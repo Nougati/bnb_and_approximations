@@ -14,7 +14,9 @@
 #include <stdio.h>
 
 
-/* This typename block is stolen from https://stackoverflow.com/questions/6280055/how-do-i-check-if-a-variable-is-of-a-certain-type-compare-two-types-in-c */
+/* This typename block is stolen from https://stackoverflow.com/questions/6280055/how-do-i-check-if-a-variable-is-of-a-certain-type-compare-two-types-in-c
+When I'm done I'll reduce the size of this block to just the necessary ones.
+ */
 #define typename(x) _Generic((x),        /* Get the name of a type */             \
                                                                                   \
         _Bool: "_Bool",                  unsigned char: "unsigned char",          \
@@ -81,7 +83,12 @@ int main(){
   int capacity = 11;
   
   printf("Problem Specification:\ncapacity: %d\n",capacity);
-
+  printf("Profits: ");
+  for(int i=0; i < n; i++) printf("%d ", profits[i]);
+  printf("\n");
+  printf("Weights: ");
+  for(int i=0; i < n; i++) printf("%d ", weights[i]);
+  printf("\n");
   DP(profits, weights, S, n, capacity);
 
   return 0;
@@ -108,9 +115,7 @@ void DP(int problem_profits[],
       Indexing for this will be confuuusing
   */
 
-  /* Debug: print profits */
-  for(int i=0; i < n; i++) printf("%d ", problem_profits[i]);
-  printf("\n");
+  
 
   // Find max profit item
   int max_profit = DP_max_profit(problem_profits,
@@ -133,19 +138,6 @@ void DP(int problem_profits[],
                         DP_table, 
                         problem_profits,
                         problem_weights);
-
-  /* Start debugging section: print to ensure
-     that the base cases were filled in       */
-  printf("DEBUG: DP print-out...\n");
-  for(int i = 0; i < p_upper_bound; i++){
-   if (DP_table[0][i] != 0) printf("∞ ");
-   else printf("%d ", DP_table[0][i]); 
-  }
-  printf("\n");
-  for(int i = 1; i < n+1; i++){
-    printf("%s\n", DP_table[i][0]==0?"0":"☹");
-  }
-  /* End debug */
 
   // Compute general cases
   DP_fill_in_general_cases(p_upper_bound,
@@ -305,18 +297,6 @@ void DP_fill_in_base_cases(const int width,
   for(int i = 1; i < width; i++){
     DP_table[0][i] = my_pinf;
   }  
-
-  /* Debug business start */
-  printf("DEBUG: DP_fill_in_base_cases print-out...\n");
-  for(int i = 0; i < width; i++){
-   if (DP_table[0][i] != 0) printf("∞ ");
-   else printf("%d ", DP_table[0][i]); 
-  }
-  printf("\n");
-  for(int i = 1; i < n; i++){
-    printf("%s\n", DP_table[i][0]==0?"0":"☹");
-  }
-  /* Debug business end */
   
 }
 
@@ -415,7 +395,7 @@ int DP_find_best_solution(const int width,
   for(int i = width-1; i>=0; i--){
     if (DP_table[n-1][i] != my_pinf){
       if (DP_table[n-1][i] <= capacity){
-        printf("Oh boy! DP_table[n][i]: %d, n: %d, i: %d\n", DP_table[n][i], n, i);
+        printf("Oh boy! DP_table[n][i]: %d, n-1: %d, i: %d\n", DP_table[n-1][i], n-1, i);
         p = i;
         break;
       } 
