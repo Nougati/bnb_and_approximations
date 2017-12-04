@@ -3,7 +3,7 @@
     described by Vijay Vasirani
    Notes:
     mmmm cheesecake
-   TODO: PUSH THIS TO GITHUB LOL
+   My update!
  */
 
 #include <math.h>
