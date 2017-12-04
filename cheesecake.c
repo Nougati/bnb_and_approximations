@@ -3,12 +3,19 @@
     described by Vijay Vasirani
    Notes:
     mmmm cheesecake
-   My second update
+   TODO:
+    - Find out why the table only has 7 rows for 7 items (it should be 0...7)
+    - DP_derive_solution_set does not work!
+    - Integrate Pisinger's problem instance generator
+    - Create a CSV reader for Pisinger's problem instances
+    - Assert profit lengths are equal
  */
 
 #include <math.h>
 #include <stdio.h>
 
+
+/* This typename block is stolen from https://stackoverflow.com/questions/6280055/how-do-i-check-if-a-variable-is-of-a-certain-type-compare-two-types-in-c */
 #define typename(x) _Generic((x),        /* Get the name of a type */             \
                                                                                   \
         _Bool: "_Bool",                  unsigned char: "unsigned char",          \
@@ -65,7 +72,7 @@ void DP_derive_solution_set(int n,
                             int solution[],
                             int p);
 
-/* .ılılılılılıl Program body lılılılılılı. */
+/* .ılılılılılılılılıl Program body lılılılılılılılılı. */
 int main(){
 
   int profits[] = { 2, 1, 6, 5, 3, 4, 8 }; 
@@ -73,8 +80,6 @@ int main(){
   int n = (int)(sizeof(profits) / sizeof(profits[0]) );
   int S[n];
   int capacity = 15;
-
-  /*TODO: Assert profits length and weights length are equal*/
 
   DP(profits, weights, S, n, capacity);
 
@@ -109,7 +114,6 @@ void DP(int problem_profits[],
   // Find max profit item
   int max_profit = DP_max_profit(problem_profits,
                                  n);
-  
   printf("max_profit: %d \n", max_profit); 
 
   // Find upper bound on p for DP
@@ -117,9 +121,10 @@ void DP(int problem_profits[],
                                        n,
                                        max_profit,
                                        2);
+
   printf("p_upper_bound: %d \n", p_upper_bound);
 
-  // Define DP table
+  // Define DP table (n+1)*(nP+1)
   int DP_table[n][p_upper_bound];
 
   // Compute base cases
@@ -151,7 +156,7 @@ void DP(int problem_profits[],
 
   /* Debugging section: print to ensure that
      the general cases were filled in...     */
-  printf("DEBUG: DP general case print-out...\n");
+  printf("DEBUG: DP general case print-out...\n   ");
   for (int k = 0; k < p_upper_bound; k++){
     printf("%2d-",k);
   }printf("\n");
@@ -166,10 +171,10 @@ void DP(int problem_profits[],
 
   // Find the best solution
   int p = DP_find_best_solution(p_upper_bound,
-                             n,
-                             DP_table,
-                             capacity,
-                             my_pinf);
+                                n,
+                                DP_table,
+                                capacity,
+                                my_pinf);
   printf("DEBUG: p=%d\n ",p);
 
   // Derive S from the table
@@ -418,6 +423,7 @@ int DP_find_best_solution(const int width,
   return p;
 }
 
+
 void DP_derive_solution_set(int n,
                             const int width,
                             const int DP_table[][width],
@@ -436,7 +442,8 @@ void DP_derive_solution_set(int n,
     Postconditions:
       solution will be filled out      
     Notes:
-      poo!
+      This does not work! I need to create a test case to capture how it should 
+       function.
   */
 
   int s_index = 0;
@@ -451,7 +458,5 @@ void DP_derive_solution_set(int n,
       // A[n-1][p] must be the same as A[n][p]
       n -= 1;
     }
-
   }
-
 }
