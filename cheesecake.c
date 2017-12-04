@@ -4,7 +4,6 @@
    Notes:
     mmmm cheesecake
    TODO:
-    - Find out why the table only has 7 rows for 7 items (it should be 0...7)
     - DP_derive_solution_set does not work!
     - Integrate Pisinger's problem instance generator
     - Create a CSV reader for Pisinger's problem instances
@@ -77,9 +76,11 @@ int main(){
 
   int profits[] = { 2, 1, 6, 5, 3, 4, 8 }; 
   int weights[] = { 1, 2, 3, 2, 1, 2, 4 };
-  int n = (int)(sizeof(profits) / sizeof(profits[0]) );
+  int n = (int)(sizeof(profits) / sizeof(profits[0]));
   int S[n];
-  int capacity = 15;
+  int capacity = 11;
+  
+  printf("Problem Specification:\ncapacity: %d\n",capacity);
 
   DP(profits, weights, S, n, capacity);
 
@@ -108,13 +109,12 @@ void DP(int problem_profits[],
   */
 
   /* Debug: print profits */
-  for(int i=0; i<n; i++) printf("%d ", problem_profits[i]);
+  for(int i=0; i < n; i++) printf("%d ", problem_profits[i]);
   printf("\n");
 
   // Find max profit item
   int max_profit = DP_max_profit(problem_profits,
                                  n);
-  printf("max_profit: %d \n", max_profit); 
 
   // Find upper bound on p for DP
   int p_upper_bound = DP_p_upper_bound(problem_profits,
@@ -124,12 +124,12 @@ void DP(int problem_profits[],
 
   printf("p_upper_bound: %d \n", p_upper_bound);
 
-  // Define DP table (n+1)*(nP+1)
-  int DP_table[n][p_upper_bound];
+  // Define DP table (n+1)*(nP)
+  int DP_table[n+1][p_upper_bound];
 
   // Compute base cases
   DP_fill_in_base_cases(p_upper_bound,
-                        n,
+                        n+1,
                         DP_table, 
                         problem_profits,
                         problem_weights);
@@ -142,26 +142,26 @@ void DP(int problem_profits[],
    else printf("%d ", DP_table[0][i]); 
   }
   printf("\n");
-  for(int i = 1; i < n; i++){
+  for(int i = 1; i < n+1; i++){
     printf("%s\n", DP_table[i][0]==0?"0":"☹");
   }
   /* End debug */
 
   // Compute general cases
   DP_fill_in_general_cases(p_upper_bound,
-                           n,
+                           n+1,
                            DP_table,
                            problem_profits,
                            problem_weights);
 
   /* Debugging section: print to ensure that
      the general cases were filled in...     */
-  printf("DEBUG: DP general case print-out...\n   ");
+  printf("DEBUG: DP general case print-out...\n");
   for (int k = 0; k < p_upper_bound; k++){
     printf("%2d-",k);
   }printf("\n");
   int my_pinf = derive_pinf(problem_weights, n);
-  for (int i = 0; i < n; i++){
+  for (int i = 0; i < n+1; i++){
     for (int j = 0; j < p_upper_bound; j++){
       if(DP_table[i][j] == my_pinf) printf("%2s "," ∞");
       else printf("%2d ", DP_table[i][j]);
@@ -171,14 +171,14 @@ void DP(int problem_profits[],
 
   // Find the best solution
   int p = DP_find_best_solution(p_upper_bound,
-                                n,
+                                n+1,
                                 DP_table,
                                 capacity,
                                 my_pinf);
   printf("DEBUG: p=%d\n ",p);
 
   // Derive S from the table
-  DP_derive_solution_set(n,
+  DP_derive_solution_set(n+1,
                          p_upper_bound,
                          DP_table,
                          problem_profits,
@@ -414,7 +414,8 @@ int DP_find_best_solution(const int width,
   int p= -1;
   for(int i = width-1; i>=0; i--){
     if (DP_table[n-1][i] != my_pinf){
-      if (DP_table[n-1][i] < capacity){
+      if (DP_table[n-1][i] <= capacity){
+        printf("Oh boy! DP_table[n][i]: %d, n: %d, i: %d\n", DP_table[n][i], n, i);
         p = i;
         break;
       } 
