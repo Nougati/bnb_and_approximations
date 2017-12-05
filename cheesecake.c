@@ -3,8 +3,9 @@
     described by Vijay Vasirani
    Notes:
     mmmm cheesecake
+    Data type assertions seem unnecessary because C is pretty tight about that anyway.
    TODO:
-    - Assert profit lengths are equal
+    - Be able to specify that sol is filled with indices or 0,1's 
     - Integrate Pisinger's problem instance generator
     - Create a CSV reader for Pisinger's problem instances
  */
@@ -12,8 +13,10 @@
 #include <math.h>
 #include <stdio.h>
 #include <string.h>
+#include <assert.h>
 
-/* This typename block is stolen from https://stackoverflow.com/questions/6280055/how-do-i-check-if-a-variable-is-of-a-certain-type-compare-two-types-in-c
+
+/* This block is stolen from https://stackoverflow.com/questions/6280055/how-do-i-check-if-a-variable-is-of-a-certain-type-compare-two-types-in-c
 When I'm done I'll reduce the size of this block to just the necessary ones.
  */
 #define typename(x) _Generic((x),        /* Get the name of a type */             \
@@ -38,9 +41,10 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
 /* Function Declarations */
 void DP(int problem_profits[], 
         int problem_weights[],
-        int * sol,
+        int sol[],
         int n,
-        int capacity);
+        int capacity,
+        const int sol_flag);
 int DP_max_profit(int problem_profits[],
                   int n);
 int DP_p_upper_bound(const int problem_profits[],
@@ -65,31 +69,47 @@ int DP_find_best_solution(const int width,
                         const int DP_table[][width],
                         const int capacity,
                         const int my_pinf);
-void DP_derive_solution_set(int n,
+int DP_derive_solution_set(int n,
                             const int width,
                             const int DP_table[][width],
                             const int problem_profits[],
                             int solution[],
-                            int p);
+                            int p,
+                            const int sol_flag);
+void DP_assert_array_is_integer(const int an_array[], const int length);
+
 
 /* .ılılılılılılılılıl Program body lılılılılılılılılı. */
 int main(){
-
+  /*
+    Notes:
+      Profits, weights, and capacity are aimed to be dynamically read from source files.
+      As it stands, this is not a functionality.
+      Also remember sol_flag = 0 means indexed, 1 means binary
+  */
   int profits[] = { 2, 1, 6, 5, 3, 4, 8 }; 
   int weights[] = { 1, 2, 3, 2, 1, 2, 4 };
   int n = (int)(sizeof(profits) / sizeof(profits[0]));
+  int n_w  = (int)(sizeof(weights) / sizeof(weights[0]));
   int S[n];
   int capacity = 11;
-  
-  printf("Problem Specification:\ncapacity: %d\n",capacity);
-  printf("Profits: ");
-  for(int i=0; i < n; i++) printf("%d ", profits[i]);
-  printf("\n");
-  printf("Weights: ");
-  for(int i=0; i < n; i++) printf("%d ", weights[i]);
-  printf("\n");
-  DP(profits, weights, S, n, capacity);
+  int sol_flag = 1;
 
+  assert(n == n_w);
+  DP_assert_array_is_integer(profits, n);
+  DP_assert_array_is_integer(weights, n);
+
+
+  printf("Problem Specification:\nCapacity: %d\n", capacity);
+  printf("Profits: [ ");
+  for(int i=0; i < n; i++) printf("%d ", profits[i]);
+  printf("]\n");
+  printf("Weights: [ ");
+  for(int i=0; i < n; i++) printf("%d ", weights[i]);
+  printf("]\nSolving...\n\n");
+  
+  DP(profits, weights, S, n, capacity, sol_flag);
+  printf("Terminating...\n");
   return 0;
 }
 
@@ -98,7 +118,8 @@ void DP(int problem_profits[],
         int problem_weights[],
         int sol[],
         int n,
-        int capacity){
+        int capacity,
+	const int sol_flag){
   /*
     Description:
       Carries out DP to compute the optimal solution for knapsack,
@@ -126,12 +147,9 @@ void DP(int problem_profits[],
                                        max_profit,
                                        2);
 
-  //printf("p_upper_bound: %d \n", p_upper_bound);
-
   // Define DP table (n+1)*(nP)
   int DP_table[n+1][p_upper_bound];
-  // HMMMMM?
-  //memset(DP_table, 0, sizeof(DP_table[0][0]) * (n+1) * p_upper_bound);
+
 
   // Compute base cases
   DP_fill_in_base_cases(p_upper_bound,
@@ -146,7 +164,10 @@ void DP(int problem_profits[],
                            DP_table,
                            problem_profits,
                            problem_weights);
+
   int my_pinf = derive_pinf(problem_weights, n);
+
+
   /* Debugging section: print to ensure that
      the general cases were filled in...     */
   printf("DEBUG: DP general case print-out...\n");
@@ -156,11 +177,12 @@ void DP(int problem_profits[],
   
   for (int i = 0; i < n+1; i++){
     for (int j = 0; j < p_upper_bound; j++){
-      if(DP_table[i][j] == my_pinf) printf("%2s "," ∞"); /**/
-      else printf("%2d ", DP_table[i][j]);/**/
+      if(DP_table[i][j] == my_pinf) printf("%2s "," ∞"); 
+      else printf("%2d ", DP_table[i][j]);
     }printf("\n");
-  }
+  }printf("\n");
   /* End debugging section */
+
 
   // Find the best solution
   int p = DP_find_best_solution(p_upper_bound,
@@ -168,21 +190,25 @@ void DP(int problem_profits[],
                                 DP_table,
                                 capacity,
                                 my_pinf);
-  //printf("DEBUG: p=%d\n ",p);
 
   // Derive S from the table
-  DP_derive_solution_set(n+1,
-                         p_upper_bound,
-                         DP_table,
-                         problem_profits,
-                         sol,
-                         p);
-  printf("Solution set: ");
-  for(int i=0; i<n; i++){
-    printf("%d ", sol[i]);
-  }printf("\n");
-
-  printf("End of main() reached...\n");
+  int n_solutions = DP_derive_solution_set(n+1,
+                                           p_upper_bound,
+                                           DP_table,
+                                           problem_profits,
+                                           sol,
+                                           p, 
+                                           sol_flag);
+  printf("Solved...\nSolution format: %s\nSolution set: ",sol_flag==0?"Indexed":"Binary");
+  if (sol_flag == 0){
+    for(int i=0; i<n_solutions; i++){
+      printf("%d ", sol[i]);
+    }printf("\nOptimal profit: %d\nOptimal Weight: %d\n", p, DP_table[n][p]);
+  }else{
+    for(int i=0; i<n; i++){
+      printf("%d ", sol[i]);
+    }printf("\nOptimal profit: %d\nOptimal Weight: %d\n", p, DP_table[n][p]);
+  }
 }
 
 
@@ -395,9 +421,7 @@ int DP_find_best_solution(const int width,
   int p= -1;
   for(int i = width-1; i>=0; i--){/*  */
     if (DP_table[n-1][i] != my_pinf){/*  */
-      //printf("DP_table[%d][%d]: %d\n", n-1, i, DP_table[n-1][i]);
       if (DP_table[n-1][i] <= capacity){/*  */
-        printf("Oh boy! DP_table[n-1][i]: %d, n-1: %d, i: %d\n", DP_table[n-1][i], n-1, i);
         p = i;
         break;
       } 
@@ -407,12 +431,13 @@ int DP_find_best_solution(const int width,
 }
 
 
-void DP_derive_solution_set(int n,
+int DP_derive_solution_set(int n,
                             const int width,
                             const int DP_table[][width],
                             const int problem_profits[],
                             int solution[],
-                            int p){
+                            int p,
+                            const int sol_flag){
   /*
     Description: 
       Given a completed DP_table, derive the indices of the items of the optimal set.
@@ -422,6 +447,7 @@ void DP_derive_solution_set(int n,
       solution - the output array; it will simply hold the indices of the items that
        are included in the optimal solution. 
       p - the profit of the optimal solution
+      sol_flag - if 0, index notation, if 1, 0/1 notation
     Postconditions:
       solution will be filled out      
     Notes:
@@ -430,17 +456,27 @@ void DP_derive_solution_set(int n,
   */
 
   int s_index = 0;
-  while (p > 0){
+  while ((p > 0)&&(n > 0)){
     if (DP_table[n-2][p] > DP_table[n-1][p]){
       // then we had item n and the solution at A[n-1][p-profit(n)]
-      printf("DP_table[n-2][p]: %d, DP_table[n-1][p]: %d, p: %d, n: %d\n", DP_table[n-2][p], DP_table[n-1][p], p, n);
-      solution[s_index] = (n-1);
+      if(sol_flag == 0) solution[s_index] = (n-1);
+      else solution[n-2] = 1;
       s_index += 1;
       n -= 1;
       p -= problem_profits[n-1]; // remember table n corresponds to profit n-1
     }else{
       // A[n-1][p] must be the same as A[n][p]
+      if (sol_flag == 1) solution[n-2] = 0;
       n -= 1;
     }
+  }
+ return s_index;
+}
+
+
+void DP_assert_array_is_integer(const int an_array[],
+                                const int length){
+  for(int i = 0; i < length; i++){
+    assert(typename(an_array[i])=="int");
   }
 }
