@@ -4,10 +4,9 @@
    Notes:
     mmmm cheesecake
    TODO:
-    - DP_derive_solution_set does not work!
+    - Assert profit lengths are equal
     - Integrate Pisinger's problem instance generator
     - Create a CSV reader for Pisinger's problem instances
-    - Assert profit lengths are equal
  */
 
 #include <math.h>
