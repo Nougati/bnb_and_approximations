@@ -477,6 +477,11 @@ int DP_derive_solution_set(int n,
 
 void DP_assert_array_is_integer(const int an_array[],
                                 const int length){
+  /*
+    Description
+      This is just a basic assertion thing because it would be just like me 
+       to find a way for C to let this happen. It really should never be needed.
+  */
   for(int i = 0; i < length; i++){
     assert(typename(an_array[i])=="int");
   }
