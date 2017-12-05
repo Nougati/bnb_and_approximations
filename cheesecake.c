@@ -8,6 +8,7 @@
     - Be able to specify that sol is filled with indices or 0,1's 
     - Integrate Pisinger's problem instance generator
     - Create a CSV reader for Pisinger's problem instances
+   Commit damn you!
  */
 
 #include <math.h>
