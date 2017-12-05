@@ -5,17 +5,20 @@
     mmmm cheesecake
     Data type assertions seem unnecessary because C is pretty tight about that anyway.
    TODO:
+    - Fix pointer issues with pisinger's csv reader! 
+      - Basically it works with the malloc in the function, just not outside it.
+      - I have no idea of what to do
+      - Take a look at https://stackoverflow.com/questions/2838038/c-programming-malloc-inside-another-function because it seems like what I need
     - Integrate Pisinger's problem instance generator
-    - Create a CSV reader for Pisinger's problem instances
     - CLEAN UP VALGRIND ERRORS LOL
    Commit damn you!
  */
 
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-
 
 /* This block is stolen from 
 https://stackoverflow.com/questions/6280055/how-do-i-check-if-a-variable-is-of-a-certain-type-compare-two-types-in-c
@@ -78,8 +81,14 @@ int DP_derive_solution_set(int n,
                             int solution[],
                             int p,
                             const int sol_flag);
-void DP_assert_array_is_integer(const int an_array[], const int length);
-
+void DP_assert_array_is_integer(const int an_array[],
+                                const int length);
+void pisinger_reader(int *n,
+                     int *c,
+                     int *p,
+                     int *w,
+                     int *x,
+                     char *problem_file);
 
 /* .ılılılılılılılılıl Program body lılılılılılılılılı. */
 int main(){
@@ -89,17 +98,40 @@ int main(){
       As it stands, this is not a functionality.
       Also remember sol_flag = 0 means indexed, 1 means binary
   */
-  int profits[] = { 2, 1, 6, 5, 3, 4, 8 }; 
-  int weights[] = { 1, 2, 3, 2, 1, 2, 4 };
-  int n = (int)(sizeof(profits) / sizeof(profits[0]));
+  int n, capacity;
+  int *profits, *weights, *x;
+  char *problem_file = "knapPI_1_50_1000.csv";
+  
+  pisinger_reader(&n,
+                  &capacity,
+                  profits,
+                  weights,
+                  x,
+                  problem_file);
+  //int profits[] = { 2, 1, 6, 5, 3, 4, 8 }; 
+  //int weights[] = { 1, 2, 3, 2, 1, 2, 4 };
+  //int n = (int)(sizeof(profits) / sizeof(profits[0]));
   int n_w  = (int)(sizeof(weights) / sizeof(weights[0]));
   int S[n];
-  int capacity = 11;
+  //int capacity = 11;
   int sol_flag = 1;
 
+  /*Pointer issues ahoy!*/
+  printf("Debug: Profits...\n");
+  for(int i=0; i<n; i++){
+    printf("profits[%d]: %d", i, profits[i]);
+  }
+
+  printf("Debug: Weights...\n");
+  for(int i=0; i<n; i++){
+    printf("weights[%d]: %d", i, weights[i]);
+  }
+  /*Pointer issues end here, yeaargh!*/
+
+  printf("n: %d, n_w: %d\n", n, n_w); 
   assert(n == n_w);
   DP_assert_array_is_integer(profits, n);
-  DP_assert_array_is_integer(weights, n);
+  DP_assert_array_is_integer(weights, n_w);
 
 
   printf("Problem Specification:\nCapacity: %d\n", capacity);
@@ -487,3 +519,61 @@ void DP_assert_array_is_integer(const int an_array[],
     assert(typename(an_array[i])=="int");
   }
 }
+
+
+void pisinger_reader(int *n, int *c, int *p, int *w, int *x, char *problem_file){
+  /* This is a haggard mess */
+
+  FILE *fp;
+  char str[256];
+  char * pch;
+  fp = fopen(problem_file, "r");
+  int counter=0;
+  
+  /* Get n */
+  if (fp == NULL) exit(EXIT_FAILURE);
+  while (fgets(str, sizeof(str), fp)){
+    if (str[0] == 'n'){
+      pch = strtok(str, " ");
+      pch = strtok(NULL, " ");
+      *n = atoi(pch);
+    }
+  }
+  printf("n: %d\n", *n);
+  p = (int *)malloc(*n);
+  w = (int *)malloc(*n);
+  x = (int *)malloc(*n);
+  rewind(fp);
+  if (fp == NULL) exit(EXIT_FAILURE);
+  while ((fgets(str, sizeof(str), fp))&&(counter<*n)){
+   if(str[0] == 'c'){
+      pch = strtok(str, " ");
+      pch = strtok(NULL, " ");
+      *c = atoi(pch);
+    }else if (!((str[0] == 'n')
+              ||(str[0] == 'z')
+              ||(str[0] == 'k')
+              ||(str[0] == 't'))){
+      pch = strtok(str, ",");
+      pch = strtok(NULL, ",");
+      p[counter] = atoi(pch);
+      pch = strtok(NULL, ",");
+      w[counter] = atoi(pch);
+      pch = strtok(NULL, ",");
+      x[counter] = atoi(pch);
+      counter += 1;
+    }
+  }
+  fclose(fp);
+
+  printf("CALLED FUNCTION Debug: Profits...\n");
+  for(int i=0; i<*n; i++){
+    printf("profits[%d]: %d\n", i, p[i]);
+  }
+
+  printf("CALLED FUNCTION Debug: Weights...\n");
+  for(int i=0; i<*n; i++){
+    printf("weights[%d]: %d\n", i, w[i]);
+  }
+}
+

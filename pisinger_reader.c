@@ -1,7 +1,7 @@
 /* pisinger_reader.c */
 /* Implements a makeshift CSV reader for pisinger's knapsack instances. It makes some assumptions about the input file format. This is because I intend to use this over and over for different instances as I move through a collection of CSVs and analyse the performance of my DP etc etc. 
 😮|/|\|\|\/😮\~~THIS IS A SERIOUS W😮RK IN PR😮GRESS~~/😮\/|/|/|\|😮
-
+  TODO: Eventually incorporate support fo riteratively reading all problems in a file.
 */
 
 
@@ -9,30 +9,28 @@
 #include <stdlib.h>
 #include <string.h>
 
-void pisinger_reader();
+void pisinger_reader(int n, int c, int *p, int *w, int *x, char *problem_file);
 
 int main(){
 
   int n, c;
   int *p, *w, *x;
-
-  pisinger_reader();
-
+  char *file = "knapPI_1_50_1000.csv";
+  pisinger_reader(n, c, p, w, x, file);
+  printf("Hellooooooooooooooo ladies\n");
   return 0;
 }
 
-void pisinger_reader(){
+void pisinger_reader(int n, int c, int *p, int *w, int *x, char *problem_file){
   /* This is a haggard mess */
 
   FILE *fp;
   char str[256];
   char * pch;
-  fp = fopen("knapPI_1_50_1000.csv", "r");
-  int n, c;
+  fp = fopen(problem_file, "r");
   int counter=0;
   
   /* Get n */
-
   if (fp == NULL) exit(EXIT_FAILURE);
   while (fgets(str, sizeof(str), fp)){
     if (str[0] == 'n'){
@@ -42,8 +40,9 @@ void pisinger_reader(){
     }
   }
   printf("n: %d\n", n);
-  int p[n], w[n], x[n];
-
+  p = (int *)malloc(n);
+  w = (int *)malloc(n);
+  x = (int *)malloc(n);
   rewind(fp);
   if (fp == NULL) exit(EXIT_FAILURE);
   while ((fgets(str, sizeof(str), fp))&&(counter<n)){
