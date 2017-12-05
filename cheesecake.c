@@ -5,9 +5,9 @@
     mmmm cheesecake
     Data type assertions seem unnecessary because C is pretty tight about that anyway.
    TODO:
-    - Be able to specify that sol is filled with indices or 0,1's 
     - Integrate Pisinger's problem instance generator
     - Create a CSV reader for Pisinger's problem instances
+    - CLEAN UP VALGRIND ERRORS LOL
    Commit damn you!
  */
 
@@ -17,7 +17,8 @@
 #include <assert.h>
 
 
-/* This block is stolen from https://stackoverflow.com/questions/6280055/how-do-i-check-if-a-variable-is-of-a-certain-type-compare-two-types-in-c
+/* This block is stolen from 
+https://stackoverflow.com/questions/6280055/how-do-i-check-if-a-variable-is-of-a-certain-type-compare-two-types-in-c
 When I'm done I'll reduce the size of this block to just the necessary ones.
  */
 #define typename(x) _Generic((x),        /* Get the name of a type */             \
