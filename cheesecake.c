@@ -5,13 +5,7 @@
     mmmm cheesecake
     Data type assertions seem unnecessary because C is pretty tight about that anyway.
    TODO:
-    - Fix pointer issues with pisinger's csv reader! 
-      - Basically it works with the malloc in the function, just not outside it.
-      - I have no idea of what to do
-      - Take a look at https://stackoverflow.com/questions/2838038/c-programming-malloc-inside-another-function because it seems like what I need
     - Integrate Pisinger's problem instance generator
-    - CLEAN UP VALGRIND ERRORS LOL
-   Commit damn you!
  */
 
 #include <math.h>
@@ -44,16 +38,18 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
 
 
 /* Function Declarations */
-void DP(int problem_profits[], 
-        int problem_weights[],
+void DP(const int problem_profits[], 
+        const int problem_weights[],
+        const int x[],
         int sol[],
-        int n,
-        int capacity,
-        const int sol_flag);
-int DP_max_profit(int problem_profits[],
+        const int n,
+        const int capacity,
+        const int sol_flag,
+        const int bounding_method);
+int DP_max_profit(const int problem_profits[],
                   int n);
 int DP_p_upper_bound(const int problem_profits[],
-                     int n,
+                     const int n,
                      int P,
                      int bounding_method);
 int p_upper_bound_aux(const int problem_profits[],
@@ -85,9 +81,9 @@ void DP_assert_array_is_integer(const int an_array[],
                                 const int length);
 void pisinger_reader(int *n,
                      int *c,
-                     int *p,
-                     int *w,
-                     int *x,
+                     int *(*p),
+                     int **w,
+                     int **x,
                      char *problem_file);
 
 /* .ılılılılılılılılıl Program body lılılılılılılılılı. */
@@ -97,63 +93,65 @@ int main(){
       Profits, weights, and capacity are aimed to be dynamically read from source files.
       As it stands, this is not a functionality.
       Also remember sol_flag = 0 means indexed, 1 means binary
+      Input files: "knapPI_1_50_1000.csv"  
+                   "small_instance"
+                   "knapPI_1_100_1000.csv"
+      Important: Valgrind will return false positives for larger problem instances.
+                 We can see this as the small instance and the large instance varies.
+                 Source: 
+                 http://blog.purevirtual.net/2012/01/valgrind-client-switching-stacks.html
+                 The crux of the issue lies in the fact that in even moderately large 
+                  instances the DP_table data structure gets so large that valgrind is
+                  inclined to believe something has gone wrong. This is why an upper bound
+                  on p would be nice!
   */
   int n, capacity;
   int *profits, *weights, *x;
   char *problem_file = "knapPI_1_50_1000.csv";
-  
+  const int bounding_method = 2;
   pisinger_reader(&n,
                   &capacity,
-                  profits,
-                  weights,
-                  x,
+                  &profits,
+                  &weights,
+                  &x,
                   problem_file);
-  //int profits[] = { 2, 1, 6, 5, 3, 4, 8 }; 
-  //int weights[] = { 1, 2, 3, 2, 1, 2, 4 };
-  //int n = (int)(sizeof(profits) / sizeof(profits[0]));
-  int n_w  = (int)(sizeof(weights) / sizeof(weights[0]));
+  
   int S[n];
-  //int capacity = 11;
-  int sol_flag = 1;
 
-  /*Pointer issues ahoy!*/
-  printf("Debug: Profits...\n");
-  for(int i=0; i<n; i++){
-    printf("profits[%d]: %d", i, profits[i]);
-  }
+  int sol_flag = 2;
 
-  printf("Debug: Weights...\n");
-  for(int i=0; i<n; i++){
-    printf("weights[%d]: %d", i, weights[i]);
-  }
-  /*Pointer issues end here, yeaargh!*/
-
-  printf("n: %d, n_w: %d\n", n, n_w); 
-  assert(n == n_w);
-  DP_assert_array_is_integer(profits, n);
-  DP_assert_array_is_integer(weights, n_w);
-
-
-  printf("Problem Specification:\nCapacity: %d\n", capacity);
+  /* PROBLEM OUTPUT */
+  printf("Problem Specification:\nCapacity: %d\tn: %d\n", capacity, n);
   printf("Profits: [ ");
   for(int i=0; i < n; i++) printf("%d ", profits[i]);
   printf("]\n");
   printf("Weights: [ ");
   for(int i=0; i < n; i++) printf("%d ", weights[i]);
-  printf("]\nSolving...\n\n");
-  
-  DP(profits, weights, S, n, capacity, sol_flag);
+  printf("]\n Bounding method chosen: %s\n Solving...\n\n",bounding_method==1?"nP (Why did you choose this?)":"Simple sum");
+  /**/
+
+  DP(profits, weights, x, S, n, capacity, sol_flag, bounding_method);
+
   printf("Terminating...\n");
+
+  /*Reader frees */
+  free(profits);
+  free(weights);
+  free(x);
+  /**/
+
   return 0;
 }
 
 
-void DP(int problem_profits[],
-        int problem_weights[],
+void DP(const int problem_profits[],
+        const int problem_weights[],
+        const int x[],
         int sol[],
-        int n,
-        int capacity,
-	const int sol_flag){
+        const int n,
+        const int capacity,
+	const int sol_flag,
+        const int bounding_method){
   /*
     Description:
       Carries out DP to compute the optimal solution for knapsack,
@@ -169,8 +167,6 @@ void DP(int problem_profits[],
       Indexing for this will be confuuusing
   */
 
-  
-
   // Find max profit item
   int max_profit = DP_max_profit(problem_profits,
                                  n);
@@ -179,11 +175,14 @@ void DP(int problem_profits[],
   int p_upper_bound = DP_p_upper_bound(problem_profits,
                                        n,
                                        max_profit,
-                                       2);
-
+                                       bounding_method);
+  printf("Upper bound on p: %d\n", p_upper_bound);
   // Define DP table (n+1)*(nP)
   int DP_table[n+1][p_upper_bound];
+  // TODO This allocation does not work with larger instances.
+  // https://stackoverflow.com/questions/14093318/large-2d-array-in-c-stack-over-flow-error
 
+  printf("DP_table defined\n");
 
   // Compute base cases
   DP_fill_in_base_cases(p_upper_bound,
@@ -201,31 +200,14 @@ void DP(int problem_profits[],
 
   int my_pinf = derive_pinf(problem_weights, n);
 
-
-  /* Debugging section: print to ensure that
-     the general cases were filled in...     */
-  printf("DEBUG: DP general case print-out...\n");
-  for (int k = 0; k < p_upper_bound; k++){
-    printf("%2d-",k);
-  }printf("\n");
-  
-  for (int i = 0; i < n+1; i++){
-    for (int j = 0; j < p_upper_bound; j++){
-      if(DP_table[i][j] == my_pinf) printf("%2s "," ∞"); 
-      else printf("%2d ", DP_table[i][j]);
-    }printf("\n");
-  }printf("\n");
-  /* End debugging section */
-
-
-  // Find the best solution
+  // Find the best solution - 2 VALGRIND ERRORS HERE
   int p = DP_find_best_solution(p_upper_bound,
                                 n+1,
                                 DP_table,
                                 capacity,
                                 my_pinf);
 
-  // Derive S from the table
+  // Derive S from the table VALGRIND ERROR HERE
   int n_solutions = DP_derive_solution_set(n+1,
                                            p_upper_bound,
                                            DP_table,
@@ -233,7 +215,9 @@ void DP(int problem_profits[],
                                            sol,
                                            p, 
                                            sol_flag);
-  printf("Solved...\nSolution format: %s\nSolution set: ",sol_flag==0?"Indexed":"Binary");
+
+  /* Solution output*/
+  printf("Solved...\nSolution format: %s\n\nSolution set: \n",sol_flag==0?"Indexed":"Binary");
   if (sol_flag == 0){
     for(int i=0; i<n_solutions; i++){
       printf("%d ", sol[i]);
@@ -241,13 +225,24 @@ void DP(int problem_profits[],
   }else{
     for(int i=0; i<n; i++){
       printf("%d ", sol[i]);
-    }printf("\nOptimal profit: %d\nOptimal Weight: %d\n", p, DP_table[n][p]);
+    }
+    printf("\nOptimal profit: %d\nOptimal Weight: %d\n\n", p, DP_table[n][p]);
   }
+  int correct_flag = 1;
+  for (int i=0; i<n; i++){
+    if (sol[i] != x[i]){
+      printf("Disparity between solution sets. Incorrect solution obtained :(\n");
+      correct_flag = 0;
+      break;
+    }
+  }
+  if (correct_flag) printf("Solution sets match. Correct solution obtained!\n");
+  /**/
 }
 
 
-int DP_max_profit(int problem_profits[],
-                  int n){
+int DP_max_profit(const int problem_profits[],
+                  const int n){
   /*
     Description:
       Finds the highest profit in the array of item profits
@@ -268,9 +263,9 @@ int DP_max_profit(int problem_profits[],
 
 
 int DP_p_upper_bound(const int problem_profits[],
-                     int n,
-                     int P,
-                     int bounding_method){
+                     const int n,
+                     const int P,
+                     const int bounding_method){
   /*
     Description:
       Derives the upper bound for the DP table, based on the bounding
@@ -286,6 +281,7 @@ int DP_p_upper_bound(const int problem_profits[],
     case 1: upper_bound = n*P; break;
     case 2: upper_bound = p_upper_bound_aux(problem_profits, n); break;
     default: printf("Hmmm... What bounding method was that?\n");
+    exit(-1);
   }
 
   return upper_bound;
@@ -293,7 +289,7 @@ int DP_p_upper_bound(const int problem_profits[],
 
 
 int p_upper_bound_aux(const int problem_profits[],
-                      int n){
+                      const int n){
   /*
     Description:
       An auxiliary function used to calculate the intelligent trivial
@@ -327,6 +323,8 @@ void DP_fill_in_base_cases(const int width,
        is every A(1,p) for every p between 0 and width.
     Inputs:
       width - the upper bound on the width of the table
+      n - the number of rows. Remember this is passed in as n+1 to account 
+           for the 0th row of the table. As a result derive_pinf passes n-1
       DP_table - the two dimensional array to calculate the DP in
     Preconditions:
       The space for the table must be allocated
@@ -347,7 +345,7 @@ void DP_fill_in_base_cases(const int width,
        This has led to the definition of the function derive_pinf.
   */
   
-  int my_pinf = derive_pinf(problem_weights, n);
+  int my_pinf = derive_pinf(problem_weights, n-1);
   // Go over the first column with 0's
   for(int i = 0; i < n; i++){
      DP_table[i][0] = 0; 
@@ -419,6 +417,7 @@ int derive_pinf(const int problem_weights[],
     Notes:
       
   */
+
   int my_pinf = 1;
   for(int i = 0; i < n; i++){
     my_pinf += problem_weights[i];
@@ -453,9 +452,9 @@ int DP_find_best_solution(const int width,
   */
 
   int p= -1;
-  for(int i = width-1; i>=0; i--){/*  */
-    if (DP_table[n-1][i] != my_pinf){/*  */
-      if (DP_table[n-1][i] <= capacity){/*  */
+  for(int i = width-1; i >= 0; i--){   
+    if (DP_table[n-1][i] != my_pinf){    
+      if (DP_table[n-1][i] <= capacity){ 
         p = i;
         break;
       } 
@@ -472,6 +471,7 @@ int DP_derive_solution_set(int n,
                             int solution[],
                             int p,
                             const int sol_flag){
+
   /*
     Description: 
       Given a completed DP_table, derive the indices of the items of the optimal set.
@@ -500,7 +500,7 @@ int DP_derive_solution_set(int n,
       p -= problem_profits[n-1]; // remember table n corresponds to profit n-1
     }else{
       // A[n-1][p] must be the same as A[n][p]
-      if (sol_flag == 1) solution[n-2] = 0;
+      if (sol_flag != 0) solution[n-2] = 0;
       n -= 1;
     }
   }
@@ -521,14 +521,15 @@ void DP_assert_array_is_integer(const int an_array[],
 }
 
 
-void pisinger_reader(int *n, int *c, int *p, int *w, int *x, char *problem_file){
-  /* This is a haggard mess */
+void pisinger_reader(int *n, int *c, int **p, int **w, int **x, char *problem_file){
+  /* This is a haggard mess*/ 
 
   FILE *fp;
   char str[256];
   char * pch;
+  
   fp = fopen(problem_file, "r");
-  int counter=0;
+
   
   /* Get n */
   if (fp == NULL) exit(EXIT_FAILURE);
@@ -539,13 +540,16 @@ void pisinger_reader(int *n, int *c, int *p, int *w, int *x, char *problem_file)
       *n = atoi(pch);
     }
   }
-  printf("n: %d\n", *n);
-  p = (int *)malloc(*n);
-  w = (int *)malloc(*n);
-  x = (int *)malloc(*n);
+
+  int *tmp_p = (int *)malloc(*n * sizeof(*tmp_p));
+  int *tmp_w = (int *)malloc(*n * sizeof(*tmp_w));
+  int *tmp_x = (int *)malloc(*n * sizeof(*tmp_x));
+
   rewind(fp);
+  int counter=0;
   if (fp == NULL) exit(EXIT_FAILURE);
   while ((fgets(str, sizeof(str), fp))&&(counter<*n)){
+
    if(str[0] == 'c'){
       pch = strtok(str, " ");
       pch = strtok(NULL, " ");
@@ -554,26 +558,38 @@ void pisinger_reader(int *n, int *c, int *p, int *w, int *x, char *problem_file)
               ||(str[0] == 'z')
               ||(str[0] == 'k')
               ||(str[0] == 't'))){
+
       pch = strtok(str, ",");
       pch = strtok(NULL, ",");
-      p[counter] = atoi(pch);
+
+      tmp_p[counter] = atoi(pch);
+
       pch = strtok(NULL, ",");
-      w[counter] = atoi(pch);
+
+      tmp_w[counter] = atoi(pch);
+
       pch = strtok(NULL, ",");
-      x[counter] = atoi(pch);
+
+      tmp_x[counter] = atoi(pch);
+
       counter += 1;
+
     }
   }
   fclose(fp);
-
+  /*
   printf("CALLED FUNCTION Debug: Profits...\n");
   for(int i=0; i<*n; i++){
-    printf("profits[%d]: %d\n", i, p[i]);
+    printf("tmp_p[%d]: %d\n", i, tmp_p[i]);
   }
 
   printf("CALLED FUNCTION Debug: Weights...\n");
   for(int i=0; i<*n; i++){
-    printf("weights[%d]: %d\n", i, w[i]);
-  }
+    printf("tmp_w[%d]: %d\n", i, tmp_w[i]);
+  }*/
+
+  *p = tmp_p;
+  *w = tmp_w;
+  *x = tmp_x;
 }
 
