@@ -4,6 +4,8 @@
    Notes:
     mmmm cheesecake
     Data type assertions seem unnecessary because C is pretty tight about that anyway.
+   Les buugs:
+    - Solution set on larger instances gets wack in the technical sense.
    TODO:
     - Integrate Pisinger's problem instance generator
  */
@@ -107,7 +109,7 @@ int main(){
   */
   int n, capacity;
   int *profits, *weights, *x;
-  char *problem_file = "knapPI_1_50_1000.csv";
+  char *problem_file = "knapPI_1_100_1000.csv";
   const int bounding_method = 2;
   pisinger_reader(&n,
                   &capacity,
@@ -178,7 +180,8 @@ void DP(const int problem_profits[],
                                        bounding_method);
   printf("Upper bound on p: %d\n", p_upper_bound);
   // Define DP table (n+1)*(nP)
-  int DP_table[n+1][p_upper_bound];
+  //int DP_table[n+1][p_upper_bound];
+   int (*DP_table)[p_upper_bound] = malloc(sizeof(*DP_table) * (n+1));
   // TODO This allocation does not work with larger instances.
   // https://stackoverflow.com/questions/14093318/large-2d-array-in-c-stack-over-flow-error
 
