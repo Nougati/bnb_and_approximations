@@ -1,14 +1,14 @@
 /* ~~ cheesecake.c ~~
-   Description: Tries to implement the DP for the 0,1 Knapsack as 
+   Description: Tries to implement the DP for the 0,1 Knapsack as
     described by Vijay Vasirani
    Notes:
     mmmm cheesecake
     Data type assertions seem unnecessary because C is pretty tight about that anyway.
    Les buugs:
-    - Segmentation fault with pisinger's problem generator when freeing memory. 
+    - Segmentation fault with pisinger's problem generator when freeing memory.
       Not sure why this is lol. It was the munmap_chunk(): invalid pointer error
     - On the problem instance "knapPI_11_10000_1000.csv" I get a segfault when I attempt to
-       fill the base cases  
+       fill the base cases
    TODO:
     - Integrate Pisinger's problem instance generator fully. The memory allocation doesn't work.
  */
@@ -19,7 +19,7 @@
 #include <string.h>
 #include <assert.h>
 
-/* This block is stolen from 
+/* This block is stolen from
 https://stackoverflow.com/questions/6280055/how-do-i-check-if-a-variable-is-of-a-certain-type-compare-two-types-in-c
 When I'm done I'll reduce the size of this block to just the necessary ones.
  */
@@ -43,7 +43,7 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
 
 
 /* Function Declarations */
-void DP(const int problem_profits[], 
+void DP(const int problem_profits[],
         const int problem_weights[],
         const int x[],
         int sol[],
@@ -62,7 +62,7 @@ int p_upper_bound_aux(const int problem_profits[],
                       int n);
 void DP_fill_in_base_cases(const int width,
                            const int n,
-                           int DP_table[][width], 
+                           int DP_table[][width],
                            const int problem_profits[],
                            const int problem_weights[]);
 int derive_pinf(const int problem_weights[], const int n);
@@ -106,7 +106,7 @@ int main(){
       Also remember sol_flag = 0 means indexed, 1 means binary
                     bounding_method = 1 -> nP, 2 -> simple sum
 
-      Input files: "knapPI_1_50_1000.csv"  
+      Input files: "knapPI_1_50_1000.csv"
                    "small_instance"
                    "knapPI_1_100_1000.csv"
                    "knapPI_1_1000_1000.csv"
@@ -118,17 +118,17 @@ int main(){
                       gcc -O3 -march=native -o generator generator.c
                      To run:
                       generator n r type i S
-                     where n: number of items, 
-                           r: range of coefficients, 
+                     where n: number of items,
+                           r: range of coefficients,
                         type: 1=uncorr., 2=weakly corr., 3=strongly corr., 4=subset sum
                            i: instance no
                            S: number of tests in series (typically 1000)
-                     
+
       Important: Valgrind will return false positives for larger problem instances.
                  We can see this as the small instance and the large instance varies.
-                 Source: 
+                 Source:
                  http://blog.purevirtual.net/2012/01/valgrind-client-switching-stacks.html
-                 The crux of the issue lies in the fact that in even moderately large 
+                 The crux of the issue lies in the fact that in even moderately large
                   instances the DP_table data structure gets so large that valgrind is
                   inclined to believe something has gone wrong. This is why an upper bound
                   on p would be nice!
@@ -184,7 +184,7 @@ int main(){
   free(weights);
   if (problem_file == "test.in") free(x);
   /**/
-
+  problem_file = getchar();
   return 0;
 }
 
@@ -232,7 +232,7 @@ void DP(const int problem_profits[],
   printf(" Filling base cases...\n");
   DP_fill_in_base_cases(p_upper_bound,
                         n+1,
-                        DP_table, 
+                        DP_table,
                         problem_profits,
                         problem_weights);
   printf(" Base cases filled!\n");
@@ -258,7 +258,7 @@ void DP(const int problem_profits[],
                                            DP_table,
                                            problem_profits,
                                            sol,
-                                           p, 
+                                           p,
                                            sol_flag);
   printf(" Solution set derived!\n");
   /* Solution output*/
@@ -296,7 +296,7 @@ int DP_max_profit(const int problem_profits[],
     Description:
       Finds the highest profit in the array of item profits
     Inputs:
-      problem_profits - the profit array 
+      problem_profits - the profit array
       n - the number of objects
     Outputs:
       max - the value of the highest profit item.
@@ -363,7 +363,7 @@ int p_upper_bound_aux(const int problem_profits[],
 
 void DP_fill_in_base_cases(const int width,
                            const int n,
-                           int DP_table[][width], 
+                           int DP_table[][width],
                            const int problem_profits[],
                            const int problem_weights[]){
   /*
@@ -372,15 +372,15 @@ void DP_fill_in_base_cases(const int width,
        is every A(1,p) for every p between 0 and width.
     Inputs:
       width - the upper bound on the width of the table
-      n - the number of rows. Remember this is passed in as n+1 to account 
+      n - the number of rows. Remember this is passed in as n+1 to account
            for the 0th row of the table. As a result derive_pinf passes n-1
       DP_table - the two dimensional array to calculate the DP in
     Preconditions:
       The space for the table must be allocated
     Postconditions:
       The first row should indicate the minimum size solutions for the
-      specified solution subset. Also, impossible solutions will be 
-       represented by infinity      
+      specified solution subset. Also, impossible solutions will be
+       represented by infinity
     Notes:
       The rows of the table is expected to represent the number of items
        included. The columns of the table is expected to represent the
@@ -393,18 +393,18 @@ void DP_fill_in_base_cases(const int width,
        the sum of all the items in problem_weights + 1.
        This has led to the definition of the function derive_pinf.
   */
-  
+
   int my_pinf = derive_pinf(problem_weights, n-1);
   // Go over the first column with 0's
   for(int i = 0; i < n; i++){
-     DP_table[i][0] = 0; 
+     DP_table[i][0] = 0;
   }
 
   // Go over the first row with infinities
   for(int i = 1; i < width; i++){
     DP_table[0][i] = my_pinf;
-  }  
-  
+  }
+
 }
 
 
@@ -414,7 +414,7 @@ void DP_fill_in_general_cases(const int width,
                               const int problem_profits[],
                               const int problem_weights[]){
   /*
-    Description: 
+    Description:
       Fills in the fields of the DP table which are defined by the
        general recurrence.
       Specifically fields A[1][nP] to A[n][nP] (using Vasirani's definition)
@@ -426,7 +426,7 @@ void DP_fill_in_general_cases(const int width,
       problem_profits - an array of all the problem profits
       problem_weights - an array of all the problem weights
     Preconditions:
-      The base cases must be filled in for this general algorithm to return 
+      The base cases must be filled in for this general algorithm to return
        a reasonable result. For our purposes, the base cases include the cases
        where profit is 0 and where items = 0
     Postconditions:
@@ -435,8 +435,8 @@ void DP_fill_in_general_cases(const int width,
     Notes:
       Serious consideration: the problem_profits are 0-indexed, as are the problem
        weights.
-      As a result the field A[1][1] is actually the solution which considers the 
-       combination of problem_profits[0] and problem_weights[0].  
+      As a result the field A[1][1] is actually the solution which considers the
+       combination of problem_profits[0] and problem_weights[0].
       This means when designing this, it is *crucial* to account for this semantic
        indexing issue.
   */
@@ -453,7 +453,7 @@ void DP_fill_in_general_cases(const int width,
   }
 }
 
-int derive_pinf(const int problem_weights[], 
+int derive_pinf(const int problem_weights[],
                 const int n){
   /*
     Description:
@@ -464,7 +464,7 @@ int derive_pinf(const int problem_weights[],
     Output:
       my_pinf - my version of positive infinity.
     Notes:
-      
+
   */
 
   int my_pinf = 1;
@@ -489,7 +489,7 @@ int DP_find_best_solution(const int width,
       problem_profits - the input problem's associated item profits
       problem_weights - the input problem's associated item weights
       capacity - the input problem's knapsack capacity
-      my_pinf - the input problem's trivial upper bound on weight 
+      my_pinf - the input problem's trivial upper bound on weight
     Preconditions:
       DP_table must be completed, both in basis and in general case, for us
        to derive an optimal solution.
@@ -501,12 +501,12 @@ int DP_find_best_solution(const int width,
   */
 
   int p= -1;
-  for(int i = width-1; i >= 0; i--){   
-    if (DP_table[n-1][i] != my_pinf){    
-      if (DP_table[n-1][i] <= capacity){ 
+  for(int i = width-1; i >= 0; i--){
+    if (DP_table[n-1][i] != my_pinf){
+      if (DP_table[n-1][i] <= capacity){
         p = i;
         break;
-      } 
+      }
     }
   }
   return p;
@@ -522,17 +522,17 @@ int DP_derive_solution_set(int n,
                            const int sol_flag){
 
   /*
-    Description: 
+    Description:
       Given a completed DP_table, derive the indices of the items of the optimal set.
     Inputs:
       n - the number of rows in the Dynamic Programming table
       DP_table - the 2d array representing the constituent subproblems of the DP
       solution - the output array; it will simply hold the indices of the items that
-       are included in the optimal solution. 
+       are included in the optimal solution.
       p - the profit of the optimal solution
       sol_flag - if 0, index notation, if 1, 0/1 notation
     Postconditions:
-      solution will be filled out      
+      solution will be filled out
     Notes:
       This doesn't work on certain instances :/
   */
@@ -560,7 +560,7 @@ void DP_assert_array_is_integer(const int an_array[],
                                 const int length){
   /*
     Description
-      This is just a basic assertion thing because it would be just like me 
+      This is just a basic assertion thing because it would be just like me
        to find a way for C to let this happen. It really should never be needed.
   */
   for(int i = 0; i < length; i++){
@@ -570,12 +570,12 @@ void DP_assert_array_is_integer(const int an_array[],
 
 
 void pisinger_reader(int *n, int *c, int **p, int **w, int **x, char *problem_file){
-  /* This is a haggard mess*/ 
+  /* This is a haggard mess*/
 
   FILE *fp;
   char str[256];
   char * pch;
-  
+
   fp = fopen(problem_file, "r");
 
   /* Get n */
@@ -636,7 +636,7 @@ void pisinger_generator_reader(int *n, int *c, int **p, int **w, char *problem_f
   /*
     Description:
       Reads in the files that Pisinger's generator creates.
-      They're of the form 
+      They're of the form
         n
             1   p[1]   w[1]
             :    :      :
@@ -647,7 +647,7 @@ void pisinger_generator_reader(int *n, int *c, int **p, int **w, char *problem_f
   FILE *fp;
   char str[256];
   char * pch;
-  
+
   fp = fopen(problem_file, "r");
   if (fp == NULL) exit(EXIT_FAILURE);
 
