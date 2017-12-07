@@ -5,9 +5,12 @@
     mmmm cheesecake
     Data type assertions seem unnecessary because C is pretty tight about that anyway.
    Les buugs:
-    - Solution set on larger instances gets wack in the technical sense.
+    - Segmentation fault with pisinger's problem generator when freeing memory. 
+      Not sure why this is lol. It was the munmap_chunk(): invalid pointer error
+    - On the problem instance "knapPI_11_10000_1000.csv" I get a segfault when I attempt to
+       fill the base cases  
    TODO:
-    - Integrate Pisinger's problem instance generator
+    - Integrate Pisinger's problem instance generator fully. The memory allocation doesn't work.
  */
 
 #include <math.h>
@@ -47,7 +50,8 @@ void DP(const int problem_profits[],
         const int n,
         const int capacity,
         const int sol_flag,
-        const int bounding_method);
+        const int bounding_method,
+        char *problem_file);
 int DP_max_profit(const int problem_profits[],
                   int n);
 int DP_p_upper_bound(const int problem_profits[],
@@ -87,17 +91,39 @@ void pisinger_reader(int *n,
                      int **w,
                      int **x,
                      char *problem_file);
-
+void pisinger_generator_reader(int *n,
+                               int *c,
+                               int **p,
+                               int **w,
+                               char *problem_file);
 /* .ılılılılılılılılıl Program body lılılılılılılılılı. */
 int main(){
   /*
     Notes:
       Profits, weights, and capacity are aimed to be dynamically read from source files.
       As it stands, this is not a functionality.
+
       Also remember sol_flag = 0 means indexed, 1 means binary
+                    bounding_method = 1 -> nP, 2 -> simple sum
+
       Input files: "knapPI_1_50_1000.csv"  
                    "small_instance"
                    "knapPI_1_100_1000.csv"
+                   "knapPI_1_1000_1000.csv"
+                   "knapPI_11_10000_1000.csv" <- Hard instance
+                   "test.in" for the auto generated instances.
+                     To generate instances:
+                      cc -Aa -O -o generator generator.c -lm
+                     Actually, use this:
+                      gcc -O3 -march=native -o generator generator.c
+                     To run:
+                      generator n r type i S
+                     where n: number of items, 
+                           r: range of coefficients, 
+                        type: 1=uncorr., 2=weakly corr., 3=strongly corr., 4=subset sum
+                           i: instance no
+                           S: number of tests in series (typically 1000)
+                     
       Important: Valgrind will return false positives for larger problem instances.
                  We can see this as the small instance and the large instance varies.
                  Source: 
@@ -109,37 +135,54 @@ int main(){
   */
   int n, capacity;
   int *profits, *weights, *x;
-  char *problem_file = "knapPI_1_100_1000.csv";
+  char *problem_file = "knapPI_1_1000_1000.csv";
   const int bounding_method = 2;
+  int sol_flag = 1;
+
+  /* pisinger_reader only works if the input file is of the form of the standard knapsack
+     instances that accompany "Where are all the the hard Knapsack instances" by Pisinger
+     in 2005. As a result, we must use a seperate reader for the other file format. */
+  if (problem_file == "test.in"){
+    pisinger_generator_reader(&n,
+                               &capacity,
+                               &profits,
+                               &weights,
+                               problem_file);
+
+  }else{
   pisinger_reader(&n,
                   &capacity,
                   &profits,
                   &weights,
                   &x,
                   problem_file);
-  
+  }
   int S[n];
+  for (int i=0; i < n; i++) S[i] = 0;
 
-  int sol_flag = 2;
-
-  /* PROBLEM OUTPUT */
+  /* PROBLEM OUTPUT*/
+  printf("%s\n", problem_file);
   printf("Problem Specification:\nCapacity: %d\tn: %d\n", capacity, n);
-  printf("Profits: [ ");
-  for(int i=0; i < n; i++) printf("%d ", profits[i]);
-  printf("]\n");
-  printf("Weights: [ ");
-  for(int i=0; i < n; i++) printf("%d ", weights[i]);
-  printf("]\n Bounding method chosen: %s\n Solving...\n\n",bounding_method==1?"nP (Why did you choose this?)":"Simple sum");
+  if (n <= 100){
+    printf("Profits: [ ");
+    for(int i=0; i < n; i++) printf("%d ", profits[i]);
+    printf("]\n");
+    printf("Weights: [ ");
+    for(int i=0; i < n; i++) printf("%d ", weights[i]);
+    printf("]\n ");
+  }else printf("Not printing profits and weights; n is too large!\n");
+
+  printf("Bounding method chosen: %s\n Solving...\n",bounding_method==1?"nP (Why did you choose this?)":"Simple sum");
   /**/
 
-  DP(profits, weights, x, S, n, capacity, sol_flag, bounding_method);
+  DP(profits, weights, x, S, n, capacity, sol_flag, bounding_method, problem_file);
 
   printf("Terminating...\n");
 
   /*Reader frees */
   free(profits);
   free(weights);
-  free(x);
+  if (problem_file == "test.in") free(x);
   /**/
 
   return 0;
@@ -153,7 +196,8 @@ void DP(const int problem_profits[],
         const int n,
         const int capacity,
 	const int sol_flag,
-        const int bounding_method){
+        const int bounding_method,
+        char * problem_file){
   /*
     Description:
       Carries out DP to compute the optimal solution for knapsack,
@@ -178,38 +222,36 @@ void DP(const int problem_profits[],
                                        n,
                                        max_profit,
                                        bounding_method);
-  printf("Upper bound on p: %d\n", p_upper_bound);
   // Define DP table (n+1)*(nP)
   //int DP_table[n+1][p_upper_bound];
    int (*DP_table)[p_upper_bound] = malloc(sizeof(*DP_table) * (n+1));
-  // TODO This allocation does not work with larger instances.
   // https://stackoverflow.com/questions/14093318/large-2d-array-in-c-stack-over-flow-error
-
-  printf("DP_table defined\n");
-
+  printf(" DP_table malloc'd! Dimensions are %d * %d! \n", n+1, p_upper_bound);
   // Compute base cases
+
+  printf(" Filling base cases...\n");
   DP_fill_in_base_cases(p_upper_bound,
                         n+1,
                         DP_table, 
                         problem_profits,
                         problem_weights);
-
+  printf(" Base cases filled!\n");
   // Compute general cases
   DP_fill_in_general_cases(p_upper_bound,
                            n+1,
                            DP_table,
                            problem_profits,
                            problem_weights);
-
+  printf(" General cases filled!\n");
   int my_pinf = derive_pinf(problem_weights, n);
-
+  printf(" pinf derived!\n");
   // Find the best solution - 2 VALGRIND ERRORS HERE
   int p = DP_find_best_solution(p_upper_bound,
                                 n+1,
                                 DP_table,
                                 capacity,
                                 my_pinf);
-
+  printf(" Best solution found!\n");
   // Derive S from the table VALGRIND ERROR HERE
   int n_solutions = DP_derive_solution_set(n+1,
                                            p_upper_bound,
@@ -218,9 +260,10 @@ void DP(const int problem_profits[],
                                            sol,
                                            p, 
                                            sol_flag);
-
+  printf(" Solution set derived!\n");
   /* Solution output*/
-  printf("Solved...\nSolution format: %s\n\nSolution set: \n",sol_flag==0?"Indexed":"Binary");
+  printf("Solved...\nSolution format: %s\n\n",sol_flag==0?"Indexed":"Binary");
+
   if (sol_flag == 0){
     for(int i=0; i<n_solutions; i++){
       printf("%d ", sol[i]);
@@ -232,15 +275,18 @@ void DP(const int problem_profits[],
     printf("\nOptimal profit: %d\nOptimal Weight: %d\n\n", p, DP_table[n][p]);
   }
   int correct_flag = 1;
-  for (int i=0; i<n; i++){
-    if (sol[i] != x[i]){
-      printf("Disparity between solution sets. Incorrect solution obtained :(\n");
-      correct_flag = 0;
-      break;
-    }
-  }
-  if (correct_flag) printf("Solution sets match. Correct solution obtained!\n");
-  /**/
+  if (problem_file != "test.in"){
+    if (sol_flag != 0){
+      for (int i=0; i<n; i++){
+        if (sol[i] != x[i]){
+          printf("Disparity between solution sets. Incorrect solution obtained :(\n");
+          correct_flag = 0;
+          break;
+        }
+      }
+      if (correct_flag) printf("Solution sets match. Correct solution obtained!\n");
+    }else printf("I'm not going to check the solution set of an indexed solution. You do it.\n");
+  }/**/
 }
 
 
@@ -468,12 +514,12 @@ int DP_find_best_solution(const int width,
 
 
 int DP_derive_solution_set(int n,
-                            const int width,
-                            const int DP_table[][width],
-                            const int problem_profits[],
-                            int solution[],
-                            int p,
-                            const int sol_flag){
+                           const int width,
+                           const int DP_table[][width],
+                           const int problem_profits[],
+                           int solution[],
+                           int p,
+                           const int sol_flag){
 
   /*
     Description: 
@@ -488,8 +534,7 @@ int DP_derive_solution_set(int n,
     Postconditions:
       solution will be filled out      
     Notes:
-      This does not work! I need to create a test case to capture how it should 
-       function.
+      This doesn't work on certain instances :/
   */
 
   int s_index = 0;
@@ -533,7 +578,6 @@ void pisinger_reader(int *n, int *c, int **p, int **w, int **x, char *problem_fi
   
   fp = fopen(problem_file, "r");
 
-  
   /* Get n */
   if (fp == NULL) exit(EXIT_FAILURE);
   while (fgets(str, sizeof(str), fp)){
@@ -541,6 +585,7 @@ void pisinger_reader(int *n, int *c, int **p, int **w, int **x, char *problem_fi
       pch = strtok(str, " ");
       pch = strtok(NULL, " ");
       *n = atoi(pch);
+      // I could probably just break here and keep moving on
     }
   }
 
@@ -548,7 +593,7 @@ void pisinger_reader(int *n, int *c, int **p, int **w, int **x, char *problem_fi
   int *tmp_w = (int *)malloc(*n * sizeof(*tmp_w));
   int *tmp_x = (int *)malloc(*n * sizeof(*tmp_x));
 
-  rewind(fp);
+  rewind(fp); // Meaning this would probably be unnecessary
   int counter=0;
   if (fp == NULL) exit(EXIT_FAILURE);
   while ((fgets(str, sizeof(str), fp))&&(counter<*n)){
@@ -580,19 +625,67 @@ void pisinger_reader(int *n, int *c, int **p, int **w, int **x, char *problem_fi
     }
   }
   fclose(fp);
-  /*
-  printf("CALLED FUNCTION Debug: Profits...\n");
-  for(int i=0; i<*n; i++){
-    printf("tmp_p[%d]: %d\n", i, tmp_p[i]);
-  }
-
-  printf("CALLED FUNCTION Debug: Weights...\n");
-  for(int i=0; i<*n; i++){
-    printf("tmp_w[%d]: %d\n", i, tmp_w[i]);
-  }*/
 
   *p = tmp_p;
   *w = tmp_w;
   *x = tmp_x;
 }
 
+
+void pisinger_generator_reader(int *n, int *c, int **p, int **w, char *problem_file){
+  /*
+    Description:
+      Reads in the files that Pisinger's generator creates.
+      They're of the form 
+        n
+            1   p[1]   w[1]
+            :    :      :
+            n   p[n]   w[n]
+        c
+  */
+
+  FILE *fp;
+  char str[256];
+  char * pch;
+  
+  fp = fopen(problem_file, "r");
+  if (fp == NULL) exit(EXIT_FAILURE);
+
+  /* Get n */
+  fgets(str, sizeof(str), fp);
+  *n = atoi(str);
+  printf("n*=%d\n",*n);
+
+  int *tmp_p = (int *)malloc(*n * sizeof(*tmp_p));
+  int *tmp_w = (int *)malloc(*n * sizeof(*tmp_w));
+
+  /* Get profits and weights */
+  /* This section has each separated by arbitrary amounts of whitespace */
+  int counter = 0;
+  //for(int i=0; i < *n; i++){
+  while ((fgets(str, sizeof(str), fp))&&(counter<*n)){
+    //fgets(str, sizeof(str), fp);
+    pch = strtok(str, " ");
+    // This is just i
+
+    pch = strtok(NULL, " ");
+    // Add pch to profits
+    //tmp_p[i] = atoi(pch);
+    tmp_p[counter] = atoi(pch);
+
+    pch = strtok(NULL, " ");
+    // Add pch to weights
+    //tmp_w[i] = atoi(pch);
+    tmp_w[counter] = atoi(pch);
+    counter++;
+  }
+
+  /* Get Capacity */
+  fgets(str, sizeof(str), fp);
+  *c = atoi(str);
+
+  fclose(fp);
+
+  *p = tmp_p;
+  *w = tmp_w;
+}
