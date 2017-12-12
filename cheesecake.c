@@ -147,10 +147,10 @@ int main(){
      in 2005. As a result, we must use a seperate reader for the other file format. */
   if (problem_file == "test.in"){
     pisinger_generator_reader(&n,
-                               &capacity,
-                               &profits,
-                               &weights,
-                               problem_file);
+                              &capacity,
+                              &profits,
+                              &weights,
+                              problem_file);
 
   }else{
   pisinger_reader(&n,
@@ -228,9 +228,8 @@ void DP(const int problem_profits[],
                                        max_profit,
                                        bounding_method);
   // Define DP table (n+1)*(nP)
-  //int DP_table[n+1][p_upper_bound];
-   int (*DP_table)[p_upper_bound] = malloc(sizeof(*DP_table) * (n+1));
-  // https://stackoverflow.com/questions/14093318/large-2d-array-in-c-stack-over-flow-error
+  int (*DP_table)[p_upper_bound] = malloc(sizeof(*DP_table) * (n+1));
+
   printf(" DP_table malloc'd! Dimensions are %d * %d! \n", n+1, p_upper_bound);
   // Compute base cases
 
@@ -252,14 +251,14 @@ void DP(const int problem_profits[],
   printf(" General cases filled!\n");
   int my_pinf = derive_pinf(problem_weights, n);
   printf(" pinf derived!\n");
-  // Find the best solution - 2 VALGRIND ERRORS HERE
+
   int p = DP_find_best_solution(p_upper_bound,
                                 n+1,
                                 DP_table,
                                 capacity,
                                 my_pinf);
   printf(" Best solution found!\n");
-  // Derive S from the table VALGRIND ERROR HERE
+
   int n_solutions = DP_derive_solution_set(n+1,
                                            p_upper_bound,
                                            DP_table,
