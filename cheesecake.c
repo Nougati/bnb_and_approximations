@@ -9,8 +9,6 @@
       Not sure why this is lol. It was the munmap_chunk(): invalid pointer error
     - On the problem instance "knapPI_11_10000_1000.csv" I get a segfault when I attempt to
        fill the base cases
-   TODO:
-    - Integrate Pisinger's problem instance generator fully. The memory allocation doesn't work.
  */
 
 #include <math.h>
@@ -49,6 +47,7 @@ void DP(const int problem_profits[],
         int sol[],
         const int n,
         const int capacity,
+        const int z,
         const int sol_flag,
         const int bounding_method,
         char *problem_file);
@@ -87,6 +86,7 @@ void DP_assert_array_is_integer(const int an_array[],
                                 const int length);
 void pisinger_reader(int *n,
                      int *c,
+                     int *z,
                      int *(*p),
                      int **w,
                      int **x,
@@ -96,6 +96,9 @@ void pisinger_generator_reader(int *n,
                                int **p,
                                int **w,
                                char *problem_file);
+
+
+
 /* .ılılılılılılılılıl Program body lılılılılılılılılı. */
 int main(){
   /*
@@ -133,7 +136,7 @@ int main(){
                   inclined to believe something has gone wrong. This is why an upper bound
                   on p would be nice!
   */
-  int n, capacity;
+  int n, capacity, z;
   int *profits, *weights, *x;
   char *problem_file = "knapPI_1_1000_1000.csv";
   const int bounding_method = 2;
@@ -152,6 +155,7 @@ int main(){
   }else{
   pisinger_reader(&n,
                   &capacity,
+                  &z,
                   &profits,
                   &weights,
                   &x,
@@ -175,16 +179,16 @@ int main(){
   printf("Bounding method chosen: %s\n Solving...\n",bounding_method==1?"nP (Why did you choose this?)":"Simple sum");
   /**/
 
-  DP(profits, weights, x, S, n, capacity, sol_flag, bounding_method, problem_file);
+  DP(profits, weights, x, S, n, capacity, z, sol_flag, bounding_method, problem_file);
 
   printf("Terminating...\n");
 
   /*Reader frees */
   free(profits);
   free(weights);
-  if (problem_file == "test.in") free(x);
+  if (problem_file != "test.in") free(x);
   /**/
-  problem_file = getchar();
+  int poo = getchar();
   return 0;
 }
 
@@ -195,6 +199,7 @@ void DP(const int problem_profits[],
         int sol[],
         const int n,
         const int capacity,
+        const int z,
 	const int sol_flag,
         const int bounding_method,
         char * problem_file){
@@ -236,7 +241,9 @@ void DP(const int problem_profits[],
                         problem_profits,
                         problem_weights);
   printf(" Base cases filled!\n");
+
   // Compute general cases
+  printf(" Filling general cases...\n");
   DP_fill_in_general_cases(p_upper_bound,
                            n+1,
                            DP_table,
@@ -262,18 +269,23 @@ void DP(const int problem_profits[],
                                            sol_flag);
   printf(" Solution set derived!\n");
   /* Solution output*/
-  printf("Solved...\nSolution format: %s\n\n",sol_flag==0?"Indexed":"Binary");
+  printf("Solved...\nSolution format: %s\n",sol_flag==0?"Indexed":"Binary");
 
   if (sol_flag == 0){
+    /* This is just printing the solution set. It is clutter at the moment
     for(int i=0; i<n_solutions; i++){
       printf("%d ", sol[i]);
-    }printf("\nOptimal profit: %d\nOptimal Weight: %d\n", p, DP_table[n][p]);
+    }*/printf("\nComputed optimal profit: %d\nComputed Optimal Weight: %d\n", p, DP_table[n][p]);
   }else{
+    /* This is just printing the solution set. It is clutter at the moment
     for(int i=0; i<n; i++){
       printf("%d ", sol[i]);
-    }
-    printf("\nOptimal profit: %d\nOptimal Weight: %d\n\n", p, DP_table[n][p]);
+    }*/
+    printf("\nComputed optimal profit: %d\nOptimal Weight: %d\n", p, DP_table[n][p]);
   }
+  printf("True optimal profit: %d\n", z);
+  float deviation = (1-(p/z))*100;
+  printf("Deviation by %.2f%s!\n", deviation, "%");
   int correct_flag = 1;
   if (problem_file != "test.in"){
     if (sol_flag != 0){
@@ -286,7 +298,9 @@ void DP(const int problem_profits[],
       }
       if (correct_flag) printf("Solution sets match. Correct solution obtained!\n");
     }else printf("I'm not going to check the solution set of an indexed solution. You do it.\n");
-  }/**/
+  }
+
+  free(DP_table);
 }
 
 
@@ -569,9 +583,8 @@ void DP_assert_array_is_integer(const int an_array[],
 }
 
 
-void pisinger_reader(int *n, int *c, int **p, int **w, int **x, char *problem_file){
+void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x, char *problem_file){
   /* This is a haggard mess*/
-
   FILE *fp;
   char str[256];
   char * pch;
@@ -598,11 +611,15 @@ void pisinger_reader(int *n, int *c, int **p, int **w, int **x, char *problem_fi
   if (fp == NULL) exit(EXIT_FAILURE);
   while ((fgets(str, sizeof(str), fp))&&(counter<*n)){
 
-   if(str[0] == 'c'){
+  if(str[0] == 'c'){
       pch = strtok(str, " ");
       pch = strtok(NULL, " ");
       *c = atoi(pch);
-    }else if (!((str[0] == 'n')
+  }else if (str[0] == 'z'){
+      pch = strtok(str, " ");   
+      pch = strtok(NULL, " ");
+      *z = atoi(pch);
+  }else if (!((str[0] == 'n')
               ||(str[0] == 'z')
               ||(str[0] == 'k')
               ||(str[0] == 't'))){
