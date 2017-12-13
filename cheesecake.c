@@ -4,11 +4,8 @@
    Notes:
     mmmm cheesecake
     Data type assertions seem unnecessary because C is pretty tight about that anyway.
-   Les buugs:
-    - Segmentation fault with pisinger's problem generator when freeing memory.
-      Not sure why this is lol. It was the munmap_chunk(): invalid pointer error
-    - On the problem instance "knapPI_11_10000_1000.csv" I get a segfault when I attempt to
-       fill the base cases
+   TODO
+    - For some reason this doesn't work on knapPI_11_1000_1000.csv
  */
 
 #include <math.h>
@@ -113,7 +110,9 @@ int main(){
                    "small_instance"
                    "knapPI_1_100_1000.csv"
                    "knapPI_1_1000_1000.csv"
-                   "knapPI_11_10000_1000.csv" <- Hard instance
+                   "knapPI_11_1000_1000.csv" <- Hard
+                   "knapPI_11_10000_1000.csv" <- Hard instance (Won't compute)
+                   "knapPI_16_1000_1000.csv" <- Hard
                    "test.in" for the auto generated instances.
                      To generate instances:
                       cc -Aa -O -o generator generator.c -lm
@@ -138,7 +137,7 @@ int main(){
   */
   int n, capacity, z;
   int *profits, *weights, *x;
-  char *problem_file = "knapPI_1_1000_1000.csv";
+  char *problem_file = "./problems/knapPI_11_1000_1000.csv";
   const int bounding_method = 2;
   int sol_flag = 1;
 
@@ -176,12 +175,12 @@ int main(){
     printf("]\n ");
   }else printf("Not printing profits and weights; n is too large!\n");
 
-  printf("Bounding method chosen: %s\n Solving...\n",bounding_method==1?"nP (Why did you choose this?)":"Simple sum");
+  printf("Bounding method chosen: %s\nSolving...\n",bounding_method==1?"nP (Why did you choose this?)":"Simple sum");
   /**/
 
   DP(profits, weights, x, S, n, capacity, z, sol_flag, bounding_method, problem_file);
 
-  printf("Terminating...\n");
+  printf("Terminating... Press the Any Key\n");
 
   /*Reader frees */
   free(profits);
@@ -290,7 +289,7 @@ void DP(const int problem_profits[],
     if (sol_flag != 0){
       for (int i=0; i<n; i++){
         if (sol[i] != x[i]){
-          printf("Disparity between solution sets. Incorrect solution obtained :(\n");
+          printf("Disparity between solution sets... %s \n",z==p?"Profits are same though ¯\\_(ツ)_/¯":"And the profits are different.. It didn't work.");
           correct_flag = 0;
           break;
         }
