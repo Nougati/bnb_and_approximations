@@ -1,15 +1,22 @@
 /* ~~fptas2.c~~
  * MAJOR WORK IN PROGRESS LOL
  * TODO
- *  - Make sure that my Kprofit(S') output is definitely what I think it is.
+ *  - Set up iterative FPTAS 
  * Pushing from home!
+ * Really big epsilons:
+ *   Basically for epsilon >= 1, the lower bound guarantee relative to OPT goes to 0. 
+ *   P lower bounds OPT, but P decreases in the truncated profits, so its guarantees decrease
+ *    too.
+ * 
  */
+
 
 #include <stdio.h>
 #include <math.h>
 #include <assert.h> 
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #define typename(x) _Generic((x),        /* Get the name of a type */             \
                                                                                   \
         _Bool: "_Bool",                  unsigned char: "unsigned char",          \
@@ -50,7 +57,6 @@ void pisinger_reader(int *n,
                      int **w,
                      int **x,
                      char *problem_file);
-
 void FPTAS(float eps, 
            int *profits,
            int *weights,
@@ -137,6 +143,7 @@ int main(){
    *   As eps approaches 1, FPTAS's lower bound approaches (1-eps)OPT
    *    ... I think
    */
+
   /* Declarations */
   float eps, K;
   char *problem_file;
@@ -144,8 +151,8 @@ int main(){
   int n, capacity, z, sol_flag, bounding_method;
 
   /* Initialisations */
-  eps = 1.0;
-  problem_file = "./problems/knapPI_3_1000_10000000.csv";
+  eps = 1;
+  problem_file = "./problems/knapPI_1_50_1000.csv";
 
   pisinger_reader(&n,
                   &capacity,
@@ -159,16 +166,13 @@ int main(){
   for (int i=0; i < n; i++) sol_prime[i] = 0;
   bounding_method = 2;
   profit_primes = (int *) malloc(n * sizeof(*profit_primes));
-  /* Begin Debug 
-  printf("DEBUG n: %d\nDEBUG c: %d\nDEBUG z: %d\n", n, capacity, z);
-  /* End Debug */
 
-  /* Run the FPTAS...
-     I want to give to FPTAS to update:
-       profit_prime: the FPTAS's guess on profit
-       sol_prime: the FPTAS's guess on sol (already malloc'd)
-       a K so I can get the rescaled profits on choice.. Just in case!
-  */ 
+  /*Timer Segment Start*/
+  clock_t t;
+  printf("eps = %f. Starting timer...\n", eps);
+  t = clock();
+  /*Timer Segment End*/
+
   FPTAS(eps,
         profits,
         weights,
@@ -183,7 +187,13 @@ int main(){
         &K,  // out parameter
         profit_primes); // out parameter 
 
-  /* Derive profit'(S') */
+  /*Timer Segment Start*/
+  t = clock() - t;
+  double time_taken = ((double)t)/CLOCKS_PER_SEC;
+  printf("Compute time: %f\n", time_taken);
+  /*Timer Segment End*/
+
+  /* Derive Kprofit'(S') */
   float profit_primes_i_times_K; 
   for(int i=0; i<n; i++){
     profit_primes_i_times_K = profit_primes[i]*K;
@@ -198,13 +208,16 @@ int main(){
     }
   }
 
-  /*End debug*/
   /* Print profit results */
-  printf("profit(O): %d\nprofit(S'): %d\nKprofit'(S'): %d\n", z, profitSprime, kprofitprimeSprime);
+  printf("profit(O): %d\nprofit(S'): %d\nKprofit'(S'): %d\n", z, profitSprime,
+                                                                 kprofitprimeSprime);
 
-  printf("Deviation from optimal: %s%f.\n", "%", (1 - ((float)z/(float)profitSprime)) *100);
+  printf("Deviation from optimal: %s%f.\n", "%", (1 - ((float)profitSprime/(float)z)) *100);
 
   free(profit_primes);
+  free(profits);
+  free(weights);
+  free(x);
   return 0;
 }
 
@@ -251,9 +264,6 @@ void FPTAS(float eps,
                     n);
   *K = define_K(eps, P, n);
   make_profit_primes(profits, profits_prime, *K, n); 
-  /*BEGIN DEBUG: Transition from profits to profits' 
-  for(int i = 0; i < n; i++) printf("profit[%d]: %d\t-> %d\n", i, profits[i], profits_prime[i]);
-  /*END DEBUG*/
   /* Now with amended profits list "profit_primes," solve the DP */
   DP(profits_prime,
      weights,
@@ -267,7 +277,7 @@ void FPTAS(float eps,
      problem_file);
 
   /* Solution should be in sol_prime */
-  /* Nothing else done in this place? */
+
 }
 
 void DP(const int problem_profits[], // profit primes?
@@ -338,16 +348,14 @@ void DP(const int problem_profits[], // profit primes?
                                            sol_flag);
   free(DP_table);
 }
-/**** END DP ****/
- 
-
 
 
 int DP_max_profit(const int problem_profits[],
                   const int n){
   /*
     Description:
-      Finds the highest profit in the array of item profits
+      Finds the highest profit in the array of item profits. In terms of Vasirani's notation
+       this is P. 
     Inputs:
       problem_profits - the profit array
       n - the number of objects
@@ -458,6 +466,7 @@ void DP_fill_in_base_cases(const int width,
   }
 }
 
+
 void DP_fill_in_general_cases(const int width,
                               const int n,
                               int DP_table[][width],
@@ -503,6 +512,7 @@ void DP_fill_in_general_cases(const int width,
   }
 }
 
+
 int derive_pinf(const int problem_weights[],
                 const int n){
   /*
@@ -514,7 +524,8 @@ int derive_pinf(const int problem_weights[],
     Output:
       my_pinf - my version of positive infinity.
     Notes:
-
+      This is a purely symbolic representation of infinity that adds a single linear
+       pass of the weight set to the run time.
   */
 
   int my_pinf = 1;
@@ -523,6 +534,7 @@ int derive_pinf(const int problem_weights[],
   }
   return my_pinf;
 }
+
 
 int DP_find_best_solution(const int width,
                           const int n,
@@ -583,7 +595,7 @@ int DP_derive_solution_set(int n,
     Postconditions:
       solution will be filled out
     Notes:
-      This doesn't work on certain instances :/
+      
   */
 
   int s_index = 0;
@@ -607,12 +619,24 @@ int DP_derive_solution_set(int n,
 
 float define_K(float eps, int P, int n){
   /* Description: 
-   *   Defines real valued scaling factor K
+   *   Defines real valued scaling factor K. K is epsP/n. As eps approaches 0, K does too.  
+   *    As eps approaches 1, K approaches P/n. As eps exceeds 1, K scales progressively larger
+   *    than the n-way split of P.
+   * Inputs: 
+   *  
+   * Output:
+   *  
+   * Notes:
+   *  Epsilon can indeed exceed 1 as soon as epsilon hits 1 the lower bound guarantee on the
+   *   profit with respect to OPT drops completely and is bounded trivially by 0. As a result,
+   *   a stronger lower bound would be P at this point, however there is no guarantee on how
+   *   this adjusted P will look. It may well be positive but with increasing epsilon values 
+   *   it would seem that P's would be crushed to a low point. 
    */
   
   // assert eps > 0
   assert(eps > 0);
-  assert(eps <= 1);  
+  //assert(eps <= 1); TODO TURN THIS BACK ON???  
 
   float K = (eps*P)/n;
   // define K
@@ -630,6 +654,12 @@ void make_profit_primes(int *profits, int *profits_prime, float K, int n){
   * Inputs:
   *
   * Postconditions:
+  *  
+  * Notes:
+  *  As eps increases, K increases, and so the profit' of each item will get scaled further
+  *   and further downwards. Since P is the max, it will be scaled to 1 for eps = 1 TODO
+  *   explain this better
+  *   
   */
   
   for(int i=0; i < n; i++){

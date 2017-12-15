@@ -5,7 +5,6 @@
     mmmm cheesecake
     Data type assertions seem unnecessary because C is pretty tight about that anyway.
    TODO
-    - For some reason this doesn't work on knapPI_11_1000_1000.csv
  */
 
 #include <math.h>
@@ -137,7 +136,7 @@ int main(){
   */
   int n, capacity, z;
   int *profits, *weights, *x;
-  char *problem_file = "./problems/knapPI_11_1000_1000.csv";
+  char *problem_file = "./problems/knapPI_3_1000_10000000.csv";
   const int bounding_method = 2;
   int sol_flag = 1;
 
@@ -413,11 +412,13 @@ void DP_fill_in_base_cases(const int width,
   }
 
   // Go over the first row with infinities
-  for(int i = 1; i < width; i++){
+  for(int i = 1; i < width; i++) {
     DP_table[0][i] = my_pinf;
   }
 
 }
+
+
 
 
 void DP_fill_in_general_cases(const int width,
