@@ -46,10 +46,12 @@ void DP(const int problem_profits[],
         const int sol_flag,
         const int bounding_method,
         const char *problem_file);
+
 int DP_p_upper_bound(const int problem_profits[],
                      const int n,
                      const int P,
                      const int bounding_method);
+
 void pisinger_reader(int *n,
                      int *c,
                      int *z,
@@ -57,6 +59,7 @@ void pisinger_reader(int *n,
                      int **w,
                      int **x,
                      char *problem_file);
+
 void FPTAS(float eps, 
            int *profits,
            int *weights,
@@ -82,16 +85,19 @@ void make_profit_primes(int *profits,
                         int *profits_prime,
                         float K,
                         int n);
+
 void DP_fill_in_base_cases(const int width,
                            const int n,
                            int DP_table[][width],
                            const int problem_profits[],
                            const int problem_weights[]);
+
 void DP_fill_in_general_cases(const int width,
                               const int n,
                               int DP_table[][width],
                               const int problem_profits[],
                               const int problem_weights[]);
+
 int derive_pinf(const int problem_weights[],
                 const int n);
 
@@ -100,6 +106,7 @@ int DP_find_best_solution(const int width,
                           const int DP_table[][width],
                           const int capacity,
                           const int my_pinf);
+
 int DP_derive_solution_set(int n,
                            const int width,
                            const int DP_table[][width],
@@ -107,10 +114,10 @@ int DP_derive_solution_set(int n,
                            int solution[],
                            int p,
                            const int sol_flag);
+
 int p_upper_bound_aux(const int problem_profits[],
                       const int n);
 /* End Function Prototypes */
-
 
 int main(){
   /* 
@@ -349,7 +356,6 @@ void DP(const int problem_profits[], // profit primes?
   free(DP_table);
 }
 
-
 int DP_max_profit(const int problem_profits[],
                   const int n){
   /*
@@ -396,7 +402,6 @@ int DP_p_upper_bound(const int problem_profits[],
   return upper_bound;
 }
 
-
 int p_upper_bound_aux(const int problem_profits[],
                       const int n){
   /*
@@ -419,7 +424,6 @@ int p_upper_bound_aux(const int problem_profits[],
   }
   return total;
 }
-
 
 void DP_fill_in_base_cases(const int width,
                            const int n,
@@ -466,7 +470,6 @@ void DP_fill_in_base_cases(const int width,
   }
 }
 
-
 void DP_fill_in_general_cases(const int width,
                               const int n,
                               int DP_table[][width],
@@ -512,7 +515,6 @@ void DP_fill_in_general_cases(const int width,
   }
 }
 
-
 int derive_pinf(const int problem_weights[],
                 const int n){
   /*
@@ -534,7 +536,6 @@ int derive_pinf(const int problem_weights[],
   }
   return my_pinf;
 }
-
 
 int DP_find_best_solution(const int width,
                           const int n,
@@ -616,7 +617,6 @@ int DP_derive_solution_set(int n,
  return s_index;
 }
 
-
 float define_K(float eps, int P, int n){
   /* Description: 
    *   Defines real valued scaling factor K. K is epsP/n. As eps approaches 0, K does too.  
@@ -645,7 +645,6 @@ float define_K(float eps, int P, int n){
   // return K
 }
 
-
 void make_profit_primes(int *profits, int *profits_prime, float K, int n){
  /* 
   * Description: 
@@ -666,7 +665,6 @@ void make_profit_primes(int *profits, int *profits_prime, float K, int n){
     profits_prime[i] = floor(profits[i]/K);
   }
 }
-
 
 void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x, char *problem_file){
   /* 
@@ -739,5 +737,4 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x, char *pr
   *w = tmp_w;
   *x = tmp_x;
 }
-
 
