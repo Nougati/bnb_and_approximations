@@ -666,7 +666,7 @@ void make_profit_primes(int *profits, int *profits_prime, float K, int n){
   }
 }
 
-void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x, char *problem_file){
+void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x, char *problem_file){ 
   /* 
    * Description:
    *   Reads pisinger's csv knapsack instances into arrays. This does not work 
