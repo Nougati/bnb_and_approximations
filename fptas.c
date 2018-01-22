@@ -1,14 +1,14 @@
-/* ~~fptas2.c~~
- * MAJOR WORK IN PROGRESS LOL
- * TODO
- *  - Set up iterative FPTAS 
- * Pushing from home!
- * Really big epsilons:
- *   Basically for epsilon >= 1, the lower bound guarantee relative to OPT goes to 0. 
- *   P lower bounds OPT, but P decreases in the truncated profits, so its guarantees decrease
- *    too.
- * 
- */
+/**fptas2.c********************************************************************
+ * TODO                                                                       *
+ *  - Go over code to more easily support Williamson and Shmoy's DP too       *
+ *  - Set up iterative FPTAS                                                  *
+ *                                                                            *
+ *  Really big epsilons:                                                      *
+ *    Basically for epsilon >= 1, the lower bound guarantee relative to OPT   *
+ *    goes to 0. P lower bounds OPT, but P decreases in the truncated profits,*
+ *    so its guarantees decrease too.                                         *
+ *                                                                            *
+ *****************************************************************************/
 
 
 #include <stdio.h>
@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
 #define typename(x) _Generic((x),        /* Get the name of a type */             \
                                                                                   \
         _Bool: "_Bool",                  unsigned char: "unsigned char",          \
@@ -157,25 +158,31 @@ int main(int argc, char *argv[]){
   int *profits, *weights, *x, *profit_primes;
   int n, capacity, z, sol_flag, bounding_method;
 
-  /* Initialisations */
-  eps = 1;
+  //eps = 1;
 
-  if (argc != 2)
+  if (strcmp(argv[1],"help") == 0)
   {
-    printf("Usage: %s <filename>\n", argv[0]);
+    printf("Usage:\n\t%s <filename> <DP solver> <epsilon>\n\tFilename options:"
+           "\n\t\tNothing yet!\n\tDP Solver Flags:\n\t\t-v : Vasirani\n\t\t-ws"
+           " : Williamson and Shmoy's DP\n\tEpsilon\n\t\tWhatever you like! We"
+           "ll, not really, it has to be nonnegative\n", argv[0]);
     exit(-1);
   }
+
+  if (argc != 4)
+  {
+    printf("Usage: %s <filename> <DP solver> <epsilon>\n Type \"%s help\" for info.\n",
+           argv[0], argv[0]);
+    exit(-1);
+  }
+
+  sscanf(argv[3], "%f", &eps);
+
   strcpy(problem_file, "./problems/");
   strcat(problem_file, argv[1]);
-  //problem_file = "./problems/.csv";
 
-  pisinger_reader(&n,
-                  &capacity,
-                  &z,
-                  &profits,
-                  &weights,
-                  &x,
-                  problem_file);
+  pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file);
+
   sol_flag = 1;
   int sol_prime[n];
   for (int i=0; i < n; i++) sol_prime[i] = 0;
@@ -188,20 +195,19 @@ int main(int argc, char *argv[]){
   t = clock();
   /*Timer Segment End*/
 
-  FPTAS(eps,
-        profits,
-        weights,
-        x,
-        sol_prime, // sol prime
-        n,
-        capacity,
-        z,
-        sol_flag,
-        bounding_method,
-        problem_file,
-        &K,  // out parameter
-        profit_primes); // out parameter 
+  /*TODO Case switch on flag*/
 
+  if(strcmp(argv[2],"-v") == 0)
+    FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
+          bounding_method, problem_file, &K, profit_primes); 
+  else if (strcmp(argv[2],"-ws")==0)
+    printf("Williamson and Shmoy!\n");
+  else
+  {
+    printf("What lol");
+    exit(-1);
+  }
+  
   /*Timer Segment Start*/
   t = clock() - t;
   double time_taken = ((double)t)/CLOCKS_PER_SEC;
