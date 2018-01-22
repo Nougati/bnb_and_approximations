@@ -70,6 +70,10 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n)
   *                                                                          *
   ****************************************************************************/
 
+  /* Debug */
+  struct solution_pair* debug_current;
+  /* End Debug */
+
   /* Base case */
   struct solution_pair* head = NULL;
   struct solution_pair* current; 
@@ -85,13 +89,14 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n)
       /* Only add if we can feasibly add it */
       int possible_weight = current->weight + items[j].weight;
       if (possible_weight <= capacity)
-        push(&head, current->profit + items[j].profit, possible_weight);
+      {
+        push(&head, possible_weight, current->profit + items[j].profit);
+      }
       current = current->next;
-      remove_dominated_pairs(&head);
     }
+    remove_dominated_pairs(&head);
   }
 
-  /* TODO: Extract solution */
   /* return max ((t,w) in A max) w*/
   current = head;
   int max_profit = -1;
@@ -101,24 +106,35 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n)
       max_profit = current->profit;
     current = current->next;  
   }
+
   return max_profit;
 }
 
 void push(struct solution_pair** head_ref, int new_weight, int new_profit)
 {
+ /***push*********************************************************************
+  *  Description:                                                            *
+  *    Given a pointer to a solution_pair structure pointer (the head of a   *
+  *    linked list of such structures), link a new structure into the list   *
+  *    with given weight new_weight and profit new_profit.                   *
+  *  Postconditions:                                                         *
+  *    This will put the new structure at the top of the list.               *
+  *  Notes:                                                                  *
+  *    This is taken from the geeksforgeeks linked list mergesort article    *
+  ****************************************************************************/
   /* Allocate memory for the new solution pair */
   struct solution_pair* new_solution_pair = 
     (struct solution_pair*) malloc(sizeof(struct solution_pair));
 
   /* Define new pair's data */
   new_solution_pair->weight = new_weight;
+  new_solution_pair->profit = new_profit;
 
   /* Connect pair to the head of the list */
   new_solution_pair->next = (*head_ref);
 
   /* Set the new node to be the new head of the list */
   (*head_ref) = new_solution_pair;
-   
 }
 
 void remove_dominated_pairs(struct solution_pair** head_ref)
@@ -139,33 +155,27 @@ void remove_dominated_pairs(struct solution_pair** head_ref)
   *    Has function dependencies in merge sort and all of its constituent    *
   *    functions                                                             *
   ****************************************************************************/
+
   /* Merge sort the list by weight */
   merge_sort(head_ref);
 
-  /* Remove dominated nodes */
-  struct solution_pair* outer_current = *head_ref;
-  struct solution_pair* inner_current, *inner_current_prev;
-  while(outer_current != NULL)
+  struct solution_pair* current = (*head_ref)->next;
+  struct solution_pair* previous = *head_ref;
+
+  /* Filtration algorithm */
+  while (current != NULL)
   {
-    inner_current_prev = outer_current;
-    inner_current = outer_current->next;
-    while(inner_current != NULL)
+    if (previous->profit >= current->profit)
     {
-      if (outer_current->profit >= inner_current->profit)
-      {
-        /* Outer current dominates inner current */
-        inner_current = inner_current->next;
-        free(inner_current_prev->next);
-        inner_current_prev->next = inner_current;         
-      }
-      else
-      {
-        /* No domination, progress further into the list */
-        inner_current = inner_current->next;
-        inner_current_prev->next = inner_current;
-      } 
+      current = current->next;
+      free(previous->next);
+      previous->next = current;
     }
-  outer_current = outer_current->next;
+    else
+    {
+      current = current->next;
+      previous = previous->next;
+    }
   }
 }
 
@@ -183,7 +193,7 @@ void merge_sort(struct solution_pair** head_ref)
     return;
 
   /* Split head into 'a' and 'b' sublists */
-  front_back_split(head, &a, &a);
+  front_back_split(head, &a, &b);
 
   /* Recursively sort the sublists */
   merge_sort(&a);
@@ -206,10 +216,10 @@ struct solution_pair* sorted_merge(struct solution_pair* a,
   if (a->weight <= b->weight)
   {
     /* Corner case: if they're equal weighted, put 
-       the one with the lower profit first         */
+       the one with the higher profit first         */
     if (a->weight == b->weight)
     {
-      if (a->profit > b->profit)
+      if (a->profit > b->profit) 
       {
         result = a;
         result->next = sorted_merge(a->next, b);
@@ -288,14 +298,14 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
    * Inputs:
    *
    * Notes:
-   *   This has been copied line for line from my original FPTAS program.
+   *   This has been edited to support dynamic allocation error catching.  
    */
   FILE *fp;
   char str[256];
   char * pch;
 
   fp = fopen(problem_file, "r");
-  printf("File opened\n");
+
   /* Get n */
   if (fp == NULL) exit(EXIT_FAILURE);
   while (fgets(str, sizeof(str), fp)){
@@ -307,21 +317,26 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
     }
   }
 
-  printf("n read in...\n");
-
   int *tmp_p;
-  if(*tmp_p = (int *)malloc(*n * sizeof(*tmp_p))==NULL)
-    perror("Error allocating space for profits\n");
+  if((tmp_p = (int *)malloc(*n * sizeof(*tmp_p)))==NULL)
+  {  //tperror("Error allocating space for profits\n");
+    fprintf(stderr, "Cannot malloc tmp_x!\n");
+    exit(1);
+  }
 
   int *tmp_w;
-  if(*tmp_w = (int *)malloc(*n * sizeof(*tmp_w))==NULL)
-    perror("Error allocating space for weights\n");
-    
-  int *tmp_x;
-  if (*tmp_x = (int *)malloc(*n * sizeof(*tmp_x))==NULL)
-    perror("Error allocating space for solution\n");
+  if((tmp_w = (int *)malloc(*n * sizeof(*tmp_w)))==NULL)
+  {  //perror("Error allocating space for weights\n");
+    fprintf(stderr, "Cannot malloc tmp_x!\n");
+    exit(1);
+  }
 
-  printf("p, w, and x arrays allocated...\n");
+  int *tmp_x;
+  if ((tmp_x = (int *)malloc(*n * sizeof(*tmp_x)))==NULL)
+  {  //perror("Error allocating space for solution\n");
+    fprintf(stderr, "Cannot malloc tmp_x!\n");
+    exit(1);
+  }
 
   int counter=0;
   if (fp == NULL) exit(EXIT_FAILURE);
@@ -370,24 +385,21 @@ int main(int argc, char *argv[])
   char *problem_file;
   int *profits, *weights, *x;
   int n, capacity, z;
-  printf("Hello?\n");
+
   /* Read in an instance */
   problem_file = "./problems/knapPI_1_50_1000.csv";
   pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file);
-  printf("Problem read in...\n");
+
   /* Build items[] array */
   struct problem_item items[n];
-  printf("problem_item array made...\n");
   for(int i = 0; i < n; i++)
   {
     items[i].weight = weights[i];
     items[i].profit = profits[i];
   }
-  printf("problem_item array completed...\n");
-
+  
   /* Put items[] array and capacity into DP */
   int result = williamson_shmoys_DP(items, capacity, n);
-  printf("williamson_shmoys_DP exited...\n");
 
   /* Return the solution */
   printf("Result: %d\n", result);
