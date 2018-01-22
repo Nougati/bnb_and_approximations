@@ -307,7 +307,11 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
   fp = fopen(problem_file, "r");
 
   /* Get n */
-  if (fp == NULL) exit(EXIT_FAILURE);
+  if (fp == NULL)
+  {
+    printf("Unable to open file. Exiting...\n");
+    exit(EXIT_FAILURE);
+  }
   while (fgets(str, sizeof(str), fp)){
     if (str[0] == 'n'){
       pch = strtok(str, " ");
@@ -382,12 +386,21 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
 int main(int argc, char *argv[])
 {
   /* Variables set up */
-  char *problem_file;
+  char problem_file[100];
   int *profits, *weights, *x;
   int n, capacity, z;
 
+  /* Command line args */
+  if (argc != 2)
+  {
+    printf("Usage: %s <filename>\n", argv[0]);
+    exit(-1);
+  }
+
   /* Read in an instance */
-  problem_file = "./problems/knapPI_1_50_1000.csv";
+  //problem_file = "./problems/knapPI_1_50_1000.csv";
+  strcpy(problem_file, "./problems/");
+  strcat(problem_file, argv[1]);
   pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file);
 
   /* Build items[] array */
@@ -402,6 +415,6 @@ int main(int argc, char *argv[])
   int result = williamson_shmoys_DP(items, capacity, n);
 
   /* Return the solution */
-  printf("Result: %d\n", result);
+  printf("z: %d\tResult: %d\n", z, result);
   return result;
 }
