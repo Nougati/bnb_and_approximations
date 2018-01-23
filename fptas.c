@@ -18,6 +18,10 @@
 #include <string.h>
 #include <time.h>
 
+#define VASIRANI 0
+#define WILLIAMSON_SHMOY 1
+
+
 #define typename(x) _Generic((x),        /* Get the name of a type */             \
                                                                                   \
         _Bool: "_Bool",                  unsigned char: "unsigned char",          \
@@ -73,7 +77,8 @@ void FPTAS(float eps,
            const int bounding_method,
            const char *problem_file,
            float *K,
-           int *profits_prime);
+           int *profits_prime
+           const int DP_method);
 
 int DP_max_profit(const int problem_profits[],
                   const int n);
@@ -152,14 +157,13 @@ int main(int argc, char *argv[]){
    *    ... I think
    */
 
-  /* Declarations */
   float eps, K;
   char problem_file[100];
   int *profits, *weights, *x, *profit_primes;
   int n, capacity, z, sol_flag, bounding_method;
+  int DP_method;
 
-  //eps = 1;
-
+  /* Command line argument "help" */
   if (strcmp(argv[1],"help") == 0)
   {
     printf("Usage:\n\t%s <filename> <DP solver> <epsilon>\n\tFilename options:"
@@ -177,49 +181,52 @@ int main(int argc, char *argv[]){
   }
 
   sscanf(argv[3], "%f", &eps);
-
   strcpy(problem_file, "./problems/");
   strcat(problem_file, argv[1]);
 
+  /* Parameters have been read in, now read in the problem file */
   pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file);
 
-  sol_flag = 1;
+  sol_flag = 1; //TODO what is this?
   int sol_prime[n];
   for (int i=0; i < n; i++) sol_prime[i] = 0;
-  bounding_method = 2;
+  bounding_method = 2; // TODO what is this? 
   profit_primes = (int *) malloc(n * sizeof(*profit_primes));
 
-  /*Timer Segment Start*/
+  /*Timer Segment Start
   clock_t t;
   printf("eps = %f. Starting timer...\n", eps);
   t = clock();
-  /*Timer Segment End*/
-
-  /*TODO Case switch on flag*/
+  *Timer Segment End*/
 
   if(strcmp(argv[2],"-v") == 0)
+    DP_method = VASIRANI;
     FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
-          bounding_method, problem_file, &K, profit_primes); 
+          bounding_method, problem_file, &K, profit_primes, DP_method); 
   else if (strcmp(argv[2],"-ws")==0)
+    DP_method = WILLIAMSON_SHMOY;
     printf("Williamson and Shmoy!\n");
   else
   {
-    printf("What lol");
+    printf("Unrecognised flag. Type \"%s help\" for options. Exiting...\n", argv[0]);
     exit(-1);
   }
   
-  /*Timer Segment Start*/
+  /*Timer Segment Start
   t = clock() - t;
   double time_taken = ((double)t)/CLOCKS_PER_SEC;
   printf("Compute time: %f\n", time_taken);
-  /*Timer Segment End*/
+  *Timer Segment End*/
 
-  /* Derive Kprofit'(S') */
+  /* FPTAS Part */
+  
   float profit_primes_i_times_K; 
   for(int i=0; i<n; i++){
     profit_primes_i_times_K = profit_primes[i]*K;
     profit_primes[i] = profit_primes_i_times_K;
+    /*Why can't I just do profit_primes[i] *= K?*/
   }
+
   int kprofitprimeSprime = 0;
   int profitSprime = 0;
   for(int i=0; i<n; i++){
@@ -254,7 +261,8 @@ void FPTAS(float eps,
            const int bounding_method,
            const char *problem_file,
            float *K,
-           int *profits_prime){
+           int *profits_prime
+           const int DP_method){
   /* Description
    *  Recreates the FPTAS for the 0,1 KP as described by V. Vasirani in his
    *   chapter on Knapsack in Approximation Algorithms.
@@ -277,28 +285,24 @@ void FPTAS(float eps,
    *  K - the husk where we store the K value determined by this algo.
    */
 
-  /* Declarations */
-  int P;
-  
-  /* Initialisations */
-  P = DP_max_profit(profits,
-                    n);
+  int P = DP_max_profit(profits, n);
+
   *K = define_K(eps, P, n);
   make_profit_primes(profits, profits_prime, *K, n); 
+
   /* Now with amended profits list "profit_primes," solve the DP */
-  DP(profits_prime,
-     weights,
-     x,
-     sol_prime,
-     n,
-     capacity,
-     z, 
-     sol_flag,
-     bounding_method,
-     problem_file);
+  if (DP_method == VASIRANI)
+  {
+    DP(profits_prime, weights, x, sol_prime, n, capacity, z, sol_flag, 
+       bounding_method, problem_file);
+  }
+  else if (DP_method == WILLIAMSON_SHMOY)
+  {
+    /* TODO use williamson and shmoy DP to derive profit primes */
+    /* sol_prime analysis is done outside for some reason */
+  }
 
   /* Solution should be in sol_prime */
-
 }
 
 void DP(const int problem_profits[], // profit primes?

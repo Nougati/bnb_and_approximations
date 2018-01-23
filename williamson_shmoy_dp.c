@@ -2,7 +2,7 @@
  *  williamson_shmoy_dp.c                                                    *
  *  Author: Nelson Frew                                                      *
  *  First Edit: 19/01/18                                                     *
- *  Last Edit: 19/01/18                                                      *
+ *  Last Edit: 22/01/18                                                      *
  *  Description:                                                             *
  *    Implements the knapsack dynamic programming algorithm as described by  *
  *    Williamson and Shmoy in their book Design of Approximation Algorithms  *
@@ -10,13 +10,7 @@
  *  Notes:                                                                   *
  *                                                                           *
  *  TODO:                                                                    *
- *    Incorporate the Psinger problem instance reader                        *
- *      Importantly, this program uses item structures to organise the data  *
- *    Do commandline args for problem files                                  *
- *    Error catching and asserts                                             *
- *      Set up mechanisms to catch malloc errors                             *
- *      Set up mechanisms to catch file reading errors                       *
- *    If I want to, make Pisinger Reader read into a struct array            *
+ *    ... Something goes here                                                *
  *                                                                           *
  *****************************************************************************/
 
@@ -36,10 +30,13 @@ struct solution_pair
   int weight;
   int profit;
   struct solution_pair *next;
+  /* Begin tentative changes */  
+  int solution_array[];
+  /* End tentative changes */ 
 };
 
-int williamson_shmoys_DP(struct problem_item items[], int capacity, int n);
-void push(struct solution_pair** head_ref, int new_weight, int new_profit);
+int williamson_shmoys_DP(struct problem_item items[], int capacity, int n, int *solution_array);
+void push(struct solution_pair** head_ref, int new_weight, int new_profit, int n);
 void remove_dominated_pairs(struct solution_pair** head_ref);
 void merge_sort(struct solution_pair** head_ref);
 struct solution_pair* sorted_merge(struct solution_pair* a, 
@@ -51,7 +48,8 @@ void print_list(struct solution_pair* node);
 void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
                      char *problem_file);
 
-int williamson_shmoys_DP(struct problem_item items[], int capacity, int n)
+int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
+                         int *solution_array)
 {
  /***william_shmoys_DP********************************************************
   *  Description: Implements the dynamic programming algorithm for the       *
@@ -70,15 +68,13 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n)
   *                                                                          *
   ****************************************************************************/
 
-  /* Debug */
-  struct solution_pair* debug_current;
-  /* End Debug */
-
   /* Base case */
   struct solution_pair* head = NULL;
   struct solution_pair* current; 
-  push(&head, 0, 0);
-  push(&head, items[0].weight, items[0].profit);
+  push(&head, 0, 0, n);
+  /* ASSUMPTION MADE: the 0'th item will feasibly fit! */
+  push(&head, items[0].weight, items[0].profit, n);
+  head->solution_array[0] = 1;
 
   /* General case */
   for(int j=2; j < n; j++)
@@ -90,7 +86,15 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n)
       int possible_weight = current->weight + items[j].weight;
       if (possible_weight <= capacity)
       {
-        push(&head, possible_weight, current->profit + items[j].profit);
+        /* Put new partial solution on the head */
+        push(&head, possible_weight, current->profit + items[j].profit, n);
+        /* Copy the partial solution array  */
+        for (int i=0; i <= j; i++)
+        {
+          head->solution_array[i] = current->solution_array[i];
+        }
+        /* Distinguish it from the others */
+        head->solution_array[j] = 1;
       }
       current = current->next;
     }
@@ -99,18 +103,40 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n)
 
   /* return max ((t,w) in A max) w*/
   current = head;
+  struct solution_pair* best_pair;
   int max_profit = -1;
   while (current != NULL)
   {
     if (current->profit > max_profit)
       max_profit = current->profit;
+      best_pair = current;
     current = current->next;  
   }
+
+  /* Assuming solution_array has been malloc'd already */
+  for(int i=0; i < n; i++)
+  {
+    solution_array[i] = best_pair->solution_array[i];
+  }
+
+  printf("What?!\n ");
+
+  /* Clean up*/
+  current = head;
+  while (current != NULL)
+  {
+    current = current->next;
+    printf("(%d, %d)\n", head->weight, head->profit);
+    free(head);
+    head = current;
+  }
+  /* TODO Find out if we need to clena up individual struct arrays */
 
   return max_profit;
 }
 
-void push(struct solution_pair** head_ref, int new_weight, int new_profit)
+void push(struct solution_pair** head_ref, int new_weight, int new_profit,
+          int n)
 {
  /***push*********************************************************************
   *  Description:                                                            *
@@ -121,10 +147,22 @@ void push(struct solution_pair** head_ref, int new_weight, int new_profit)
   *    This will put the new structure at the top of the list.               *
   *  Notes:                                                                  *
   *    This is taken from the geeksforgeeks linked list mergesort article    *
+  *    This needs n in order to dynamically allocate enough space for the    *
+  *    struct member solution_array                                          * 
   ****************************************************************************/
-  /* Allocate memory for the new solution pair */
+  /* Allocate memory for the new solution pair 
   struct solution_pair* new_solution_pair = 
-    (struct solution_pair*) malloc(sizeof(struct solution_pair));
+    (struct solution_pair*) malloc(sizeof(struct solution_pair) + n * sizeof(int));
+  */
+  /*Tentative start*/
+  struct solution_pair* new_solution_pair = calloc(sizeof(struct solution_pair) + n, sizeof(int));
+  if (new_solution_pair)
+    memcpy(new_solution_pair, &(struct solution_pair const){ .weight = new_weight,
+           .profit = new_profit, .next=(*head_ref)},
+           sizeof(struct solution_pair));
+  
+
+  /*Tentative end*/
 
   /* Define new pair's data */
   new_solution_pair->weight = new_weight;
@@ -133,6 +171,11 @@ void push(struct solution_pair** head_ref, int new_weight, int new_profit)
   /* Connect pair to the head of the list */
   new_solution_pair->next = (*head_ref);
 
+  
+  /* TENTATIVE Initialise the array to 0's*/
+  for(int i = 0; i < n; i++)
+    *(new_solution_pair->solution_array+i) = 0;
+ 
   /* Set the new node to be the new head of the list */
   (*head_ref) = new_solution_pair;
 }
@@ -215,8 +258,9 @@ struct solution_pair* sorted_merge(struct solution_pair* a,
   /* Pick either a or b, and recur */
   if (a->weight <= b->weight)
   {
-    /* Corner case: if they're equal weighted, put 
-       the one with the higher profit first         */
+    /* Corner case: if they're equal weighted, put the one with the higher 
+       profit first. This simplifies the cases we have to consider within
+       the filtration step of dominated pair removal */
     if (a->weight == b->weight)
     {
       if (a->profit > b->profit) 
@@ -398,12 +442,11 @@ int main(int argc, char *argv[])
   }
 
   /* Read in an instance */
-  //problem_file = "./problems/knapPI_1_50_1000.csv";
   strcpy(problem_file, "./problems/");
   strcat(problem_file, argv[1]);
   pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file);
 
-  /* Build items[] array */
+  /* Build items[] structure array */
   struct problem_item items[n];
   for(int i = 0; i < n; i++)
   {
@@ -412,9 +455,27 @@ int main(int argc, char *argv[])
   }
   
   /* Put items[] array and capacity into DP */
-  int result = williamson_shmoys_DP(items, capacity, n);
+  int *solution_array = (int *) malloc(n*sizeof(int));
+
+  /* Solve it with Williamson and Shmoy's DP */
+  int result = williamson_shmoys_DP(items, capacity, n, solution_array);
 
   /* Return the solution */
   printf("z: %d\tResult: %d\n", z, result);
+
+  /* Check solution set */
+  int correct_solution_flag = 1;
+  for(int i = 0; i < n; i++)
+    if (x[i] != solution_array[i])
+      correct_solution_flag = 0;
+  printf("%s", correct_solution_flag ? "Correct solution!\n" : "Incorrect solution!\n");
+
+  for(int i = 0; i < n; i++)
+    printf("%d\t%d\n", x[i], solution_array[i]);
+  /* Clean up */
+  free(profits);
+  free(weights);
+  free(x);
+
   return result;
 }

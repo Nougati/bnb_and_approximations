@@ -1,8 +1,8 @@
-/* ~~ cheesecake.c ~~
+/* ~~ vasirani_dp.c ~~
    Description: Tries to implement the DP for the 0,1 Knapsack as
     described by Vijay Vasirani
    Notes:
-    mmmm cheesecake
+    This was once cheesecake. Sad!
     Data type assertions seem unnecessary because C is pretty tight about that anyway.
    TODO
  */
@@ -15,7 +15,7 @@
 
 /* This block is stolen from
 https://stackoverflow.com/questions/6280055/how-do-i-check-if-a-variable-is-of-a-certain-type-compare-two-types-in-c
-When I'm done I'll reduce the size of this block to just the necessary ones.
+"When I'm done I'll reduce the size of this block to just the necessary ones." - Nelson, the court jester.
  */
 #define typename(x) _Generic((x),        /* Get the name of a type */             \
                                                                                   \
@@ -35,7 +35,6 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
        __typeof__ (b) _b = (b); \
      _a < _b ? _a : _b; })
 
-
 /* Function Declarations */
 void DP(const int problem_profits[],
         const int problem_weights[],
@@ -47,30 +46,38 @@ void DP(const int problem_profits[],
         const int sol_flag,
         const int bounding_method,
         char *problem_file);
+
 int DP_max_profit(const int problem_profits[],
                   int n);
+
 int DP_p_upper_bound(const int problem_profits[],
                      const int n,
                      int P,
                      int bounding_method);
+
 int p_upper_bound_aux(const int problem_profits[],
                       int n);
+
 void DP_fill_in_base_cases(const int width,
                            const int n,
                            int DP_table[][width],
                            const int problem_profits[],
                            const int problem_weights[]);
+
 int derive_pinf(const int problem_weights[], const int n);
+
 void DP_fill_in_general_cases(const int width,
                               const int n,
                               int DP_table[][width],
                               const int problem_profits[],
                               const int problem_weights[]);
+
 int DP_find_best_solution(const int width,
                         const int n,
                         const int DP_table[][width],
                         const int capacity,
                         const int my_pinf);
+
 int DP_derive_solution_set(int n,
                             const int width,
                             const int DP_table[][width],
@@ -78,8 +85,10 @@ int DP_derive_solution_set(int n,
                             int solution[],
                             int p,
                             const int sol_flag);
+
 void DP_assert_array_is_integer(const int an_array[],
                                 const int length);
+
 void pisinger_reader(int *n,
                      int *c,
                      int *z,
@@ -87,6 +96,7 @@ void pisinger_reader(int *n,
                      int **w,
                      int **x,
                      char *problem_file);
+
 void pisinger_generator_reader(int *n,
                                int *c,
                                int **p,
@@ -94,9 +104,8 @@ void pisinger_generator_reader(int *n,
                                char *problem_file);
 
 
-
 /* .ılılılılılılılılıl Program body lılılılılılılılılı. */
-int main(){
+int main(int argc, char *argv[]){
   /*
     Notes:
       Profits, weights, and capacity are aimed to be dynamically read from source files.
@@ -136,50 +145,44 @@ int main(){
   */
   int n, capacity, z;
   int *profits, *weights, *x;
-  char *problem_file = "./problems/knapPI_3_1000_10000000.csv";
+  char problem_file[80];
   const int bounding_method = 2;
   int sol_flag = 1;
+
+  /* Command line verification */
+  if (argc != 2)
+  {
+    printf("Usage: %s <problem_file>\n", argv[0]);
+    exit(EXIT_FAILURE);
+  }
+  else
+  {
+    strcpy(problem_file, "./problems/");
+    strcat(problem_file, argv[1]);
+  }
 
   /* pisinger_reader only works if the input file is of the form of the standard knapsack
      instances that accompany "Where are all the the hard Knapsack instances" by Pisinger
      in 2005. As a result, we must use a seperate reader for the other file format. */
-  if (problem_file == "test.in"){
+  if (strcmp(argv[1], "test.in")==0)
+  {
     pisinger_generator_reader(&n,
                               &capacity,
                               &profits,
                               &weights,
                               problem_file);
 
-  }else{
-  pisinger_reader(&n,
-                  &capacity,
-                  &z,
-                  &profits,
-                  &weights,
-                  &x,
-                  problem_file);
   }
+  else
+  {
+  pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file);
+  }
+
   int S[n];
   for (int i=0; i < n; i++) S[i] = 0;
 
-  /* PROBLEM OUTPUT*/
-  printf("%s\n", problem_file);
-  printf("Problem Specification:\nCapacity: %d\tn: %d\n", capacity, n);
-  if (n <= 100){
-    printf("Profits: [ ");
-    for(int i=0; i < n; i++) printf("%d ", profits[i]);
-    printf("]\n");
-    printf("Weights: [ ");
-    for(int i=0; i < n; i++) printf("%d ", weights[i]);
-    printf("]\n ");
-  }else printf("Not printing profits and weights; n is too large!\n");
-
-  printf("Bounding method chosen: %s\nSolving...\n",bounding_method==1?"nP (Why did you choose this?)":"Simple sum");
-  /**/
 
   DP(profits, weights, x, S, n, capacity, z, sol_flag, bounding_method, problem_file);
-
-  printf("Terminating... Press the Any Key\n");
 
   /*Reader frees */
   free(profits);
@@ -189,7 +192,6 @@ int main(){
   int poo = getchar();
   return 0;
 }
-
 
 void DP(const int problem_profits[],
         const int problem_weights[],
@@ -300,7 +302,6 @@ void DP(const int problem_profits[],
   free(DP_table);
 }
 
-
 int DP_max_profit(const int problem_profits[],
                   const int n){
   /*
@@ -320,7 +321,6 @@ int DP_max_profit(const int problem_profits[],
   }
   return max;
 }
-
 
 int DP_p_upper_bound(const int problem_profits[],
                      const int n,
@@ -347,7 +347,6 @@ int DP_p_upper_bound(const int problem_profits[],
   return upper_bound;
 }
 
-
 int p_upper_bound_aux(const int problem_profits[],
                       const int n){
   /*
@@ -370,7 +369,6 @@ int p_upper_bound_aux(const int problem_profits[],
   }
   return total;
 }
-
 
 void DP_fill_in_base_cases(const int width,
                            const int n,
@@ -417,9 +415,6 @@ void DP_fill_in_base_cases(const int width,
   }
 
 }
-
-
-
 
 void DP_fill_in_general_cases(const int width,
                               const int n,
@@ -525,7 +520,6 @@ int DP_find_best_solution(const int width,
   return p;
 }
 
-
 int DP_derive_solution_set(int n,
                            const int width,
                            const int DP_table[][width],
@@ -568,7 +562,6 @@ int DP_derive_solution_set(int n,
  return s_index;
 }
 
-
 void DP_assert_array_is_integer(const int an_array[],
                                 const int length){
   /*
@@ -580,7 +573,6 @@ void DP_assert_array_is_integer(const int an_array[],
     assert(typename(an_array[i])=="int");
   }
 }
-
 
 void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x, char *problem_file){
   /* This is a haggard mess*/
@@ -603,11 +595,13 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x, char *pr
 
   int *tmp_p = (int *)malloc(*n * sizeof(*tmp_p));
   int *tmp_w = (int *)malloc(*n * sizeof(*tmp_w));
-  int *tmp_x = (int *)malloc(*n * sizeof(*tmp_x));
-
-  rewind(fp); // Meaning this would probably be unnecessary
+  int *tmp_x = (int *)malloc(*n * sizeof(*tmp_x)); rewind(fp); // Meaning this would probably be unnecessary
   int counter=0;
-  if (fp == NULL) exit(EXIT_FAILURE);
+  if (fp == NULL) 
+  {
+    printf("Null file pointer; problem reading in the file.\n");
+    exit(EXIT_FAILURE);
+  }
   while ((fgets(str, sizeof(str), fp))&&(counter<*n)){
 
   if(str[0] == 'c'){
@@ -646,7 +640,6 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x, char *pr
   *w = tmp_w;
   *x = tmp_x;
 }
-
 
 void pisinger_generator_reader(int *n, int *c, int **p, int **w, char *problem_file){
   /*
