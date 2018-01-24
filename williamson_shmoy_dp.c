@@ -2,7 +2,7 @@
  *  williamson_shmoy_dp.c                                                    *
  *  Author: Nelson Frew                                                      *
  *  First Edit: 19/01/18                                                     *
- *  Last Edit: 22/01/18                                                      *
+ *  Last Edit: 24/01/18                                                      *
  *  Description:                                                             *
  *    Implements the knapsack dynamic programming algorithm as described by  *
  *    Williamson and Shmoy in their book Design of Approximation Algorithms  *
@@ -10,7 +10,7 @@
  *  Notes:                                                                   *
  *                                                                           *
  *  TODO:                                                                    *
- *    ... Something goes here                                                *
+ *    Valgrind tests for the complicated struct arrays :O                    *
  *                                                                           *
  *****************************************************************************/
 
@@ -77,7 +77,7 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
   head->solution_array[0] = 1;
 
   /* General case */
-  for(int j=2; j < n; j++)
+  for(int j=1; j < n; j++)
   {
     current = head;
     while(current != NULL)
@@ -90,9 +90,7 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
         push(&head, possible_weight, current->profit + items[j].profit, n);
         /* Copy the partial solution array  */
         for (int i=0; i <= j; i++)
-        {
           head->solution_array[i] = current->solution_array[i];
-        }
         /* Distinguish it from the others */
         head->solution_array[j] = 1;
       }
@@ -119,14 +117,12 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
     solution_array[i] = best_pair->solution_array[i];
   }
 
-  printf("What?!\n ");
 
-  /* Clean up*/
+  /* Clean up */
   current = head;
   while (current != NULL)
   {
     current = current->next;
-    printf("(%d, %d)\n", head->weight, head->profit);
     free(head);
     head = current;
   }
@@ -155,7 +151,7 @@ void push(struct solution_pair** head_ref, int new_weight, int new_profit,
     (struct solution_pair*) malloc(sizeof(struct solution_pair) + n * sizeof(int));
   */
   /*Tentative start*/
-  struct solution_pair* new_solution_pair = calloc(sizeof(struct solution_pair) + n, sizeof(int));
+  struct solution_pair* new_solution_pair = (solution_pair*)calloc(sizeof(struct solution_pair) + n, sizeof(int));
   if (new_solution_pair)
     memcpy(new_solution_pair, &(struct solution_pair const){ .weight = new_weight,
            .profit = new_profit, .next=(*head_ref)},
@@ -182,7 +178,7 @@ void push(struct solution_pair** head_ref, int new_weight, int new_profit,
 
 void remove_dominated_pairs(struct solution_pair** head_ref)
 {
- /***remove_dominated_pairs***************************************************
+ /***remove_dominated_pairs documentation*************************************
   *  Description:                                                            *
   *    Removes the dominated pairs within a linked list of solution_pairs by *
   *    a two phase approach consistening of a merge sort on each of the      * 
@@ -197,6 +193,10 @@ void remove_dominated_pairs(struct solution_pair** head_ref)
   *  Notes:                                                                  *
   *    Has function dependencies in merge sort and all of its constituent    *
   *    functions                                                             *
+  *    This function assumes that the (0,0) tuple will always be in an input.*
+  *    As such, the case where the linked list is of length 0 is not         *
+  *    addressed. The algorithm seems resilient enough to cover length=1     *
+  *    with its general case.                                                *
   ****************************************************************************/
 
   /* Merge sort the list by weight */
@@ -232,6 +232,7 @@ void merge_sort(struct solution_pair** head_ref)
   struct solution_pair* a;
   struct solution_pair* b;
 
+  /* Bases: length 0 or 1 */
   if ((head == NULL) || (head->next == NULL))
     return;
 
@@ -255,7 +256,7 @@ struct solution_pair* sorted_merge(struct solution_pair* a,
   if (a == NULL) return (b);
   else if (b == NULL) return (a);
 
-  /* Pick either a or b, and recur */
+  /* Pick the lower of either a or b, and recur */
   if (a->weight <= b->weight)
   {
     /* Corner case: if they're equal weighted, put the one with the higher 
@@ -427,6 +428,7 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
   *x = tmp_x;
 }
 
+#ifndef TESTING
 int main(int argc, char *argv[])
 {
   /* Variables set up */
@@ -468,10 +470,9 @@ int main(int argc, char *argv[])
   for(int i = 0; i < n; i++)
     if (x[i] != solution_array[i])
       correct_solution_flag = 0;
-  printf("%s", correct_solution_flag ? "Correct solution!\n" : "Incorrect solution!\n");
+  printf("%s", correct_solution_flag ? "Solution set identical!\n" : "Disparit"
+         "y bewtween solution sets!\n");
 
-  for(int i = 0; i < n; i++)
-    printf("%d\t%d\n", x[i], solution_array[i]);
   /* Clean up */
   free(profits);
   free(weights);
@@ -479,3 +480,4 @@ int main(int argc, char *argv[])
 
   return result;
 }
+#endif
