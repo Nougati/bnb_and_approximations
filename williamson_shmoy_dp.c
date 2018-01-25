@@ -151,12 +151,20 @@ void push(struct solution_pair** head_ref, int new_weight, int new_profit,
     (struct solution_pair*) malloc(sizeof(struct solution_pair) + n * sizeof(int));
   */
   /*Tentative start*/
-  struct solution_pair* new_solution_pair = (solution_pair*)calloc(sizeof(struct solution_pair) + n, sizeof(int));
+  struct solution_pair* new_solution_pair =
+    (struct solution_pair*)calloc(sizeof(struct solution_pair) + n, sizeof(int));
   if (new_solution_pair)
+  {
+    struct solution_pair const temp_pair =
+      {.weight = new_weight, .profit = new_profit, .next=(*head_ref)};
+    /*Old code
     memcpy(new_solution_pair, &(struct solution_pair const){ .weight = new_weight,
            .profit = new_profit, .next=(*head_ref)},
-           sizeof(struct solution_pair));
-  
+           sizeof(struct solution_pair));*/
+   /*New Code*/
+     memcpy(new_solution_pair, &temp_pair, sizeof(struct solution_pair));
+    
+  }
 
   /*Tentative end*/
 
@@ -429,6 +437,7 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
 }
 
 #ifndef TESTING
+
 int main(int argc, char *argv[])
 {
   /* Variables set up */
@@ -480,4 +489,5 @@ int main(int argc, char *argv[])
 
   return result;
 }
+
 #endif
