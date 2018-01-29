@@ -10,7 +10,6 @@
  *                                                                            *
  *****************************************************************************/
 
-
 #include <stdio.h>
 #include <math.h>
 #include <assert.h> 
@@ -20,7 +19,10 @@
 
 #define VASIRANI 0
 #define WILLIAMSON_SHMOY 1
-
+#define INDEX_NOTATION 0
+#define BINARY_NOTATION 1
+#define HYPER_TRIVIAL_BOUND 1
+#define TRIVIAL_BOUND 2
 
 #define typename(x) _Generic((x),        /* Get the name of a type */             \
                                                                                   \
@@ -34,13 +36,43 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
   long double: "long double",                   char *: "pointer to char",        \
        void *: "pointer to void",                int *: "pointer to int",         \
       default: "other")
-
+/*
 #define min(a,b) \
    ({ __typeof__ (a) _a = (a); \
        __typeof__ (b) _b = (b); \
      _a < _b ? _a : _b; })
-
+*/
 /* Function Prototypes */
+struct problem_item
+{
+  int weight;
+  int profit;
+};
+
+
+struct solution_pair 
+{
+  int weight;
+  int profit;
+  struct solution_pair *next;
+  /* Begin tentative changes */  
+  int solution_array[];
+  /* End tentative changes */ 
+};
+
+int williamson_shmoys_DP(struct problem_item items[], int capacity, int n, 
+                         int *solution_array);
+void push(struct solution_pair** head_ref, int new_weight, int new_profit, 
+          int n);
+void remove_dominated_pairs(struct solution_pair** head_ref);
+void merge_sort(struct solution_pair** head_ref);
+struct solution_pair* sorted_merge(struct solution_pair* a, 
+                                   struct solution_pair* b);
+void front_back_split(struct solution_pair* source, 
+                      struct solution_pair** front_ref, 
+                      struct solution_pair** back_ref);
+void print_list(struct solution_pair* node);
+
 void DP(const int problem_profits[],
         const int problem_weights[],
         const int x[],
@@ -77,7 +109,7 @@ void FPTAS(float eps,
            const int bounding_method,
            const char *problem_file,
            float *K,
-           int *profits_prime
+           int *profits_prime,
            const int DP_method);
 
 int DP_max_profit(const int problem_profits[],
@@ -94,13 +126,13 @@ void make_profit_primes(int *profits,
 
 void DP_fill_in_base_cases(const int width,
                            const int n,
-                           int DP_table[][width],
+                           int ** DP_table, //int DP_table[][width],
                            const int problem_profits[],
                            const int problem_weights[]);
 
 void DP_fill_in_general_cases(const int width,
                               const int n,
-                              int DP_table[][width],
+                              int ** DP_table, //int DP_table[][width],
                               const int problem_profits[],
                               const int problem_weights[]);
 
@@ -109,13 +141,13 @@ int derive_pinf(const int problem_weights[],
 
 int DP_find_best_solution(const int width,
                           const int n,
-                          const int DP_table[][width],
+                          int ** DP_table, //const int DP_table[][width],
                           const int capacity,
                           const int my_pinf);
 
 int DP_derive_solution_set(int n,
                            const int width,
-                           const int DP_table[][width],
+                           int **, //const int DP_table[][width],
                            const int problem_profits[],
                            int solution[],
                            int p,
@@ -125,6 +157,7 @@ int p_upper_bound_aux(const int problem_profits[],
                       const int n);
 /* End Function Prototypes */
 
+#ifndef TESTING
 int main(int argc, char *argv[]){
   /* 
    * Description:
@@ -164,7 +197,7 @@ int main(int argc, char *argv[]){
   int DP_method;
 
   /* Command line argument "help" */
-  if (strcmp(argv[1],"help") == 0)
+  if ((argc == 2)&&(strcmp(argv[1],"help") == 0))
   {
     printf("Usage:\n\t%s <filename> <DP solver> <epsilon>\n\tFilename options:"
            "\n\t\tNothing yet!\n\tDP Solver Flags:\n\t\t-v : Vasirani\n\t\t-ws"
@@ -172,10 +205,10 @@ int main(int argc, char *argv[]){
            "ll, not really, it has to be nonnegative\n", argv[0]);
     exit(-1);
   }
-
   if (argc != 4)
   {
-    printf("Usage: %s <filename> <DP solver> <epsilon>\n Type \"%s help\" for info.\n",
+    printf("Usage: %s <filename> <DP solver> <epsilon>\n Type \"%s help\" for "
+            "info.\n",
            argv[0], argv[0]);
     exit(-1);
   }
@@ -187,36 +220,42 @@ int main(int argc, char *argv[]){
   /* Parameters have been read in, now read in the problem file */
   pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file);
 
-  sol_flag = 1; //TODO what is this?
+  sol_flag = BINARY_NOTATION;
   int sol_prime[n];
   for (int i=0; i < n; i++) sol_prime[i] = 0;
-  bounding_method = 2; // TODO what is this? 
+  bounding_method = TRIVIAL_BOUND;  
   profit_primes = (int *) malloc(n * sizeof(*profit_primes));
 
-  /*Timer Segment Start
+  /*Timer Segment Start*/
   clock_t t;
   printf("eps = %f. Starting timer...\n", eps);
   t = clock();
-  *Timer Segment End*/
+  /*Timer Segment End*/
 
   if(strcmp(argv[2],"-v") == 0)
+  {
     DP_method = VASIRANI;
     FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
           bounding_method, problem_file, &K, profit_primes, DP_method); 
+  }
   else if (strcmp(argv[2],"-ws")==0)
+  {
     DP_method = WILLIAMSON_SHMOY;
-    printf("Williamson and Shmoy!\n");
+    FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
+          bounding_method, problem_file, &K, profit_primes, DP_method); 
+  }
   else
   {
-    printf("Unrecognised flag. Type \"%s help\" for options. Exiting...\n", argv[0]);
+    printf("Unrecognised flag. Type \"%s help\" for options. Exiting...\n", 
+           argv[0]);
     exit(-1);
   }
   
-  /*Timer Segment Start
+  /*Timer Segment Start*/
   t = clock() - t;
   double time_taken = ((double)t)/CLOCKS_PER_SEC;
   printf("Compute time: %f\n", time_taken);
-  *Timer Segment End*/
+  /*Timer Segment End*/
 
   /* FPTAS Part */
   
@@ -248,6 +287,7 @@ int main(int argc, char *argv[]){
   free(x);
   return 0;
 }
+#endif
 
 void FPTAS(float eps, 
            int *profits,
@@ -261,7 +301,7 @@ void FPTAS(float eps,
            const int bounding_method,
            const char *problem_file,
            float *K,
-           int *profits_prime
+           int *profits_prime,
            const int DP_method){
   /* Description
    *  Recreates the FPTAS for the 0,1 KP as described by V. Vasirani in his
@@ -284,12 +324,10 @@ void FPTAS(float eps,
    *  problem_file - just the string of the problem file
    *  K - the husk where we store the K value determined by this algo.
    */
-
   int P = DP_max_profit(profits, n);
 
   *K = define_K(eps, P, n);
   make_profit_primes(profits, profits_prime, *K, n); 
-
   /* Now with amended profits list "profit_primes," solve the DP */
   if (DP_method == VASIRANI)
   {
@@ -299,12 +337,20 @@ void FPTAS(float eps,
   else if (DP_method == WILLIAMSON_SHMOY)
   {
     /* TODO use williamson and shmoy DP to derive profit primes */
+    /* Make problem item struct array */
+    struct problem_item items_prime[n];
+    for(int i = 0;  i < n; i++)
+    {
+      items_prime[i].weight = weights[i];
+      items_prime[i].profit = profits_prime[i];
+    }
+    int result = williamson_shmoys_DP(items_prime, capacity, n, sol_prime);
     /* sol_prime analysis is done outside for some reason */
   }
-
   /* Solution should be in sol_prime */
 }
 
+/* vasirani_dp.c begin */
 void DP(const int problem_profits[], // profit primes?
         const int problem_weights[],
         const int x[],
@@ -340,7 +386,12 @@ void DP(const int problem_profits[], // profit primes?
                                        max_profit,
                                        bounding_method);
   // Define DP table (n+1)*(nP)
-  int (*DP_table)[p_upper_bound] = malloc(sizeof(*DP_table) * (n+1));
+  //int (*DP_table)[p_upper_bound] = malloc(sizeof(*DP_table) * (n+1));
+  int **DP_table = (int **) malloc(sizeof(int *) * (n+1));
+  DP_table[0] = (int *)malloc(sizeof(int) * p_upper_bound * (n+1));
+  for(int i = 0; i < (n+1); i++)
+    DP_table[i] = (*DP_table + p_upper_bound * i);
+
   printf("DP table is %d * %d\n", (n+1),  p_upper_bound);
   // Compute base cases
 
@@ -411,9 +462,9 @@ int DP_p_upper_bound(const int problem_profits[],
   int upper_bound;
 
   switch (bounding_method){
-    case 1: upper_bound = n*P; break;
-    case 2: upper_bound = p_upper_bound_aux(problem_profits, n); break;
-    default: printf("Hmmm... What bounding method was that?\n");
+    case HYPER_TRIVIAL_BOUND: upper_bound = n*P; break;
+    case TRIVIAL_BOUND: upper_bound = p_upper_bound_aux(problem_profits, n); break;
+    default: printf("Invalid bounding method! Exiting...\n");
     exit(-1);
   }
 
@@ -445,7 +496,7 @@ int p_upper_bound_aux(const int problem_profits[],
 
 void DP_fill_in_base_cases(const int width,
                            const int n,
-                           int DP_table[][width],
+                           int ** DP_table, //int DP_table[][width],
                            const int problem_profits[],
                            const int problem_weights[]){
   /*
@@ -490,7 +541,7 @@ void DP_fill_in_base_cases(const int width,
 
 void DP_fill_in_general_cases(const int width,
                               const int n,
-                              int DP_table[][width],
+                              int ** DP_table, //int DP_table[][width],
                               const int problem_profits[],
                               const int problem_weights[]){
   /*
@@ -527,7 +578,8 @@ void DP_fill_in_general_cases(const int width,
       if (problem_profits[i-1] <= p){
         a = DP_table[i-1][p];
         b = problem_weights[i-1] + DP_table[i-1][(p-problem_profits[i-1])];
-        DP_table[i][p] = min(a,b);
+        //DP_table[i][p] = min(a,b);
+        DP_table[i][p] = ((a < b) ? a : b);
       }else DP_table[i][p] = DP_table[i-1][p];
     }
   }
@@ -557,7 +609,7 @@ int derive_pinf(const int problem_weights[],
 
 int DP_find_best_solution(const int width,
                           const int n,
-                          const int DP_table[][width],
+                          int ** DP_table, //const int DP_table[][width],
                           const int capacity,
                           const int my_pinf){
   /*
@@ -595,7 +647,7 @@ int DP_find_best_solution(const int width,
 
 int DP_derive_solution_set(int n,
                            const int width,
-                           const int DP_table[][width],
+                           int ** DP_table, //const int DP_table[][width],
                            const int problem_profits[],
                            int solution[],
                            int p,
@@ -621,19 +673,318 @@ int DP_derive_solution_set(int n,
   while ((p > 0)&&(n > 0)){
     if (DP_table[n-2][p] > DP_table[n-1][p]){
       // then we had item n and the solution at A[n-1][p-profit(n)]
-      if(sol_flag == 0) solution[s_index] = (n-1);
+      if(sol_flag == INDEX_NOTATION) solution[s_index] = (n-1);
       else solution[n-2] = 1;
       s_index += 1;
       n -= 1;
       p -= problem_profits[n-1]; // remember table n corresponds to profit n-1
     }else{
       // A[n-1][p] must be the same as A[n][p]
-      if (sol_flag != 0) solution[n-2] = 0;
+      if (sol_flag != INDEX_NOTATION) solution[n-2] = 0;
       n -= 1;
     }
   }
  return s_index;
 }
+/* vasirani_dp.c end */
+
+/* williamson_shmoy_dp.c begin */
+
+int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
+                         int *solution_array)
+{
+ /***william_shmoys_DP********************************************************
+  *  Description: Implements the dynamic programming algorithm for the       *
+  *               knapsack problem as described by Williamson and Shmoys.    *
+  *  Inputs:                                                                 *
+  *    struct problem_item items[]                                           *
+  *      An array of all the items in the problem instance, built from       *
+  *      reading and encoding an input file. Each item struct has profit     * 
+  *      and weight members.                                                 *
+  *    int capacity                                                          *
+  *      The capacity as described by the problem statement                  *
+  *  Outputs:                                                                *
+  *    int w                                                                 *
+  *      the max weight of a tuple in the list at the end of the algorithm   *
+  *  Notes:                                                                  *
+  *                                                                          *
+  ****************************************************************************/
+
+  /* Base case */
+  struct solution_pair* head = NULL;
+  struct solution_pair* current; 
+  push(&head, 0, 0, n);
+  /* ASSUMPTION MADE: the 0'th item will feasibly fit! */
+  push(&head, items[0].weight, items[0].profit, n);
+  head->solution_array[0] = 1;
+
+  /* General case */
+  for(int j=1; j < n; j++)
+  {
+    current = head;
+    while(current != NULL)
+    {
+      /* Only add if we can feasibly add it */
+      int possible_weight = current->weight + items[j].weight;
+      if (possible_weight <= capacity)
+      {
+        /* Put new partial solution on the head */
+        push(&head, possible_weight, current->profit + items[j].profit, n);
+        /* Copy the partial solution array  */
+        for (int i=0; i <= j; i++)
+          head->solution_array[i] = current->solution_array[i];
+        /* Distinguish it from the others */
+        head->solution_array[j] = 1;
+      }
+      current = current->next;
+    }
+    remove_dominated_pairs(&head);
+  }
+
+  /* return max ((t,w) in A max) w*/
+  current = head;
+  struct solution_pair* best_pair;
+  int max_profit = -1;
+  while (current != NULL)
+  {
+    if (current->profit > max_profit)
+      max_profit = current->profit;
+      best_pair = current;
+    current = current->next;  
+  }
+
+  /* Assuming solution_array has been malloc'd already */
+  for(int i=0; i < n; i++)
+  {
+    solution_array[i] = best_pair->solution_array[i];
+  }
+
+
+  /* Clean up */
+  current = head;
+  while (current != NULL)
+  {
+    current = current->next;
+    free(head);
+    head = current;
+  }
+  /* TODO Find out if we need to clena up individual struct arrays */
+
+  return max_profit;
+}
+
+void push(struct solution_pair** head_ref, int new_weight, int new_profit,
+          int n)
+{
+ /***push*********************************************************************
+  *  Description:                                                            *
+  *    Given a pointer to a solution_pair structure pointer (the head of a   *
+  *    linked list of such structures), link a new structure into the list   *
+  *    with given weight new_weight and profit new_profit.                   *
+  *  Postconditions:                                                         *
+  *    This will put the new structure at the top of the list.               *
+  *  Notes:                                                                  *
+  *    This is taken from the geeksforgeeks linked list mergesort article    *
+  *    This needs n in order to dynamically allocate enough space for the    *
+  *    struct member solution_array                                          * 
+  ****************************************************************************/
+  /* Allocate memory for the new solution pair 
+  struct solution_pair* new_solution_pair = 
+    (struct solution_pair*) malloc(sizeof(struct solution_pair) + n * sizeof(int));
+  */
+  /*Tentative start*/
+  struct solution_pair* new_solution_pair =
+    (struct solution_pair*)calloc(sizeof(struct solution_pair) + n, sizeof(int));
+  if (new_solution_pair)
+  {
+    struct solution_pair const temp_pair =
+      {.weight = new_weight, .profit = new_profit, .next=(*head_ref)};
+    /*Old code
+    memcpy(new_solution_pair, &(struct solution_pair const){ .weight = new_weight,
+           .profit = new_profit, .next=(*head_ref)},
+           sizeof(struct solution_pair));*/
+   /*New Code*/
+     memcpy(new_solution_pair, &temp_pair, sizeof(struct solution_pair));
+    
+  }
+
+  /*Tentative end*/
+
+  /* Define new pair's data */
+  new_solution_pair->weight = new_weight;
+  new_solution_pair->profit = new_profit;
+
+  /* Connect pair to the head of the list */
+  new_solution_pair->next = (*head_ref);
+
+  
+  /* TENTATIVE Initialise the array to 0's*/
+  for(int i = 0; i < n; i++)
+    *(new_solution_pair->solution_array+i) = 0;
+ 
+  /* Set the new node to be the new head of the list */
+  (*head_ref) = new_solution_pair;
+}
+
+void remove_dominated_pairs(struct solution_pair** head_ref)
+{
+ /***remove_dominated_pairs documentation*************************************
+  *  Description:                                                            *
+  *    Removes the dominated pairs within a linked list of solution_pairs by *
+  *    a two phase approach consistening of a merge sort on each of the      * 
+  *    weights and a series of iteratively shortening comparisons based on   *
+  *    the profits.                                                          *
+  *  Inputs:                                                                 *
+  *    struct solution_pair** headRef                                        *
+  *      Double pointer to the head of the linked list to allow for          *
+  *      reallocation of the head, should it be dominated                    * 
+  *  Postconditions:                                                         *
+  *    Linked list will have entirely non-dominated pairs.                   *
+  *  Notes:                                                                  *
+  *    Has function dependencies in merge sort and all of its constituent    *
+  *    functions                                                             *
+  *    This function assumes that the (0,0) tuple will always be in an input.*
+  *    As such, the case where the linked list is of length 0 is not         *
+  *    addressed. The algorithm seems resilient enough to cover length=1     *
+  *    with its general case.                                                *
+  ****************************************************************************/
+
+  /* Merge sort the list by weight */
+  merge_sort(head_ref);
+
+  struct solution_pair* current = (*head_ref)->next;
+  struct solution_pair* previous = *head_ref;
+
+  /* Filtration algorithm */
+  while (current != NULL)
+  {
+    if (previous->profit >= current->profit)
+    {
+      current = current->next;
+      free(previous->next);
+      previous->next = current;
+    }
+    else
+    {
+      current = current->next;
+      previous = previous->next;
+    }
+  }
+}
+
+void merge_sort(struct solution_pair** head_ref)
+{
+ /* merge_sort: my adapation for solution pairs as originally described by    *
+  *             geeks for geeks.                                              *
+  *             This is strictly designed for linked lists                    *
+  *             This algorithm is said to have complexity O(nlogn)            */
+  struct solution_pair* head = *head_ref;
+  struct solution_pair* a;
+  struct solution_pair* b;
+
+  /* Bases: length 0 or 1 */
+  if ((head == NULL) || (head->next == NULL))
+    return;
+
+  /* Split head into 'a' and 'b' sublists */
+  front_back_split(head, &a, &b);
+
+  /* Recursively sort the sublists */
+  merge_sort(&a);
+  merge_sort(&b);
+
+  /* Merge the two lists of this scope together */
+  *head_ref = sorted_merge(a, b);
+}
+
+struct solution_pair* sorted_merge(struct solution_pair* a, 
+                                   struct solution_pair* b)
+{
+  struct solution_pair* result = NULL;
+  
+  /* Base cases */
+  if (a == NULL) return (b);
+  else if (b == NULL) return (a);
+
+  /* Pick the lower of either a or b, and recur */
+  if (a->weight <= b->weight)
+  {
+    /* Corner case: if they're equal weighted, put the one with the higher 
+       profit first. This simplifies the cases we have to consider within
+       the filtration step of dominated pair removal */
+    if (a->weight == b->weight)
+    {
+      if (a->profit > b->profit) 
+      {
+        result = a;
+        result->next = sorted_merge(a->next, b);
+      }
+      else 
+      {
+        result = b;
+        result->next = sorted_merge(a, b->next);
+      }
+    }
+    /* Otherwise just merge as normal */
+    else
+    {
+      result = a;
+      result->next = sorted_merge(a->next, b);
+    }
+  }
+  else
+  {
+    result = b;
+    result->next = sorted_merge(a, b->next);
+  }
+  return(result);
+}
+
+void front_back_split(struct solution_pair* source, 
+                      struct solution_pair** front_ref, 
+                      struct solution_pair** back_ref)
+{
+  struct solution_pair* fast;
+  struct solution_pair* slow;
+  if (source == NULL || source->next == NULL)
+  {
+    /* Length < 2 cases */
+    *front_ref = source;
+    *back_ref = NULL; 
+  }
+  else
+  {
+    slow = source;
+    fast = source->next;
+
+    /* Advance 'fast' by two nodes, and advance 'slow' by one */
+    while (fast != NULL)
+    {
+      fast = fast->next;
+      if (fast != NULL)
+      {
+        slow = slow->next;
+        fast = fast->next;
+      }
+    }
+    /* 'slow' is before the midpoint in the list, so split it at that point */
+    *front_ref = source;
+    *back_ref = slow->next;
+    slow->next = NULL;
+  }
+}
+
+void print_list(struct solution_pair* node)
+{
+  while(node!=NULL)
+  {
+    printf("%d ", node->profit);
+    node = node->next;
+  }
+}
+
+
+/* williamson_shmoy_dp.c end */
 
 float define_K(float eps, int P, int n){
   /* Description: 
@@ -663,7 +1014,7 @@ float define_K(float eps, int P, int n){
   // return K
 }
 
-void make_profit_primes(int *profits, int *profits_prime, float K, int n){
+void make_profit_primes(int profits[], int profits_prime[], float K, int n){
  /* 
   * Description: 
   *  Derives the adjusted profits set profits', which is made by scaling every

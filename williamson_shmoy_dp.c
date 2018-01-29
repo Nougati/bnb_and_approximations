@@ -10,7 +10,7 @@
  *  Notes:                                                                   *
  *                                                                           *
  *  TODO:                                                                    *
- *    Valgrind tests for the complicated struct arrays :O                    *
+ *    Change read only variable declarations to const                        *
  *                                                                           *
  *****************************************************************************/
 
@@ -35,7 +35,8 @@ struct solution_pair
   /* End tentative changes */ 
 };
 
-int williamson_shmoys_DP(struct problem_item items[], int capacity, int n, int *solution_array);
+int williamson_shmoys_DP(struct problem_item items[], int capacity, int n, 
+                         int *solution_array);
 void push(struct solution_pair** head_ref, int new_weight, int new_profit, int n);
 void remove_dominated_pairs(struct solution_pair** head_ref);
 void merge_sort(struct solution_pair** head_ref);
@@ -479,10 +480,11 @@ int main(int argc, char *argv[])
   for(int i = 0; i < n; i++)
     if (x[i] != solution_array[i])
       correct_solution_flag = 0;
-  printf("%s", correct_solution_flag ? "Solution set identical!\n" : "Disparit"
+  printf("%s", correct_solution_flag ? "Solution set identical (Good news!)\n" : "Disparit"
          "y bewtween solution sets!\n");
 
   /* Clean up */
+  free(solution_array);
   free(profits);
   free(weights);
   free(x);
