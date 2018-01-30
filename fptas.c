@@ -423,6 +423,7 @@ void DP(const int problem_profits[], // profit primes?
                                            p,
                                            sol_flag);
   free(DP_table);
+  free(DP_table[0]);
 }
 
 int DP_max_profit(const int problem_profits[],

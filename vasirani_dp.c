@@ -3,8 +3,11 @@
     described by Vijay Vasirani
    Notes:
     This was once cheesecake. Sad!
-    Data type assertions seem unnecessary because C is pretty tight about that anyway.
+    Data type assertions seem unnecessary because C is pretty tight about 
+    that anyway.
    TODO
+    Update the 2D array arg declarations to double pointer notation for 
+    consistency's sake
  */
 
 #include <math.h>
@@ -17,7 +20,9 @@
 https://stackoverflow.com/questions/6280055/how-do-i-check-if-a-variable-is-of-a-certain-type-compare-two-types-in-c
 "When I'm done I'll reduce the size of this block to just the necessary ones." - Nelson, the court jester.
  */
-#define typename(x) _Generic((x),        /* Get the name of a type */             \
+/*
+
+#define typename(x) _Generic((x),        /* Get the name of a type            \
                                                                                   \
         _Bool: "_Bool",                  unsigned char: "unsigned char",          \
          char: "char",                     signed char: "signed char",            \
@@ -29,12 +34,13 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
   long double: "long double",                   char *: "pointer to char",        \
        void *: "pointer to void",                int *: "pointer to int",         \
       default: "other")
-
+*/
+/*
 #define min(a,b) \
    ({ __typeof__ (a) _a = (a); \
        __typeof__ (b) _b = (b); \
      _a < _b ? _a : _b; })
-
+*/
 /* Function Declarations */
 void DP(const int problem_profits[],
         const int problem_weights[],
@@ -60,7 +66,7 @@ int p_upper_bound_aux(const int problem_profits[],
 
 void DP_fill_in_base_cases(const int width,
                            const int n,
-                           int DP_table[][width],
+                           int ** DP_table, //int DP_table[][width],
                            const int problem_profits[],
                            const int problem_weights[]);
 
@@ -68,26 +74,24 @@ int derive_pinf(const int problem_weights[], const int n);
 
 void DP_fill_in_general_cases(const int width,
                               const int n,
-                              int DP_table[][width],
+                              int ** DP_table,//int DP_table[][width],
                               const int problem_profits[],
                               const int problem_weights[]);
 
 int DP_find_best_solution(const int width,
                         const int n,
-                        const int DP_table[][width],
+                        int ** DP_table, //const int DP_table[][width],
                         const int capacity,
                         const int my_pinf);
 
 int DP_derive_solution_set(int n,
                             const int width,
-                            const int DP_table[][width],
+                            int ** DP_table, //const int DP_table[][width],
                             const int problem_profits[],
                             int solution[],
                             int p,
                             const int sol_flag);
 
-void DP_assert_array_is_integer(const int an_array[],
-                                const int length);
 
 void pisinger_reader(int *n,
                      int *c,
@@ -105,6 +109,7 @@ void pisinger_generator_reader(int *n,
 
 
 /* .ılılılılılılılılıl Program body lılılılılılılılılı. */
+#ifndef TESTING
 int main(int argc, char *argv[]){
   /*
     Notes:
@@ -192,6 +197,7 @@ int main(int argc, char *argv[]){
   int poo = getchar();
   return 0;
 }
+#endif
 
 void DP(const int problem_profits[],
         const int problem_weights[],
@@ -228,7 +234,11 @@ void DP(const int problem_profits[],
                                        max_profit,
                                        bounding_method);
   // Define DP table (n+1)*(nP)
-  int (*DP_table)[p_upper_bound] = malloc(sizeof(*DP_table) * (n+1));
+  //int (*DP_table)[p_upper_bound] = malloc(sizeof(*DP_table) * (n+1));
+  int ** DP_table = (int **) malloc(sizeof(int *) * (n+1));
+  DP_table[0] = (int *)malloc(sizeof(int) * p_upper_bound * (n+1));
+  for(int i = 0; i < (n+1); i++)
+    DP_table[i] = (*DP_table + p_upper_bound * i);
 
   printf(" DP_table malloc'd! Dimensions are %d * %d! \n", n+1, p_upper_bound);
   // Compute base cases
@@ -274,13 +284,15 @@ void DP(const int problem_profits[],
     /* This is just printing the solution set. It is clutter at the moment
     for(int i=0; i<n_solutions; i++){
       printf("%d ", sol[i]);
-    }*/printf("\nComputed optimal profit: %d\nComputed Optimal Weight: %d\n", p, DP_table[n][p]);
+    }*/printf("\nComputed optimal profit: %d\nComputed Optimal Weight: %d\n", 
+              p, DP_table[n][p]);
   }else{
     /* This is just printing the solution set. It is clutter at the moment
     for(int i=0; i<n; i++){
       printf("%d ", sol[i]);
     }*/
-    printf("\nComputed optimal profit: %d\nOptimal Weight: %d\n", p, DP_table[n][p]);
+    printf("\nComputed optimal profit: %d\nOptimal Weight: %d\n", p, 
+           DP_table[n][p]);
   }
   printf("True optimal profit: %d\n", z);
   float deviation = (1-(p/z))*100;
@@ -290,13 +302,17 @@ void DP(const int problem_profits[],
     if (sol_flag != 0){
       for (int i=0; i<n; i++){
         if (sol[i] != x[i]){
-          printf("Disparity between solution sets... %s \n",z==p?"Profits are same though ¯\\_(ツ)_/¯":"And the profits are different.. It didn't work.");
+          printf("Disparity between solution sets... %s \n",z==p?"Profits are "
+                 "same though ¯\\_(ツ)_/¯":"And the profits are different.. It"
+                 " didn't work.");
           correct_flag = 0;
           break;
         }
       }
-      if (correct_flag) printf("Solution sets match. Correct solution obtained!\n");
-    }else printf("I'm not going to check the solution set of an indexed solution. You do it.\n");
+      if (correct_flag) printf("Solution sets match. Correct solution obtained"
+                               "!\n");
+    }else printf("I'm not going to check the solution set of an indexed soluti"
+                 "on. You do it.\n");
   }
 
   free(DP_table);
@@ -372,7 +388,7 @@ int p_upper_bound_aux(const int problem_profits[],
 
 void DP_fill_in_base_cases(const int width,
                            const int n,
-                           int DP_table[][width],
+                           int ** DP_table, //int DP_table[][width],
                            const int problem_profits[],
                            const int problem_weights[]){
   /*
@@ -387,9 +403,8 @@ void DP_fill_in_base_cases(const int width,
     Preconditions:
       The space for the table must be allocated
     Postconditions:
-      The first row should indicate the minimum size solutions for the
-      specified solution subset. Also, impossible solutions will be
-       represented by infinity
+      The cases where profit is limited to 0, and the cases where the there is
+       a set of 0 items in the solution will be filled out.
     Notes:
       The rows of the table is expected to represent the number of items
        included. The columns of the table is expected to represent the
@@ -418,7 +433,7 @@ void DP_fill_in_base_cases(const int width,
 
 void DP_fill_in_general_cases(const int width,
                               const int n,
-                              int DP_table[][width],
+                              int ** DP_table, //int DP_table[][width],
                               const int problem_profits[],
                               const int problem_weights[]){
   /*
@@ -441,12 +456,12 @@ void DP_fill_in_general_cases(const int width,
       Hopefully a completed DP table which will, within it, contain the optimal
        solution to the 0,1 Knapsack.
     Notes:
-      Serious consideration: the problem_profits are 0-indexed, as are the problem
-       weights.
-      As a result the field A[1][1] is actually the solution which considers the
-       combination of problem_profits[0] and problem_weights[0].
-      This means when designing this, it is *crucial* to account for this semantic
-       indexing issue.
+      Serious consideration: the problem_profits are 0-indexed, as are the 
+      problem weights.
+      As a result the field A[1][1] is actually the solution which considers 
+      the combination of problem_profits[0] and problem_weights[0].
+      This means when designing this, it is *crucial* to account for this
+       semantic indexing issue.
   */
 
   int a, b;
@@ -455,7 +470,8 @@ void DP_fill_in_general_cases(const int width,
       if (problem_profits[i-1] <= p){
         a = DP_table[i-1][p];
         b = problem_weights[i-1] + DP_table[i-1][(p-problem_profits[i-1])];
-        DP_table[i][p] = min(a,b);
+        //DP_table[i][p] = min(a,b);
+        DP_table[i][p] = ((a < b) ? a : b);
       }else DP_table[i][p] = DP_table[i-1][p];
     }
   }
@@ -484,7 +500,7 @@ int derive_pinf(const int problem_weights[],
 
 int DP_find_best_solution(const int width,
                           const int n,
-                          const int DP_table[][width],
+                          int ** DP_table, //const int DP_table[][width],
                           const int capacity,
                           const int my_pinf){
   /*
@@ -522,7 +538,7 @@ int DP_find_best_solution(const int width,
 
 int DP_derive_solution_set(int n,
                            const int width,
-                           const int DP_table[][width],
+                           int ** DP_table, //const int DP_table[][width],
                            const int problem_profits[],
                            int solution[],
                            int p,
@@ -530,12 +546,14 @@ int DP_derive_solution_set(int n,
 
   /*
     Description:
-      Given a completed DP_table, derive the indices of the items of the optimal set.
+      Given a completed DP_table, derive the indices of the items of the 
+      optimal set.
     Inputs:
       n - the number of rows in the Dynamic Programming table
-      DP_table - the 2d array representing the constituent subproblems of the DP
-      solution - the output array; it will simply hold the indices of the items that
-       are included in the optimal solution.
+      DP_table - the 2d array representing the constituent subproblems of the
+       DP
+      solution - the output array; it will simply hold the indices of the items
+       that are included in the optimal solution.
       p - the profit of the optimal solution
       sol_flag - if 0, index notation, if 1, 0/1 notation
     Postconditions:
@@ -562,19 +580,8 @@ int DP_derive_solution_set(int n,
  return s_index;
 }
 
-void DP_assert_array_is_integer(const int an_array[],
-                                const int length){
-  /*
-    Description
-      This is just a basic assertion thing because it would be just like me
-       to find a way for C to let this happen. It really should never be needed.
-  */
-  for(int i = 0; i < length; i++){
-    assert(typename(an_array[i])=="int");
-  }
-}
-
-void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x, char *problem_file){
+void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
+                     char *problem_file){
   /* This is a haggard mess*/
   FILE *fp;
   char str[256];
