@@ -16,6 +16,10 @@
 #include <string.h>
 #include <assert.h>
 
+#define HYPER_TRIVIAL_BOUND 1
+#define TRIVIAL_BOUND 2
+#define RATIO_BOUND 3
+
 /* This block is stolen from
 https://stackoverflow.com/questions/6280055/how-do-i-check-if-a-variable-is-of-a-certain-type-compare-two-types-in-c
 "When I'm done I'll reduce the size of this block to just the necessary ones." - Nelson, the court jester.
@@ -57,9 +61,11 @@ int DP_max_profit(const int problem_profits[],
                   int n);
 
 int DP_p_upper_bound(const int problem_profits[],
+                     const int problem_weights[],
                      const int n,
                      int P,
-                     int bounding_method);
+                     int bounding_method,
+                     const int c);
 
 int p_upper_bound_aux(const int problem_profits[],
                       int n);
@@ -107,6 +113,7 @@ void pisinger_generator_reader(int *n,
                                int **w,
                                char *problem_file);
 
+int p_upper_bound_ratio(const int problem_profits[], const int problem_weights[], const int n, const int c);
 
 /* .ılılılılılılılılıl Program body lılılılılılılılılı. */
 #ifndef TESTING
@@ -148,27 +155,42 @@ int main(int argc, char *argv[]){
                   inclined to believe something has gone wrong. This is why an upper bound
                   on p would be nice!
   */
-  int n, capacity, z;
+  int n, capacity, z, bounding_method;
   int *profits, *weights, *x;
-  char problem_file[80];
-  const int bounding_method = 2;
+  char problem_file[100];
   int sol_flag = 1;
 
   /* Command line verification */
-  if (argc != 2)
+  if (argc != 3)
   {
-    printf("Usage: %s <problem_file>\n", argv[0]);
+    if (strcmp(argv[1], "help") == 0)
+      printf("bounding methods\n\t-np: nP\n\t-bps: basic profit sum\n\t-r: max r"
+             "atio times capacity\n");
+    printf("Usage: %s <problem_file> <bounding_method>\nType \"%s help\" for o"
+           "ptions\n", argv[0], argv[0]);
     exit(EXIT_FAILURE);
   }
   else
   {
     strcpy(problem_file, "./problems/");
     strcat(problem_file, argv[1]);
+    if (strcmp(argv[2], "-np")==0)
+      bounding_method = HYPER_TRIVIAL_BOUND;
+    else if (strcmp(argv[2], "-bps")==0)
+      bounding_method = TRIVIAL_BOUND;
+    else if (strcmp(argv[2], "-r")==0)
+      bounding_method = RATIO_BOUND;
+    else
+    {
+      printf("There was a problem deciphering the bounding method. Exiting...\n");
+      exit(-1);
+    }
   }
-
-  /* pisinger_reader only works if the input file is of the form of the standard knapsack
-     instances that accompany "Where are all the the hard Knapsack instances" by Pisinger
-     in 2005. As a result, we must use a seperate reader for the other file format. */
+  
+  /* pisinger_reader only works if the input file is of the form of the
+     standard knapsack instances that accompany "Where are all the the hard
+     Knapsack instances" by Pisinger. As a result, we must use a seperate
+     reader for the other file format. */
   if (strcmp(argv[1], "test.in")==0)
   {
     pisinger_generator_reader(&n,
@@ -180,21 +202,20 @@ int main(int argc, char *argv[]){
   }
   else
   {
-  pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file);
+    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file);
   }
 
   int S[n];
   for (int i=0; i < n; i++) S[i] = 0;
 
-
-  DP(profits, weights, x, S, n, capacity, z, sol_flag, bounding_method, problem_file);
+  DP(profits, weights, x, S, n, capacity, z, sol_flag, bounding_method,
+     problem_file);
 
   /*Reader frees */
   free(profits);
   free(weights);
   if (problem_file != "test.in") free(x);
-  /**/
-  int poo = getchar();
+
   return 0;
 }
 #endif
@@ -230,69 +251,59 @@ void DP(const int problem_profits[],
 
   // Find upper bound on p for DP
   int p_upper_bound = DP_p_upper_bound(problem_profits,
+                                       problem_weights,
                                        n,
                                        max_profit,
-                                       bounding_method);
-  // Define DP table (n+1)*(nP)
-  //int (*DP_table)[p_upper_bound] = malloc(sizeof(*DP_table) * (n+1));
-  int ** DP_table = (int **) malloc(sizeof(int *) * (n+1));
-  DP_table[0] = (int *)malloc(sizeof(int) * p_upper_bound * (n+1));
+                                       bounding_method,
+                                       capacity);
+
+  printf("Table is of size %d * %d\n", n+1, p_upper_bound);
+
+  int **DP_table;
+  DP_table = (int **)malloc((n+1) * sizeof(int *));
   for(int i = 0; i < (n+1); i++)
-    DP_table[i] = (*DP_table + p_upper_bound * i);
+    DP_table[i] = (int *)malloc(p_upper_bound * sizeof(int));
 
-  printf(" DP_table malloc'd! Dimensions are %d * %d! \n", n+1, p_upper_bound);
   // Compute base cases
-
-  printf(" Filling base cases...\n");
   DP_fill_in_base_cases(p_upper_bound,
-                        n+1,
+                        n,
                         DP_table,
                         problem_profits,
                         problem_weights);
-  printf(" Base cases filled!\n");
-
   // Compute general cases
-  printf(" Filling general cases...\n");
   DP_fill_in_general_cases(p_upper_bound,
-                           n+1,
+                           n,
                            DP_table,
                            problem_profits,
                            problem_weights);
-  printf(" General cases filled!\n");
   int my_pinf = derive_pinf(problem_weights, n);
-  printf(" pinf derived!\n");
 
   int p = DP_find_best_solution(p_upper_bound,
-                                n+1,
+                                n,
                                 DP_table,
                                 capacity,
                                 my_pinf);
-  printf(" Best solution found!\n");
 
-  int n_solutions = DP_derive_solution_set(n+1,
+  int n_solutions = DP_derive_solution_set(n,
                                            p_upper_bound,
                                            DP_table,
                                            problem_profits,
                                            sol,
                                            p,
                                            sol_flag);
-  printf(" Solution set derived!\n");
   /* Solution output*/
-  printf("Solved...\nSolution format: %s\n",sol_flag==0?"Indexed":"Binary");
-
   if (sol_flag == 0){
     /* This is just printing the solution set. It is clutter at the moment
     for(int i=0; i<n_solutions; i++){
       printf("%d ", sol[i]);
-    }*/printf("\nComputed optimal profit: %d\nComputed Optimal Weight: %d\n", 
-              p, DP_table[n][p]);
+    }*/printf("\nComputed optimal profit: %d\n", 
+              p);
   }else{
     /* This is just printing the solution set. It is clutter at the moment
     for(int i=0; i<n; i++){
       printf("%d ", sol[i]);
     }*/
-    printf("\nComputed optimal profit: %d\nOptimal Weight: %d\n", p, 
-           DP_table[n][p]);
+    printf("\nComputed optimal profit: %d\n", p);
   }
   printf("True optimal profit: %d\n", z);
   float deviation = (1-(p/z))*100;
@@ -339,9 +350,11 @@ int DP_max_profit(const int problem_profits[],
 }
 
 int DP_p_upper_bound(const int problem_profits[],
+                     const int problem_weights[],
                      const int n,
                      const int P,
-                     const int bounding_method){
+                     const int bounding_method,
+                     const int c){
   /*
     Description:
       Derives the upper bound for the DP table, based on the bounding
@@ -354,14 +367,35 @@ int DP_p_upper_bound(const int problem_profits[],
   int upper_bound;
 
   switch (bounding_method){
-    case 1: upper_bound = n*P; break;
-    case 2: upper_bound = p_upper_bound_aux(problem_profits, n); break;
+    case HYPER_TRIVIAL_BOUND: upper_bound = n*P; break;
+    case TRIVIAL_BOUND: upper_bound = p_upper_bound_aux(problem_profits, n); break;
+    case RATIO_BOUND: upper_bound = p_upper_bound_ratio(problem_profits, problem_weights, n, c); break;
     default: printf("Hmmm... What bounding method was that?\n");
     exit(-1);
   }
 
   return upper_bound;
 }
+
+
+int p_upper_bound_ratio(const int problem_profits[],
+                        const int problem_weights[], const int n, const int c)
+{
+  /*TODO Does this work?!*/
+  double biggest_ratio = 0.0;
+  double this_ratio;
+  for(int i = 0; i < n; i++)
+  {
+    this_ratio = (double)problem_profits[i] / (double)problem_weights[i];
+    if (this_ratio > biggest_ratio)
+      biggest_ratio = this_ratio;
+  }
+  biggest_ratio *= c;
+  int upper_bound = (int)floor(biggest_ratio);
+  return upper_bound;
+}
+
+
 
 int p_upper_bound_aux(const int problem_profits[],
                       const int n){
@@ -418,17 +452,16 @@ void DP_fill_in_base_cases(const int width,
        This has led to the definition of the function derive_pinf.
   */
 
-  int my_pinf = derive_pinf(problem_weights, n-1);
+  int my_pinf = derive_pinf(problem_weights, n);
   // Go over the first column with 0's
   for(int i = 0; i < n; i++){
      DP_table[i][0] = 0;
   }
 
   // Go over the first row with infinities
-  for(int i = 1; i < width; i++) {
+  for(int i = 1; i <= width; i++) {
     DP_table[0][i] = my_pinf;
   }
-
 }
 
 void DP_fill_in_general_cases(const int width,
@@ -465,8 +498,8 @@ void DP_fill_in_general_cases(const int width,
   */
 
   int a, b;
-  for (int p = 1; p < width; p++){
-    for (int i = 1; i < n; i++){
+  for (int p = 1; p <= width; p++){
+    for (int i = 1; i <= n; i++){
       if (problem_profits[i-1] <= p){
         a = DP_table[i-1][p];
         b = problem_weights[i-1] + DP_table[i-1][(p-problem_profits[i-1])];
@@ -525,9 +558,9 @@ int DP_find_best_solution(const int width,
   */
 
   int p= -1;
-  for(int i = width-1; i >= 0; i--){
-    if (DP_table[n-1][i] != my_pinf){
-      if (DP_table[n-1][i] <= capacity){
+  for(int i = width; i >= 0; i--){
+    if (DP_table[n][i] != my_pinf){
+      if (DP_table[n][i] <= capacity){
         p = i;
         break;
       }

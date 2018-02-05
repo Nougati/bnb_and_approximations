@@ -23,6 +23,8 @@
 #define BINARY_NOTATION 1
 #define HYPER_TRIVIAL_BOUND 1
 #define TRIVIAL_BOUND 2
+#define TRUE 1
+
 
 #define typename(x) _Generic((x),        /* Get the name of a type */             \
                                                                                   \
@@ -89,13 +91,8 @@ int DP_p_upper_bound(const int problem_profits[],
                      const int P,
                      const int bounding_method);
 
-void pisinger_reader(int *n,
-                     int *c,
-                     int *z,
-                     int **p,
-                     int **w,
-                     int **x,
-                     char *problem_file);
+void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
+                     char *problem_file, int problem_no);
 
 void FPTAS(float eps, 
            int *profits,
@@ -195,96 +192,116 @@ int main(int argc, char *argv[]){
   int *profits, *weights, *x, *profit_primes;
   int n, capacity, z, sol_flag, bounding_method;
   int DP_method;
+  int all_instances = 0;
 
   /* Command line argument "help" */
   if ((argc == 2)&&(strcmp(argv[1],"help") == 0))
   {
-    printf("Usage:\n\t%s <filename> <DP solver> <epsilon>\n\tFilename options:"
+    printf("Usage:\n\t%s <filename> <DP solver> <epsilon> <instance number>\n\tFilename options:"
            "\n\t\tNothing yet!\n\tDP Solver Flags:\n\t\t-v : Vasirani\n\t\t-ws"
            " : Williamson and Shmoy's DP\n\tEpsilon\n\t\tWhatever you like! We"
-           "ll, not really, it has to be nonnegative\n", argv[0]);
+           "ll, not really, it has to be nonnegative\n\tInstance number:\n\t\t"
+           " An integer in the range 1 to 100 inclusive.\n\t\t.. or \"all\" fo"
+           "r repeated readings", argv[0]);
     exit(-1);
   }
-  if (argc != 4)
+  if (argc != 5)
   {
-    printf("Usage: %s <filename> <DP solver> <epsilon>\n Type \"%s help\" for "
+    printf("Usage: %s <filename> <DP solver> <epsilon> <instance number>\n Type \"%s help\" for "
             "info.\n",
            argv[0], argv[0]);
     exit(-1);
   }
 
   sscanf(argv[3], "%f", &eps);
-  strcpy(problem_file, "./problems/");
-  strcat(problem_file, argv[1]);
+  strcpy(problem_file, argv[1]);
 
-  /* Parameters have been read in, now read in the problem file */
-  pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file);
-
-  sol_flag = BINARY_NOTATION;
-  int sol_prime[n];
-  for (int i=0; i < n; i++) sol_prime[i] = 0;
-  bounding_method = TRIVIAL_BOUND;  
-  profit_primes = (int *) malloc(n * sizeof(*profit_primes));
-
-  /*Timer Segment Start*/
-  clock_t t;
-  printf("eps = %f. Starting timer...\n", eps);
-  t = clock();
-  /*Timer Segment End*/
-
-  if(strcmp(argv[2],"-v") == 0)
+  int problem_number, iter_start, iter_end;
+  if(strcmp(argv[4],"all") == 0)
   {
-    DP_method = VASIRANI;
-    FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
-          bounding_method, problem_file, &K, profit_primes, DP_method); 
-  }
-  else if (strcmp(argv[2],"-ws")==0)
+    /* TODO FIX MALLOCING ISSUE I THINK IT'S SEGFAULTING BECAUSE I AM TRYING TO USE FREE'D SPACE OR SOMETHING? LOL*/
+    printf("All!\n");
+    all_instances = TRUE;
+    iter_start = 1;
+    iter_end = 100;
+    
+  }else
   {
-    DP_method = WILLIAMSON_SHMOY;
-    FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
-          bounding_method, problem_file, &K, profit_primes, DP_method); 
+    iter_start = atoi(argv[4]);
+    iter_end = iter_start + 1;
+    //problem_number = atoi(argv[4]);
   }
-  else
+  for(int i = iter_start; i < iter_end; i++)
   {
-    printf("Unrecognised flag. Type \"%s help\" for options. Exiting...\n", 
-           argv[0]);
-    exit(-1);
-  }
-  
-  /*Timer Segment Start*/
-  t = clock() - t;
-  double time_taken = ((double)t)/CLOCKS_PER_SEC;
-  printf("Compute time: %f\n", time_taken);
-  /*Timer Segment End*/
+    /* Parameters have been read in, now read in the problem file */
+    printf("problem_file: %s\n", problem_file);
+    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file, i);
 
-  /* FPTAS Part */
-  
-  float profit_primes_i_times_K; 
-  for(int i=0; i<n; i++){
-    profit_primes_i_times_K = profit_primes[i]*K;
-    profit_primes[i] = profit_primes_i_times_K;
-    /*Why can't I just do profit_primes[i] *= K?*/
-  }
+    sol_flag = BINARY_NOTATION;
+    int sol_prime[n];
+    for (int i=0; i < n; i++) sol_prime[i] = 0;
+    bounding_method = TRIVIAL_BOUND;  
+    profit_primes = (int *) malloc(n * sizeof(*profit_primes));
+ 
+    /*Timer Segment Start*/
+    clock_t t;
+    t = clock();
+    /*Timer Segment End*/
 
-  int kprofitprimeSprime = 0;
-  int profitSprime = 0;
-  for(int i=0; i<n; i++){
-    if (sol_prime[i] == 1){ 
-      kprofitprimeSprime += profit_primes[i];
-      profitSprime += profits[i];
+    if(strcmp(argv[2],"-v") == 0)
+    {
+      DP_method = VASIRANI;
+      FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
+            bounding_method, problem_file, &K, profit_primes, DP_method); 
     }
+    else if (strcmp(argv[2],"-ws")==0)
+    {
+      DP_method = WILLIAMSON_SHMOY;
+      FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
+            bounding_method, problem_file, &K, profit_primes, DP_method); 
+    }
+    else
+    {
+      printf("Unrecognised flag. Type \"%s help\" for options. Exiting...\n", 
+             argv[0]);
+      exit(-1);
+    }
+  
+    /*Timer Segment Start*/
+    t = clock() - t;
+    double time_taken = ((double)t)/CLOCKS_PER_SEC;
+    printf("Compute time: %f\n", time_taken);
+    /*Timer Segment End*/
+
+    /* FPTAS Part */
+  
+    float profit_primes_i_times_K; 
+    for(int i=0; i<n; i++){
+      profit_primes_i_times_K = profit_primes[i]*K;
+      profit_primes[i] = profit_primes_i_times_K;
+      /*Why can't I just do profit_primes[i] *= K?*/
+    }
+
+    int kprofitprimeSprime = 0;
+    int profitSprime = 0;
+    for(int i=0; i<n; i++){
+      if (sol_prime[i] == 1){ 
+        kprofitprimeSprime += profit_primes[i];
+        profitSprime += profits[i];
+      }
+    }
+
+    /* Print profit results */
+    printf("profit(O): %d\nprofit(S'): %d\nKprofit'(S'): %d\n", z, profitSprime,
+                                                                   kprofitprimeSprime);
+
+    printf("Deviation from optimal: %s%f.\n", "%", (1 - ((float)profitSprime/(float)z)) *100);
+
+    free(profit_primes);
+    free(profits);
+    free(weights);
+    free(x);
   }
-
-  /* Print profit results */
-  printf("profit(O): %d\nprofit(S'): %d\nKprofit'(S'): %d\n", z, profitSprime,
-                                                                 kprofitprimeSprime);
-
-  printf("Deviation from optimal: %s%f.\n", "%", (1 - ((float)profitSprime/(float)z)) *100);
-
-  free(profit_primes);
-  free(profits);
-  free(weights);
-  free(x);
   return 0;
 }
 #endif
@@ -1035,6 +1052,7 @@ void make_profit_primes(int profits[], int profits_prime[], float K, int n){
     profits_prime[i] = floor(profits[i]/K);
   }
 }
+/*
 
 void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x, char *problem_file){ 
   /* 
@@ -1045,14 +1063,14 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x, char *pr
    *
    * Notes:
    * 
-   */
+   *
   FILE *fp;
   char str[256];
   char * pch;
 
   fp = fopen(problem_file, "r");
 
-  /* Get n */
+  /* Get n *
   if (fp == NULL) 
   {
     printf("Problem opening the file!\n");
@@ -1070,6 +1088,130 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x, char *pr
   int *tmp_p = (int *)malloc(*n * sizeof(*tmp_p));
   int *tmp_w = (int *)malloc(*n * sizeof(*tmp_w));
   int *tmp_x = (int *)malloc(*n * sizeof(*tmp_x));
+
+  int counter=0;
+  if (fp == NULL) exit(EXIT_FAILURE);
+  while ((fgets(str, sizeof(str), fp))&&(counter<*n)){
+
+  if(str[0] == 'c'){
+      pch = strtok(str, " ");
+      pch = strtok(NULL, " ");
+      *c = atoi(pch);
+  }else if (str[0] == 'z'){
+      pch = strtok(str, " ");   
+      pch = strtok(NULL, " ");
+      *z = atoi(pch);
+  }else if (!((str[0] == 'n')
+            ||(str[0] == 'z')
+            ||(str[0] == 'k')
+            ||(str[0] == 't'))){
+
+      pch = strtok(str, ",");
+      pch = strtok(NULL, ",");
+
+      tmp_p[counter] = atoi(pch);
+
+      pch = strtok(NULL, ",");
+
+      tmp_w[counter] = atoi(pch);
+
+      pch = strtok(NULL, ",");
+
+      tmp_x[counter] = atoi(pch);
+
+      counter += 1;
+
+    }
+  }
+  fclose(fp);
+
+  *p = tmp_p;
+  *w = tmp_w;
+  *x = tmp_x;
+}
+*/
+
+void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x, 
+                     char *problem_file, int problem_number)
+{ 
+  /* 
+   * Description:
+   *   Reads pisinger's csv knapsack instances into arrays. This does not work 
+   *    on his automatically generated instances.
+   * Inputs:
+   *
+   * Notes:
+   *   This has been edited to support dynamic allocation error catching.  
+   */
+  if (problem_number <= 0 || problem_number > 100)
+  {
+    printf("Bad problem number. Exiting...\n");
+    exit(EXIT_FAILURE);
+  }
+  FILE *fp;
+  char str[256];
+  char * pch;
+
+  char problem_number_str[100];
+  sprintf(problem_number_str, "%d", problem_number);
+  printf("problem_number_str: %s\n", problem_number_str);
+  char instance_name[50];
+  strncpy(instance_name, problem_file, 16);
+  strcat(instance_name, "_");
+  strcat(instance_name, problem_number_str);
+
+  char path[80];
+  strcpy(path, "./problems/");
+  strcat(path, problem_file);
+  fp = fopen(path, "r");
+  if (fp == NULL)
+  {
+    printf("Unable to open file. Exiting...\n");
+    exit(EXIT_FAILURE);
+  }
+
+  int coefficient_size;
+  sscanf(problem_file, "knapPI_%*d_%d_%d.csv", n, &coefficient_size);
+  int ndigits = floor(log10(abs(*n)))+1;
+  int cdigits = floor(log10(abs(coefficient_size)))+1;
+  int pnodigits = floor(log10(abs(problem_number)))+1;
+
+  int instance_name_width = 11+ndigits+cdigits+pnodigits;
+
+  printf("instance_name_width: %d\n", instance_name_width);
+  while(strncmp(fgets(str, sizeof(str), fp), instance_name, instance_name_width) != 0)
+    ;
+
+
+  while (fgets(str, sizeof(str), fp)){
+    if (str[0] == 'n'){
+      pch = strtok(str, " ");
+      pch = strtok(NULL, " ");
+      *n = atoi(pch);
+      break;
+    }
+  }
+
+  int *tmp_p;
+  if((tmp_p = (int *)malloc(*n * sizeof(*tmp_p)))==NULL)
+  {  //tperror("Error allocating space for profits\n");
+    fprintf(stderr, "Cannot malloc tmp_x!\n");
+    exit(1);
+  }
+
+  int *tmp_w;
+  if((tmp_w = (int *)malloc(*n * sizeof(*tmp_w)))==NULL)
+  {  //perror("Error allocating space for weights\n");
+    fprintf(stderr, "Cannot malloc tmp_x!\n");
+    exit(1);
+  }
+
+  int *tmp_x;
+  if ((tmp_x = (int *)malloc(*n * sizeof(*tmp_x)))==NULL)
+  {  //perror("Error allocating space for solution\n");
+    fprintf(stderr, "Cannot malloc tmp_x!\n");
+    exit(1);
+  }
 
   int counter=0;
   if (fp == NULL) exit(EXIT_FAILURE);
