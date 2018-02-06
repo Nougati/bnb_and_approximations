@@ -189,52 +189,62 @@ int main(int argc, char *argv[]){
 
   float eps, K;
   char problem_file[100];
+  char output_file[100];
   int *profits, *weights, *x, *profit_primes;
-  int n, capacity, z, sol_flag, bounding_method;
-  int DP_method;
+  int n, capacity, z, sol_flag, bounding_method, DP_method;
   int all_instances = 0;
-
+  int output_flag = 0;
+  FILE *fp_out;
   /* Command line argument "help" */
   if ((argc == 2)&&(strcmp(argv[1],"help") == 0))
   {
-    printf("Usage:\n\t%s <filename> <DP solver> <epsilon> <instance number>\n\tFilename options:"
+    printf("Usage:\n\t%s <filename> <DP solver> <epsilon> <instance number> <l"
+           "ogging rule>\n\tFilename options:"
            "\n\t\tNothing yet!\n\tDP Solver Flags:\n\t\t-v : Vasirani\n\t\t-ws"
            " : Williamson and Shmoy's DP\n\tEpsilon\n\t\tWhatever you like! We"
            "ll, not really, it has to be nonnegative\n\tInstance number:\n\t\t"
-           " An integer in the range 1 to 100 inclusive.\n\t\t.. or \"all\" fo"
-           "r repeated readings", argv[0]);
+           " An integer in the range 1 to 100 inclusive.\n\t\t.. or \"all\" to"
+           " read all of the file.\n\t Logging rule:\n\t\t Use \"none\" to not"
+           " log anything, otherwise \"filename.csv\" to specify an output fil"
+           "e.", argv[0]);
     exit(-1);
   }
-  if (argc != 5)
+  if (argc != 6)
   {
-    printf("Usage: %s <filename> <DP solver> <epsilon> <instance number>\n Type \"%s help\" for "
-            "info.\n",
-           argv[0], argv[0]);
+    printf("Usage: %s <filename> <DP solver> <epsilon> <instance number> <logg"
+           "ing_rule>\n Type \"%s help\" for info.\n", argv[0], argv[0]);
     exit(-1);
   }
-
   sscanf(argv[3], "%f", &eps);
   strcpy(problem_file, argv[1]);
 
+  /* If argv[5] doesn't want output */
+  if(strcmp(argv[4], "none")!=0) 
+  {
+    output_flag = TRUE; 
+    strcpy(output_file, argv[5]);
+    fp_out = fopen(output_file, "a");
+    fprintf(fp_out, "epsilon, problem_file, instance no, runtime, profit(S'), "
+                    "z, deviation\n");
+
+  }
+  /* Set up iterative FPTAS */
   int problem_number, iter_start, iter_end;
+  /* If the user specified all instances to be run */
   if(strcmp(argv[4],"all") == 0)
   {
-    /* TODO FIX MALLOCING ISSUE I THINK IT'S SEGFAULTING BECAUSE I AM TRYING TO USE FREE'D SPACE OR SOMETHING? LOL*/
-    printf("All!\n");
     all_instances = TRUE;
     iter_start = 1;
     iter_end = 100;
-    
   }else
   {
     iter_start = atoi(argv[4]);
     iter_end = iter_start + 1;
-    //problem_number = atoi(argv[4]);
   }
+  printf("Computing");
   for(int i = iter_start; i < iter_end; i++)
   {
     /* Parameters have been read in, now read in the problem file */
-    printf("problem_file: %s\n", problem_file);
     pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file, i);
 
     sol_flag = BINARY_NOTATION;
@@ -248,6 +258,7 @@ int main(int argc, char *argv[]){
     t = clock();
     /*Timer Segment End*/
 
+    /* Choose DP method*/
     if(strcmp(argv[2],"-v") == 0)
     {
       DP_method = VASIRANI;
@@ -270,18 +281,14 @@ int main(int argc, char *argv[]){
     /*Timer Segment Start*/
     t = clock() - t;
     double time_taken = ((double)t)/CLOCKS_PER_SEC;
-    printf("Compute time: %f\n", time_taken);
     /*Timer Segment End*/
 
     /* FPTAS Part */
-  
     float profit_primes_i_times_K; 
     for(int i=0; i<n; i++){
       profit_primes_i_times_K = profit_primes[i]*K;
       profit_primes[i] = profit_primes_i_times_K;
-      /*Why can't I just do profit_primes[i] *= K?*/
     }
-
     int kprofitprimeSprime = 0;
     int profitSprime = 0;
     for(int i=0; i<n; i++){
@@ -291,17 +298,23 @@ int main(int argc, char *argv[]){
       }
     }
 
-    /* Print profit results */
-    printf("profit(O): %d\nprofit(S'): %d\nKprofit'(S'): %d\n", z, profitSprime,
-                                                                   kprofitprimeSprime);
-
-    printf("Deviation from optimal: %s%f.\n", "%", (1 - ((float)profitSprime/(float)z)) *100);
-
+    /* Output results */
+    if(output_flag == TRUE){
+      fprintf(fp_out, "%f, %s, %d, %f, %d, %d, %f%s\n", eps, problem_file, i, 
+              time_taken, profitSprime, z, 
+              (1-((float)profitSprime/(float)z))*100, "%");
+    }else{
+     /* Just print */
+     printf("epsilon: %f\ttime_taken:  %f\tdeviation: %s%f\n", eps, time_taken,
+            "%", (1-((float)profitSprime/(float)z))*100);
+    }
     free(profit_primes);
     free(profits);
     free(weights);
     free(x);
+    printf(".");
   }
+  printf(" Done!\n");
   return 0;
 }
 #endif
@@ -1143,6 +1156,7 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
    * Notes:
    *   This has been edited to support dynamic allocation error catching.  
    */
+  /* Make sure the reader was given a valid problem index */
   if (problem_number <= 0 || problem_number > 100)
   {
     printf("Bad problem number. Exiting...\n");
@@ -1151,15 +1165,30 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
   FILE *fp;
   char str[256];
   char * pch;
-
   char problem_number_str[100];
+
+  /* Get data about the instance itself */
+  int coefficient_size;
+  sscanf(problem_file, "knapPI_%*d_%d_%d.csv", n, &coefficient_size);
+  int ndigits = floor(log10(abs(*n)))+1;
+  int cdigits = floor(log10(abs(coefficient_size)))+1;
+  int pnodigits = floor(log10(abs(problem_number)))+1;
+  /* From this, we deduce the length of the instance name */
+  int instance_name_width = 11+ndigits+cdigits+pnodigits;
+
+  /* Problem number needs to be concatenated onto char array instance_name */
+  /* So, we convert it to a string. */
   sprintf(problem_number_str, "%d", problem_number);
-  printf("problem_number_str: %s\n", problem_number_str);
+
+  /* Create the instance name of form knapPI_<instance>_<n>_<coeff>_<pno>*/
   char instance_name[50];
-  strncpy(instance_name, problem_file, 16);
-  strcat(instance_name, "_");
+  strncpy(instance_name, problem_file, instance_name_width-pnodigits-1);
+  //strcat(instance_name, "_");
+  instance_name[instance_name_width-pnodigits-1] = '_';
+  instance_name[instance_name_width-pnodigits] = '\0';
   strcat(instance_name, problem_number_str);
 
+  /* Open file */
   char path[80];
   strcpy(path, "./problems/");
   strcat(path, problem_file);
@@ -1170,19 +1199,11 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
     exit(EXIT_FAILURE);
   }
 
-  int coefficient_size;
-  sscanf(problem_file, "knapPI_%*d_%d_%d.csv", n, &coefficient_size);
-  int ndigits = floor(log10(abs(*n)))+1;
-  int cdigits = floor(log10(abs(coefficient_size)))+1;
-  int pnodigits = floor(log10(abs(problem_number)))+1;
-
-  int instance_name_width = 11+ndigits+cdigits+pnodigits;
-
-  printf("instance_name_width: %d\n", instance_name_width);
+  /* Find instance in file */
   while(strncmp(fgets(str, sizeof(str), fp), instance_name, instance_name_width) != 0)
     ;
 
-
+  /* Extract n */
   while (fgets(str, sizeof(str), fp)){
     if (str[0] == 'n'){
       pch = strtok(str, " ");
@@ -1192,6 +1213,7 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
     }
   }
 
+  /* Allocate profits array */
   int *tmp_p;
   if((tmp_p = (int *)malloc(*n * sizeof(*tmp_p)))==NULL)
   {  //tperror("Error allocating space for profits\n");
@@ -1199,6 +1221,7 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
     exit(1);
   }
 
+  /* Allocate weights array */
   int *tmp_w;
   if((tmp_w = (int *)malloc(*n * sizeof(*tmp_w)))==NULL)
   {  //perror("Error allocating space for weights\n");
@@ -1206,6 +1229,7 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
     exit(1);
   }
 
+  /* Allocate solution array x */
   int *tmp_x;
   if ((tmp_x = (int *)malloc(*n * sizeof(*tmp_x)))==NULL)
   {  //perror("Error allocating space for solution\n");
@@ -1215,35 +1239,36 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
 
   int counter=0;
   if (fp == NULL) exit(EXIT_FAILURE);
+
+  /* Read in all the values into the arrays */
   while ((fgets(str, sizeof(str), fp))&&(counter<*n)){
+    if(str[0] == 'c'){
+        pch = strtok(str, " ");
+        pch = strtok(NULL, " ");
+        *c = atoi(pch);
+    }else if (str[0] == 'z'){
+        pch = strtok(str, " ");   
+        pch = strtok(NULL, " ");
+        *z = atoi(pch);
+    }else if (!((str[0] == 'n')
+              ||(str[0] == 'z')
+              ||(str[0] == 'k')
+              ||(str[0] == 't'))){
 
-  if(str[0] == 'c'){
-      pch = strtok(str, " ");
-      pch = strtok(NULL, " ");
-      *c = atoi(pch);
-  }else if (str[0] == 'z'){
-      pch = strtok(str, " ");   
-      pch = strtok(NULL, " ");
-      *z = atoi(pch);
-  }else if (!((str[0] == 'n')
-            ||(str[0] == 'z')
-            ||(str[0] == 'k')
-            ||(str[0] == 't'))){
+        pch = strtok(str, ",");
+        pch = strtok(NULL, ",");
 
-      pch = strtok(str, ",");
-      pch = strtok(NULL, ",");
+        tmp_p[counter] = atoi(pch);
 
-      tmp_p[counter] = atoi(pch);
+        pch = strtok(NULL, ",");
 
-      pch = strtok(NULL, ",");
+        tmp_w[counter] = atoi(pch);
 
-      tmp_w[counter] = atoi(pch);
+        pch = strtok(NULL, ",");
 
-      pch = strtok(NULL, ",");
+        tmp_x[counter] = atoi(pch);
 
-      tmp_x[counter] = atoi(pch);
-
-      counter += 1;
+        counter += 1;
 
     }
   }
