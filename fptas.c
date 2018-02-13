@@ -8,7 +8,7 @@
  *    goes to 0. P lower bounds OPT, but P decreases in the truncated profits,*
  *    so its guarantees decrease too.                                         *
  *                                                                            *
- *****************************************************************************/
+ ******************************************************************************/
 
 #include <stdio.h>
 #include <math.h>
@@ -100,14 +100,15 @@ void FPTAS(float eps,
            int *x,
            int *sol_prime,
            const int n,
-           const int capacity,
+           int capacity,
            const int z,
            const int sol_flag,
            const int bounding_method,
            const char *problem_file,
            float *K,
            int *profits_prime,
-           const int DP_method);
+           const int DP_method,
+           const int *active_nodes);
 
 int DP_max_profit(const int problem_profits[],
                   const int n);
@@ -119,7 +120,8 @@ float define_K(float eps,
 void make_profit_primes(int *profits,
                         int *profits_prime,
                         float K,
-                        int n);
+                        int n,
+                        const int *active_nodes);
 
 void DP_fill_in_base_cases(const int width,
                            const int n,
@@ -179,7 +181,7 @@ int main(int argc, char *argv[]){
    *                  "knapPI_1_100_1000.csv"
    *                  "knapPI_1_1000_1000.csv"
    *                  "knapPI_11_1000_1000.csv" <- Hard
-   *                  "knapPI_11_10000_1000.csv" <- Hard instance (Won't compute)
+   *                  "knapPI_11_10000_1000.csv" <- Hard instance
    *                  "knapPI_16_1000_1000.csv" <- Hard
    * Some things to note:
    *   As eps approaches 0, FPTAS's lower bound approaches true solution
@@ -195,6 +197,7 @@ int main(int argc, char *argv[]){
   int all_instances = 0;
   int output_flag = 0;
   FILE *fp_out;
+
   /* Command line argument "help" */
   if ((argc == 2)&&(strcmp(argv[1],"help") == 0))
   {
@@ -219,17 +222,18 @@ int main(int argc, char *argv[]){
   strcpy(problem_file, argv[1]);
 
   /* If argv[5] doesn't want output */
-  if(strcmp(argv[4], "none")!=0) 
+  if(strcmp(argv[5], "none")!=0) 
   {
     output_flag = TRUE; 
     strcpy(output_file, argv[5]);
     fp_out = fopen(output_file, "a");
     fprintf(fp_out, "epsilon, problem_file, instance no, runtime, profit(S'), "
                     "z, deviation\n");
-
   }
+
   /* Set up iterative FPTAS */
   int problem_number, iter_start, iter_end;
+
   /* If the user specified all instances to be run */
   if(strcmp(argv[4],"all") == 0)
   {
@@ -241,11 +245,16 @@ int main(int argc, char *argv[]){
     iter_start = atoi(argv[4]);
     iter_end = iter_start + 1;
   }
-  printf("Computing");
+  if(output_flag) printf("Computing");
+  
   for(int i = iter_start; i < iter_end; i++)
   {
     /* Parameters have been read in, now read in the problem file */
     pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file, i);
+
+    /* This is just for the B&B */
+    int active_nodes[n];
+    for (int i = 0; i < n; i++) active_nodes[i] = 1;
 
     sol_flag = BINARY_NOTATION;
     int sol_prime[n];
@@ -258,18 +267,20 @@ int main(int argc, char *argv[]){
     t = clock();
     /*Timer Segment End*/
 
-    /* Choose DP method*/
+    /* Choose DP method and run the FPTAS */
     if(strcmp(argv[2],"-v") == 0)
     {
       DP_method = VASIRANI;
       FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
-            bounding_method, problem_file, &K, profit_primes, DP_method); 
+            bounding_method, problem_file, &K, profit_primes, DP_method, 
+            active_nodes); 
     }
     else if (strcmp(argv[2],"-ws")==0)
     {
       DP_method = WILLIAMSON_SHMOY;
       FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
-            bounding_method, problem_file, &K, profit_primes, DP_method); 
+            bounding_method, problem_file, &K, profit_primes, DP_method,
+            active_nodes); 
     }
     else
     {
@@ -283,14 +294,18 @@ int main(int argc, char *argv[]){
     double time_taken = ((double)t)/CLOCKS_PER_SEC;
     /*Timer Segment End*/
 
-    /* FPTAS Part */
+    /* FPTAS solved a scaled down one. We need to scale profit_primes[i] up by
+     *  K for it to be useful */
     float profit_primes_i_times_K; 
-    for(int i=0; i<n; i++){
+    for(int i=0; i<n; i++)
+    {
       profit_primes_i_times_K = profit_primes[i]*K;
       profit_primes[i] = profit_primes_i_times_K;
     }
     int kprofitprimeSprime = 0;
     int profitSprime = 0;
+
+    /* Then, for each item in S', we derive Kprofit'(S') and profit(S')*/
     for(int i=0; i<n; i++){
       if (sol_prime[i] == 1){ 
         kprofitprimeSprime += profit_primes[i];
@@ -303,18 +318,21 @@ int main(int argc, char *argv[]){
       fprintf(fp_out, "%f, %s, %d, %f, %d, %d, %f%s\n", eps, problem_file, i, 
               time_taken, profitSprime, z, 
               (1-((float)profitSprime/(float)z))*100, "%");
+      fclose(fp_out);
     }else{
-     /* Just print */
      printf("epsilon: %f\ttime_taken:  %f\tdeviation: %s%f\n", eps, time_taken,
             "%", (1-((float)profitSprime/(float)z))*100);
     }
+
+    /* Clean up */
     free(profit_primes);
     free(profits);
     free(weights);
     free(x);
     printf(".");
   }
-  printf(" Done!\n");
+  if(output_flag) printf(" Done!\n");
+  
   return 0;
 }
 #endif
@@ -325,14 +343,15 @@ void FPTAS(float eps,
            int *x,
            int *sol_prime,
            const int n,
-           const int capacity,
+           int capacity,
            const int z,
            const int sol_flag,
            const int bounding_method,
            const char *problem_file,
            float *K,
            int *profits_prime,
-           const int DP_method){
+           const int DP_method,
+           const int *active_nodes){
   /* Description
    *  Recreates the FPTAS for the 0,1 KP as described by V. Vasirani in his
    *   chapter on Knapsack in Approximation Algorithms.
@@ -357,7 +376,15 @@ void FPTAS(float eps,
   int P = DP_max_profit(profits, n);
 
   *K = define_K(eps, P, n);
-  make_profit_primes(profits, profits_prime, *K, n); 
+
+  /* Derive adjusted profits (this also trivialises nodes constrained to 0) */
+  make_profit_primes(profits, profits_prime, *K, n, active_nodes); 
+
+  /* Adjust capacity according to nodes constrained to be in */
+  for (int i = 0; i < n; i++)
+    if (active_nodes[i] == 2)
+      capacity -= weights[i];
+
   /* Now with amended profits list "profit_primes," solve the DP */
   if (DP_method == VASIRANI)
   {
@@ -366,7 +393,6 @@ void FPTAS(float eps,
   }
   else if (DP_method == WILLIAMSON_SHMOY)
   {
-    /* TODO use williamson and shmoy DP to derive profit primes */
     /* Make problem item struct array */
     struct problem_item items_prime[n];
     for(int i = 0;  i < n; i++)
@@ -824,17 +850,16 @@ void push(struct solution_pair** head_ref, int new_weight, int new_profit,
     (struct solution_pair*) malloc(sizeof(struct solution_pair) + n * sizeof(int));
   */
   /*Tentative start*/
+  /*Start temp white-out*/
   struct solution_pair* new_solution_pair =
-    (struct solution_pair*)calloc(sizeof(struct solution_pair) + n, sizeof(int));
+     (struct solution_pair*)calloc(sizeof(struct solution_pair) + n, sizeof(int));
+  /*End*/
+
+
   if (new_solution_pair)
   {
     struct solution_pair const temp_pair =
       {.weight = new_weight, .profit = new_profit, .next=(*head_ref)};
-    /*Old code
-    memcpy(new_solution_pair, &(struct solution_pair const){ .weight = new_weight,
-           .profit = new_profit, .next=(*head_ref)},
-           sizeof(struct solution_pair));*/
-   /*New Code*/
      memcpy(new_solution_pair, &temp_pair, sizeof(struct solution_pair));
     
   }
@@ -1045,7 +1070,8 @@ float define_K(float eps, int P, int n){
   // return K
 }
 
-void make_profit_primes(int profits[], int profits_prime[], float K, int n){
+void make_profit_primes(int profits[], int profits_prime[], float K, int n,
+                        const int *active_nodes){
  /* 
   * Description: 
   *  Derives the adjusted profits set profits', which is made by scaling every
@@ -1062,7 +1088,10 @@ void make_profit_primes(int profits[], int profits_prime[], float K, int n){
   */
   
   for(int i=0; i < n; i++){
-    profits_prime[i] = floor(profits[i]/K);
+    if(active_nodes[i]==1)
+      profits_prime[i] = floor(profits[i]/K);
+    else
+      profits_prime[i] = 0; // We just make the item dominated
   }
 }
 /*

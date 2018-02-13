@@ -4,7 +4,9 @@
  *   a problem instance list                                                  *
  * Using Kprofit'(S') as a replacement to the LP relaxation may have been     *
  *  something that slipped straight past me.                                  *
- *                                                                            *
+ * TODO                                                                       *
+ *   I don't think we actually need profits and weights for each              *
+ *    Problem_Instance                                                        *
  *                                                                            *
  ******************************************************************************/
 
@@ -33,24 +35,52 @@ void branch_and_bound_KP(int profits[], int weights[], int capacity, int *z_out,
 
 void generate_node(Problem_Instance* current_node, Problem_Instance **problems,
                   int *problem_instance_length, int number_of_nodes_to_generate,
-                  float epsilon, int max_profit, int n);
+                  float epsilon, int max_profit, int n, int *sol_prime);
+
+void generate_node_v2(Problem_Instance *current_node, 
+                      Problem_Instance **problems, int *problem_instance_length, 
+                      int number_of_nodes_to_generate, float epsilon,
+                      int max_profit, int n, int *sol_prime);
+
+void generate_node_v3(Problem_Instance *current_node, 
+                      Problem_Instance **problems, int *problem_instance_length, 
+                      int number_of_nodes_to_generate, float epsilon,
+                      int max_profit, int n, int *sol_prime, char *problem_name);
 
 Problem_Instance *select_node(Problem_Instance *nodes[], int *end_of_list);
+
 int main(int argc, char *argv[])
 {
   int n, capacity, z, opt_profit;
   int *profits, *weights, *x;
   char problem_file[100];
-  strcpy(problem_file, "knapPI_1_50_1000.csv");
+  
+  /* Get problem file from argv[1] */
+  if(argc != 2)
+  { 
+    printf("Format:  %s <filename>\n", argv[0]);
+    exit(-1);
+  }
+  strcpy(problem_file, argv[1]);
 
   /* Define problem */
   pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file, 1);
   int sol_out[n];
-  /* Debug notes: It seems to read in the problem correctly */
+
+  /* Start timer */
+  clock_t t;
+  t = clock();
 
   /* Then run branch and bound */
   branch_and_bound_KP(profits, weights, capacity, &opt_profit, sol_out, n, 
                       problem_file);
+
+  /* End timer */
+  t = clock() - t;
+  double time_taken = ((double)t)/CLOCKS_PER_SEC;
+  
+  printf("%d/%d: %s\t Runtime: %f\n", opt_profit, z, opt_profit == z ? "Correc"
+         "t Solution!" : "Incorrect Solution!", time_taken);
   return 0;
 }
 
@@ -60,10 +90,9 @@ void branch_and_bound_KP(int profits[], int weights[], int capacity, int *z_out,
   /**branch_and_bound_KP
    * Last time I wrote this the computer froze
    * ... Bad omen.*/
-
+  //TODO change turned_on_nodes to node_status
   /* 0. Initialise */
   /* Pick a root primal bound which is as high as possible. */
-  /*TODO The current bug is the current_node_list_length isn't decreasing*/
   Partial_Solution *root_problem_sol;
 
   /* Read in an instance and define all FPTAS stuff */
@@ -75,7 +104,6 @@ void branch_and_bound_KP(int profits[], int weights[], int capacity, int *z_out,
   int all_instances = 0;
   int output_flag = 0;
   FILE *fp_out;
-  /* TODO Replace this with command-line args */
 
   /* Read in instance. */
   epsilon = n;
@@ -121,10 +149,13 @@ void branch_and_bound_KP(int profits[], int weights[], int capacity, int *z_out,
 
   /* This is just a flag so that the first iteration is treated differently */
   int first_node = 1;
-
+  int iterations = 0;
   /* 1. Terminate? */
   while (problem_instance_list_length >= 1)
   {
+    /*Debug variable*/
+    iterations++;
+
     /* 2. Select node */
     current_node = select_node(problem_list, &problem_instance_list_length);
 
@@ -136,20 +167,20 @@ void branch_and_bound_KP(int profits[], int weights[], int capacity, int *z_out,
       sol_prime[i] = 0;
 
     /* On first node, we use an eps = n */
-    /*if(first_node)
+    if(first_node)
     {
       FPTAS(((float)n/4.0), profits, weights, x, sol_prime, n, capacity, z,
             sol_flag, bounding_method, problem_file, &K, profit_primes,
             DP_method, current_node->turned_on_variables);
       first_node = 0;
       epsilon = 0.99;
-    }/*
+    }
     else
-    {*/
+    {
       FPTAS(epsilon, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
             bounding_method, problem_file, &K, profit_primes, DP_method,
             current_node->turned_on_variables);
-    /*}*/  
+    }  
 
     /* Get profit(S') */
     relaxed_solution->profit = 0;
@@ -160,44 +191,35 @@ void branch_and_bound_KP(int profits[], int weights[], int capacity, int *z_out,
       relaxed_solution->sol[i] = sol_prime[i];
     }
 
-    /* Make sure the solutions is relaxed-feasible */
-    /* I'm commenting all this out because I don't think I need feasibility
-     * But I've been wrong before
-    if(!is_feasible(relaxed_solution))
-      continue; // TODO, elucidate about the requirements of this
-    else
+    /* Plant any variables which were constrained to be on in */
+    for(int i = 0; i < n; i++)
     {
-      * The LP relaxation has a solution *
-      * I'm not sure if we need this*
-    }*/
-
-    /* 4. Prune */
-    /* If this dual bound is lower than the current global_lower_bound */
-    /* If this happens, then that's actually good; it means we've likely found a key player in the solution...? ANyway it'll back out and turn him on.  */
-    if(relaxed_solution->profit <= global_lower_bound) continue;
-    /* Dual is better, check that it's MILP feasible 
-    if(is_MILP_feasible(relaxed_solution))
-    {
-      global_lower_bound = relaxed_solution->z;
-      current_opt_solution_ptr = current_node_sol->sol;
-      continue;
+      if (current_node->turned_on_variables[i] == 2) 
+      //TODO replace 2 with a symbolic constant
+      {
+        relaxed_solution->profit += profits[i];
+        relaxed_solution->sol[i] = sol_prime[i];
+      }
     }
-    */
+
+    if(relaxed_solution->profit <= global_lower_bound) continue;
 
     global_lower_bound = relaxed_solution->profit;
-    /* 5. Branch*/
-    /* We have an LP feasible MILP infeasible solution which is bigger than 
-     * global_lower_bound. So, we branch on it. */
-    //number_of_nodes_to_generate = decide_how_many_to_branch_on();
+
     generate_node(current_node, problem_list, &problem_instance_list_length,
-                  2, epsilon, max_profit, n);
+                  1, epsilon, max_profit, n, sol_prime);
+   
+    generate_node_v2(current_node, problem_list, &problem_instance_list_length,
+                  1, epsilon, max_profit, n, sol_prime);
+    // TODO FOR WEDNESDAY NELSON: Put generate_node_v3 in!
   }
-  printf("Global lower bound: %d\n", global_lower_bound);
+  *z_out = global_lower_bound;
+  printf("Iterations: %d\n", iterations); 
 }
 
-void generate_node(Problem_Instance* current_node, Problem_Instance **problems,
+void generate_node(Problem_Instance *current_node, Problem_Instance **problems,
                   int *problem_instance_length, int number_of_nodes_to_generate,
-                  float epsilon, int max_profit, int n)
+                  float epsilon, int max_profit, int n, int *sol_prime)
 {
   /* My first method: we're going to branch and turn off the more truncate-able
    * items */
@@ -206,11 +228,19 @@ void generate_node(Problem_Instance* current_node, Problem_Instance **problems,
   double this_truncation;
   double K = epsilon * max_profit / n;
   int best_variable;
+  /* workshopping begins */
+  //int this_read_only_variables[n];
+  //for (int i = 0; i < n; i++) this_read_only_variables[i] = 0;
+
+  //for(int i = 0; i < number_of_nodes_to_generate; i++)
+  //{
+  /* workshopping ends */
   for(int i = 0; i < n; i++)
-  {
+  { //TODO try only looking at variables that are in the current partial sol
   /* For every variable which is on, maintain which one will make the equation 
    * in my notebook on the page labelled "BOOKMARK" maximised */
-    if(!current_node->read_only_variables[i])
+    //if(!current_node->read_only_variables[i])// First idea
+    if((!current_node->read_only_variables[i]) && !(sol_prime[i])) //Second idea
     {
       this_truncation = 
         current_node->profits[i] - K*floor(current_node->profits[i] / K);
@@ -218,9 +248,14 @@ void generate_node(Problem_Instance* current_node, Problem_Instance **problems,
       {
         max_truncation = this_truncation;
         best_variable = i;
+        //this_read_only_variables[i] = 1;
       }
     }
   }
+
+  /* Debug */
+  printf("Branching on: %d\n", best_variable);
+
   /* Then for the node that has the most, create a problem_instance where it
    * is on and another where it is off */
   Problem_Instance *generated_node_variable_on = 
@@ -238,6 +273,8 @@ void generate_node(Problem_Instance* current_node, Problem_Instance **problems,
   generated_node_variable_on->read_only_variables = 
                                              current_node->read_only_variables; 
   generated_node_variable_on->epsilon = current_node->epsilon;
+
+  generated_node_variable_on->turned_on_variables[best_variable] = 2;
   generated_node_variable_on->read_only_variables[best_variable] = 1;
 
   generated_node_variable_off->profits = current_node->profits;
@@ -252,10 +289,175 @@ void generate_node(Problem_Instance* current_node, Problem_Instance **problems,
   generated_node_variable_off->epsilon = current_node->epsilon;
   generated_node_variable_off->turned_on_variables[best_variable] = 0;
   generated_node_variable_off->read_only_variables[best_variable] = 1;
-  problems[(*problem_instance_length)++] = generated_node_variable_on;// TODO invalid write of size 8 here
-  problems[(*problem_instance_length)++] = generated_node_variable_off;// TODO invalid write of size 8 here
+  problems[(*problem_instance_length)++] = generated_node_variable_on;
+  problems[(*problem_instance_length)++] = generated_node_variable_off;
   /* Okay this should be all g */ 
+}
+
+void generate_node_v2(Problem_Instance *current_node, 
+                      Problem_Instance **problems, int *problem_instance_length, 
+                      int number_of_nodes_to_generate, float epsilon,
+                      int max_profit, int n, int *sol_prime)
+{
+  /* My second method: we're going to branch and turn on the least truncate-able
+   * items */
+
+  /* Comb through the current_node instance */
+  double this_truncation;
+  double K = epsilon * max_profit / n;
+  double min_truncation = K*2;
+  int best_variable;
+
+  /* For every variable which is on, maintain which one will make the equation 
+   * in my notebook on the page labelled "BOOKMARK" maximised */
+  for(int i = 0; i < n; i++)
+  { 
+    //if(!current_node->read_only_variables[i])// First idea
+    if((!current_node->read_only_variables[i]) && sol_prime[i]) //Second idea
+    {
+      this_truncation = 
+        current_node->profits[i] - K*floor(current_node->profits[i] / K);
+      if (this_truncation < min_truncation)
+      {
+        min_truncation = this_truncation;
+        best_variable = i;
+      }
+    }
+  }
+
+
+  /* Debug */
+  printf("Branching on: %d\n", best_variable);
+
+  /* Then for the node that has the most, create a problem_instance where it
+   * is on and another where it is off */
+  Problem_Instance *generated_node_variable_on = 
+                         malloc(sizeof(current_node)+n*5*(sizeof(int)));
+  Problem_Instance *generated_node_variable_off = 
+                         malloc(sizeof(current_node)+n*5*(sizeof(int)));
   
+  /* Generate the first node */
+  generated_node_variable_on->profits = current_node->profits;
+  generated_node_variable_on->weights = current_node->weights;
+  generated_node_variable_on->capacity = current_node->capacity;
+  generated_node_variable_on->z_opt = current_node->z_opt;
+  generated_node_variable_on->x_opt = current_node->x_opt;
+  generated_node_variable_on->turned_on_variables =
+                                             current_node->turned_on_variables;
+  generated_node_variable_on->read_only_variables = 
+                                             current_node->read_only_variables; 
+  generated_node_variable_on->epsilon = current_node->epsilon;
+  generated_node_variable_on->read_only_variables[best_variable] = 1;
+
+  /* Generate the second node */
+  generated_node_variable_off->profits = current_node->profits;
+  generated_node_variable_off->weights = current_node->weights;
+  generated_node_variable_off->capacity = current_node->capacity;
+  generated_node_variable_off->z_opt = current_node->z_opt;
+  generated_node_variable_off->x_opt = current_node->x_opt;
+  generated_node_variable_off->turned_on_variables =
+                                             current_node->turned_on_variables;
+  generated_node_variable_off->read_only_variables = 
+                                             current_node->read_only_variables; 
+  generated_node_variable_off->epsilon = current_node->epsilon;
+  generated_node_variable_off->turned_on_variables[best_variable] = 0;
+  generated_node_variable_off->read_only_variables[best_variable] = 1;
+
+  /* Put them on the top */
+  problems[(*problem_instance_length)++] = generated_node_variable_off;
+  problems[(*problem_instance_length)++] = generated_node_variable_on;
+  /* Okay this should be all g */ 
+}
+
+void generate_node_v3(Problem_Instance *current_node, 
+                      Problem_Instance **problems, int *problem_instance_length, 
+                      int number_of_nodes_to_generate, float epsilon,
+                      int max_profit, int n, int *sol_prime, char *problem_name)
+{
+  /* My third method: we're going to branch on the variables with the highest 
+   * FPTAS with some high epsilon */
+
+  /* TODO make this more efficient (it can easily be done)*/
+  // For each i in n
+  int temp_read_only_variables[n];
+  int a_sol_prime[n];
+  int profits_prime[n];
+  float K = epsilon * max_profit / n;
+  int this_profit, best_variable;
+
+  for (int i = 0; i < n; i++)
+  {
+    
+  //   Set read only variables to all 0
+    for (int j = 0; j < n; i++)
+      temp_read_only_variables[i] = 0;
+  //   Turn on just i
+    temp_read_only_variables[i] = 2;
+  //   solve with just i forced on
+    FPTAS(15.0, current_node->profits, current_node->weights, 
+          current_node->x_opt, a_sol_prime, n, current_node->capacity, 
+          current_node->z_opt, 1, 2, problem_name, &K, profits_prime, 1,
+          temp_read_only_variables);
+        /* Get profit(S') */
+    this_profit = 0;
+    for(int i = 0; i < n; i++)
+    {
+      if (a_sol_prime[i] == 1)
+        this_profit += current_node->profits[i];
+    }
+
+    /* Plant any variables which were constrained to be on in */
+    for(int i = 0; i < n; i++)
+    {
+      if (current_node->turned_on_variables[i] == 2) 
+      //TODO replace 2 with a symbolic constant
+      {
+        this_profit += current_node->profits[i];
+      }
+    }
+    if (this_profit > max_profit)
+      best_variable = i;
+  }
+  /* Debug */
+  printf("Branching on: %d\n", best_variable);
+
+  /* We have our variable chosen... */
+  Problem_Instance *generated_node_variable_on = 
+                         malloc(sizeof(current_node)+n*5*(sizeof(int)));
+  Problem_Instance *generated_node_variable_off = 
+                         malloc(sizeof(current_node)+n*5*(sizeof(int)));
+  
+  /* Generate the first node */
+  generated_node_variable_on->profits = current_node->profits;
+  generated_node_variable_on->weights = current_node->weights;
+  generated_node_variable_on->capacity = current_node->capacity;
+  generated_node_variable_on->z_opt = current_node->z_opt;
+  generated_node_variable_on->x_opt = current_node->x_opt;
+  generated_node_variable_on->turned_on_variables =
+                                             current_node->turned_on_variables;
+  generated_node_variable_on->read_only_variables = 
+                                             current_node->read_only_variables; 
+  generated_node_variable_on->epsilon = current_node->epsilon;
+  generated_node_variable_on->read_only_variables[best_variable] = 1;
+
+  /* Generate the second node */
+  generated_node_variable_off->profits = current_node->profits;
+  generated_node_variable_off->weights = current_node->weights;
+  generated_node_variable_off->capacity = current_node->capacity;
+  generated_node_variable_off->z_opt = current_node->z_opt;
+  generated_node_variable_off->x_opt = current_node->x_opt;
+  generated_node_variable_off->turned_on_variables =
+                                             current_node->turned_on_variables;
+  generated_node_variable_off->read_only_variables = 
+                                             current_node->read_only_variables; 
+  generated_node_variable_off->epsilon = current_node->epsilon;
+  generated_node_variable_off->turned_on_variables[best_variable] = 0;
+  generated_node_variable_off->read_only_variables[best_variable] = 1;
+
+  /* Put them on the top */
+  problems[(*problem_instance_length)++] = generated_node_variable_off;
+  problems[(*problem_instance_length)++] = generated_node_variable_on;
+  /* Okay this should be all g */ 
 }
 
 Problem_Instance *select_node(Problem_Instance *nodes[], int *end_of_list)

@@ -15,6 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <time.h>
 
 #define HYPER_TRIVIAL_BOUND 1
 #define TRIVIAL_BOUND 2
@@ -159,7 +160,7 @@ int main(int argc, char *argv[]){
   int *profits, *weights, *x;
   char problem_file[100];
   int sol_flag = 1;
-
+  printf("Hello?\n");
   /* Command line verification */
   if (argc != 3)
   {
@@ -208,8 +209,19 @@ int main(int argc, char *argv[]){
   int S[n];
   for (int i=0; i < n; i++) S[i] = 0;
 
+  /* Start timer */
+  clock_t t;
+  t = clock();
+
+  /* Run DP */
   DP(profits, weights, x, S, n, capacity, z, sol_flag, bounding_method,
      problem_file);
+
+  /* End timer */
+  t = clock() - t;
+  double time_taken = ((double)t)/CLOCKS_PER_SEC;
+  printf("Time elapsed: %f\n", time_taken);
+
 
   /*Reader frees */
   free(profits);

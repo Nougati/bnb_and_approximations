@@ -17,6 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 /* Prototypes go here */
 struct problem_item
 {
@@ -469,11 +470,20 @@ int main(int argc, char *argv[])
   /* Put items[] array and capacity into DP */
   int *solution_array = (int *) malloc(n*sizeof(int));
 
+  /* Timer start */
+  clock_t t;
+  t = clock();
+
   /* Solve it with Williamson and Shmoy's DP */
   int result = williamson_shmoys_DP(items, capacity, n, solution_array);
 
+  /* Timer end */
+  t = clock() - t;
+  double time_taken = ((double)t)/CLOCKS_PER_SEC;
+
   /* Return the solution */
-  printf("z: %d\tResult: %d\n", z, result);
+  printf("%s solution!\tTime elapsed: %f\n", z == result ? "Correct " : "Incor"
+         "rect ", time_taken);
 
   /* Check solution set */
   int correct_solution_flag = 1;
