@@ -320,7 +320,7 @@ int main(int argc, char *argv[]){
               (1-((float)profitSprime/(float)z))*100, "%");
       fclose(fp_out);
     }else{
-     printf("epsilon: %f\ttime_taken:  %f\tdeviation: %s%f\n", eps, time_taken,
+     printf("%d/%d, epsilon: %f\ttime_taken:  %f\tdeviation: %s%f\n", profitSprime, z, eps, time_taken,
             "%", (1-((float)profitSprime/(float)z))*100);
     }
 

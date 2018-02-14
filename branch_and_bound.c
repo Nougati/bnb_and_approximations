@@ -11,8 +11,11 @@
  ******************************************************************************/
 
 #define TESTING
+#define VARIABLE_ON 1
+#define VARIABLE_OFF 0
 #include<stdio.h>
 #include "fptas.c"
+
 
 typedef struct p_solution{
   int profit;
@@ -28,6 +31,9 @@ typedef struct p_instance {
   int *turned_on_variables;
   int *read_only_variables; 
   float epsilon;
+  int branched_variable;
+  int branched_variable_status;
+  int depth;
 } Problem_Instance;
 
 void branch_and_bound_KP(int profits[], int weights[], int capacity, int *z_out,
@@ -43,7 +49,7 @@ void generate_node_v2(Problem_Instance *current_node,
                       int max_profit, int n, int *sol_prime);
 
 void generate_node_v3(Problem_Instance *current_node, 
-                      Problem_Instance **problems, int *problem_instance_length, 
+                      Problem_Instance **problems, int *problem_instance_length,
                       int number_of_nodes_to_generate, float epsilon,
                       int max_profit, int n, int *sol_prime, char *problem_name);
 
@@ -133,6 +139,9 @@ void branch_and_bound_KP(int profits[], int weights[], int capacity, int *z_out,
   root_node->turned_on_variables = root_vars;
   root_node->read_only_variables = root_read_only_vars; 
   root_node->epsilon = epsilon;
+  root_node->branched_variable = -1;
+  root_node->branched_variable_status = VARIABLE_ON;
+  root_node->depth = 0;
 
   /* Put this root node in the list */
   int number_of_nodes_to_generate = 2;
@@ -153,65 +162,90 @@ void branch_and_bound_KP(int profits[], int weights[], int capacity, int *z_out,
   /* 1. Terminate? */
   while (problem_instance_list_length >= 1)
   {
-    /*Debug variable*/
+    /* Debug */
     iterations++;
+    
 
     /* 2. Select node */
     current_node = select_node(problem_list, &problem_instance_list_length);
 
+    /* Debug */
+    //printf("Depth: %d\n", current_node->depth);
+    printf("Line 174:\n ");
+    printf("current_node->read_only_variables[7]=%d\n", current_node->read_only_variables[7]);
+    printf("current_node->read_only_variables[19]=%d\n", current_node->read_only_variables[19]);
+
     /* 3. Bound */
     epsilon *= 0.9; // TODO This reduction of epsilon is ARBITRARY 
 
-    /* Reset sol_prime */
-    for(int i = 0; i < n; i++)
-      sol_prime[i] = 0;
+    /* Tentative changes: only solve for on-constrained instances */
+    if(current_node->branched_variable_status == VARIABLE_ON)//read_only_variables are ok
+    {
+      /* Debug */
+      //printf("Variable on!\n");
+      
+      /* Reset sol_prime */
+      for(int i = 0; i < n; i++)
+        sol_prime[i] = 0;
 
-    /* On first node, we use an eps = n */
-    if(first_node)
-    {
-      FPTAS(((float)n/4.0), profits, weights, x, sol_prime, n, capacity, z,
-            sol_flag, bounding_method, problem_file, &K, profit_primes,
-            DP_method, current_node->turned_on_variables);
-      first_node = 0;
-      epsilon = 0.99;
-    }
-    else
-    {
-      FPTAS(epsilon, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
-            bounding_method, problem_file, &K, profit_primes, DP_method,
-            current_node->turned_on_variables);
-    }  
-
-    /* Get profit(S') */
-    relaxed_solution->profit = 0;
-    for(int i = 0; i < n; i++)
-    {
-      if (sol_prime[i] == 1)
-        relaxed_solution->profit += profits[i];
-      relaxed_solution->sol[i] = sol_prime[i];
-    }
-
-    /* Plant any variables which were constrained to be on in */
-    for(int i = 0; i < n; i++)
-    {
-      if (current_node->turned_on_variables[i] == 2) 
-      //TODO replace 2 with a symbolic constant
+      /* On first node, we use an eps = n */
+     if(first_node)
       {
-        relaxed_solution->profit += profits[i];
+        FPTAS(((float)n/4.0), profits, weights, x, sol_prime, n, capacity, z,
+              sol_flag, bounding_method, problem_file, &K, profit_primes,
+            DP_method, current_node->turned_on_variables);
+        first_node = 0;
+        epsilon = 0.99;
+      }
+      else
+      {
+        FPTAS(epsilon, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
+              bounding_method, problem_file, &K, profit_primes, DP_method,
+              current_node->turned_on_variables);
+      }  
+
+      /* Get profit(S') */
+      relaxed_solution->profit = 0;
+      for(int i = 0; i < n; i++)
+      {
+        if (sol_prime[i] == 1)
+          relaxed_solution->profit += profits[i];
         relaxed_solution->sol[i] = sol_prime[i];
       }
-    }
+
+      /* Plant any variables which were constrained to be on in */
+      for(int i = 0; i < n; i++)
+      {
+        if (current_node->turned_on_variables[i] == 2) 
+        //TODO replace 2 with a symbolic constant
+        {
+          relaxed_solution->profit += profits[i];
+          relaxed_solution->sol[i] = sol_prime[i];
+        }
+      }
 
     if(relaxed_solution->profit <= global_lower_bound) continue;
-
+    
     global_lower_bound = relaxed_solution->profit;
 
-    generate_node(current_node, problem_list, &problem_instance_list_length,
-                  1, epsilon, max_profit, n, sol_prime);
+      /* Tentative change if statement close */
+    }//else printf("Variable off!\n");
+
+    //generate_node(current_node, problem_list, &problem_instance_list_length,
+    //              1, epsilon, max_profit, n, sol_prime);
    
-    generate_node_v2(current_node, problem_list, &problem_instance_list_length,
-                  1, epsilon, max_profit, n, sol_prime);
-    // TODO FOR WEDNESDAY NELSON: Put generate_node_v3 in!
+//    generate_node_v2(current_node, problem_list, &problem_instance_list_length,
+//                  1, epsilon, max_profit, n, sol_prime);
+    // TODO read_only_variables not okay anymore (21845)
+    printf("Line 240:\n ");
+    printf("current_node->read_only_variables[7]=%d\n", current_node->read_only_variables[7]);
+    printf("current_node->read_only_variables[19]=%d\n", current_node->read_only_variables[19]);
+    generate_node_v3(current_node, problem_list, &problem_instance_list_length,
+                     1, epsilon, max_profit, n, sol_prime, problem_file);
+    
+    /* Debug */
+    if(iterations >= 3) exit(-1);
+
   }
   *z_out = global_lower_bound;
   printf("Iterations: %d\n", iterations); 
@@ -295,7 +329,7 @@ void generate_node(Problem_Instance *current_node, Problem_Instance **problems,
 }
 
 void generate_node_v2(Problem_Instance *current_node, 
-                      Problem_Instance **problems, int *problem_instance_length, 
+                      Problem_Instance **problems, int *problem_instance_length,
                       int number_of_nodes_to_generate, float epsilon,
                       int max_profit, int n, int *sol_prime)
 {
@@ -370,94 +404,170 @@ void generate_node_v2(Problem_Instance *current_node,
 }
 
 void generate_node_v3(Problem_Instance *current_node, 
-                      Problem_Instance **problems, int *problem_instance_length, 
+                      Problem_Instance **problems, int *problem_instance_length,
                       int number_of_nodes_to_generate, float epsilon,
                       int max_profit, int n, int *sol_prime, char *problem_name)
 {
   /* My third method: we're going to branch on the variables with the highest 
    * FPTAS with some high epsilon */
 
-  /* TODO make this more efficient (it can easily be done)*/
+  /* TODO make this more efficient (it can probably be easily done)*/
   // For each i in n
-  int temp_read_only_variables[n];
+  int temp_variable_statuses[n];
   int a_sol_prime[n];
   int profits_prime[n];
+  int best_variables[n];
+  int list_of_these_profits[n];
   float K = epsilon * max_profit / n;
-  int this_profit, best_variable;
+  int this_profit;
+  int best_found_profit = 0;
+  int best_variable = -1;
+
+  /* Debug */
+  int iterations = 0;
+
+  /* Tentative list of best variables initialisation*/
+  for (int i = 0; i < n; i++)
+    best_variables[i] = -1;
 
   for (int i = 0; i < n; i++)
   {
+    if (!current_node->read_only_variables[i])
+    {
+      for (int j = 0; j < n; j++)
+        temp_variable_statuses[j] = current_node->turned_on_variables[i];
+
+
+      temp_variable_statuses[i] = 2;
+      FPTAS(1.0, current_node->profits, current_node->weights, 
+            current_node->x_opt, a_sol_prime, n, current_node->capacity, 
+            current_node->z_opt, 1, 2, problem_name, &K, profits_prime, 1,
+            temp_variable_statuses);
+
+      /* Get profit(S') */
+      this_profit = 0;
+      for(int j = 0; j < n; j++)
+        if (a_sol_prime[j] == 1)
+          this_profit += current_node->profits[j];
     
-  //   Set read only variables to all 0
-    for (int j = 0; j < n; i++)
-      temp_read_only_variables[i] = 0;
-  //   Turn on just i
-    temp_read_only_variables[i] = 2;
-  //   solve with just i forced on
-    FPTAS(15.0, current_node->profits, current_node->weights, 
-          current_node->x_opt, a_sol_prime, n, current_node->capacity, 
-          current_node->z_opt, 1, 2, problem_name, &K, profits_prime, 1,
-          temp_read_only_variables);
-        /* Get profit(S') */
-    this_profit = 0;
-    for(int i = 0; i < n; i++)
-    {
-      if (a_sol_prime[i] == 1)
-        this_profit += current_node->profits[i];
-    }
-
-    /* Plant any variables which were constrained to be on in */
-    for(int i = 0; i < n; i++)
-    {
-      if (current_node->turned_on_variables[i] == 2) 
+      /* Plant any variables which were constrained to be on in */
+      for(int j = 0; j < n; j++)
       //TODO replace 2 with a symbolic constant
+        if (temp_variable_statuses[j] == 2) 
+          this_profit += current_node->profits[j];
+
+      
+      if (this_profit > best_found_profit)
       {
-        this_profit += current_node->profits[i];
+        best_variable = i;
+        best_found_profit = this_profit;
+
       }
+      
+      
+      list_of_these_profits[i] = this_profit;
+
+      /* Debug */
+      iterations++;
     }
-    if (this_profit > max_profit)
-      best_variable = i;
   }
+  int best_variables_counter = 0;
+  for (int i = 0; i < n; i++)
+  {
+    if(list_of_these_profits[i] == best_found_profit)
+    {
+      best_variables[best_variables_counter++] = i;
+    }
+  }
+
   /* Debug */
-  printf("Branching on: %d\n", best_variable);
+  if(best_variable == -1)
+  {
+    printf("No best variable found?\n");
+    //printf("We iterated %d times.\n", iterations);
+    return;
+  }
 
-  /* We have our variable chosen... */
-  Problem_Instance *generated_node_variable_on = 
-                         malloc(sizeof(current_node)+n*5*(sizeof(int)));
-  Problem_Instance *generated_node_variable_off = 
-                         malloc(sizeof(current_node)+n*5*(sizeof(int)));
+  for(int i = 0; i < best_variables_counter; i++)
+  {
+    best_variable = best_variables[i];
+    //printf("Branching on: %d\n", best_variable);
+
+    /* We have our variable chosen... */
+    Problem_Instance *generated_node_variable_on = 
+                           malloc(sizeof(current_node)+n*5*(sizeof(int)));
+    Problem_Instance *generated_node_variable_off = 
+                           malloc(sizeof(current_node)+n*5*(sizeof(int)));
   
-  /* Generate the first node */
-  generated_node_variable_on->profits = current_node->profits;
-  generated_node_variable_on->weights = current_node->weights;
-  generated_node_variable_on->capacity = current_node->capacity;
-  generated_node_variable_on->z_opt = current_node->z_opt;
-  generated_node_variable_on->x_opt = current_node->x_opt;
-  generated_node_variable_on->turned_on_variables =
-                                             current_node->turned_on_variables;
-  generated_node_variable_on->read_only_variables = 
-                                             current_node->read_only_variables; 
-  generated_node_variable_on->epsilon = current_node->epsilon;
-  generated_node_variable_on->read_only_variables[best_variable] = 1;
+    /* Generate the first node */
+    generated_node_variable_on->profits = current_node->profits;
+    generated_node_variable_on->weights = current_node->weights;
+    generated_node_variable_on->capacity = current_node->capacity;
+    generated_node_variable_on->z_opt = current_node->z_opt;
+    generated_node_variable_on->x_opt = current_node->x_opt;
+    //generated_node_variable_on->turned_on_variables =
+    //                                       current_node->turned_on_variables;
+    /*
+    int generated_node_variable_on_turned_on_variables[n];
+    for (int j = 0; j < n; j++)
+      generated_node_variable_on_turned_on_variables[j] = 
+        current_node->turned_on_variables[j];
+    generated_node_variable_on->turned_on_variables = 
+      generated_node_variable_on_turned_on_variables;
 
-  /* Generate the second node */
-  generated_node_variable_off->profits = current_node->profits;
-  generated_node_variable_off->weights = current_node->weights;
-  generated_node_variable_off->capacity = current_node->capacity;
-  generated_node_variable_off->z_opt = current_node->z_opt;
-  generated_node_variable_off->x_opt = current_node->x_opt;
-  generated_node_variable_off->turned_on_variables =
-                                             current_node->turned_on_variables;
-  generated_node_variable_off->read_only_variables = 
-                                             current_node->read_only_variables; 
-  generated_node_variable_off->epsilon = current_node->epsilon;
-  generated_node_variable_off->turned_on_variables[best_variable] = 0;
-  generated_node_variable_off->read_only_variables[best_variable] = 1;
 
-  /* Put them on the top */
-  problems[(*problem_instance_length)++] = generated_node_variable_off;
-  problems[(*problem_instance_length)++] = generated_node_variable_on;
-  /* Okay this should be all g */ 
+    int generated_node_variable_on_read_only_variables[n];
+    for (int j = 0; j < n; j++) 
+      generated_node_variable_on_read_only_variables[j] = 
+        current_node->read_only_variables[j];
+    generated_node_variable_on->read_only_variables = 
+      generated_node_variable_on_read_only_variables;
+    */
+
+    
+
+    generated_node_variable_on->epsilon = current_node->epsilon;
+    generated_node_variable_on->read_only_variables[best_variable] = 1;
+    generated_node_variable_on->branched_variable = best_variable;
+    generated_node_variable_on->branched_variable_status = VARIABLE_ON;
+    generated_node_variable_on->depth = current_node->depth + 1;
+
+    /* Generate the second node */
+    generated_node_variable_off->profits = current_node->profits;
+    generated_node_variable_off->weights = current_node->weights;
+    generated_node_variable_off->capacity = current_node->capacity;
+    generated_node_variable_off->z_opt = current_node->z_opt;
+    generated_node_variable_off->x_opt = current_node->x_opt;
+    //generated_node_variable_off->turned_on_variables =
+    //                                       current_node->turned_on_variables;
+    //generated_node_variable_off->read_only_variables = 
+    //                                       current_node->read_only_variables; 
+    int generated_node_variable_off_turned_on_variables[n];
+    for (int j = 0; j < n; j++)
+      generated_node_variable_off_turned_on_variables[j] = 
+        current_node->turned_on_variables[j];
+    generated_node_variable_off->turned_on_variables = 
+      generated_node_variable_off_turned_on_variables;
+
+    int generated_node_variable_off_read_only_variables[n];
+    for (int j = 0; j < n; j++) 
+      generated_node_variable_off_read_only_variables[j] = 
+        current_node->read_only_variables[j];
+    generated_node_variable_off->read_only_variables = 
+      generated_node_variable_off_read_only_variables;
+
+    generated_node_variable_off->epsilon = current_node->epsilon;
+    generated_node_variable_off->turned_on_variables[best_variable] = 0;
+    generated_node_variable_off->read_only_variables[best_variable] = 1;
+    generated_node_variable_off->branched_variable = best_variable;
+    generated_node_variable_off->branched_variable_status = VARIABLE_OFF;
+    generated_node_variable_off->depth = current_node->depth + 1;
+  
+    /* Put them on the top */
+    problems[(*problem_instance_length)++] = generated_node_variable_off;
+    problems[(*problem_instance_length)++] = generated_node_variable_on;
+    /* Okay this should be all g */ 
+  }
 }
 
 Problem_Instance *select_node(Problem_Instance *nodes[], int *end_of_list)
