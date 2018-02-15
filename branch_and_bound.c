@@ -11,7 +11,8 @@
  ******************************************************************************/
 
 #define TESTING
-#define VARIABLE_ON 1
+#define VARIABLE_ON 2
+#define VARIABLE_UNCONSTRAINED 1
 #define VARIABLE_OFF 0
 #include<stdio.h>
 #include "fptas.c"
@@ -51,9 +52,13 @@ void generate_node_v2(Problem_Instance *current_node,
 void generate_node_v3(Problem_Instance *current_node, 
                       Problem_Instance **problems, int *problem_instance_length,
                       int number_of_nodes_to_generate, float epsilon,
-                      int max_profit, int n, int *sol_prime, char *problem_name);
+                      int max_profit, int n, int *sol_prime, 
+                      char *problem_name);
 
 Problem_Instance *select_node(Problem_Instance *nodes[], int *end_of_list);
+
+Problem_Instance *select_node_priority_to_upnodes(Problem_Instance *nodes[],
+                                                  int *end_of_list);
 
 int main(int argc, char *argv[])
 {
@@ -114,8 +119,6 @@ void branch_and_bound_KP(int profits[], int weights[], int capacity, int *z_out,
   /* Read in instance. */
   epsilon = n;
   int sol_prime[n];
-  Problem_Instance *root_node = 
-                         malloc(sizeof(root_node)+n*5*sizeof(int));
   for (int i = 0; i < n; i++) sol_prime[i] = 0;
   bounding_method = TRIVIAL_BOUND;
   profit_primes = (int *) malloc(n * sizeof(*profit_primes));  
@@ -124,20 +127,31 @@ void branch_and_bound_KP(int profits[], int weights[], int capacity, int *z_out,
   int max_profit = DP_max_profit(profits, n);
 
   /* Now, define root_problem structure */
-  int root_vars[n];
-  for(int i = 0; i < n; i++) root_vars[i] = 1;
-  int root_read_only_vars[n];
-  for(int i = 0; i < n; i++) root_read_only_vars[i] = 0;
+  //int root_vars[n];
+  //for(int i = 0; i < n; i++) root_vars[i] = ;
+  //int root_read_only_vars[n];
+  //for(int i = 0; i < n; i++) root_read_only_vars[i] = 0;
   //*root_node = { profits, weights, capacity, z, x, 
   //                  root_vars, root_read_only_vars, epsilon };
 
+  Problem_Instance *root_node = (Problem_Instance *)malloc(sizeof(Problem_Instance));
+  //Problem_Instance *root_node;
   root_node->profits = profits;
   root_node->weights = weights;
   root_node->capacity = capacity;
   root_node->z_opt = z;
   root_node->x_opt = x;
-  root_node->turned_on_variables = root_vars;
-  root_node->read_only_variables = root_read_only_vars; 
+  //root_node->turned_on_variables = root_vars;
+  if((root_node->turned_on_variables = (int *) calloc(n, sizeof(int)))==NULL)
+  {
+    printf("Allocation of root_node->turned_on_variables failed!\n");
+    exit(-1);
+  }
+  for (int i = 0; i < n; i++) 
+    (root_node->turned_on_variables)[i] = VARIABLE_UNCONSTRAINED;
+  //root_node->read_only_variables = root_read_only_vars; 
+  root_node->read_only_variables = (int *) calloc(n, sizeof(int));
+  // TODO make sure calloc actually puts these to zero as advertised
   root_node->epsilon = epsilon;
   root_node->branched_variable = -1;
   root_node->branched_variable_status = VARIABLE_ON;
@@ -164,17 +178,15 @@ void branch_and_bound_KP(int profits[], int weights[], int capacity, int *z_out,
   {
     /* Debug */
     iterations++;
-    
+    printf("Iteration!\n");
 
     /* 2. Select node */
-    current_node = select_node(problem_list, &problem_instance_list_length);
-
+    //current_node = select_node(problem_list, &problem_instance_list_length);
+    current_node = select_node_priority_to_upnodes(problem_list, &problem_instance_list_length);
+    printf("Problem_instance_list_length: %d\n", problem_instance_list_length);
+    if (current_node == NULL) printf("Here it is!\n");
     /* Debug */
     //printf("Depth: %d\n", current_node->depth);
-    printf("Line 174:\n ");
-    printf("current_node->read_only_variables[7]=%d\n", current_node->read_only_variables[7]);
-    printf("current_node->read_only_variables[19]=%d\n", current_node->read_only_variables[19]);
-
     /* 3. Bound */
     epsilon *= 0.9; // TODO This reduction of epsilon is ARBITRARY 
 
@@ -189,23 +201,29 @@ void branch_and_bound_KP(int profits[], int weights[], int capacity, int *z_out,
         sol_prime[i] = 0;
 
       /* On first node, we use an eps = n */
-     if(first_node)
+      if(first_node)
       {
+    printf("First FPTAS!\n");
         FPTAS(((float)n/4.0), profits, weights, x, sol_prime, n, capacity, z,
               sol_flag, bounding_method, problem_file, &K, profit_primes,
-            DP_method, current_node->turned_on_variables);
+              DP_method, current_node->turned_on_variables, 
+              current_node->read_only_variables);
         first_node = 0;
+    printf("First FPTAS done!\n");
         epsilon = 0.99;
       }
-      else
-      {
+      else 
+      { // TODO During the FPTAS, current_node->read_only_variables goes to garbage
+    printf("Nonfirst FPTAS!\n");
         FPTAS(epsilon, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
               bounding_method, problem_file, &K, profit_primes, DP_method,
-              current_node->turned_on_variables);
+              current_node->turned_on_variables, 
+              current_node->read_only_variables);
       }  
 
       /* Get profit(S') */
       relaxed_solution->profit = 0;
+    printf("Getting profit!\n");
       for(int i = 0; i < n; i++)
       {
         if (sol_prime[i] == 1)
@@ -214,6 +232,7 @@ void branch_and_bound_KP(int profits[], int weights[], int capacity, int *z_out,
       }
 
       /* Plant any variables which were constrained to be on in */
+    printf("Planting variables!\n");
       for(int i = 0; i < n; i++)
       {
         if (current_node->turned_on_variables[i] == 2) 
@@ -224,10 +243,12 @@ void branch_and_bound_KP(int profits[], int weights[], int capacity, int *z_out,
         }
       }
 
-    if(relaxed_solution->profit <= global_lower_bound) continue;
-    
-    global_lower_bound = relaxed_solution->profit;
-
+    printf("Planted variables!\n");
+      if(relaxed_solution->profit <= global_lower_bound){
+       printf("%d%s children pruned.\n", current_node->branched_variable, current_node->branched_variable_status ? "-ON" : "-OFF");
+       continue;
+      }
+      global_lower_bound = relaxed_solution->profit;
       /* Tentative change if statement close */
     }//else printf("Variable off!\n");
 
@@ -237,14 +258,12 @@ void branch_and_bound_KP(int profits[], int weights[], int capacity, int *z_out,
 //    generate_node_v2(current_node, problem_list, &problem_instance_list_length,
 //                  1, epsilon, max_profit, n, sol_prime);
     // TODO read_only_variables not okay anymore (21845)
-    printf("Line 240:\n ");
-    printf("current_node->read_only_variables[7]=%d\n", current_node->read_only_variables[7]);
-    printf("current_node->read_only_variables[19]=%d\n", current_node->read_only_variables[19]);
+    printf("Generating nodes!\n");
     generate_node_v3(current_node, problem_list, &problem_instance_list_length,
                      1, epsilon, max_profit, n, sol_prime, problem_file);
-    
+    printf("Generated nodes!\n");
     /* Debug */
-    if(iterations >= 3) exit(-1);
+    //if(iterations >= 3) exit(-1);
 
   }
   *z_out = global_lower_bound;
@@ -256,7 +275,7 @@ void generate_node(Problem_Instance *current_node, Problem_Instance **problems,
                   float epsilon, int max_profit, int n, int *sol_prime)
 {
   /* My first method: we're going to branch and turn off the more truncate-able
-   * items */
+   * items TODO UPDATE THIS FUNCTION TO SUPPORT THE NEW ALLOCATION TECHNIQUE*/
   /* Comb through the current_node instance */
   double max_truncation = 0;
   double this_truncation;
@@ -293,9 +312,9 @@ void generate_node(Problem_Instance *current_node, Problem_Instance **problems,
   /* Then for the node that has the most, create a problem_instance where it
    * is on and another where it is off */
   Problem_Instance *generated_node_variable_on = 
-                         malloc(sizeof(current_node)+n*5*(sizeof(int)));
+                         malloc(sizeof(Problem_Instance));
   Problem_Instance *generated_node_variable_off = 
-                         malloc(sizeof(current_node)+n*5*(sizeof(int)));
+                         malloc(sizeof(Problem_Instance));
   
   generated_node_variable_on->profits = current_node->profits;
   generated_node_variable_on->weights = current_node->weights;
@@ -334,7 +353,9 @@ void generate_node_v2(Problem_Instance *current_node,
                       int max_profit, int n, int *sol_prime)
 {
   /* My second method: we're going to branch and turn on the least truncate-able
-   * items */
+   * items TODO UPDATE THIS TO SUPPORT NEW ALLOCATION TECHNIQUE also update 
+   * the method for the way turned_on_variables is defined for the 'on' 
+   * case */
 
   /* Comb through the current_node instance */
   double this_truncation;
@@ -439,11 +460,10 @@ void generate_node_v3(Problem_Instance *current_node,
 
 
       temp_variable_statuses[i] = 2;
-      FPTAS(1.0, current_node->profits, current_node->weights, 
+      FPTAS(5.0, current_node->profits, current_node->weights, 
             current_node->x_opt, a_sol_prime, n, current_node->capacity, 
             current_node->z_opt, 1, 2, problem_name, &K, profits_prime, 1,
-            temp_variable_statuses);
-
+            temp_variable_statuses, current_node->turned_on_variables);
       /* Get profit(S') */
       this_profit = 0;
       for(int j = 0; j < n; j++)
@@ -455,49 +475,56 @@ void generate_node_v3(Problem_Instance *current_node,
       //TODO replace 2 with a symbolic constant
         if (temp_variable_statuses[j] == 2) 
           this_profit += current_node->profits[j];
-
       
+      /* Check if this is the highest profit so far */
       if (this_profit > best_found_profit)
       {
         best_variable = i;
         best_found_profit = this_profit;
-
       }
       
-      
+      /* Add it to a list of profits */
       list_of_these_profits[i] = this_profit;
 
       /* Debug */
       iterations++;
     }
   }
+  /* Add all the best variables to a list */
   int best_variables_counter = 0;
   for (int i = 0; i < n; i++)
-  {
     if(list_of_these_profits[i] == best_found_profit)
-    {
       best_variables[best_variables_counter++] = i;
-    }
-  }
 
   /* Debug */
   if(best_variable == -1)
   {
     printf("No best variable found?\n");
-    //printf("We iterated %d times.\n", iterations);
     return;
   }
 
   for(int i = 0; i < best_variables_counter; i++)
   {
     best_variable = best_variables[i];
-    //printf("Branching on: %d\n", best_variable);
+    printf("Variable %d%s branches on %d\n", current_node->branched_variable,
+           current_node->branched_variable_status ? "-ON" : "-OFF",
+           best_variable);
 
     /* We have our variable chosen... */
-    Problem_Instance *generated_node_variable_on = 
-                           malloc(sizeof(current_node)+n*5*(sizeof(int)));
-    Problem_Instance *generated_node_variable_off = 
-                           malloc(sizeof(current_node)+n*5*(sizeof(int)));
+    Problem_Instance *generated_node_variable_on;
+    if((generated_node_variable_on = 
+        malloc(sizeof(Problem_Instance)))==NULL)
+    {
+      printf("Failure to allocate for an 'on' instance.\n");
+      continue;
+    }
+    Problem_Instance *generated_node_variable_off;
+    if((generated_node_variable_off = 
+                           malloc(sizeof(Problem_Instance)))==NULL)
+    {
+      printf("Failure to alloacte for an 'off' instance.\n");
+      continue;
+    }
   
     /* Generate the first node */
     generated_node_variable_on->profits = current_node->profits;
@@ -505,29 +532,22 @@ void generate_node_v3(Problem_Instance *current_node,
     generated_node_variable_on->capacity = current_node->capacity;
     generated_node_variable_on->z_opt = current_node->z_opt;
     generated_node_variable_on->x_opt = current_node->x_opt;
-    //generated_node_variable_on->turned_on_variables =
-    //                                       current_node->turned_on_variables;
-    /*
-    int generated_node_variable_on_turned_on_variables[n];
-    for (int j = 0; j < n; j++)
-      generated_node_variable_on_turned_on_variables[j] = 
-        current_node->turned_on_variables[j];
-    generated_node_variable_on->turned_on_variables = 
-      generated_node_variable_on_turned_on_variables;
-
-
-    int generated_node_variable_on_read_only_variables[n];
-    for (int j = 0; j < n; j++) 
-      generated_node_variable_on_read_only_variables[j] = 
-        current_node->read_only_variables[j];
+    //TODO Dynamically allocate pointers to list for the stuff
+    /* Make the turned_on_variable list */
     generated_node_variable_on->read_only_variables = 
-      generated_node_variable_on_read_only_variables;
-    */
-
-    
-
+      (int *) calloc(n, sizeof(int *));
+    for (int j = 0; j < n; j++) 
+      generated_node_variable_on->read_only_variables[j] = 
+        current_node->read_only_variables[j];
+    generated_node_variable_on->turned_on_variables = 
+      (int *) calloc(n, sizeof(int *));
+    for (int j = 0; j < n; j++) 
+      generated_node_variable_on->turned_on_variables[j] = 
+        current_node->turned_on_variables[j];
     generated_node_variable_on->epsilon = current_node->epsilon;
     generated_node_variable_on->read_only_variables[best_variable] = 1;
+    generated_node_variable_on->turned_on_variables[best_variable] =
+      VARIABLE_ON;
     generated_node_variable_on->branched_variable = best_variable;
     generated_node_variable_on->branched_variable_status = VARIABLE_ON;
     generated_node_variable_on->depth = current_node->depth + 1;
@@ -538,26 +558,20 @@ void generate_node_v3(Problem_Instance *current_node,
     generated_node_variable_off->capacity = current_node->capacity;
     generated_node_variable_off->z_opt = current_node->z_opt;
     generated_node_variable_off->x_opt = current_node->x_opt;
-    //generated_node_variable_off->turned_on_variables =
-    //                                       current_node->turned_on_variables;
-    //generated_node_variable_off->read_only_variables = 
-    //                                       current_node->read_only_variables; 
-    int generated_node_variable_off_turned_on_variables[n];
-    for (int j = 0; j < n; j++)
-      generated_node_variable_off_turned_on_variables[j] = 
-        current_node->turned_on_variables[j];
-    generated_node_variable_off->turned_on_variables = 
-      generated_node_variable_off_turned_on_variables;
-
-    int generated_node_variable_off_read_only_variables[n];
-    for (int j = 0; j < n; j++) 
-      generated_node_variable_off_read_only_variables[j] = 
-        current_node->read_only_variables[j];
+    //TODO Make sure allocation actually works
     generated_node_variable_off->read_only_variables = 
-      generated_node_variable_off_read_only_variables;
-
+      (int *) calloc(n, sizeof(int *));
+    for (int j = 0; j < n; j++) 
+      generated_node_variable_off->read_only_variables[j] = 
+        current_node->read_only_variables[j];
+    generated_node_variable_off->turned_on_variables = 
+      (int *) calloc(n, sizeof(int *));
+    for (int j = 0; j < n; j++) 
+      generated_node_variable_off->turned_on_variables[j] = 
+        current_node->turned_on_variables[j]; 
     generated_node_variable_off->epsilon = current_node->epsilon;
-    generated_node_variable_off->turned_on_variables[best_variable] = 0;
+    generated_node_variable_off->turned_on_variables[best_variable] = 
+      VARIABLE_OFF;
     generated_node_variable_off->read_only_variables[best_variable] = 1;
     generated_node_variable_off->branched_variable = best_variable;
     generated_node_variable_off->branched_variable_status = VARIABLE_OFF;
@@ -581,3 +595,26 @@ Problem_Instance *select_node(Problem_Instance *nodes[], int *end_of_list)
   return output_problem_instance;
 }
 
+Problem_Instance *select_node_priority_to_upnodes(Problem_Instance *nodes[],
+                                                  int *end_of_list)
+{
+  /* My first method: I wanna have a bit of a stack mentality to this
+   * So, pick the one at the top of the stack. (Assuming I maintain the stack 
+   * so that the next generated node with a variable turned off is at the head
+   *  of the stack). This is sort of depth-first ish */
+  Problem_Instance *output_problem_instance;
+  for (int i = *end_of_list; i > 0; i--)
+  {
+    if(nodes[i]->branched_variable_status == VARIABLE_ON)
+    {
+      *end_of_list--;
+      output_problem_instance = nodes[i];
+      for (int j = i; j < *end_of_list; i++)
+        nodes[j] = nodes[j+1];
+      return output_problem_instance; 
+    }
+  }
+  /* Otherwise just pop the top */
+  nodes[(*end_of_list)--] = NULL;
+  return output_problem_instance;
+}

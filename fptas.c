@@ -63,16 +63,16 @@ struct solution_pair
 };
 
 int williamson_shmoys_DP(struct problem_item items[], int capacity, int n, 
-                         int *solution_array);
+                         int *solution_array, const int *read_only_variables);
 void push(struct solution_pair** head_ref, int new_weight, int new_profit, 
           int n);
-void remove_dominated_pairs(struct solution_pair** head_ref);
-void merge_sort(struct solution_pair** head_ref);
+void remove_dominated_pairs(struct solution_pair** head_ref, const int *read_only_variables);
+void merge_sort(struct solution_pair** head_ref, const int *read_only_variables);
 struct solution_pair* sorted_merge(struct solution_pair* a, 
-                                   struct solution_pair* b);
+                                   struct solution_pair* b, const int *read_only_variables);
 void front_back_split(struct solution_pair* source, 
                       struct solution_pair** front_ref, 
-                      struct solution_pair** back_ref);
+                      struct solution_pair** back_ref, const int *read_only_variables);
 void print_list(struct solution_pair* node);
 
 void DP(const int problem_profits[],
@@ -108,7 +108,8 @@ void FPTAS(float eps,
            float *K,
            int *profits_prime,
            const int DP_method,
-           const int *active_nodes);
+           const int *active_nodes,
+           const int *read_only_variables);
 
 int DP_max_profit(const int problem_profits[],
                   const int n);
@@ -192,7 +193,7 @@ int main(int argc, char *argv[]){
   float eps, K;
   char problem_file[100];
   char output_file[100];
-  int *profits, *weights, *x, *profit_primes;
+  int *profits, *weights, *x, *profit_primes, *turned_on_variables;
   int n, capacity, z, sol_flag, bounding_method, DP_method;
   int all_instances = 0;
   int output_flag = 0;
@@ -273,14 +274,14 @@ int main(int argc, char *argv[]){
       DP_method = VASIRANI;
       FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
             bounding_method, problem_file, &K, profit_primes, DP_method, 
-            active_nodes); 
+            active_nodes, turned_on_variables); 
     }
     else if (strcmp(argv[2],"-ws")==0)
     {
       DP_method = WILLIAMSON_SHMOY;
       FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
             bounding_method, problem_file, &K, profit_primes, DP_method,
-            active_nodes); 
+            active_nodes, turned_on_variables); 
     }
     else
     {
@@ -351,7 +352,8 @@ void FPTAS(float eps,
            float *K,
            int *profits_prime,
            const int DP_method,
-           const int *active_nodes){
+           const int *active_nodes,
+           const int *read_only_variables){
   /* Description
    *  Recreates the FPTAS for the 0,1 KP as described by V. Vasirani in his
    *   chapter on Knapsack in Approximation Algorithms.
@@ -400,7 +402,8 @@ void FPTAS(float eps,
       items_prime[i].weight = weights[i];
       items_prime[i].profit = profits_prime[i];
     }
-    int result = williamson_shmoys_DP(items_prime, capacity, n, sol_prime);
+    int result = williamson_shmoys_DP(items_prime, capacity, n, sol_prime, 
+                                      read_only_variables);
     /* sol_prime analysis is done outside for some reason */
   }
   /* Solution should be in sol_prime */
@@ -748,7 +751,7 @@ int DP_derive_solution_set(int n,
 /* williamson_shmoy_dp.c begin */
 
 int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
-                         int *solution_array)
+                         int *solution_array, const int *read_only_variables)
 {
  /***william_shmoys_DP********************************************************
   *  Description: Implements the dynamic programming algorithm for the       *
@@ -795,7 +798,7 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
       }
       current = current->next;
     }
-    remove_dominated_pairs(&head);
+    remove_dominated_pairs(&head, read_only_variables);
   }
 
   /* return max ((t,w) in A max) w*/
@@ -882,7 +885,7 @@ void push(struct solution_pair** head_ref, int new_weight, int new_profit,
   (*head_ref) = new_solution_pair;
 }
 
-void remove_dominated_pairs(struct solution_pair** head_ref)
+void remove_dominated_pairs(struct solution_pair** head_ref, const int *read_only_variables)
 {
  /***remove_dominated_pairs documentation*************************************
   *  Description:                                                            *
@@ -906,7 +909,7 @@ void remove_dominated_pairs(struct solution_pair** head_ref)
   ****************************************************************************/
 
   /* Merge sort the list by weight */
-  merge_sort(head_ref);
+  merge_sort(head_ref, read_only_variables);
 
   struct solution_pair* current = (*head_ref)->next;
   struct solution_pair* previous = *head_ref;
@@ -928,7 +931,7 @@ void remove_dominated_pairs(struct solution_pair** head_ref)
   }
 }
 
-void merge_sort(struct solution_pair** head_ref)
+void merge_sort(struct solution_pair** head_ref, const int *read_only_variables)
 {
  /* merge_sort: my adapation for solution pairs as originally described by    *
   *             geeks for geeks.                                              *
@@ -943,18 +946,19 @@ void merge_sort(struct solution_pair** head_ref)
     return;
 
   /* Split head into 'a' and 'b' sublists */
-  front_back_split(head, &a, &b);
+  front_back_split(head, &a, &b, read_only_variables);
 
   /* Recursively sort the sublists */
-  merge_sort(&a);
-  merge_sort(&b);
+  merge_sort(&a, read_only_variables);
+  merge_sort(&b, read_only_variables);
 
   /* Merge the two lists of this scope together */
-  *head_ref = sorted_merge(a, b);
+  *head_ref = sorted_merge(a, b, read_only_variables);
 }
 
 struct solution_pair* sorted_merge(struct solution_pair* a, 
-                                   struct solution_pair* b)
+                                   struct solution_pair* b, 
+                                   const int *read_only_variables)
 {
   struct solution_pair* result = NULL;
   
@@ -973,32 +977,33 @@ struct solution_pair* sorted_merge(struct solution_pair* a,
       if (a->profit > b->profit) 
       {
         result = a;
-        result->next = sorted_merge(a->next, b);
+        result->next = sorted_merge(a->next, b, read_only_variables);
       }
       else 
       {
         result = b;
-        result->next = sorted_merge(a, b->next);
+        result->next = sorted_merge(a, b->next, read_only_variables);
       }
     }
     /* Otherwise just merge as normal */
     else
     {
       result = a;
-      result->next = sorted_merge(a->next, b);
+      result->next = sorted_merge(a->next, b, read_only_variables);
     }
   }
   else
   {
     result = b;
-    result->next = sorted_merge(a, b->next);
+    result->next = sorted_merge(a, b->next, read_only_variables);
   }
   return(result);
 }
 
 void front_back_split(struct solution_pair* source, 
                       struct solution_pair** front_ref, 
-                      struct solution_pair** back_ref)
+                      struct solution_pair** back_ref, 
+                      const int *read_only_variables)
 {
   struct solution_pair* fast;
   struct solution_pair* slow;
