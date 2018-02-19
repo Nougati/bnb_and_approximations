@@ -158,6 +158,7 @@ int p_upper_bound_aux(const int problem_profits[],
 /* End Function Prototypes */
 
 #ifndef TESTING
+#ifndef INCLUDE_FPTAS
 int main(int argc, char *argv[]){
   /* 
    * Description:
@@ -336,6 +337,7 @@ int main(int argc, char *argv[]){
   
   return 0;
 }
+#endif
 #endif
 
 void FPTAS(float eps, 

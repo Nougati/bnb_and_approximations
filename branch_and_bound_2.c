@@ -1,5 +1,11 @@
-/*TODO FiX COMPILER ERRORS*/
-#define TESTING
+/******************************************************************************
+ * TODO:                                                                      *
+ *   - Unit tests                                                              *
+ *   - Then problem instance testing                                          *
+ *   - Then customise to suit me minutely                                     *
+ *                                                                            *
+ ******************************************************************************/
+#define INCLUDE_FPTAS
 #define nP 1
 #define SIMPLE_SUM 2
 #define RATIO_BOUND 3
@@ -24,7 +30,7 @@ typedef struct p_instance
 typedef struct queue 
 {
   int front, rear, size, capacity;
-  struct p_instance* array[];
+  struct p_instance** array;
 } Problem_Queue;
 
 /* Branch and Bound Declarations */
@@ -36,21 +42,22 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
 int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z, 
                                int n, int capacity, char *problem_file);
 
-int find_branching_variable(int *profits, int *weights, int n, 
+int find_branching_variable(int *profits, int *weights, int n, int z,  
                             int *read_only_variables);
 
 void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
                           int branching_variable, 
                           Problem_Queue *problems_list);
 
+Problem_Instance *select_and_dequeue_node(Problem_Queue *node_queue);
+
 void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
                  int x[], int capacity, int n, int z, int *lower_bound_ptr, 
-                 int *upper_bound_ptr);
+                 int *upper_bound_ptr, char *problem_file);
 
 /* Queue Declarations */
 Problem_Queue *create_queue(int capacity);
 
-Problem_Instance *select_and_dequeue_node(Problem_Queue *node_queue);
 
 int is_full(Problem_Queue *queue);
 
@@ -65,10 +72,12 @@ Problem_Instance *front(Problem_Queue *queue);
 Problem_Instance *rear(Problem_Queue *queue);
 
 
-int main(int argc, char *argv[])
-{
+/* Main function */
+#ifndef TESTING
+int main(int argc, char *argv[]) {
   return 0;
 }
+#endif
 
 /* Branch and bound algorithm */
 void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
@@ -86,12 +95,13 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
    * queue. */
   srand(time(NULL));
   int *read_only_variables = (int *) calloc(n, sizeof(int));
-  int branching_variable = find_branching_variable(profits, weights, n, 
+  int branching_variable = find_branching_variable(profits, weights, n, z,
                                                   read_only_variables);
   Problem_Queue *node_queue = create_queue(n);
   generate_and_enqueue_nodes(root_node, n, branching_variable, node_queue);
 
   Problem_Instance *current_node;
+
   /* Then, while our node queue is not empty: */
   while(node_queue->size >= 1)
   {
@@ -100,7 +110,8 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
 
     /* Derive the LB and UB for node N with the FPTAS */
     find_bounds(current_node, profits, weights, x, capacity, n, z,
-                &current_node->lower_bound, &current_node->upper_bound);
+                &current_node->lower_bound, &current_node->upper_bound,
+                problem_file);
 
     /* If UB < GLB, we safely prune this branch and continue to loop */
     if (upper_bound < global_lower_bound)
@@ -119,7 +130,8 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
     {
       branching_variable = find_branching_variable(profits, weights, n, z, 
                                                   read_only_variables);
-      generate_and_enqueue_nodes(current_node, n, branching_variable, node_queue);
+      generate_and_enqueue_nodes(current_node, n, branching_variable, 
+                                node_queue);
     }
   }
 }
@@ -154,7 +166,7 @@ int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z,
 }
 
 /* Branching algorithm */
-int find_branching_variable(int *profits, int *weights, int n, 
+int find_branching_variable(int *profits, int *weights, int n, int z, 
                             int *read_only_variables)
 {
   int r = rand()%n;
@@ -164,9 +176,10 @@ int find_branching_variable(int *profits, int *weights, int n,
 /* Node generation and enqueuing algorithm */
 Problem_Instance *define_root_node(int n)
 {
-  Problem_Instance *root_instance = &(Problem_Instance) 
-        { .parent = NULL,
-          .variable_statuses = (int *) malloc(n * sizeof(int))};
+  Problem_Instance *root_instance =
+                           (Problem_Instance*) malloc(sizeof(Problem_Instance));
+  root_instance->parent = NULL;
+  root_instance->variable_statuses = (int *) malloc(n * sizeof(int));
   for(int i = 0; i < n; i++) 
     root_instance->variable_statuses[i] = VARIABLE_UNCONSTRAINED;
   return root_instance;
@@ -178,9 +191,9 @@ void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
   /* This will just use the structure Problem_Queue to enqueue it */
   /* Allocate for each node */
   Problem_Instance *generated_node_variable_on = 
-                                            malloc(sizeof(Problem_Instance));
+                          (Problem_Instance *) malloc(sizeof(Problem_Instance));
   Problem_Instance *generated_node_variable_off = 
-                                            malloc(sizeof(Problem_Instance));
+                          (Problem_Instance *) malloc(sizeof(Problem_Instance));
 
   /* Inherit parent's traits */
   /* First node */
@@ -216,7 +229,7 @@ Problem_Instance *select_and_dequeue_node(Problem_Queue *node_queue)
 /* General case node bounds derivation algorithm */
 void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
                  int x[], int capacity, int n, int z, int *lower_bound_ptr, 
-                 int *upper_bound_ptr)
+                 int *upper_bound_ptr, char *problem_file)
 { 
   /* lower_bound_ptr and upper_bound_ptr are both output parameters */
   /* Solve the FPTAS with current node */
@@ -225,14 +238,14 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
   int sol_prime[n];
   for (int i = 0; i < n; i++) sol_prime[i] = 0;
   int *profits_prime = (int *) malloc(n * sizeof(*profits_prime));
-  int active_nodes[n];
-  for (int i = 0; i < n; i++) active_nodes[i] = 0;
+  int node_statuses[n];
+  for (int i = 0; i < n; i++) node_statuses[i] = VARIABLE_UNCONSTRAINED;
   int read_only_variables[n];
   for (int i = 0; i < n; i++) read_only_variables[i] = 0;
 
-  FPTAS(eps, profits, weights, x, sol_prime, SIMPLE_SUM, capacity, z,
-        BINARY_SOL, problem_file, &K, profits_prime, WILLIAMSON_SHMOY, 
-        acitve_nodes, read_only_variables);
+  FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z,
+        BINARY_SOL, SIMPLE_SUM, problem_file, &K, profits_prime, 
+        WILLIAMSON_SHMOY, node_statuses, read_only_variables);
 
   int fptas_lower_bound = 0;
   int fptas_upper_bound = 0;
@@ -252,11 +265,11 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
 /* Queue Data Structure Methods */
 Problem_Queue *create_queue(int capacity)
 {
-  Problem_Queue *queue = (Queue*) malloc(sizeof(Queue));
+  Problem_Queue *queue = (Problem_Queue*) malloc(sizeof(Problem_Queue));
   queue->capacity = capacity;
   queue->front = queue->size = 0;
-  queue->read = capacity - 1;
-  queue->array = (int *) malloc(queue->capacity * sizeof(Problem_Instance*));
+  queue->rear = capacity - 1;
+  queue->array = (Problem_Instance **) malloc(queue->capacity * sizeof(Problem_Instance*));
   return queue;
 }
 
@@ -270,12 +283,12 @@ int is_empty(Problem_Queue *queue)
   return (queue->size == 0);
 }
 
-void enqueue(Problem_Queue *queue, Problem_Instance *node)
+void enqueue(Problem_Queue *queue, Problem_Instance *problem)
 {
   if(is_full(queue))
     return;
   queue->rear = (queue->rear + 1)%queue->capacity;
-  queue->array[queue->read] = problem;
+  queue->array[queue->rear] = problem;
   queue->size = queue->size + 1;
 }
 
@@ -290,6 +303,7 @@ Problem_Instance *dequeue(Problem_Queue *queue)
   return node;
 }
 
+
 Problem_Instance *front(Problem_Queue *queue)
 {
   if(is_empty(queue))
@@ -303,5 +317,4 @@ Problem_Instance *rear(Problem_Queue *queue)
     return NULL;
   return queue->array[queue->rear];
 }
-
 
