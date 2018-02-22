@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <limits.h>
 #include "fptas.c"
 
 /* Structure Declarations */
@@ -111,7 +112,7 @@ int main(int argc, char *argv[]) {
   t = clock() - t;
   double time_taken = ((double)t)/CLOCKS_PER_SEC;
 
-  printf("Answer: %d/%d (%s)\n", z_out, z, z_out == z ? "Pass!" : "Failure!");
+  printf("Answer: %d/%d (%s), time taken: %lf\n", z_out, z, z_out == z ? "Pass!" : "Failure!", time_taken);
   return 0;
 }
 #endif
@@ -124,6 +125,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
 {
   int iterations = 0;
   Problem_Instance *root_node = define_root_node(n);
+  root_node->upper_bound = INT_MAX;
 
   int count = 0;
   root_node->ID = count;
@@ -141,11 +143,15 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
   branching_variable = find_branching_variable(n, z,initial_variable_statuses);
   Problem_Queue *node_queue = create_queue(n);
 
-  /* Debug */
-  printf("GLB: %d, ID: 0, PID: NULL, branched on %d\n", global_lower_bound, branching_variable);
+  //srand(TIME(NULL));
 
+  /* Debug */
+  //printf("GLB: %d, ID: 0, PID: NULL, branched on %d\n", global_lower_bound, branching_variable);
+
+  /* Branch on root */
   generate_and_enqueue_nodes(root_node, n, branching_variable, node_queue, &count);
 
+  /* Create general node */
   Problem_Instance *current_node;
 
   /* Then, while our node queue is not empty: */
@@ -156,16 +162,16 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
 
     /* Derive the LB and UB for node N with the FPTAS */
     //printf("Finding bounds\n");
-    printf("GLB: %d, ID: %d, PID: %d ", global_lower_bound, current_node->ID, current_node->parent->ID);
+    //printf("GLB: %d, ID: %d, PID: %d ", global_lower_bound, current_node->ID, current_node->parent->ID);
     find_bounds(current_node, profits, weights, x, capacity, n, z,
                 &current_node->lower_bound, &current_node->upper_bound,
                 problem_file);
 
     /* If UB < GLB, we safely prune this branch and continue to loop */
-    if (current_node->upper_bound <= global_lower_bound) //|| 
-       // (current_node->lower_bound > current_node->parent->upper_bound))
+    if ((current_node->upper_bound <= global_lower_bound) || 
+        (current_node->upper_bound > current_node->parent->upper_bound))  
     {
-      printf("pruned...\n");
+      //printf("pruned...\n");
       continue;
     }
 
@@ -182,12 +188,18 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
     if (current_node->upper_bound > global_lower_bound)
     {
       branching_variable = find_branching_variable(n, z, current_node->variable_statuses);
-      printf("branched on %d...\n", branching_variable);
+      if (branching_variable == -1) 
+      {
+        //printf("Stub leaf node.\n");
+        continue;
+      }
+      //printf("branched on %d...\n", branching_variable);
       generate_and_enqueue_nodes(current_node, n, branching_variable, 
                                 node_queue, &count);
     }
     iterations++;
   }
+  printf("No of nodes: %d\n", count);
   *z_out = global_lower_bound;
 }
 
@@ -221,11 +233,20 @@ int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z,
 /* Branching algorithm */
 int find_branching_variable(int n, int z, int *variable_statuses)
 {
+  /*
+  r = rand() % n;
+  counter = 0;
+  while(variable_statuses[r] != VARIABLE_UNCONSTRAINED && counter <= n)
+  {
+    r = (r+1) % n; 
+    counter++;
+  }
+*/
+  
   for(int i = 0; i < n; i++)
     if (variable_statuses[i] == VARIABLE_UNCONSTRAINED)
       return i;
-  printf("No branching variable found... Exiting...\n");
-  exit(-1);
+  return -1;
 }
 
 /* Root node definition algorithm */
@@ -299,7 +320,7 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
 { 
   /* lower_bound_ptr and upper_bound_ptr are both output parameters */
   /* Solve the FPTAS with current node */
-  double eps = 0.1;
+  double eps = 0.002;
   double K;
   int sol_prime[n];
   for (int i = 0; i < n; i++) sol_prime[i] = 0;
@@ -320,7 +341,7 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
       fptas_upper_bound += K * profits_prime[i];
     }
   fptas_upper_bound += n*K; 
-  printf(", LB: %d, UB: %lf, ", fptas_lower_bound, fptas_upper_bound);
+  //printf(", LB: %d, UB: %lf, ", fptas_lower_bound, fptas_upper_bound);
   //fptas_upper_bound /= (1-eps);
 
   *lower_bound_ptr = fptas_lower_bound;

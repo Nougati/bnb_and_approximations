@@ -126,6 +126,12 @@ void make_profit_primes(int *profits,
                         int n,
                         const int *active_nodes);
 
+void make_symbolic_profit_primes(int *profits,
+                        int *profits_prime,
+                        double K,
+                        int n,
+                        const int *active_nodes);
+
 void DP_fill_in_base_cases(const int width,
                            const int n,
                            int ** DP_table, //int DP_table[][width],
@@ -386,6 +392,9 @@ void FPTAS(double eps,
   /* Derive adjusted profits (and trivialise constrained nodes 0) */
   make_profit_primes(profits, profits_prime, *K, n, variable_statuses); 
 
+  /* Symbolic profits (just for the computation) */
+  int symbolic_profits_prime[n];
+  make_symbolic_profit_primes(profits, symbolic_profits_prime, *K, n, variable_statuses);
 
   /* Adjust capacity according to nodes constrained to be in */
   for (int i = 0; i < n; i++)
@@ -395,7 +404,7 @@ void FPTAS(double eps,
   /* Now with amended profits list "profit_primes," solve the DP */
   if (DP_method == VASIRANI)
   {
-    DP(profits_prime, weights, x, sol_prime, n, capacity, z, sol_flag, 
+    DP(symbolic_profits_prime, weights, x, sol_prime, n, capacity, z, sol_flag, 
        bounding_method, problem_file);
   }
   else if (DP_method == WILLIAMSON_SHMOY)
@@ -405,11 +414,14 @@ void FPTAS(double eps,
     for(int i = 0;  i < n; i++)
     {
       items_prime[i].weight = weights[i];
-      items_prime[i].profit = profits_prime[i];
+      items_prime[i].profit = symbolic_profits_prime[i];
     }
     int result = williamson_shmoys_DP(items_prime, capacity, n, sol_prime);
     /* sol_prime analysis is done outside for some reason */
   }
+  for(int i = 0; i < n; i++) 
+    if(variable_statuses[i] == VARIABLE_ON)
+      sol_prime[i] = 1;
   /* Solution should be in sol_prime */
 }
 
@@ -1089,8 +1101,32 @@ void make_profit_primes(int profits[], int profits_prime[], double K, int n,
   *  
   * Notes:
   *  As eps increases, K increases, and so the profit' of each item will get scaled further
-  *   and further downwards. Since P is the max, it will be scaled to 1 for eps = 1 TODO
-  *   explain this better
+  *   and further downwards. Since P is the max, it will be scaled to 1 for eps = 1 
+  *   
+  *   
+  */
+  
+  for(int i=0; i < n; i++)
+  {
+      double scaled_profit = profits[i]/K;
+      profits_prime[i] = floor(scaled_profit);
+  }
+}
+
+void make_symbolic_profit_primes(int profits[], int symbolic_profits_prime[], double K, int n,
+                        const int *variable_statuses){
+ /* 
+  * Description: 
+  *  Derives the adjusted profits set profits', which is made by scaling every
+  *   profit down by 1/K and flooring the result, while zeroing constrained variables.
+  *   The process of forcing domination is the symbolic component of this.
+  * Inputs:
+  *
+  * Postconditions:
+  *  
+  * Notes:
+  *  As eps increases, K increases, and so the profit' of each item will get scaled further
+  *   and further downwards. Since P is the max, it will be scaled to 1 for eps = 1 
   *   
   */
   
@@ -1099,10 +1135,10 @@ void make_profit_primes(int profits[], int profits_prime[], double K, int n,
     if(variable_statuses[i] == VARIABLE_UNCONSTRAINED)
     {
       double scaled_profit = profits[i]/K;
-      profits_prime[i] = floor(scaled_profit);
+      symbolic_profits_prime[i] = floor(scaled_profit);
     }
     else
-      profits_prime[i] = VARIABLE_OFF; // We just make the item dominated
+      symbolic_profits_prime[i] = VARIABLE_OFF; // We just make the item dominated
   }
 }
 /*
