@@ -24,6 +24,9 @@
 #define HYPER_TRIVIAL_BOUND 1
 #define TRIVIAL_BOUND 2
 #define TRUE 1
+#define VARIABLE_ON 2
+#define VARIABLE_UNCONSTRAINED 1
+#define VARIABLE_OFF 0
 
 
 #define typename(x) _Generic((x),        /* Get the name of a type */             \
@@ -94,7 +97,7 @@ int DP_p_upper_bound(const int problem_profits[],
 void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
                      char *problem_file, int problem_no);
 
-void FPTAS(float eps, 
+void FPTAS(double eps, 
            int *profits,
            int *weights,
            int *x,
@@ -105,7 +108,7 @@ void FPTAS(float eps,
            const int sol_flag,
            const int bounding_method,
            const char *problem_file,
-           float *K,
+           double *K,
            int *profits_prime,
            const int DP_method,
            const int *variable_statuses);
@@ -113,13 +116,13 @@ void FPTAS(float eps,
 int DP_max_profit(const int problem_profits[],
                   const int n);
 
-float define_K(float eps,
+float define_K(double eps,
                int P,
                int n);
 
 void make_profit_primes(int *profits,
                         int *profits_prime,
-                        float K,
+                        double K,
                         int n,
                         const int *active_nodes);
 
@@ -190,7 +193,7 @@ int main(int argc, char *argv[]){
    *    ... I think
    */
 
-  float eps, K;
+  double eps, K;
   char problem_file[100];
   char output_file[100];
   int *profits, *weights, *x, *profit_primes, *turned_on_variables;
@@ -219,7 +222,7 @@ int main(int argc, char *argv[]){
            "ing_rule>\n Type \"%s help\" for info.\n", argv[0], argv[0]);
     exit(-1);
   }
-  sscanf(argv[3], "%f", &eps);
+  sscanf(argv[3], "%lf", &eps);
   strcpy(problem_file, argv[1]);
 
   /* If argv[5] doesn't want output */
@@ -274,14 +277,14 @@ int main(int argc, char *argv[]){
       DP_method = VASIRANI;
       FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
             bounding_method, problem_file, &K, profit_primes, DP_method, 
-            active_nodes, turned_on_variables); 
+            active_nodes); 
     }
     else if (strcmp(argv[2],"-ws")==0)
     {
       DP_method = WILLIAMSON_SHMOY;
       FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
             bounding_method, problem_file, &K, profit_primes, DP_method,
-            active_nodes, turned_on_variables); 
+            active_nodes); 
     }
     else
     {
@@ -339,7 +342,7 @@ int main(int argc, char *argv[]){
 #endif
 #endif
 
-void FPTAS(float eps, 
+void FPTAS(double eps, 
            int *profits,
            int *weights,
            int *x,
@@ -350,7 +353,7 @@ void FPTAS(float eps,
            const int sol_flag,
            const int bounding_method,
            const char *problem_file,
-           float *K,
+           double *K,
            int *profits_prime,
            const int DP_method,
            const int *variable_statuses){
@@ -377,10 +380,12 @@ void FPTAS(float eps,
    */
   int P = DP_max_profit(profits, n);
 
+  /* Define K */
   *K = define_K(eps, P, n);
 
-  /* Derive adjusted profits (this also trivialises nodes constrained to 0) */
+  /* Derive adjusted profits (and trivialise constrained nodes 0) */
   make_profit_primes(profits, profits_prime, *K, n, variable_statuses); 
+
 
   /* Adjust capacity according to nodes constrained to be in */
   for (int i = 0; i < n; i++)
@@ -1044,7 +1049,7 @@ void print_list(struct solution_pair* node)
 
 /* williamson_shmoy_dp.c end */
 
-float define_K(float eps, int P, int n){
+float define_K(double eps, int P, int n){
   /* Description: 
    *   Defines real valued scaling factor K. K is epsP/n. As eps approaches 0, K does too.  
    *    As eps approaches 1, K approaches P/n. As eps exceeds 1, K scales progressively larger
@@ -1065,14 +1070,14 @@ float define_K(float eps, int P, int n){
   assert(eps > 0);
   //assert(eps <= 1); TODO TURN THIS BACK ON???  
 
-  float K = (eps*P)/n;
+  double K = (eps*P)/n;
   // define K
 
   return K;
   // return K
 }
 
-void make_profit_primes(int profits[], int profits_prime[], float K, int n,
+void make_profit_primes(int profits[], int profits_prime[], double K, int n,
                         const int *variable_statuses){
  /* 
   * Description: 
@@ -1089,9 +1094,13 @@ void make_profit_primes(int profits[], int profits_prime[], float K, int n,
   *   
   */
   
-  for(int i=0; i < n; i++){
+  for(int i=0; i < n; i++)
+  {
     if(variable_statuses[i] == VARIABLE_UNCONSTRAINED)
-      profits_prime[i] = floor(profits[i]/K);
+    {
+      double scaled_profit = profits[i]/K;
+      profits_prime[i] = floor(scaled_profit);
+    }
     else
       profits_prime[i] = VARIABLE_OFF; // We just make the item dominated
   }
@@ -1198,12 +1207,14 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
   char * pch;
   char problem_number_str[100];
 
-  /* Get data about the instance itself */
+  /* Get data about the instance itself
+   * TODO Get this supporting instance types of more than one digit */
   int coefficient_size;
   sscanf(problem_file, "knapPI_%*d_%d_%d.csv", n, &coefficient_size);
   int ndigits = floor(log10(abs(*n)))+1;
   int cdigits = floor(log10(abs(coefficient_size)))+1;
   int pnodigits = floor(log10(abs(problem_number)))+1;
+
   /* From this, we deduce the length of the instance name */
   int instance_name_width = 11+ndigits+cdigits+pnodigits;
 

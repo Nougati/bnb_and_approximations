@@ -47,6 +47,11 @@ class problem_instance_queueTest : public testing::Test
   }
 };
 
+/*
+void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
+                     char *problem_file, int problem_no);
+*/
+
 /* Queue Test Cases */
 
 TEST(problem_instance_queueTest, create_queueTest){
@@ -314,23 +319,17 @@ TEST(problem_instance_queueTest, rearTest){
 TEST(branch_and_bound_mechanismTest, find_heuristic_initial_glbTest){
   /* Make sure, given a problem instance with known optimal objective value
    * that the heuristic initial GLB is indeed less than it. */
-  /* Define problem instance */
+  /* Pisinger Reader version */
+  int *profits, *weights, *x;
+  int n, z, capacity;
+  char problem_file[100];
 
-  int profits[] = {94, 506, 416, 992, 649, 237, 457, 815, 446, 422, 791, 359, 
-                  667, 598, 7, 544, 334, 766, 994, 893, 633, 131, 428, 700, 617,
-                  874, 720, 419, 794, 196, 997, 116, 908, 539, 707, 569, 537, 
-                  931, 726, 487, 772, 513, 81, 943, 58, 303, 764, 536, 724, 789};
-  int weights[] = {485, 326, 248, 421, 322, 795, 43, 845, 955, 252, 9, 901, 122,
-                   94, 738, 574, 715, 882, 367, 984, 299, 433, 682, 72, 874, 138,
-                   856, 145, 995, 529, 199, 277, 97, 719, 242, 107, 122, 70, 98,
-                   600, 645, 267, 972, 895, 213, 748, 487, 923, 29, 674}; 
-  int x[] = {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-             0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-             1, 0};
-  int n = 50;
-  int z = 8373;
-  int capacity = 995;
-  char problem_file[] = "knapPI_1_50_1000.csv";
+  /* Edit problem file here */
+  char file[] = "knapPI_3_50_1000.csv";
+
+  /* Read problem */
+  strcpy(problem_file, file);
+  pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file, 1);
 
   /* Derive initial GLB */
   int GLB = find_heuristic_initial_GLB(profits, weights, x, z, n, capacity, 
@@ -343,28 +342,23 @@ TEST(branch_and_bound_mechanismTest, find_heuristic_initial_glbTest){
 TEST(branch_and_bound_mechanismTest, find_boundsTest){
   /* Make sure, given a problem instance with known optimal objective value
    * that the return UB and LB are in the correct relative positions. */
-  /* Define problem instance */
-  int profits[] = {94, 506, 416, 992, 649, 237, 457, 815, 446, 422, 791, 359, 
-                  667, 598, 7, 544, 334, 766, 994, 893, 633, 131, 428, 700, 617,
-                  874, 720, 419, 794, 196, 997, 116, 908, 539, 707, 569, 537, 
-                  931, 726, 487, 772, 513, 81, 943, 58, 303, 764, 536, 724, 789};
-  int weights[] = {485, 326, 248, 421, 322, 795, 43, 845, 955, 252, 9, 901, 122,
-                   94, 738, 574, 715, 882, 367, 984, 299, 433, 682, 72, 874, 138,
-                   856, 145, 995, 529, 199, 277, 97, 719, 242, 107, 122, 70, 98,
-                   600, 645, 267, 972, 895, 213, 748, 487, 923, 29, 674}; 
-  int x[] = {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-             0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-             1, 0};
-  int n = 50;
-  int z = 8373;
-  int capacity = 995;
-  char problem_file[] = "knapPI_1_50_1000.csv";
+  /* Input variables */
+  int *profits, *weights, *x;
+  int n, z, capacity;
+  char problem_file[100];
+
+  /* Edit problem file here */
+  char file[] = "knapPI_3_50_1000.csv";
+
+  /* Read problem */
+  strcpy(problem_file, file);
+  pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file, 1);
 
   /* Define test problem instance */
   Problem_Instance *test_problem = (Problem_Instance *) malloc(sizeof(Problem_Instance));
   test_problem->parent = NULL;
   test_problem->variable_statuses = (int *) malloc(sizeof(int)*n);
-  memset(test_problem->variable_statuses, VARIABLE_UNCONSTRAINED, sizeof(int)*n);
+  for(int i = 0; i < n; i++) test_problem->variable_statuses[i] = VARIABLE_UNCONSTRAINED;
   test_problem->lower_bound = 0;  
   test_problem->upper_bound = 0;
 
@@ -381,7 +375,6 @@ TEST(branch_and_bound_mechanismTest, find_boundsTest){
   free(test_problem->variable_statuses);
   free(test_problem);
 }
-
 
 TEST(branch_and_bound_mechanismTest, generate_and_enqueue_nodesTest){
   /* Make sure, given a problem queue and a current problem instance structure,
@@ -494,23 +487,18 @@ TEST(branch_and_bound_mechanismTest, select_and_dequeue_nodesTest){
 }
 
 /* Tests for computing the optimal value*/
-TEST(branch_and_bound_mechanismTest, returns_optimal_value){
+TEST(branch_and_bound_mechanismTest, returns_optimal_value_uncorrelated){
   /* Input variables */
-  int profits[] = {94, 506, 416, 992, 649, 237, 457, 815, 446, 422, 791, 359, 
-                  667, 598, 7, 544, 334, 766, 994, 893, 633, 131, 428, 700, 617,
-                  874, 720, 419, 794, 196, 997, 116, 908, 539, 707, 569, 537, 
-                  931, 726, 487, 772, 513, 81, 943, 58, 303, 764, 536, 724, 789};
-  int weights[] = {485, 326, 248, 421, 322, 795, 43, 845, 955, 252, 9, 901, 122,
-                   94, 738, 574, 715, 882, 367, 984, 299, 433, 682, 72, 874, 138,
-                   856, 145, 995, 529, 199, 277, 97, 719, 242, 107, 122, 70, 98,
-                   600, 645, 267, 972, 895, 213, 748, 487, 923, 29, 674}; 
-  int x[] = {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-             0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-             1, 0};
-  int n = 50;
-  int z = 8373;
-  int capacity = 995;
-  char problem_file[] = "knapPI_1_50_1000.csv";
+  int *profits, *weights, *x;
+  int n, z, capacity;
+  char problem_file[100];
+
+  /* Edit problem file here */
+  char file[] = "knapPI_1_50_1000.csv";
+
+  /* Read problem */
+  strcpy(problem_file, file);
+  pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file, 1);
 
   /* Output variables */
   int z_out = 0;
@@ -521,8 +509,57 @@ TEST(branch_and_bound_mechanismTest, returns_optimal_value){
   ASSERT_EQ(z_out, z);
 }
 
+TEST(branch_and_bound_mechanismTest, returns_optimal_value_weaklycorrelated){
+  /* Input variables */
+  int *profits, *weights, *x;
+  int n, z, capacity;
+  char problem_file[100];
+
+  /* Edit problem file here */
+  char file[] = "knapPI_2_50_1000.csv";
+
+  /* Read problem */
+  strcpy(problem_file, file);
+  pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file, 1);
+
+  /* Output variables */
+  int z_out = 0;
+  int sol_out[n];
+
+  /* Solve */
+  branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, sol_out, n, problem_file); 
+  
+  ASSERT_EQ(z_out, z);
+}
+
+TEST(branch_and_bound_mechanismTest, returns_optimal_value_stronglycorrelated){
+  /* Input variables */
+  int *profits, *weights, *x;
+  int n, z, capacity;
+  char problem_file[100];
+
+  /* Edit problem file here */
+  char file[] = "knapPI_3_50_1000.csv";
+
+  /* Read problem */
+  strcpy(problem_file, file);
+  pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file, 1);
+
+  /* Output variables */
+  int z_out = 0;
+  int sol_out[n];
+
+  /* Solve */
+  branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, sol_out, n, problem_file); 
+  
+  ASSERT_EQ(z_out, z);
+}
+
 int main(int argc, char **argv)
 {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
+
+/* Pisinger instance reader */
+

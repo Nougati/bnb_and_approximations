@@ -25,6 +25,7 @@ typedef struct p_instance
   int *variable_statuses;
   int lower_bound;
   int upper_bound;
+  int ID;
 } Problem_Instance;
 
 typedef struct queue 
@@ -42,12 +43,11 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
 int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z, 
                                int n, int capacity, char *problem_file);
 
-int find_branching_variable(int *profits, int *weights, int n, int z,  
-                            int *read_only_variables);
+int find_branching_variable(int n, int z, int *read_only_variables);
 
 void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
                           int branching_variable, 
-                          Problem_Queue *problems_list);
+                          Problem_Queue *problems_list, int *count);
 
 Problem_Instance *select_and_dequeue_node(Problem_Queue *node_queue);
 
@@ -75,24 +75,6 @@ Problem_Instance *rear(Problem_Queue *queue);
 /* Main function */
 #ifndef TESTING
 int main(int argc, char *argv[]) {
-  /* Static Input variables 
-  int profits[] = {94, 506, 416, 992, 649, 237, 457, 815, 446, 422, 791, 359, 
-                  667, 598, 7, 544, 334, 766, 994, 893, 633, 131, 428, 700, 617,
-                  874, 720, 419, 794, 196, 997, 116, 908, 539, 707, 569, 537, 
-                  931, 726, 487, 772, 513, 81, 943, 58, 303, 764, 536, 724, 789};
-  int weights[] = {485, 326, 248, 421, 322, 795, 43, 845, 955, 252, 9, 901, 122,
-                   94, 738, 574, 715, 882, 367, 984, 299, 433, 682, 72, 874, 138,
-                   856, 145, 995, 529, 199, 277, 97, 719, 242, 107, 122, 70, 98,
-                   600, 645, 267, 972, 895, 213, 748, 487, 923, 29, 674}; 
-  int x[] = {0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,
-             0, 1, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-             1, 0};
-  int n = 50;
-  int z = 8373;
-  int capacity = 995;
-  char problem_file[] = "knapPI_1_50_1000.csv";*/
-
-
   /* Dynamic Input variable support */
   int n, capacity, z, opt_profit;
   int *profits, *weights, *x;
@@ -116,10 +98,15 @@ int main(int argc, char *argv[]) {
   /* Start timer */
   clock_t t = clock();
 
+  /* Debug prints */
+  //printf("Starting...\n");
+
   /* Solve the problem */
-  printf("Computing...\n");
   branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, sol_out, n, problem_file); 
-  printf("Computed.\n");
+
+  /* Debug prints */
+  //printf("Stopping...\n");
+
   /* Stop timer */
   t = clock() - t;
   double time_taken = ((double)t)/CLOCKS_PER_SEC;
@@ -136,47 +123,51 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                                    int n, char *problem_file)
 {
   int iterations = 0;
-  int lower_bound, upper_bound;
   Problem_Instance *root_node = define_root_node(n);
 
+  int count = 0;
+  root_node->ID = count;
   //printf("Finding heuristics intial GLB on problem with FPTAS\n");
   /* Find heuristic initial GLB on problem with FPTAS */
   int global_lower_bound = find_heuristic_initial_GLB(profits, weights, x, z, 
                                                     n, capacity, problem_file);
 
-  /* Choose a variable to branch on by some criteria, and generate the 
+  /* Choose a variable to branch on by some criterion, and generate the 
    * constrained problems known as 'nodes'. Then, places these nodes in a node
    * queue. */
-  time_t seed = time(NULL); 
-  srand(seed);
-  printf("Seed: %ld\n", seed);
   int *initial_variable_statuses = (int *) malloc(sizeof(int)*n);
   for(int i = 0; i < n; i++) initial_variable_statuses[i] = VARIABLE_UNCONSTRAINED;
-  //printf("Finding branching variable\n");
-  int branching_variable = find_branching_variable(profits, weights, n, z,
-                                                  initial_variable_statuses);
+  int branching_variable;
+  branching_variable = find_branching_variable(n, z,initial_variable_statuses);
   Problem_Queue *node_queue = create_queue(n);
-  //printf("Generating and enqueuing nodes\n");
-  generate_and_enqueue_nodes(root_node, n, branching_variable, node_queue);
+
+  /* Debug */
+  printf("GLB: %d, ID: 0, PID: NULL, branched on %d\n", global_lower_bound, branching_variable);
+
+  generate_and_enqueue_nodes(root_node, n, branching_variable, node_queue, &count);
 
   Problem_Instance *current_node;
 
   /* Then, while our node queue is not empty: */
   while(node_queue->size >= 1)
   {
-    //printf("Looping\n");
     /* Take node N off queue by some node selection scheme */
     current_node = select_and_dequeue_node(node_queue);
 
     /* Derive the LB and UB for node N with the FPTAS */
     //printf("Finding bounds\n");
+    printf("GLB: %d, ID: %d, PID: %d ", global_lower_bound, current_node->ID, current_node->parent->ID);
     find_bounds(current_node, profits, weights, x, capacity, n, z,
                 &current_node->lower_bound, &current_node->upper_bound,
                 problem_file);
 
     /* If UB < GLB, we safely prune this branch and continue to loop */
-    if (upper_bound < global_lower_bound)
+    if (current_node->upper_bound <= global_lower_bound) //|| 
+       // (current_node->lower_bound > current_node->parent->upper_bound))
+    {
+      printf("pruned...\n");
       continue;
+    }
 
     /* If LB > GLB, we set GLB = LB */
     if (current_node->lower_bound > global_lower_bound)
@@ -190,10 +181,10 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
     //printf("Branching... %d\n", iterations);
     if (current_node->upper_bound > global_lower_bound)
     {
-      branching_variable = find_branching_variable(profits, weights, n, z, 
-                                                  current_node->variable_statuses);
+      branching_variable = find_branching_variable(n, z, current_node->variable_statuses);
+      printf("branched on %d...\n", branching_variable);
       generate_and_enqueue_nodes(current_node, n, branching_variable, 
-                                node_queue);
+                                node_queue, &count);
     }
     iterations++;
   }
@@ -205,8 +196,8 @@ int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z,
                                int n, int capacity, char *problem_file)
 {
   /* Run the FPTAS on the original problem with high epsilon */
-  float eps = 1.0;
-  float K;
+  double eps = 1.0;
+  double K;
   int sol_prime[n]; 
   for (int i = 0; i < n; i++) sol_prime[i] = 0; 
   int *profits_prime = (int *) malloc(n * sizeof(*profits_prime));
@@ -227,14 +218,14 @@ int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z,
   return fptas_profit;
 }
 
-/* Branching algorithm RANDOM NUMBER HERE*/
-int find_branching_variable(int *profits, int *weights, int n, int z, 
-                            int *variable_statuses)
+/* Branching algorithm */
+int find_branching_variable(int n, int z, int *variable_statuses)
 {
-  int r = rand() % n;
-  while (variable_statuses[r] == VARIABLE_OFF || variable_statuses[r] == VARIABLE_ON)
-    r = rand() % n;
-  return r;
+  for(int i = 0; i < n; i++)
+    if (variable_statuses[i] == VARIABLE_UNCONSTRAINED)
+      return i;
+  printf("No branching variable found... Exiting...\n");
+  exit(-1);
 }
 
 /* Root node definition algorithm */
@@ -251,7 +242,8 @@ Problem_Instance *define_root_node(int n)
 
 /* Generation and node enqueuing algorithm */
 void generate_and_enqueue_nodes(Problem_Instance *parent, int n, 
-                          int branching_variable, Problem_Queue *problems_list)
+                          int branching_variable, Problem_Queue *problems_list,
+                          int *count)
 {
   /* This will just use the structure Problem_Queue to enqueue it */
   /* Allocate for each node */
@@ -260,6 +252,9 @@ void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
   Problem_Instance *generated_node_variable_off = 
                           (Problem_Instance *) malloc(sizeof(Problem_Instance));
 
+  /* For debug */
+  generated_node_variable_on->ID = ++(*count);
+  generated_node_variable_off->ID = ++(*count);
 
   /* Inherit parent's traits */
   /* First node */
@@ -285,6 +280,7 @@ void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
   /* Place into priority queue (for now just append) */
   enqueue(problems_list, generated_node_variable_on);
   enqueue(problems_list, generated_node_variable_off);
+
 }
 
 /* Node selection and dequeuing algorithm */
@@ -303,31 +299,36 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
 { 
   /* lower_bound_ptr and upper_bound_ptr are both output parameters */
   /* Solve the FPTAS with current node */
-  float eps = 1.0;
-  float K;
+  double eps = 0.1;
+  double K;
   int sol_prime[n];
   for (int i = 0; i < n; i++) sol_prime[i] = 0;
   int *profits_prime = (int *) malloc(n * sizeof(*profits_prime));
 
+  /* Run the FPTAS */
   FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z,
         BINARY_SOL, SIMPLE_SUM, problem_file, &K, profits_prime, 
         WILLIAMSON_SHMOY, current_node->variable_statuses);
 
+  /* Then, from the solution sets returned from the FPTAS, derive bounds */
   int fptas_lower_bound = 0;
-  int fptas_upper_bound = 0;
+  double fptas_upper_bound = 0;
   for (int i = 0; i < n; i++)
     if (sol_prime[i] == 1)
     {
       fptas_lower_bound += profits[i];
       fptas_upper_bound += K * profits_prime[i];
     }
-  fptas_upper_bound += n*K;
+  fptas_upper_bound += n*K; 
+  printf(", LB: %d, UB: %lf, ", fptas_lower_bound, fptas_upper_bound);
+  //fptas_upper_bound /= (1-eps);
 
   *lower_bound_ptr = fptas_lower_bound;
-  *upper_bound_ptr = fptas_upper_bound;
+  *upper_bound_ptr = (int) fptas_upper_bound;
 
   free(profits_prime);
 }
+
 
 /* Queue Data Structure Methods */
 /* Problem Queue method: create_queue */
