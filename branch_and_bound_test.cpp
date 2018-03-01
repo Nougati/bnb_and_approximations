@@ -1,27 +1,11 @@
 /*****************************************************************************
- * FPTAS_test.cpp                                                            *
+ * branch_and_bound_test.cpp                                                 *
  * Author: Nelson Frew                                                       *
  * First edit: 19/02/18                                                      *
- * Last edit: 19/02/18                                                       *
+ * Last edit: 27/02/18                                                       *
  * Description:                                                              *
  *   Unit tests for the branch and bound algorithm which uses an unspecified *
  *   but already tested FPTAS framework.                                     *
- * TODO:                                                                     *
- *   Problem Instance structure tests                                        *
- *   Problem Queue                                                           *
- *     create queue                                                          *
- *     is full                                                               *
- *     is empty                                                              *
- *     enqueue                                                               *
- *     dequeue                                                               *
- *     front                                                                 *
- *     rear                                                                  *
- *   Branch and bound                                                        *
- *     Find heuristic initial glb                                            *
- *     Find bounds                                                           *
- *     Find branching variables                                              *
- *     Generate and enqueue                                                  *
- *     Select and dequeue nodes                                              *
  *                                                                           *
  *****************************************************************************/
 

@@ -1,7 +1,4 @@
 /**fptas2.c********************************************************************
- * TODO                                                                       *
- *  - Go over code to more easily support Williamson and Shmoy's DP too       *
- *  - Set up iterative FPTAS                                                  *
  *                                                                            *
  *  Really big epsilons:                                                      *
  *    Basically for epsilon >= 1, the lower bound guarantee relative to OPT   *
@@ -17,6 +14,7 @@
 #include <string.h>
 #include <time.h>
 
+/* Preprocessor definitions */
 #define VASIRANI 0
 #define WILLIAMSON_SHMOY 1
 #define INDEX_NOTATION 0
@@ -28,7 +26,7 @@
 #define VARIABLE_UNCONSTRAINED 1
 #define VARIABLE_OFF 0
 
-
+/* That generic thingo */
 #define typename(x) _Generic((x),        /* Get the name of a type */             \
                                                                                   \
         _Bool: "_Bool",                  unsigned char: "unsigned char",          \
@@ -41,30 +39,23 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
   long double: "long double",                   char *: "pointer to char",        \
        void *: "pointer to void",                int *: "pointer to int",         \
       default: "other")
-/*
-#define min(a,b) \
-   ({ __typeof__ (a) _a = (a); \
-       __typeof__ (b) _b = (b); \
-     _a < _b ? _a : _b; })
-*/
-/* Function Prototypes */
+
+/* Structure definitions */
 struct problem_item
 {
   int weight;
   int profit;
 };
 
-
 struct solution_pair 
 {
   int weight;
   int profit;
   struct solution_pair *next;
-  /* Begin tentative changes */  
   int solution_array[];
-  /* End tentative changes */ 
 };
 
+/* FTPAS Function Declarations */
 int williamson_shmoys_DP(struct problem_item items[], int capacity, int n, 
                          int *solution_array);
 void push(struct solution_pair** head_ref, int new_weight, int new_profit, 
@@ -163,8 +154,8 @@ int DP_derive_solution_set(int n,
 
 int p_upper_bound_aux(const int problem_profits[],
                       const int n);
-/* End Function Prototypes */
 
+/* Main function */
 #ifndef TESTING
 #ifndef INCLUDE_FPTAS
 int main(int argc, char *argv[]){
@@ -186,13 +177,6 @@ int main(int argc, char *argv[]){
    *     K ---------------->|       |
    *     profit_primes ---->|_______|
    * 
-   *     Input files: "knapPI_1_50_1000.csv"
-   *                  "small_instance"
-   *                  "knapPI_1_100_1000.csv"
-   *                  "knapPI_1_1000_1000.csv"
-   *                  "knapPI_11_1000_1000.csv" <- Hard
-   *                  "knapPI_11_10000_1000.csv" <- Hard instance
-   *                  "knapPI_16_1000_1000.csv" <- Hard
    * Some things to note:
    *   As eps approaches 0, FPTAS's lower bound approaches true solution
    *   As eps approaches 1, FPTAS's lower bound approaches (1-eps)OPT
@@ -348,6 +332,8 @@ int main(int argc, char *argv[]){
 #endif
 #endif
 
+/* FPTAS Functions */
+/* FPTAS core function */
 void FPTAS(double eps, 
            int *profits,
            int *weights,
@@ -401,31 +387,152 @@ void FPTAS(double eps,
     if (variable_statuses[i] == VARIABLE_ON)
       capacity -= weights[i];
 
-  /* Now with amended profits list "profit_primes," solve the DP */
-  if (DP_method == VASIRANI)
+  for (int i = 0; i < n; i++) sol_prime[i] = 0;
+  /* Feasibility check */
+  if (capacity >= 0)
   {
-    DP(symbolic_profits_prime, weights, x, sol_prime, n, capacity, z, sol_flag, 
-       bounding_method, problem_file);
-  }
-  else if (DP_method == WILLIAMSON_SHMOY)
-  {
-    /* Make problem item struct array */
-    struct problem_item items_prime[n];
-    for(int i = 0;  i < n; i++)
+    /* Now with amended profits list "profit_primes," solve the DP */
+    if (DP_method == VASIRANI)
+      DP(symbolic_profits_prime, weights, x, sol_prime, n, capacity, z, sol_flag, 
+         bounding_method, problem_file);
+
+    else if (DP_method == WILLIAMSON_SHMOY)
     {
-      items_prime[i].weight = weights[i];
-      items_prime[i].profit = symbolic_profits_prime[i];
+      /* Make problem item struct array */
+      struct problem_item items_prime[n];
+      for(int i = 0;  i < n; i++)
+      {
+        items_prime[i].weight = weights[i];
+        items_prime[i].profit = symbolic_profits_prime[i];
+      }
+      int result = williamson_shmoys_DP(items_prime, capacity, n, sol_prime);
+
+      /* Okay this is bad, but I made an assumption in W&S DP that the first item would fit. */
+      int weight = 0;
+      for (int i = 0; i < n; i++) if (sol_prime[i]) weight += weights[i];
+      if (weight > capacity) 
+      {
+        for (int i = 0; i < n; i++)
+          sol_prime[i] = 0;
+        return;
+      }
     }
-    int result = williamson_shmoys_DP(items_prime, capacity, n, sol_prime);
-    /* sol_prime analysis is done outside for some reason */
+    for(int i = 0; i < n; i++) 
+      if(variable_statuses[i] == VARIABLE_ON)
+        sol_prime[i] = 1;
+    /* Solution should be in sol_prime */
   }
-  for(int i = 0; i < n; i++) 
-    if(variable_statuses[i] == VARIABLE_ON)
-      sol_prime[i] = 1;
-  /* Solution should be in sol_prime */
 }
 
-/* vasirani_dp.c begin */
+/* FPTAS: Define K */
+float define_K(double eps, int P, int n){
+  /* Description: 
+   *   Defines real valued scaling factor K. K is epsP/n. As eps approaches 0, K does too.  
+   *    As eps approaches 1, K approaches P/n. As eps exceeds 1, K scales progressively larger
+   *    than the n-way split of P.
+   * Inputs: 
+   *  
+   * Output:
+   *  
+   * Notes:
+   *  Epsilon can indeed exceed 1 as soon as epsilon hits 1 the lower bound guarantee on the
+   *   profit with respect to OPT drops completely and is bounded trivially by 0. As a result,
+   *   a stronger lower bound would be P at this point, however there is no guarantee on how
+   *   this adjusted P will look. It may well be positive but with increasing epsilon values 
+   *   it would seem that P's would be crushed to a low point. 
+   */
+  
+  // assert eps > 0
+  assert(eps > 0);
+  //assert(eps <= 1); TODO TURN THIS BACK ON???  
+
+  double K = (eps*P)/n;
+  // define K
+
+  return K;
+  // return K
+}
+
+/* FPTAS: Make profit primes */
+void make_profit_primes(int profits[], int profits_prime[], double K, int n,
+                        const int *variable_statuses){
+ /* 
+  * Description: 
+  *  Derives the adjusted profits set profits', which is made by scaling every
+  *   profit down by 1/K and flooring the result.
+  * Inputs:
+  *
+  * Postconditions:
+  *  
+  * Notes:
+  *  As eps increases, K increases, and so the profit' of each item will get scaled further
+  *   and further downwards. Since P is the max, it will be scaled to 1 for eps = 1 
+  *   
+  *   
+  */
+  
+  for(int i=0; i < n; i++)
+  {
+      double scaled_profit = profits[i]/K;
+      profits_prime[i] = floor(scaled_profit);
+  }
+}
+
+/* FPTAS: Make symbolic profit primes function */
+void make_symbolic_profit_primes(int profits[], int symbolic_profits_prime[], double K, int n,
+                        const int *variable_statuses){
+ /* 
+  * Description: 
+  *  Derives the adjusted profits set profits', which is made by scaling every
+  *   profit down by 1/K and flooring the result, while zeroing constrained variables.
+  *   The process of forcing domination is the symbolic component of this.
+  * Inputs:
+  *
+  * Postconditions:
+  *  
+  * Notes:
+  *  As eps increases, K increases, and so the profit' of each item will get scaled further
+  *   and further downwards. Since P is the max, it will be scaled to 1 for eps = 1 
+  *   
+  */
+  
+  for(int i=0; i < n; i++)
+  {
+    if(variable_statuses[i] == VARIABLE_UNCONSTRAINED)
+    {
+      double scaled_profit = profits[i]/K;
+      symbolic_profits_prime[i] = floor(scaled_profit);
+    }
+    else
+      symbolic_profits_prime[i] = VARIABLE_OFF; // We just make the item dominated
+  }
+}
+
+/* General DP / FPTAS Aux: Find max profits */
+int DP_max_profit(const int problem_profits[],
+                  const int n){
+  /*
+    Description:
+      Finds the highest profit in the array of item profits. In terms of Vasirani's notation
+       this is P. 
+    Inputs:
+      problem_profits - the profit array
+      n - the number of objects
+    Outputs:
+      max - the value of the highest profit item.
+  */
+  int max = 0;
+  for(int i = 0; i < n; i++){
+    if (max < problem_profits[i]){
+      max = problem_profits[i];
+    }
+  }
+  return max;
+}
+
+
+/* Vasirani DP functions */
+/* Vasirani DP: General Dynamic programming algorithm */
 void DP(const int problem_profits[], // profit primes?
         const int problem_weights[],
         const int x[],
@@ -461,15 +568,14 @@ void DP(const int problem_profits[], // profit primes?
                                        max_profit,
                                        bounding_method);
   // Define DP table (n+1)*(nP)
-  //int (*DP_table)[p_upper_bound] = malloc(sizeof(*DP_table) * (n+1));
   int **DP_table = (int **) malloc(sizeof(int *) * (n+1));
   DP_table[0] = (int *)malloc(sizeof(int) * p_upper_bound * (n+1));
   for(int i = 0; i < (n+1); i++)
     DP_table[i] = (*DP_table + p_upper_bound * i);
 
   printf("DP table is %d * %d\n", (n+1),  p_upper_bound);
-  // Compute base cases
 
+  // Compute base cases
   DP_fill_in_base_cases(p_upper_bound,
                         n+1,
                         DP_table,
@@ -501,27 +607,7 @@ void DP(const int problem_profits[], // profit primes?
   free(DP_table[0]);
 }
 
-int DP_max_profit(const int problem_profits[],
-                  const int n){
-  /*
-    Description:
-      Finds the highest profit in the array of item profits. In terms of Vasirani's notation
-       this is P. 
-    Inputs:
-      problem_profits - the profit array
-      n - the number of objects
-    Outputs:
-      max - the value of the highest profit item.
-  */
-  int max = 0;
-  for(int i = 0; i < n; i++){
-    if (max < problem_profits[i]){
-      max = problem_profits[i];
-    }
-  }
-  return max;
-}
-
+/* Vasirani DP: Derive upper bound P (table width) */
 int DP_p_upper_bound(const int problem_profits[],
                      const int n,
                      const int P,
@@ -543,10 +629,10 @@ int DP_p_upper_bound(const int problem_profits[],
     default: printf("Invalid bounding method! Exiting...\n");
     exit(-1);
   }
-
   return upper_bound;
 }
 
+/* Vasirani DP: profit upper bound auxiliary function */
 int p_upper_bound_aux(const int problem_profits[],
                       const int n){
   /*
@@ -570,6 +656,7 @@ int p_upper_bound_aux(const int problem_profits[],
   return total;
 }
 
+/* Vasirani DP: Fill in base cases */
 void DP_fill_in_base_cases(const int width,
                            const int n,
                            int ** DP_table, //int DP_table[][width],
@@ -615,6 +702,7 @@ void DP_fill_in_base_cases(const int width,
   }
 }
 
+/* Vasirani DP: General case computation */
 void DP_fill_in_general_cases(const int width,
                               const int n,
                               int ** DP_table, //int DP_table[][width],
@@ -661,6 +749,7 @@ void DP_fill_in_general_cases(const int width,
   }
 }
 
+/* Vasirani DP: Find symbolic positive infinity */
 int derive_pinf(const int problem_weights[],
                 const int n){
   /*
@@ -683,6 +772,7 @@ int derive_pinf(const int problem_weights[],
   return my_pinf;
 }
 
+/* Vasirani DP: Find best solution from table */
 int DP_find_best_solution(const int width,
                           const int n,
                           int ** DP_table, //const int DP_table[][width],
@@ -721,9 +811,10 @@ int DP_find_best_solution(const int width,
   return p;
 }
 
+/* Vasirani DP: Derive solution set */
 int DP_derive_solution_set(int n,
                            const int width,
-                           int ** DP_table, //const int DP_table[][width],
+                           int ** DP_table,
                            const int problem_profits[],
                            int solution[],
                            int p,
@@ -762,10 +853,10 @@ int DP_derive_solution_set(int n,
   }
  return s_index;
 }
-/* vasirani_dp.c end */
 
-/* williamson_shmoy_dp.c begin */
 
+/* W&S DP Functions */
+/* W&S DP Core Algorithm */
 int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
                          int *solution_array)
 {
@@ -835,7 +926,6 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
     solution_array[i] = best_pair->solution_array[i];
   }
 
-
   /* Clean up */
   current = head;
   while (current != NULL)
@@ -849,6 +939,7 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
   return max_profit;
 }
 
+/* W&S DP: Linked list push function */
 void push(struct solution_pair** head_ref, int new_weight, int new_profit,
           int n)
 {
@@ -901,6 +992,7 @@ void push(struct solution_pair** head_ref, int new_weight, int new_profit,
   (*head_ref) = new_solution_pair;
 }
 
+/* W&S DP: Remove Dominated Pairs */
 void remove_dominated_pairs(struct solution_pair** head_ref)
 {
  /***remove_dominated_pairs documentation*************************************
@@ -947,6 +1039,7 @@ void remove_dominated_pairs(struct solution_pair** head_ref)
   }
 }
 
+/* Merge sort */
 void merge_sort(struct solution_pair** head_ref)
 {
  /* merge_sort: my adapation for solution pairs as originally described by    *
@@ -972,6 +1065,7 @@ void merge_sort(struct solution_pair** head_ref)
   *head_ref = sorted_merge(a, b);
 }
 
+/* Merge sort aux: sorted merge function */
 struct solution_pair* sorted_merge(struct solution_pair* a, 
                                    struct solution_pair* b)
 {
@@ -1015,6 +1109,7 @@ struct solution_pair* sorted_merge(struct solution_pair* a,
   return(result);
 }
 
+/* Merge sort aux: front/back split function */
 void front_back_split(struct solution_pair* source, 
                       struct solution_pair** front_ref, 
                       struct solution_pair** back_ref)
@@ -1049,6 +1144,7 @@ void front_back_split(struct solution_pair* source,
   }
 }
 
+/* Linked list printer function */
 void print_list(struct solution_pair* node)
 {
   while(node!=NULL)
@@ -1059,167 +1155,7 @@ void print_list(struct solution_pair* node)
 }
 
 
-/* williamson_shmoy_dp.c end */
-
-float define_K(double eps, int P, int n){
-  /* Description: 
-   *   Defines real valued scaling factor K. K is epsP/n. As eps approaches 0, K does too.  
-   *    As eps approaches 1, K approaches P/n. As eps exceeds 1, K scales progressively larger
-   *    than the n-way split of P.
-   * Inputs: 
-   *  
-   * Output:
-   *  
-   * Notes:
-   *  Epsilon can indeed exceed 1 as soon as epsilon hits 1 the lower bound guarantee on the
-   *   profit with respect to OPT drops completely and is bounded trivially by 0. As a result,
-   *   a stronger lower bound would be P at this point, however there is no guarantee on how
-   *   this adjusted P will look. It may well be positive but with increasing epsilon values 
-   *   it would seem that P's would be crushed to a low point. 
-   */
-  
-  // assert eps > 0
-  assert(eps > 0);
-  //assert(eps <= 1); TODO TURN THIS BACK ON???  
-
-  double K = (eps*P)/n;
-  // define K
-
-  return K;
-  // return K
-}
-
-void make_profit_primes(int profits[], int profits_prime[], double K, int n,
-                        const int *variable_statuses){
- /* 
-  * Description: 
-  *  Derives the adjusted profits set profits', which is made by scaling every
-  *   profit down by 1/K and flooring the result.
-  * Inputs:
-  *
-  * Postconditions:
-  *  
-  * Notes:
-  *  As eps increases, K increases, and so the profit' of each item will get scaled further
-  *   and further downwards. Since P is the max, it will be scaled to 1 for eps = 1 
-  *   
-  *   
-  */
-  
-  for(int i=0; i < n; i++)
-  {
-      double scaled_profit = profits[i]/K;
-      profits_prime[i] = floor(scaled_profit);
-  }
-}
-
-void make_symbolic_profit_primes(int profits[], int symbolic_profits_prime[], double K, int n,
-                        const int *variable_statuses){
- /* 
-  * Description: 
-  *  Derives the adjusted profits set profits', which is made by scaling every
-  *   profit down by 1/K and flooring the result, while zeroing constrained variables.
-  *   The process of forcing domination is the symbolic component of this.
-  * Inputs:
-  *
-  * Postconditions:
-  *  
-  * Notes:
-  *  As eps increases, K increases, and so the profit' of each item will get scaled further
-  *   and further downwards. Since P is the max, it will be scaled to 1 for eps = 1 
-  *   
-  */
-  
-  for(int i=0; i < n; i++)
-  {
-    if(variable_statuses[i] == VARIABLE_UNCONSTRAINED)
-    {
-      double scaled_profit = profits[i]/K;
-      symbolic_profits_prime[i] = floor(scaled_profit);
-    }
-    else
-      symbolic_profits_prime[i] = VARIABLE_OFF; // We just make the item dominated
-  }
-}
-/*
-
-void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x, char *problem_file){ 
-  /* 
-   * Description:
-   *   Reads pisinger's csv knapsack instances into arrays. This does not work 
-   *    on his automatically generated instances.
-   * Inputs:
-   *
-   * Notes:
-   * 
-   *
-  FILE *fp;
-  char str[256];
-  char * pch;
-
-  fp = fopen(problem_file, "r");
-
-  /* Get n *
-  if (fp == NULL) 
-  {
-    printf("Problem opening the file!\n");
-    exit(EXIT_FAILURE);
-  }
-  while (fgets(str, sizeof(str), fp)){
-    if (str[0] == 'n'){
-      pch = strtok(str, " ");
-      pch = strtok(NULL, " ");
-      *n = atoi(pch);
-      break;
-    }
-  }
-
-  int *tmp_p = (int *)malloc(*n * sizeof(*tmp_p));
-  int *tmp_w = (int *)malloc(*n * sizeof(*tmp_w));
-  int *tmp_x = (int *)malloc(*n * sizeof(*tmp_x));
-
-  int counter=0;
-  if (fp == NULL) exit(EXIT_FAILURE);
-  while ((fgets(str, sizeof(str), fp))&&(counter<*n)){
-
-  if(str[0] == 'c'){
-      pch = strtok(str, " ");
-      pch = strtok(NULL, " ");
-      *c = atoi(pch);
-  }else if (str[0] == 'z'){
-      pch = strtok(str, " ");   
-      pch = strtok(NULL, " ");
-      *z = atoi(pch);
-  }else if (!((str[0] == 'n')
-            ||(str[0] == 'z')
-            ||(str[0] == 'k')
-            ||(str[0] == 't'))){
-
-      pch = strtok(str, ",");
-      pch = strtok(NULL, ",");
-
-      tmp_p[counter] = atoi(pch);
-
-      pch = strtok(NULL, ",");
-
-      tmp_w[counter] = atoi(pch);
-
-      pch = strtok(NULL, ",");
-
-      tmp_x[counter] = atoi(pch);
-
-      counter += 1;
-
-    }
-  }
-  fclose(fp);
-
-  *p = tmp_p;
-  *w = tmp_w;
-  *x = tmp_x;
-}
-*/
-
+/* Pisinger reader */
 void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x, 
                      char *problem_file, int problem_number)
 { 

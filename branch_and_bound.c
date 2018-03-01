@@ -1,4 +1,5 @@
 /**branch_and_bound_KP.c*******************************************************
+ * THIS IS NOT USED ANYMORE!                                                  *
  * Goodluck, yo.                                                              *
  * Thought: maintain a static variable to make a low-maintenance DS for       *
  *   a problem instance list                                                  *
