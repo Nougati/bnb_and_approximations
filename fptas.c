@@ -17,6 +17,7 @@
 /* Preprocessor definitions */
 #define VASIRANI 0
 #define WILLIAMSON_SHMOY 1
+#define SMART_DP 2
 #define INDEX_NOTATION 0
 #define BINARY_NOTATION 1
 #define HYPER_TRIVIAL_BOUND 1
@@ -308,14 +309,18 @@ int main(int argc, char *argv[]){
     }
 
     /* Output results */
-    if(output_flag == TRUE){
+    if(output_flag == TRUE)
+    {
       fprintf(fp_out, "%f, %s, %d, %f, %d, %d, %f%s\n", eps, problem_file, i, 
               time_taken, profitSprime, z, 
               (1-((float)profitSprime/(float)z))*100, "%");
       fclose(fp_out);
-    }else{
-     printf("%d/%d, epsilon: %f\ttime_taken:  %f\tdeviation: %s%f\n", profitSprime, z, eps, time_taken,
-            "%", (1-((float)profitSprime/(float)z))*100);
+    }
+    else
+    {
+      printf("%d/%d, epsilon: %f\ttime_taken:  %f\tdeviation: %s%f\n",
+             profitSprime, z, eps, time_taken, "%",
+             (1-((float)profitSprime/(float)z))*100);
     }
 
     /* Clean up */
@@ -380,7 +385,8 @@ void FPTAS(double eps,
 
   /* Symbolic profits (just for the computation) */
   int symbolic_profits_prime[n];
-  make_symbolic_profit_primes(profits, symbolic_profits_prime, *K, n, variable_statuses);
+  make_symbolic_profit_primes(profits, symbolic_profits_prime, *K, n, 
+                              variable_statuses);
 
   /* Adjust capacity according to nodes constrained to be in */
   for (int i = 0; i < n; i++)
@@ -393,8 +399,8 @@ void FPTAS(double eps,
   {
     /* Now with amended profits list "profit_primes," solve the DP */
     if (DP_method == VASIRANI)
-      DP(symbolic_profits_prime, weights, x, sol_prime, n, capacity, z, sol_flag, 
-         bounding_method, problem_file);
+      DP(symbolic_profits_prime, weights, x, sol_prime, n, capacity, z, 
+         sol_flag, bounding_method, problem_file);
 
     else if (DP_method == WILLIAMSON_SHMOY)
     {
@@ -407,15 +413,6 @@ void FPTAS(double eps,
       }
       int result = williamson_shmoys_DP(items_prime, capacity, n, sol_prime);
 
-      /* Okay this is bad, but I made an assumption in W&S DP that the first item would fit. */
-      int weight = 0;
-      for (int i = 0; i < n; i++) if (sol_prime[i]) weight += weights[i];
-      if (weight > capacity) 
-      {
-        for (int i = 0; i < n; i++)
-          sol_prime[i] = 0;
-        return;
-      }
     }
     for(int i = 0; i < n; i++) 
       if(variable_statuses[i] == VARIABLE_ON)
@@ -427,30 +424,20 @@ void FPTAS(double eps,
 /* FPTAS: Define K */
 float define_K(double eps, int P, int n){
   /* Description: 
-   *   Defines real valued scaling factor K. K is epsP/n. As eps approaches 0, K does too.  
-   *    As eps approaches 1, K approaches P/n. As eps exceeds 1, K scales progressively larger
-   *    than the n-way split of P.
-   * Inputs: 
-   *  
-   * Output:
-   *  
+   *   Defines real valued scaling factor K. K is epsP/n. As eps approaches 0,
+   *   K does too. As eps approaches 1, K approaches P/n. As eps exceeds 1, K 
+   *   scales progressively larger than the n-way split of P.
    * Notes:
-   *  Epsilon can indeed exceed 1 as soon as epsilon hits 1 the lower bound guarantee on the
-   *   profit with respect to OPT drops completely and is bounded trivially by 0. As a result,
-   *   a stronger lower bound would be P at this point, however there is no guarantee on how
-   *   this adjusted P will look. It may well be positive but with increasing epsilon values 
-   *   it would seem that P's would be crushed to a low point. 
+   *  Epsilon can indeed exceed 1 as soon as epsilon hits 1 the lower bound
+   *  guarantee on the profit with respect to OPT drops completely and is 
+   *  bounded trivially by 0. As a result, a stronger lower bound would be P at
+   *  this point, however there is no guarantee on how this adjusted P will look. 
+   *  It may well be positive but with increasing epsilon values it would seem 
+`  *  that P's would be crushed to a low point. 
    */
-  
-  // assert eps > 0
   assert(eps > 0);
-  //assert(eps <= 1); TODO TURN THIS BACK ON???  
-
   double K = (eps*P)/n;
-  // define K
-
   return K;
-  // return K
 }
 
 /* FPTAS: Make profit primes */
@@ -478,11 +465,9 @@ void make_profit_primes(int profits[], int profits_prime[], double K, int n,
   }
 }
 
-/* FPTAS: Make symbolic profit primes function */
-void make_symbolic_profit_primes(int profits[], int symbolic_profits_prime[], double K, int n,
-                        const int *variable_statuses){
- /* 
-  * Description: 
+/* FPTAS: Make symbolic profit primes function */ 
+void make_symbolic_profit_primes(int profits[], int symbolic_profits_prime[], double K, int n, const int *variable_statuses){ 
+ /* Description: 
   *  Derives the adjusted profits set profits', which is made by scaling every
   *   profit down by 1/K and flooring the result, while zeroing constrained variables.
   *   The process of forcing domination is the symbolic component of this.
@@ -573,8 +558,6 @@ void DP(const int problem_profits[], // profit primes?
   for(int i = 0; i < (n+1); i++)
     DP_table[i] = (*DP_table + p_upper_bound * i);
 
-  printf("DP table is %d * %d\n", (n+1),  p_upper_bound);
-
   // Compute base cases
   DP_fill_in_base_cases(p_upper_bound,
                         n+1,
@@ -603,8 +586,8 @@ void DP(const int problem_profits[], // profit primes?
                                            sol,
                                            p,
                                            sol_flag);
-  free(DP_table);
   free(DP_table[0]);
+  free(DP_table);
 }
 
 /* Vasirani DP: Derive upper bound P (table width) */
@@ -881,12 +864,17 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
   struct solution_pair* head = NULL;
   struct solution_pair* current; 
   push(&head, 0, 0, n);
-  /* ASSUMPTION MADE: the 0'th item will feasibly fit! */
-  push(&head, items[0].weight, items[0].profit, n);
-  head->solution_array[0] = 1;
+
+
+  /* WIP Section */
+  int first_index = 0;
+  while (items[first_index++].weight >= capacity)
+    ;
+  push(&head, items[first_index-1].weight, items[first_index-1].profit, n);
+  head->solution_array[first_index-1] = 1;
 
   /* General case */
-  for(int j=1; j < n; j++)
+  for(int j=first_index; j < n; j++)
   {
     current = head;
     while(current != NULL)

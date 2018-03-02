@@ -1,8 +1,8 @@
 /******************************************************************************
  * TODO:                                                                      *
- *   -                                                                        *
- *   -                                                                        *
- *                                                                            *
+ *   - This doesn't work with epsilons that are big                           *
+ *   - Update the logger so that it logs node IDs so I can locate who is      *
+ *      spawning who.                                                         *
  *                                                                            *
  ******************************************************************************/
 /* Preprocessor definitions */
@@ -19,6 +19,10 @@
 #define TRUNCATION_BRANCHING 2
 #define TRUE 1
 #define FALSE 0
+#define NO_LOGGING 0 
+#define PARTIAL_LOGGING 1
+#define FULL_LOGGING 2
+#define FILE_LOGGING 3
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -46,10 +50,13 @@ typedef struct queue
 
 /* Branch and Bound Declarations */
 Problem_Instance *define_root_node(int n);
+
 void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                                    int capacity, int z, int *z_out, int sol_out[],
                                    int n, char *problem_file, 
-                                   int branching_strategy, time_t seed);
+                                   int branching_strategy, time_t seed,
+                                   int DP_method, int logging_rule, 
+                                   FILE *logging_stream, double epsilon);
 
 int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z, 
                                int n, int capacity, char *problem_file);
@@ -65,7 +72,8 @@ Problem_Instance *select_and_dequeue_node(Problem_Queue *node_queue);
 
 void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
                  int x[], int capacity, int n, int z, int *lower_bound_ptr, 
-                 int *upper_bound_ptr, char *problem_file);
+                 int *upper_bound_ptr, char *problem_file, int DP_method,
+                 int logging_rule, FILE *logging_stream, double eps);
 
 void post_order_tree_clean(Problem_Instance *root_node);
 
@@ -97,41 +105,89 @@ int main(int argc, char *argv[]) {
   if(argc == 2 && (strcmp(argv[1], "help") == 0))
   {
     printf("Branch strategy flags:\n\t-rb: random branching\n\t-le: linear enu"
-           "meration\n\t-tb: truncation branching \n");
+           "meration\n\t-tb: truncation branching \nDP Options:\n\t-ws: force "
+           "Williamson & Shmoy's DP\n\t-vv: force Vasirani's DP\n\t-smart: let"
+           " the program decide.\n\tLogging rule:\n\t-off: do not log anything"
+           ".\n\t-console_some: log the big actions of the program to console."
+           "\n\t-console_all: log basically all actions to console\n\t<filenam"
+           "e>: specify a file to write to.\nEpsilon:\n\t0 to leave it to algo"
+           "rithm, else input an eps > 0.\n");
     exit(0);
   }
-  if(argc != 4 && argc != 5)
+  if(argc != 7 && argc != 8)
   { 
-    printf("Format:\n %s <filename> <problem_no> <branching strategy>\n", argv[0]);
-    printf("or\n %s <filename> -rb <seed>\n", argv[0]);
+    printf("Format:\n %s <filename> <problem_no> <DP> <logging rule> <epsilon> <branching strategy>\n", argv[0]);
+    printf("or\n %s <filename> <problem_no> <DP> <logging rule> <epsilon> -rb <seed>\n", argv[0]);
     exit(0);
   }
   
   int problem_no = atoi(argv[2]);
 
+  /* Specify DP method */
+  int DP_method = -1;
+  if(strcmp(argv[3], "-ws") == 0)
+    DP_method = WILLIAMSON_SHMOY;
+  else if (strcmp(argv[3], "-vv") == 0)
+    DP_method = VASIRANI;
+  else if (strcmp(argv[3], "-smart") == 0)
+    DP_method = SMART_DP; 
+  else
+  {
+    printf("Unrecognised DP flag!\nExiting...\n");
+    exit(-1);
+  }
+  
+  /* Specify logging */
+  int logging_rule = -1;
+  FILE * logging_stream;
+  if(strcmp(argv[4], "-off") == 0)
+  {  
+    logging_rule = NO_LOGGING;
+    logging_stream = NULL;
+  }
+  else if(strcmp(argv[4], "-console_some") == 0)
+  {
+    logging_rule = PARTIAL_LOGGING;
+    logging_stream = stdout;
+  }
+  else if(strcmp(argv[4], "-console_all") == 0)
+  { 
+    logging_rule = FULL_LOGGING; 
+    logging_stream = stdout;
+  }
+  else
+  {
+    logging_rule = FULL_LOGGING;
+    logging_stream = fopen(argv[4], "a");
+  }
+
+  /* Epsilon choice */
+  double epsilon = 0.02;
+  sscanf(argv[5], "%lf", &epsilon);
+
   /* Designate branching strategy variable */
   int branching_strategy;
   time_t seed;
-  if(strcmp(argv[3], "-rb") == 0)
+  if(strcmp(argv[6], "-rb") == 0)
   {
     branching_strategy = RANDOM_BRANCHING;
-    if (argc != 5)
+    if (argc != 8)
     {
       printf("Please define a seed!\n For random branching after the -rb flag,"
              " or input \"auto\"\n to allow the program to generate one based "
              "on time(NULL).\n");
       exit(-1);
     }
-    if (strcmp(argv[4], "auto") == 0)
+    if (strcmp(argv[7], "auto") == 0)
       seed = time(NULL);
     else seed = (time_t) atoi(argv[3]);
   }
-  else if(strcmp(argv[3], "-le") == 0)
+  else if(strcmp(argv[6], "-le") == 0)
   {
     branching_strategy = LINEAR_ENUM_BRANCHING;
     seed = 0;
   }
-  else if(strcmp(argv[3], "-tb") == 0)
+  else if(strcmp(argv[6], "-tb") == 0)
   {
     branching_strategy = TRUNCATION_BRANCHING;
     seed = 0;
@@ -157,7 +213,8 @@ int main(int argc, char *argv[]) {
   /* Solve the problem */
   branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, problem_file, branching_strategy,
-                                seed); 
+                                seed, DP_method, logging_rule, logging_stream, 
+                                epsilon); 
 
   /* Stop timer */
   t = clock() - t;
@@ -183,8 +240,15 @@ int main(int argc, char *argv[]) {
 void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                                    int capacity, int z, int *z_out, 
                                    int sol_out[], int n, char *problem_file, 
-                                   int branching_strategy, time_t seed)
+                                   int branching_strategy, time_t seed, 
+                                   int DP_method, int logging_rule, 
+                                   FILE *logging_stream, double eps)
 { 
+  /* Logging functionality */
+  if(logging_rule != NO_LOGGING)
+    fprintf(logging_stream, "Starting Branch and Bound! Problem: %s\n",
+            problem_file);
+
   int count = 0;
   int branching_variable;
   Problem_Queue *node_queue = create_queue(n);
@@ -193,10 +257,18 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
   Problem_Instance *current_node;
   int first_iteration = TRUE;
   int global_lower_bound;
-
+  int iterations = 0;
   /* While our node queue is not empty: */
   while((first_iteration) || (node_queue->size >= 1))
   {
+    iterations++;
+    /* Logging functionality */
+    if(logging_rule != NO_LOGGING)
+      fprintf(logging_stream, "\nStarting loop iteration %d (Node queue size: %d"
+              ")\n", iterations, node_queue->size);
+
+
+    /* Get next node */
     if(first_iteration)
     {
       current_node = root_node;
@@ -206,6 +278,9 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                                                   n, capacity, problem_file);
       current_node->lower_bound = global_lower_bound;
       first_iteration = FALSE;
+      if(logging_rule != NO_LOGGING)
+        fprintf(logging_stream, "\tRoot node bounds established. GLB: %d", 
+                global_lower_bound);
     }
     else
     {
@@ -215,34 +290,67 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
       /* Derive the LB and UB for node N with the FPTAS */
       find_bounds(current_node, profits, weights, x, capacity, n, z,
                   &current_node->lower_bound, &current_node->upper_bound,
-                  problem_file);
+                  problem_file, DP_method, logging_rule, logging_stream, eps);
+
+      if(logging_rule != NO_LOGGING)
+        fprintf(logging_stream, "\tNode bounds established: lower: %d, upper: %d"
+                                " (GLB: %d)\n", current_node->lower_bound, 
+                                current_node->upper_bound, global_lower_bound);
     }
 
     /* If UB < GLB, we safely prune this branch and continue to loop */
     if ((current_node->ID != 0) && 
         ((current_node->upper_bound <= global_lower_bound) || 
          (current_node->upper_bound > current_node->parent->upper_bound)))  
+    {
+      if(logging_rule != NO_LOGGING)
+        fprintf(logging_stream, "\tUpper bound is lower that GLB! Pruning node b"
+                "ranch.\n");
       continue;
+    }
 
     /* If LB > GLB, we set GLB = LB */
     if (current_node->lower_bound > global_lower_bound)
+    {
       global_lower_bound = current_node->lower_bound;
+
+      if(logging_rule != NO_LOGGING)
+        fprintf(logging_stream, "\tLB > GLB: Improving GLB to %d.\n", global_lower_bound);
+    }
 
     /* If for N's parent's upper bound, UB_p, UB > UB_p, UB = UB_p */
     if (current_node->ID != 0 &&
         current_node->upper_bound > current_node->parent->upper_bound)
+    {
+      if(logging_rule != NO_LOGGING)
+        fprintf(logging_stream, "\tParent's upper bound is lower; reducing thi"
+                "s node's upper bound from %d to %d\n", 
+                current_node->upper_bound, current_node->parent->upper_bound);
+
       current_node->upper_bound = current_node->parent->upper_bound;
+    }
 
     /* If UB > GLB, we branch on the variable */
     if (current_node->upper_bound > global_lower_bound)
     {
+      if(logging_rule != NO_LOGGING)
+        fprintf(logging_stream, "\tUB > GLB; branching on variable.\n");
+
       branching_variable = find_branching_variable(n, z, 
                                               current_node->variable_statuses,
                                               branching_strategy, profits);
       if (branching_variable == -1) 
+      {
+        if(logging_rule != NO_LOGGING)
+          fprintf(logging_stream, "\tNo variables left to constrain. Continuin"
+                  "g...\n");
         continue;
+      }
       generate_and_enqueue_nodes(current_node, n, branching_variable, 
                                  node_queue, &count);
+      if(logging_rule != NO_LOGGING)
+        fprintf(logging_stream, "\t Branched on variable %d and put two new no"
+                "des in the queue...\n", branching_variable);
     }
   }
   #ifndef TESTING
@@ -418,20 +526,34 @@ Problem_Instance *select_and_dequeue_node(Problem_Queue *node_queue)
 /* General case node bounds derivation algorithm */
 void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
                  int x[], int capacity, int n, int z, int *lower_bound_ptr, 
-                 int *upper_bound_ptr, char *problem_file)
+                 int *upper_bound_ptr, char *problem_file, int DP_method, 
+                 int logging_rule, FILE *logging_stream, double eps)
 { 
   /* lower_bound_ptr and upper_bound_ptr are both output parameters */
   /* Solve the FPTAS with current node */
-  double eps = 0.002;
+  if (eps == 0.0) eps = 0.002;
   double K;
   int sol_prime[n];
   for (int i = 0; i < n; i++) sol_prime[i] = 0;
   int *profits_prime = (int *) malloc(n * sizeof(*profits_prime));
 
   /* Run the FPTAS */
-  FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z,
-        BINARY_SOL, SIMPLE_SUM, problem_file, &K, profits_prime, 
-        WILLIAMSON_SHMOY, current_node->variable_statuses);
+  if(DP_method == SMART_DP)
+  {
+    printf("SMART DYNAMIC PROGRAAAAAAAAAAAMMING\n");
+    exit(-1);
+  }
+  else
+  {
+    if(logging_rule == FULL_LOGGING)
+      fprintf(logging_stream, "\t\tCalling FPTAS for bounds (epsilon: %f, meth"
+              "od: %s\n", eps, DP_method==VASIRANI ? "Vasirani" : "Williamson "
+              "& Shmoys)");
+
+    FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z,
+          BINARY_SOL, SIMPLE_SUM, problem_file, &K, profits_prime, 
+          DP_method, current_node->variable_statuses);
+  }
 
   /* Then, from the solution sets returned from the FPTAS, derive bounds */
   int fptas_lower_bound = 0;
@@ -452,6 +574,8 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
   free(profits_prime);
 }
 
+
+/* Post order node freeing algorithm */
 void post_order_tree_clean(Problem_Instance *node)
 {
   /* Todo this I need the pointers to the children too */
