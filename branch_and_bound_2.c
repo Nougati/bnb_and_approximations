@@ -698,11 +698,11 @@ void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem)
     queue->tail = new_item;
     queue->size = 1;
   }
-  /*else if(queue->size >= 15000000)
+  else if(queue->size >= 15000)
   {
-    printf("150,000,000 nodes in queue! Abandon ship!\n");
+    printf("15000 nodes in queue! Abandon ship!\n");
     exit(-1);
-  }*/
+  }
   else
   {
     new_item->in_front = queue->tail;
