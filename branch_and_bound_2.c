@@ -1,8 +1,6 @@
 /******************************************************************************
  * TODO:                                                                      *
- *   - This doesn't work with epsilons that are big                           *
- *   - Update the logger so that it logs node IDs so I can locate who is      *
- *      spawning who.                                                         *
+ *   - This doesn't work if the algo needs to just exhaustively search.       *
  *                                                                            *
  ******************************************************************************/
 /* Preprocessor definitions */
@@ -48,6 +46,22 @@ typedef struct queue
   struct p_instance** array;
 } Problem_Queue;
 
+/*WIP*/
+typedef struct linked_list_item
+{
+  struct linked_list_item *in_front;
+  struct linked_list_item *behind;
+  struct p_instance *problem;
+} LL_Node_Queue_Item;
+
+typedef struct linked_list_p_queue
+{
+  struct linked_list_item *head;
+  struct linked_list_item *tail;
+  int size;
+} LL_Problem_Queue;
+
+
 /* Branch and Bound Declarations */
 Problem_Instance *define_root_node(int n);
 
@@ -66,9 +80,9 @@ int find_branching_variable(int n, int z, int *read_only_variables,
 
 void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
                           int branching_variable, 
-                          Problem_Queue *problems_list, int *count);
+                          LL_Problem_Queue *problems_list, int *count);
 
-Problem_Instance *select_and_dequeue_node(Problem_Queue *node_queue);
+Problem_Instance *select_and_dequeue_node(LL_Problem_Queue *node_queue);
 
 void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
                  int x[], int capacity, int n, int z, int *lower_bound_ptr, 
@@ -92,6 +106,10 @@ Problem_Instance *front(Problem_Queue *queue);
 
 Problem_Instance *rear(Problem_Queue *queue);
 
+/* LL Queue Declarations */
+LL_Problem_Queue *LL_create_queue(void);
+void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem);
+Problem_Instance *LL_dequeue(LL_Problem_Queue *queue);
 
 /* Main function */
 #ifndef TESTING
@@ -230,6 +248,7 @@ int main(int argc, char *argv[]) {
   free(weights);
   free(x);
 
+  fclose(logging_stream);
   return 0;
 }
 #endif
@@ -251,13 +270,15 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
 
   int count = 0;
   int branching_variable;
-  Problem_Queue *node_queue = create_queue(n);
+  //Problem_Queue *node_queue = create_queue(n);
+  LL_Problem_Queue *node_queue = LL_create_queue(); 
   Problem_Instance *root_node = define_root_node(n);
   srand(seed);
   Problem_Instance *current_node;
   int first_iteration = TRUE;
   int global_lower_bound;
   int iterations = 0;
+
   /* While our node queue is not empty: */
   while((first_iteration) || (node_queue->size >= 1))
   {
@@ -293,8 +314,8 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                   problem_file, DP_method, logging_rule, logging_stream, eps);
 
       if(logging_rule != NO_LOGGING)
-        fprintf(logging_stream, "\tNode bounds established: lower: %d, upper: %d"
-                                " (GLB: %d)\n", current_node->lower_bound, 
+        fprintf(logging_stream, "\tNode %d (parent: %d) - bounds established: lower: %d, upper: %d"
+                                " (GLB: %d)\n", current_node->ID, current_node->parent->ID, current_node->lower_bound, 
                                 current_node->upper_bound, global_lower_bound);
     }
 
@@ -324,7 +345,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
     {
       if(logging_rule != NO_LOGGING)
         fprintf(logging_stream, "\tParent's upper bound is lower; reducing thi"
-                "s node's upper bound from %d to %d\n", 
+                "s node's upper bound from %d to %d\n",
                 current_node->upper_bound, current_node->parent->upper_bound);
 
       current_node->upper_bound = current_node->parent->upper_bound;
@@ -349,8 +370,8 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
       generate_and_enqueue_nodes(current_node, n, branching_variable, 
                                  node_queue, &count);
       if(logging_rule != NO_LOGGING)
-        fprintf(logging_stream, "\t Branched on variable %d and put two new no"
-                "des in the queue...\n", branching_variable);
+        fprintf(logging_stream, "\t Node %d branched on variable %d\n",
+                current_node->ID, branching_variable);
     }
   }
   #ifndef TESTING
@@ -359,7 +380,8 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
   *z_out = global_lower_bound;
 
   /* Total clean up */
-  free(node_queue->array);
+  /* TODO Translate this to new node queue format */
+  //free(node_queue->array);
   free(node_queue);
   post_order_tree_clean(root_node);
 }
@@ -372,13 +394,12 @@ int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z,
   double eps = 1.0;
   double K;
   int sol_prime[n]; 
-  for (int i = 0; i < n; i++) sol_prime[i] = 0; 
   int *profits_prime = (int *) malloc(n * sizeof(*profits_prime));
   int node_statuses[n];
   for (int i = 0; i < n; i++) node_statuses[i] = VARIABLE_UNCONSTRAINED;
 
   FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z,
-        BINARY_SOL, TRIVIAL_BOUND, problem_file, &K, profits_prime, 
+        BINARY_SOL, SIMPLE_SUM, problem_file, &K, profits_prime, 
         WILLIAMSON_SHMOY, node_statuses);
 
   int fptas_profit = 0;
@@ -467,7 +488,7 @@ Problem_Instance *define_root_node(int n)
 
 /* Generation and node enqueuing algorithm */
 void generate_and_enqueue_nodes(Problem_Instance *parent, int n, 
-                          int branching_variable, Problem_Queue *problems_list,
+                          int branching_variable, LL_Problem_Queue *problem_queue,
                           int *count)
 {
   /* This will just use the structure Problem_Queue to enqueue it */
@@ -510,16 +531,19 @@ void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
   generated_node_variable_off->off_child = NULL;
 
   /* Place into priority queue (for now just append) */
-  enqueue(problems_list, generated_node_variable_on);
-  enqueue(problems_list, generated_node_variable_off);
+  //enqueue(problems_list, generated_node_variable_on);
+  LL_enqueue(problem_queue, generated_node_variable_on);
+  //enqueue(problems_list, generated_node_variable_off);
+  LL_enqueue(problem_queue, generated_node_variable_off);
 }
 
 /* Node selection and dequeuing algorithm */
-Problem_Instance *select_and_dequeue_node(Problem_Queue *node_queue)
+Problem_Instance *select_and_dequeue_node(LL_Problem_Queue *node_queue)
 {
   /* This method is largely a placeholder */
   /* It doesn't do much yet, but I made this function to accomodate growth */
-  Problem_Instance *selected_node = dequeue(node_queue);
+  //Problem_Instance *selected_node = dequeue(node_queue);
+  Problem_Instance *selected_node = LL_dequeue(node_queue);
   return selected_node;
 }
 
@@ -534,7 +558,6 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
   if (eps == 0.0) eps = 0.002;
   double K;
   int sol_prime[n];
-  for (int i = 0; i < n; i++) sol_prime[i] = 0;
   int *profits_prime = (int *) malloc(n * sizeof(*profits_prime));
 
   /* Run the FPTAS */
@@ -650,5 +673,56 @@ Problem_Instance *rear(Problem_Queue *queue)
   if (is_empty(queue))
     return NULL;
   return queue->array[queue->rear];
+}
+
+
+/* LL Queue Data structure methods */
+/* LL Problem Queue method: create queue */
+LL_Problem_Queue *LL_create_queue(void)
+{
+  LL_Problem_Queue *queue = (LL_Problem_Queue*) malloc(sizeof(LL_Problem_Queue));
+  queue->head = NULL;
+  queue->tail = NULL;
+  queue->size = 0;
+  return queue;
+}
+
+/* LL Problem Queue method: enqueue */
+void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem)
+{
+  LL_Node_Queue_Item *new_item = (LL_Node_Queue_Item *) malloc(sizeof(LL_Node_Queue_Item));
+  new_item->problem = problem;
+  if(queue->size == 0)
+  {
+    queue->head = new_item;
+    queue->tail = new_item;
+    queue->size = 1;
+  }
+  /*else if(queue->size >= 15000000)
+  {
+    printf("150,000,000 nodes in queue! Abandon ship!\n");
+    exit(-1);
+  }*/
+  else
+  {
+    new_item->in_front = queue->tail;
+    queue->tail->behind = new_item;
+    queue->tail = new_item;
+    queue->size++;
+  }
+}
+
+/* LL Problem Queue method: dequeue */
+Problem_Instance *LL_dequeue(LL_Problem_Queue *queue)
+{
+  if(queue->size == 0)
+    return NULL;
+  
+  Problem_Instance *dequeued_problem = queue->head->problem;
+  LL_Node_Queue_Item *temp_node_pointer = queue->head->behind;
+  free(queue->head);
+  queue->head = temp_node_pointer;
+  queue->size -= 1;
+  return dequeued_problem;
 }
 

@@ -385,6 +385,7 @@ void FPTAS(double eps,
 
   /* Symbolic profits (just for the computation) */
   int symbolic_profits_prime[n];
+  for (int i = 0; i < n; i++) symbolic_profits_prime[i] = 0;
   make_symbolic_profit_primes(profits, symbolic_profits_prime, *K, n, 
                               variable_statuses);
 
@@ -862,13 +863,13 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
 
   /* Base case */
   struct solution_pair* head = NULL;
-  struct solution_pair* current; 
+  struct solution_pair* current = NULL; 
   push(&head, 0, 0, n);
 
 
   /* WIP Section */
   int first_index = 0;
-  while (items[first_index++].weight >= capacity)
+  while ((first_index < n) && items[first_index++].weight >= capacity)
     ;
   push(&head, items[first_index-1].weight, items[first_index-1].profit, n);
   head->solution_array[first_index-1] = 1;
