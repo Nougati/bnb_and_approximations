@@ -382,7 +382,6 @@ void FPTAS(double eps,
 
   /* Derive adjusted profits (and trivialise constrained nodes 0) */
   make_profit_primes(profits, profits_prime, *K, n, variable_statuses); 
-
   /* Symbolic profits (just for the computation) */
   int symbolic_profits_prime[n];
   for (int i = 0; i < n; i++) symbolic_profits_prime[i] = 0;
@@ -455,15 +454,16 @@ void make_profit_primes(int profits[], int profits_prime[], double K, int n,
   * Notes:
   *  As eps increases, K increases, and so the profit' of each item will get scaled further
   *   and further downwards. Since P is the max, it will be scaled to 1 for eps = 1 
-  *   
-  *   
   */
-  
-  for(int i=0; i < n; i++)
-  {
-      double scaled_profit = profits[i]/K;
-      profits_prime[i] = floor(scaled_profit);
-  }
+  if(K > 1)
+    for(int i=0; i < n; i++)
+    {
+        double scaled_profit = profits[i]/K;
+        profits_prime[i] = floor(scaled_profit);
+    }
+  else
+    for(int i = 0; i < n; i++)
+      profits_prime[i] = profits[i];
 }
 
 /* FPTAS: Make symbolic profit primes function */ 
@@ -481,16 +481,30 @@ void make_symbolic_profit_primes(int profits[], int symbolic_profits_prime[], do
   *   and further downwards. Since P is the max, it will be scaled to 1 for eps = 1 
   *   
   */
-  
-  for(int i=0; i < n; i++)
-  {
-    if(variable_statuses[i] == VARIABLE_UNCONSTRAINED)
+  if(K > 1)
+  { 
+    for(int i=0; i < n; i++)
     {
-      double scaled_profit = profits[i]/K;
-      symbolic_profits_prime[i] = floor(scaled_profit);
+      if(variable_statuses[i] == VARIABLE_UNCONSTRAINED)
+      {
+        double scaled_profit = profits[i]/K;
+        symbolic_profits_prime[i] = floor(scaled_profit);
+      }
+      else
+        symbolic_profits_prime[i] = VARIABLE_OFF; // We just make the item dominated
     }
-    else
-      symbolic_profits_prime[i] = VARIABLE_OFF; // We just make the item dominated
+  }
+  else
+  {
+    for(int i = 0; i < n; i++)
+    {
+      if(variable_statuses[i] == VARIABLE_UNCONSTRAINED)
+      {
+        symbolic_profits_prime[i] = profits[i];
+      }
+      else
+        symbolic_profits_prime[i] = VARIABLE_OFF;
+    } 
   }
 }
 

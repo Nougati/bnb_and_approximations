@@ -21,6 +21,7 @@
 #define PARTIAL_LOGGING 1
 #define FULL_LOGGING 2
 #define FILE_LOGGING 3
+#define NODE_OVERFLOW 1500000
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -80,7 +81,8 @@ int find_branching_variable(int n, int z, int *read_only_variables,
 
 void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
                           int branching_variable, 
-                          LL_Problem_Queue *problems_list, int *count);
+                          LL_Problem_Queue *problems_list, int *count, 
+                          FILE *logging_stream, int logging_rule);
 
 Problem_Instance *select_and_dequeue_node(LL_Problem_Queue *node_queue);
 
@@ -108,7 +110,7 @@ Problem_Instance *rear(Problem_Queue *queue);
 
 /* LL Queue Declarations */
 LL_Problem_Queue *LL_create_queue(void);
-void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem);
+void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem, FILE *logging_stream, int logging_rule);
 Problem_Instance *LL_dequeue(LL_Problem_Queue *queue);
 
 /* Main function */
@@ -264,9 +266,18 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                                    FILE *logging_stream, double eps)
 { 
   /* Logging functionality */
+  time_t t = time(NULL);
+  struct tm tm = *localtime(&t);
   if(logging_rule != NO_LOGGING)
-    fprintf(logging_stream, "Starting Branch and Bound! Problem: %s\n",
-            problem_file);
+  {
+    fprintf(logging_stream, "▁ ▂ ▄ ▅ ▆ ▇ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █"
+                            " █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ ▇ ▆ ▅ "
+                            "▄ ▂ ▁\n"); 
+    fprintf(logging_stream, "(¯`·.¸¸.·´¯`·.¸¸.-> [ %d-%d-%d %d:%d:%d - Startin"
+                            "g B&B Problem %s] <-.¸¸.·´¯`·.¸¸.·´¯) \nƐ: %lf\n", 
+            tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min,
+            tm.tm_sec, problem_file, eps);
+  }
 
   int count = 0;
   int branching_variable;
@@ -283,11 +294,11 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
   while((first_iteration) || (node_queue->size >= 1))
   {
     iterations++;
+
     /* Logging functionality */
     if(logging_rule != NO_LOGGING)
       fprintf(logging_stream, "\nStarting loop iteration %d (Node queue size: %d"
               ")\n", iterations, node_queue->size);
-
 
     /* Get next node */
     if(first_iteration)
@@ -314,9 +325,11 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                   problem_file, DP_method, logging_rule, logging_stream, eps);
 
       if(logging_rule != NO_LOGGING)
-        fprintf(logging_stream, "\tNode %d (parent: %d) - bounds established: lower: %d, upper: %d"
-                                " (GLB: %d)\n", current_node->ID, current_node->parent->ID, current_node->lower_bound, 
-                                current_node->upper_bound, global_lower_bound);
+        fprintf(logging_stream, "\tNode %d (parent: %d) - bounds established: "
+                                "lower: %d, upper: %d (GLB: %d)\n", 
+                current_node->ID, current_node->parent->ID, 
+                current_node->lower_bound, current_node->upper_bound,
+                global_lower_bound);
     }
 
     /* If UB < GLB, we safely prune this branch and continue to loop */
@@ -336,7 +349,8 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
       global_lower_bound = current_node->lower_bound;
 
       if(logging_rule != NO_LOGGING)
-        fprintf(logging_stream, "\tLB > GLB: Improving GLB to %d.\n", global_lower_bound);
+        fprintf(logging_stream, "\tLB > GLB: Improving GLB to %d.\n", 
+                global_lower_bound);
     }
 
     /* If for N's parent's upper bound, UB_p, UB > UB_p, UB = UB_p */
@@ -368,7 +382,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
         continue;
       }
       generate_and_enqueue_nodes(current_node, n, branching_variable, 
-                                 node_queue, &count);
+                                 node_queue, &count, logging_stream, logging_rule);
       if(logging_rule != NO_LOGGING)
         fprintf(logging_stream, "\t Node %d branched on variable %d\n",
                 current_node->ID, branching_variable);
@@ -378,10 +392,12 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
   printf("No of nodes: %d\n", count);
   #endif
   *z_out = global_lower_bound;
-
+  if(logging_rule != NO_LOGGING)
+    fprintf(logging_stream, "\nAlgorithm finished! Result: %d / %d, %d nodes g"
+                            "enerated.\n▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄"
+                            "▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n\n", *z_out, 
+            z, count);
   /* Total clean up */
-  /* TODO Translate this to new node queue format */
-  //free(node_queue->array);
   free(node_queue);
   post_order_tree_clean(root_node);
 }
@@ -489,7 +505,7 @@ Problem_Instance *define_root_node(int n)
 /* Generation and node enqueuing algorithm */
 void generate_and_enqueue_nodes(Problem_Instance *parent, int n, 
                           int branching_variable, LL_Problem_Queue *problem_queue,
-                          int *count)
+                          int *count, FILE *logging_stream, int logging_rule)
 {
   /* This will just use the structure Problem_Queue to enqueue it */
   /* Allocate for each node */
@@ -532,9 +548,9 @@ void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
 
   /* Place into priority queue (for now just append) */
   //enqueue(problems_list, generated_node_variable_on);
-  LL_enqueue(problem_queue, generated_node_variable_on);
+  LL_enqueue(problem_queue, generated_node_variable_on, logging_stream, logging_rule);
   //enqueue(problems_list, generated_node_variable_off);
-  LL_enqueue(problem_queue, generated_node_variable_off);
+  LL_enqueue(problem_queue, generated_node_variable_off, logging_stream, logging_rule);
 }
 
 /* Node selection and dequeuing algorithm */
@@ -585,11 +601,12 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
     if (sol_prime[i] == 1)
     {
       fptas_lower_bound += profits[i];
-      fptas_upper_bound += K * profits_prime[i];
+      if (K > 1)  
+        fptas_upper_bound += K * profits_prime[i];
+      else
+        fptas_upper_bound += profits[i];
     }
   fptas_upper_bound += n*K; 
-  //printf(", LB: %d, UB: %lf, ", fptas_lower_bound, fptas_upper_bound);
-  //fptas_upper_bound /= (1-eps);
 
   *lower_bound_ptr = fptas_lower_bound;
   *upper_bound_ptr = (int) fptas_upper_bound;
@@ -688,7 +705,7 @@ LL_Problem_Queue *LL_create_queue(void)
 }
 
 /* LL Problem Queue method: enqueue */
-void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem)
+void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem, FILE *logging_stream, int logging_rule)
 {
   LL_Node_Queue_Item *new_item = (LL_Node_Queue_Item *) malloc(sizeof(LL_Node_Queue_Item));
   new_item->problem = problem;
@@ -698,9 +715,11 @@ void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem)
     queue->tail = new_item;
     queue->size = 1;
   }
-  else if(queue->size >= 15000)
+  else if(queue->size >= NODE_OVERFLOW)
   {
-    printf("15000 nodes in queue! Abandon ship!\n");
+    printf("%d nodes in queue! Abandon ship!\n", NODE_OVERFLOW);
+    if(logging_rule != NO_LOGGING)
+      fprintf(logging_stream, "NODE OVERFLOW AAAAAAAAAAAAAAAAAAAHH-- \n");
     exit(-1);
   }
   else
