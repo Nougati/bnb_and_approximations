@@ -1,621 +1,747 @@
-/**branch_and_bound_KP.c*******************************************************
- * THIS IS NOT USED ANYMORE!                                                  *
- * Goodluck, yo.                                                              *
- * Thought: maintain a static variable to make a low-maintenance DS for       *
- *   a problem instance list                                                  *
- * Using Kprofit'(S') as a replacement to the LP relaxation may have been     *
- *  something that slipped straight past me.                                  *
- * TODO                                                                       *
- *   I don't think we actually need profits and weights for each              *
- *    Problem_Instance                                                        *
+/******************************************************************************
+ * TODO:                                                                      *
+ *   - This doesn't work if the algo needs to just exhaustively search.       *
  *                                                                            *
  ******************************************************************************/
-
-#define TESTING
+/* Preprocessor definitions */
+#define INCLUDE_FPTAS
+#define nP 1
+#define SIMPLE_SUM 2
+#define RATIO_BOUND 3
+#define BINARY_SOL 1
 #define VARIABLE_ON 2
 #define VARIABLE_UNCONSTRAINED 1
 #define VARIABLE_OFF 0
-#include<stdio.h>
+#define LINEAR_ENUM_BRANCHING 0
+#define RANDOM_BRANCHING 1
+#define TRUNCATION_BRANCHING 2
+#define TRUE 1
+#define FALSE 0
+#define NO_LOGGING 0 
+#define PARTIAL_LOGGING 1
+#define FULL_LOGGING 2
+#define FILE_LOGGING 3
+#define NODE_OVERFLOW 1500000
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <limits.h>
 #include "fptas.c"
 
-
-typedef struct p_solution{
-  int profit;
-  int sol[];
-} Partial_Solution;
-
-typedef struct p_instance {
-  int *profits;
-  int *weights;
-  int capacity;
-  int z_opt;
-  int *x_opt;
-  int *turned_on_variables;
-  int *read_only_variables; 
-  float epsilon;
-  int branched_variable;
-  int branched_variable_status;
-  int depth;
+/* Structure Declarations */
+typedef struct p_instance
+{
+  struct p_instance *parent;
+  int *variable_statuses;
+  int lower_bound;
+  int upper_bound;
+  int ID;
+  struct p_instance *on_child;
+  struct p_instance *off_child;
 } Problem_Instance;
 
-void branch_and_bound_KP(int profits[], int weights[], int capacity, int *z_out,
-                         int sol_out[], int n, char *problem_file);
-
-void generate_node(Problem_Instance* current_node, Problem_Instance **problems,
-                  int *problem_instance_length, int number_of_nodes_to_generate,
-                  float epsilon, int max_profit, int n, int *sol_prime);
-
-void generate_node_v2(Problem_Instance *current_node, 
-                      Problem_Instance **problems, int *problem_instance_length, 
-                      int number_of_nodes_to_generate, float epsilon,
-                      int max_profit, int n, int *sol_prime);
-
-void generate_node_v3(Problem_Instance *current_node, 
-                      Problem_Instance **problems, int *problem_instance_length,
-                      int number_of_nodes_to_generate, float epsilon,
-                      int max_profit, int n, int *sol_prime, 
-                      char *problem_name);
-
-Problem_Instance *select_node(Problem_Instance *nodes[], int *end_of_list);
-
-Problem_Instance *select_node_priority_to_upnodes(Problem_Instance *nodes[],
-                                                  int *end_of_list);
-
-int main(int argc, char *argv[])
+typedef struct queue 
 {
+  int front, rear, size, capacity;
+  struct p_instance** array;
+} Problem_Queue;
+
+/*WIP*/
+typedef struct linked_list_item
+{
+  struct linked_list_item *in_front;
+  struct linked_list_item *behind;
+  struct p_instance *problem;
+} LL_Node_Queue_Item;
+
+typedef struct linked_list_p_queue
+{
+  struct linked_list_item *head;
+  struct linked_list_item *tail;
+  int size;
+} LL_Problem_Queue;
+
+
+/* Branch and Bound Declarations */
+Problem_Instance *define_root_node(int n);
+
+void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
+                                   int capacity, int z, int *z_out, int sol_out[],
+                                   int n, char *problem_file, 
+                                   int branching_strategy, time_t seed,
+                                   int DP_method, int logging_rule, 
+                                   FILE *logging_stream, double epsilon);
+
+int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z, 
+                               int n, int capacity, char *problem_file);
+
+int find_branching_variable(int n, int z, int *read_only_variables, 
+                            int branching_strategy, int *profits);
+
+void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
+                          int branching_variable, 
+                          LL_Problem_Queue *problems_list, int *count, 
+                          FILE *logging_stream, int logging_rule);
+
+Problem_Instance *select_and_dequeue_node(LL_Problem_Queue *node_queue);
+
+void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
+                 int x[], int capacity, int n, int z, int *lower_bound_ptr, 
+                 int *upper_bound_ptr, char *problem_file, int DP_method,
+                 int logging_rule, FILE *logging_stream, double eps);
+
+void post_order_tree_clean(Problem_Instance *root_node);
+
+/* Queue Declarations */
+Problem_Queue *create_queue(int capacity);
+
+int is_full(Problem_Queue *queue);
+
+int is_empty(Problem_Queue *queue);
+
+void enqueue(Problem_Queue *queue, Problem_Instance *node);
+
+Problem_Instance *dequeue(Problem_Queue *queue);
+
+Problem_Instance *front(Problem_Queue *queue);
+
+Problem_Instance *rear(Problem_Queue *queue);
+
+/* LL Queue Declarations */
+LL_Problem_Queue *LL_create_queue(void);
+void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem, FILE *logging_stream, int logging_rule);
+Problem_Instance *LL_dequeue(LL_Problem_Queue *queue);
+
+/* Main function */
+#ifndef TESTING
+int main(int argc, char *argv[]) {
+  /* Dynamic Input variable support */
   int n, capacity, z, opt_profit;
   int *profits, *weights, *x;
   char problem_file[100];
-  
-  /* Get problem file from argv[1] */
-  if(argc != 2)
+
+  /* Command line args support */
+  if(argc == 2 && (strcmp(argv[1], "help") == 0))
+  {
+    printf("Branch strategy flags:\n\t-rb: random branching\n\t-le: linear enu"
+           "meration\n\t-tb: truncation branching \nDP Options:\n\t-ws: force "
+           "Williamson & Shmoy's DP\n\t-vv: force Vasirani's DP\n\t-smart: let"
+           " the program decide.\n\tLogging rule:\n\t-off: do not log anything"
+           ".\n\t-console_some: log the big actions of the program to console."
+           "\n\t-console_all: log basically all actions to console\n\t<filenam"
+           "e>: specify a file to write to.\nEpsilon:\n\t0 to leave it to algo"
+           "rithm, else input an eps > 0.\n");
+    exit(0);
+  }
+  if(argc != 7 && argc != 8)
   { 
-    printf("Format:  %s <filename>\n", argv[0]);
+    printf("Format:\n %s <filename> <problem_no> <DP> <logging rule> <epsilon> <branching strategy>\n", argv[0]);
+    printf("or\n %s <filename> <problem_no> <DP> <logging rule> <epsilon> -rb <seed>\n", argv[0]);
+    exit(0);
+  }
+  
+  int problem_no = atoi(argv[2]);
+
+  /* Specify DP method */
+  int DP_method = -1;
+  if(strcmp(argv[3], "-ws") == 0)
+    DP_method = WILLIAMSON_SHMOY;
+  else if (strcmp(argv[3], "-vv") == 0)
+    DP_method = VASIRANI;
+  else if (strcmp(argv[3], "-smart") == 0)
+    DP_method = SMART_DP; 
+  else
+  {
+    printf("Unrecognised DP flag!\nExiting...\n");
     exit(-1);
   }
+  
+  /* Specify logging */
+  int logging_rule = -1;
+  FILE * logging_stream;
+  if(strcmp(argv[4], "-off") == 0)
+  {  
+    logging_rule = NO_LOGGING;
+    logging_stream = NULL;
+  }
+  else if(strcmp(argv[4], "-console_some") == 0)
+  {
+    logging_rule = PARTIAL_LOGGING;
+    logging_stream = stdout;
+  }
+  else if(strcmp(argv[4], "-console_all") == 0)
+  { 
+    logging_rule = FULL_LOGGING; 
+    logging_stream = stdout;
+  }
+  else
+  {
+    logging_rule = FULL_LOGGING;
+    logging_stream = fopen(argv[4], "a");
+  }
+
+  /* Epsilon choice */
+  double epsilon = 0.02;
+  sscanf(argv[5], "%lf", &epsilon);
+
+  /* Designate branching strategy variable */
+  int branching_strategy;
+  time_t seed;
+  if(strcmp(argv[6], "-rb") == 0)
+  {
+    branching_strategy = RANDOM_BRANCHING;
+    if (argc != 8)
+    {
+      printf("Please define a seed!\n For random branching after the -rb flag,"
+             " or input \"auto\"\n to allow the program to generate one based "
+             "on time(NULL).\n");
+      exit(-1);
+    }
+    if (strcmp(argv[7], "auto") == 0)
+      seed = time(NULL);
+    else seed = (time_t) atoi(argv[3]);
+  }
+  else if(strcmp(argv[6], "-le") == 0)
+  {
+    branching_strategy = LINEAR_ENUM_BRANCHING;
+    seed = 0;
+  }
+  else if(strcmp(argv[6], "-tb") == 0)
+  {
+    branching_strategy = TRUNCATION_BRANCHING;
+    seed = 0;
+  }
+  else
+  {
+    printf("Branching strategy flag not recognised!\n");
+    exit(-1);
+  }
+  
   strcpy(problem_file, argv[1]);
 
-  /* Define problem */
-  pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file, 1);
+  /* Read problem */
+  pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file, problem_no);
+
+  /* Output variables */
+  int z_out = 0;
   int sol_out[n];
 
   /* Start timer */
-  clock_t t;
-  t = clock();
+  clock_t t = clock();
 
-  /* Then run branch and bound */
-  branch_and_bound_KP(profits, weights, capacity, &opt_profit, sol_out, n, 
-                      problem_file);
+  /* Solve the problem */
+  branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
+                                sol_out, n, problem_file, branching_strategy,
+                                seed, DP_method, logging_rule, logging_stream, 
+                                epsilon); 
 
-  /* End timer */
+  /* Stop timer */
   t = clock() - t;
   double time_taken = ((double)t)/CLOCKS_PER_SEC;
-  
-  printf("%d/%d: %s\t Runtime: %f\n", opt_profit, z, opt_profit == z ? "Correc"
-         "t Solution!" : "Incorrect Solution!", time_taken);
+
+  if(branching_strategy == RANDOM_BRANCHING) printf("Seed: %ld\n", seed);
+
+  printf("Answer: %d/%d (%s), time taken: %lf\n" , z_out, z, z_out == z ? "Pass"
+         "!" : "Failure!", time_taken);
+
+  /* Clean up */  
+  free(profits);
+  free(weights);
+  free(x);
+
+  fclose(logging_stream);
   return 0;
 }
+#endif
 
-void branch_and_bound_KP(int profits[], int weights[], int capacity, int *z_out,
-                         int sol_out[], int n, char *problem_file)
-{
-  /**branch_and_bound_KP
-   * Last time I wrote this the computer froze
-   * ... Bad omen.*/
-  //TODO change turned_on_nodes to node_status
-  /* 0. Initialise */
-  /* Pick a root primal bound which is as high as possible. */
-  Partial_Solution *root_problem_sol;
 
-  /* Read in an instance and define all FPTAS stuff */
-  float epsilon;
-  float K;
-  char output_file[100];
-  int *x, *profit_primes;
-  int z, sol_flag, bounding_method, DP_method;
-  int all_instances = 0;
-  int output_flag = 0;
-  FILE *fp_out;
-
-  /* Read in instance. */
-  epsilon = n;
-  int sol_prime[n];
-  for (int i = 0; i < n; i++) sol_prime[i] = 0;
-  bounding_method = TRIVIAL_BOUND;
-  profit_primes = (int *) malloc(n * sizeof(*profit_primes));  
-  DP_method = WILLIAMSON_SHMOY;
-  sol_flag = BINARY_NOTATION;
-  int max_profit = DP_max_profit(profits, n);
-
-  /* Now, define root_problem structure */
-  //int root_vars[n];
-  //for(int i = 0; i < n; i++) root_vars[i] = ;
-  //int root_read_only_vars[n];
-  //for(int i = 0; i < n; i++) root_read_only_vars[i] = 0;
-  //*root_node = { profits, weights, capacity, z, x, 
-  //                  root_vars, root_read_only_vars, epsilon };
-
-  Problem_Instance *root_node = (Problem_Instance *)malloc(sizeof(Problem_Instance));
-  //Problem_Instance *root_node;
-  root_node->profits = profits;
-  root_node->weights = weights;
-  root_node->capacity = capacity;
-  root_node->z_opt = z;
-  root_node->x_opt = x;
-  //root_node->turned_on_variables = root_vars;
-  if((root_node->turned_on_variables = (int *) calloc(n, sizeof(int)))==NULL)
+/* Branch and bound methods */
+/* Branch and bound algorithm */
+void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
+                                   int capacity, int z, int *z_out, 
+                                   int sol_out[], int n, char *problem_file, 
+                                   int branching_strategy, time_t seed, 
+                                   int DP_method, int logging_rule, 
+                                   FILE *logging_stream, double eps)
+{ 
+  /* Logging functionality */
+  time_t t = time(NULL);
+  struct tm tm = *localtime(&t);
+  if(logging_rule != NO_LOGGING)
   {
-    printf("Allocation of root_node->turned_on_variables failed!\n");
-    exit(-1);
+    fprintf(logging_stream, "▁ ▂ ▄ ▅ ▆ ▇ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █"
+                            " █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ █ ▇ ▆ ▅ "
+                            "▄ ▂ ▁\n"); 
+    fprintf(logging_stream, "(¯`·.¸¸.·´¯`·.¸¸.-> [ %d-%d-%d %d:%d:%d - Startin"
+                            "g B&B Problem %s] <-.¸¸.·´¯`·.¸¸.·´¯) \nƐ: %lf\n", 
+            tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min,
+            tm.tm_sec, problem_file, eps);
   }
-  for (int i = 0; i < n; i++) 
-    (root_node->turned_on_variables)[i] = VARIABLE_UNCONSTRAINED;
-  //root_node->read_only_variables = root_read_only_vars; 
-  root_node->read_only_variables = (int *) calloc(n, sizeof(int));
-  // TODO make sure calloc actually puts these to zero as advertised
-  root_node->epsilon = epsilon;
-  root_node->branched_variable = -1;
-  root_node->branched_variable_status = VARIABLE_ON;
-  root_node->depth = 0;
 
-  /* Put this root node in the list */
-  int number_of_nodes_to_generate = 2;
-  //int global_lower_bound = root_node->profits;
-  int global_lower_bound = -1;
-  Problem_Instance **problem_list = malloc(sizeof(root_node)*n);
- // TODO make a better length for this
-  int problem_instance_list_length = 0;
-  problem_list[problem_instance_list_length++] = root_node;
- 
-  /* Prep for loop*/
-  Partial_Solution *relaxed_solution = malloc(sizeof(int) + n*sizeof(int));
+  int count = 0;
+  int branching_variable;
+  //Problem_Queue *node_queue = create_queue(n);
+  LL_Problem_Queue *node_queue = LL_create_queue(); 
+  Problem_Instance *root_node = define_root_node(n);
+  srand(seed);
   Problem_Instance *current_node;
-
-  /* This is just a flag so that the first iteration is treated differently */
-  int first_node = 1;
+  int first_iteration = TRUE;
+  int global_lower_bound;
   int iterations = 0;
-  /* 1. Terminate? */
-  while (problem_instance_list_length >= 1)
+
+  /* While our node queue is not empty: */
+  while((first_iteration) || (node_queue->size >= 1))
   {
-    /* Debug */
     iterations++;
-    printf("Iteration!\n");
 
-    /* 2. Select node */
-    //current_node = select_node(problem_list, &problem_instance_list_length);
-    current_node = select_node_priority_to_upnodes(problem_list, &problem_instance_list_length);
-    printf("Problem_instance_list_length: %d\n", problem_instance_list_length);
-    if (current_node == NULL) printf("Here it is!\n");
-    /* Debug */
-    //printf("Depth: %d\n", current_node->depth);
-    /* 3. Bound */
-    epsilon *= 0.9; // TODO This reduction of epsilon is ARBITRARY 
+    /* Logging functionality */
+    if(logging_rule != NO_LOGGING)
+      fprintf(logging_stream, "\nStarting loop iteration %d (Node queue size: %d"
+              ")\n", iterations, node_queue->size);
 
-    /* Tentative changes: only solve for on-constrained instances */
-    if(current_node->branched_variable_status == VARIABLE_ON)//read_only_variables are ok
+    /* Get next node */
+    if(first_iteration)
     {
-      /* Debug */
-      //printf("Variable on!\n");
-      
-      /* Reset sol_prime */
-      for(int i = 0; i < n; i++)
-        sol_prime[i] = 0;
+      current_node = root_node;
+      current_node->upper_bound = INT_MAX;
+      current_node->ID = count;
+      global_lower_bound = find_heuristic_initial_GLB(profits, weights, x, z, 
+                                                  n, capacity, problem_file);
+      current_node->lower_bound = global_lower_bound;
+      first_iteration = FALSE;
+      if(logging_rule != NO_LOGGING)
+        fprintf(logging_stream, "\tRoot node bounds established. GLB: %d", 
+                global_lower_bound);
+    }
+    else
+    {
+      /* Take node N off queue by some node selection scheme */
+      current_node = select_and_dequeue_node(node_queue);
 
-      /* On first node, we use an eps = n */
-      if(first_node)
+      /* Derive the LB and UB for node N with the FPTAS */
+      find_bounds(current_node, profits, weights, x, capacity, n, z,
+                  &current_node->lower_bound, &current_node->upper_bound,
+                  problem_file, DP_method, logging_rule, logging_stream, eps);
+
+      if(logging_rule != NO_LOGGING)
+        fprintf(logging_stream, "\tNode %d (parent: %d) - bounds established: "
+                                "lower: %d, upper: %d (GLB: %d)\n", 
+                current_node->ID, current_node->parent->ID, 
+                current_node->lower_bound, current_node->upper_bound,
+                global_lower_bound);
+    }
+
+    /* If UB < GLB, we safely prune this branch and continue to loop */
+    if ((current_node->ID != 0) && 
+        ((current_node->upper_bound <= global_lower_bound) || 
+         (current_node->upper_bound > current_node->parent->upper_bound)))  
+    {
+      if(logging_rule != NO_LOGGING)
+        fprintf(logging_stream, "\tUpper bound is lower that GLB! Pruning node b"
+                "ranch.\n");
+      continue;
+    }
+
+    /* If LB > GLB, we set GLB = LB */
+    if (current_node->lower_bound > global_lower_bound)
+    {
+      global_lower_bound = current_node->lower_bound;
+
+      if(logging_rule != NO_LOGGING)
+        fprintf(logging_stream, "\tLB > GLB: Improving GLB to %d.\n", 
+                global_lower_bound);
+    }
+
+    /* If for N's parent's upper bound, UB_p, UB > UB_p, UB = UB_p */
+    if (current_node->ID != 0 &&
+        current_node->upper_bound > current_node->parent->upper_bound)
+    {
+      if(logging_rule != NO_LOGGING)
+        fprintf(logging_stream, "\tParent's upper bound is lower; reducing thi"
+                "s node's upper bound from %d to %d\n",
+                current_node->upper_bound, current_node->parent->upper_bound);
+
+      current_node->upper_bound = current_node->parent->upper_bound;
+    }
+
+    /* If UB > GLB, we branch on the variable */
+    if (current_node->upper_bound > global_lower_bound)
+    {
+      if(logging_rule != NO_LOGGING)
+        fprintf(logging_stream, "\tUB > GLB; branching on variable.\n");
+
+      branching_variable = find_branching_variable(n, z, 
+                                              current_node->variable_statuses,
+                                              branching_strategy, profits);
+      if (branching_variable == -1) 
       {
-    printf("First FPTAS!\n");
-        FPTAS(((float)n/4.0), profits, weights, x, sol_prime, n, capacity, z,
-              sol_flag, bounding_method, problem_file, &K, profit_primes,
-              DP_method, current_node->turned_on_variables, 
-              current_node->read_only_variables);
-        first_node = 0;
-    printf("First FPTAS done!\n");
-        epsilon = 0.99;
+        if(logging_rule != NO_LOGGING)
+          fprintf(logging_stream, "\tNo variables left to constrain. Continuin"
+                  "g...\n");
+        continue;
       }
-      else 
-      { // TODO During the FPTAS, current_node->read_only_variables goes to garbage
-    printf("Nonfirst FPTAS!\n");
-        FPTAS(epsilon, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
-              bounding_method, problem_file, &K, profit_primes, DP_method,
-              current_node->turned_on_variables, 
-              current_node->read_only_variables);
-      }  
+      generate_and_enqueue_nodes(current_node, n, branching_variable, 
+                                 node_queue, &count, logging_stream, logging_rule);
+      if(logging_rule != NO_LOGGING)
+        fprintf(logging_stream, "\t Node %d branched on variable %d\n",
+                current_node->ID, branching_variable);
+    }
+  }
+  #ifndef TESTING
+  printf("No of nodes: %d\n", count);
+  #endif
+  *z_out = global_lower_bound;
+  if(logging_rule != NO_LOGGING)
+    fprintf(logging_stream, "\nAlgorithm finished! Result: %d / %d, %d nodes g"
+                            "enerated.\n▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄"
+                            "▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n\n", *z_out, 
+            z, count);
+  /* Total clean up */
+  free(node_queue);
+  post_order_tree_clean(root_node);
+}
 
-      /* Get profit(S') */
-      relaxed_solution->profit = 0;
-    printf("Getting profit!\n");
-      for(int i = 0; i < n; i++)
-      {
-        if (sol_prime[i] == 1)
-          relaxed_solution->profit += profits[i];
-        relaxed_solution->sol[i] = sol_prime[i];
-      }
+/* Initial global lower bound heuristic */
+int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z, 
+                               int n, int capacity, char *problem_file)
+{
+  /* Run the FPTAS on the original problem with high epsilon */
+  double eps = 1.0;
+  double K;
+  int sol_prime[n]; 
+  int *profits_prime = (int *) malloc(n * sizeof(*profits_prime));
+  int node_statuses[n];
+  for (int i = 0; i < n; i++) node_statuses[i] = VARIABLE_UNCONSTRAINED;
 
-      /* Plant any variables which were constrained to be on in */
-    printf("Planting variables!\n");
-      for(int i = 0; i < n; i++)
+  FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z,
+        BINARY_SOL, SIMPLE_SUM, problem_file, &K, profits_prime, 
+        WILLIAMSON_SHMOY, node_statuses);
+
+  int fptas_profit = 0;
+  for (int i = 0; i < n; i++)
+    if (sol_prime[i] == 1)
+      fptas_profit += profits[i];
+  
+  free(profits_prime);
+
+  return fptas_profit;
+}
+
+/* Branching algorithm */
+int find_branching_variable(int n, int z, int *variable_statuses, 
+                            int branching_strategy, int *profits)
+{
+  /* Random node enumeration algorithm */
+  if (branching_strategy == RANDOM_BRANCHING)
+  {
+    int number_of_available_variables = 0;
+    int available_variables[n];
+    for(int i = 0; i < n; i++)
+      if (variable_statuses[i] == VARIABLE_UNCONSTRAINED)
+        available_variables[number_of_available_variables++] = i;
+    int branched_variable;
+    if (number_of_available_variables > 0)
+      branched_variable = available_variables[rand() % number_of_available_variables];
+    else
+      branched_variable = -1;
+    return branched_variable;
+  } 
+
+  /* Linear variable enumeration algorithm */  
+  else if (branching_strategy == LINEAR_ENUM_BRANCHING)
+  {
+    for(int i = 0; i < n; i++)
+      if (variable_statuses[i] == VARIABLE_UNCONSTRAINED)
+        return i;
+    return -1;
+  }
+
+  /* Truncation branching algorithm */
+  else if (branching_strategy == TRUNCATION_BRANCHING)
+  {
+    /* For now, find max_profit here */
+    int max_profit = -1;
+    for(int i = 0; i < n; i++)
+      if (profits[i] > max_profit)
+        max_profit = profits[i];
+
+    /* For now, we can try a linear pass every time (maybe later we can try a
+     *  presort) */
+    double max_truncation = 0;
+    double this_truncation;
+    double epsilon = 0.8;
+    double K = epsilon * max_profit / n;
+    int best_variable = -1;
+   
+    for(int i = 0; i < n; i++)
+    {
+      if(variable_statuses[i] == VARIABLE_UNCONSTRAINED)
       {
-        if (current_node->turned_on_variables[i] == 2) 
-        //TODO replace 2 with a symbolic constant
+        this_truncation = profits[i] - K*floor(profits[i] / K);
+        if(this_truncation > max_truncation)
         {
-          relaxed_solution->profit += profits[i];
-          relaxed_solution->sol[i] = sol_prime[i];
+          max_truncation = this_truncation;
+          best_variable = i;
         }
       }
-
-    printf("Planted variables!\n");
-      if(relaxed_solution->profit <= global_lower_bound){
-       printf("%d%s children pruned.\n", current_node->branched_variable, current_node->branched_variable_status ? "-ON" : "-OFF");
-       continue;
-      }
-      global_lower_bound = relaxed_solution->profit;
-      /* Tentative change if statement close */
-    }//else printf("Variable off!\n");
-
-    //generate_node(current_node, problem_list, &problem_instance_list_length,
-    //              1, epsilon, max_profit, n, sol_prime);
-   
-//    generate_node_v2(current_node, problem_list, &problem_instance_list_length,
-//                  1, epsilon, max_profit, n, sol_prime);
-    // TODO read_only_variables not okay anymore (21845)
-    printf("Generating nodes!\n");
-    generate_node_v3(current_node, problem_list, &problem_instance_list_length,
-                     1, epsilon, max_profit, n, sol_prime, problem_file);
-    printf("Generated nodes!\n");
-    /* Debug */
-    //if(iterations >= 3) exit(-1);
-
+    }
+    return best_variable;
   }
-  *z_out = global_lower_bound;
-  printf("Iterations: %d\n", iterations); 
 }
 
-void generate_node(Problem_Instance *current_node, Problem_Instance **problems,
-                  int *problem_instance_length, int number_of_nodes_to_generate,
-                  float epsilon, int max_profit, int n, int *sol_prime)
+/* Root node definition algorithm */
+Problem_Instance *define_root_node(int n)
 {
-  /* My first method: we're going to branch and turn off the more truncate-able
-   * items TODO UPDATE THIS FUNCTION TO SUPPORT THE NEW ALLOCATION TECHNIQUE*/
-  /* Comb through the current_node instance */
-  double max_truncation = 0;
-  double this_truncation;
-  double K = epsilon * max_profit / n;
-  int best_variable;
-  /* workshopping begins */
-  //int this_read_only_variables[n];
-  //for (int i = 0; i < n; i++) this_read_only_variables[i] = 0;
+  Problem_Instance *root_instance =
+                           (Problem_Instance*) malloc(sizeof(Problem_Instance));
+  root_instance->parent = NULL;
+  root_instance->variable_statuses = (int *) malloc(n * sizeof(int));
+  for(int i = 0; i < n; i++) 
+    root_instance->variable_statuses[i] = VARIABLE_UNCONSTRAINED;
+  return root_instance;
+}
 
-  //for(int i = 0; i < number_of_nodes_to_generate; i++)
-  //{
-  /* workshopping ends */
-  for(int i = 0; i < n; i++)
-  { //TODO try only looking at variables that are in the current partial sol
-  /* For every variable which is on, maintain which one will make the equation 
-   * in my notebook on the page labelled "BOOKMARK" maximised */
-    //if(!current_node->read_only_variables[i])// First idea
-    if((!current_node->read_only_variables[i]) && !(sol_prime[i])) //Second idea
-    {
-      this_truncation = 
-        current_node->profits[i] - K*floor(current_node->profits[i] / K);
-      if (this_truncation > max_truncation)
-      {
-        max_truncation = this_truncation;
-        best_variable = i;
-        //this_read_only_variables[i] = 1;
-      }
-    }
-  }
-
-  /* Debug */
-  printf("Branching on: %d\n", best_variable);
-
-  /* Then for the node that has the most, create a problem_instance where it
-   * is on and another where it is off */
+/* Generation and node enqueuing algorithm */
+void generate_and_enqueue_nodes(Problem_Instance *parent, int n, 
+                          int branching_variable, LL_Problem_Queue *problem_queue,
+                          int *count, FILE *logging_stream, int logging_rule)
+{
+  /* This will just use the structure Problem_Queue to enqueue it */
+  /* Allocate for each node */
   Problem_Instance *generated_node_variable_on = 
-                         malloc(sizeof(Problem_Instance));
+                          (Problem_Instance *) malloc(sizeof(Problem_Instance));
   Problem_Instance *generated_node_variable_off = 
-                         malloc(sizeof(Problem_Instance));
-  
-  generated_node_variable_on->profits = current_node->profits;
-  generated_node_variable_on->weights = current_node->weights;
-  generated_node_variable_on->capacity = current_node->capacity;
-  generated_node_variable_on->z_opt = current_node->z_opt;
-  generated_node_variable_on->x_opt = current_node->x_opt;
-  generated_node_variable_on->turned_on_variables =
-                                             current_node->turned_on_variables;
-  generated_node_variable_on->read_only_variables = 
-                                             current_node->read_only_variables; 
-  generated_node_variable_on->epsilon = current_node->epsilon;
+                          (Problem_Instance *) malloc(sizeof(Problem_Instance));
 
-  generated_node_variable_on->turned_on_variables[best_variable] = 2;
-  generated_node_variable_on->read_only_variables[best_variable] = 1;
+  parent->on_child = generated_node_variable_on;
+  parent->off_child = generated_node_variable_off;
 
-  generated_node_variable_off->profits = current_node->profits;
-  generated_node_variable_off->weights = current_node->weights;
-  generated_node_variable_off->capacity = current_node->capacity;
-  generated_node_variable_off->z_opt = current_node->z_opt;
-  generated_node_variable_off->x_opt = current_node->x_opt;
-  generated_node_variable_off->turned_on_variables =
-                                             current_node->turned_on_variables;
-  generated_node_variable_off->read_only_variables = 
-                                             current_node->read_only_variables; 
-  generated_node_variable_off->epsilon = current_node->epsilon;
-  generated_node_variable_off->turned_on_variables[best_variable] = 0;
-  generated_node_variable_off->read_only_variables[best_variable] = 1;
-  problems[(*problem_instance_length)++] = generated_node_variable_on;
-  problems[(*problem_instance_length)++] = generated_node_variable_off;
-  /* Okay this should be all g */ 
-}
+  /* For debug */
+  generated_node_variable_on->ID = ++(*count);
+  generated_node_variable_off->ID = ++(*count);
 
-void generate_node_v2(Problem_Instance *current_node, 
-                      Problem_Instance **problems, int *problem_instance_length,
-                      int number_of_nodes_to_generate, float epsilon,
-                      int max_profit, int n, int *sol_prime)
-{
-  /* My second method: we're going to branch and turn on the least truncate-able
-   * items TODO UPDATE THIS TO SUPPORT NEW ALLOCATION TECHNIQUE also update 
-   * the method for the way turned_on_variables is defined for the 'on' 
-   * case */
-
-  /* Comb through the current_node instance */
-  double this_truncation;
-  double K = epsilon * max_profit / n;
-  double min_truncation = K*2;
-  int best_variable;
-
-  /* For every variable which is on, maintain which one will make the equation 
-   * in my notebook on the page labelled "BOOKMARK" maximised */
+  /* Inherit parent's traits */
+  /* First node */
+  generated_node_variable_on->parent = parent;
+  generated_node_variable_on->variable_statuses =
+                                    (int *) malloc(sizeof(int) * n);
   for(int i = 0; i < n; i++)
-  { 
-    //if(!current_node->read_only_variables[i])// First idea
-    if((!current_node->read_only_variables[i]) && sol_prime[i]) //Second idea
-    {
-      this_truncation = 
-        current_node->profits[i] - K*floor(current_node->profits[i] / K);
-      if (this_truncation < min_truncation)
-      {
-        min_truncation = this_truncation;
-        best_variable = i;
-      }
-    }
-  }
+    generated_node_variable_on->variable_statuses[i] = 
+                                     parent->variable_statuses[i];  
+  generated_node_variable_on->variable_statuses[branching_variable] =
+                                                                   VARIABLE_ON;
+  generated_node_variable_on->on_child = NULL;
+  generated_node_variable_on->off_child = NULL;
 
+  /* Second node */
+  generated_node_variable_off->parent = parent;
+  generated_node_variable_off->variable_statuses =
+                                    (int *) malloc(sizeof(int) * n);
+  for(int i = 0; i < n; i++)
+    generated_node_variable_off->variable_statuses[i] = 
+                                     parent->variable_statuses[i];  
+  generated_node_variable_off->variable_statuses[branching_variable] = 
+                                                                  VARIABLE_OFF; 
+  generated_node_variable_off->on_child = NULL;
+  generated_node_variable_off->off_child = NULL;
 
-  /* Debug */
-  printf("Branching on: %d\n", best_variable);
-
-  /* Then for the node that has the most, create a problem_instance where it
-   * is on and another where it is off */
-  Problem_Instance *generated_node_variable_on = 
-                         malloc(sizeof(current_node)+n*5*(sizeof(int)));
-  Problem_Instance *generated_node_variable_off = 
-                         malloc(sizeof(current_node)+n*5*(sizeof(int)));
-  
-  /* Generate the first node */
-  generated_node_variable_on->profits = current_node->profits;
-  generated_node_variable_on->weights = current_node->weights;
-  generated_node_variable_on->capacity = current_node->capacity;
-  generated_node_variable_on->z_opt = current_node->z_opt;
-  generated_node_variable_on->x_opt = current_node->x_opt;
-  generated_node_variable_on->turned_on_variables =
-                                             current_node->turned_on_variables;
-  generated_node_variable_on->read_only_variables = 
-                                             current_node->read_only_variables; 
-  generated_node_variable_on->epsilon = current_node->epsilon;
-  generated_node_variable_on->read_only_variables[best_variable] = 1;
-
-  /* Generate the second node */
-  generated_node_variable_off->profits = current_node->profits;
-  generated_node_variable_off->weights = current_node->weights;
-  generated_node_variable_off->capacity = current_node->capacity;
-  generated_node_variable_off->z_opt = current_node->z_opt;
-  generated_node_variable_off->x_opt = current_node->x_opt;
-  generated_node_variable_off->turned_on_variables =
-                                             current_node->turned_on_variables;
-  generated_node_variable_off->read_only_variables = 
-                                             current_node->read_only_variables; 
-  generated_node_variable_off->epsilon = current_node->epsilon;
-  generated_node_variable_off->turned_on_variables[best_variable] = 0;
-  generated_node_variable_off->read_only_variables[best_variable] = 1;
-
-  /* Put them on the top */
-  problems[(*problem_instance_length)++] = generated_node_variable_off;
-  problems[(*problem_instance_length)++] = generated_node_variable_on;
-  /* Okay this should be all g */ 
+  /* Place into priority queue (for now just append) */
+  //enqueue(problems_list, generated_node_variable_on);
+  LL_enqueue(problem_queue, generated_node_variable_on, logging_stream, logging_rule);
+  //enqueue(problems_list, generated_node_variable_off);
+  LL_enqueue(problem_queue, generated_node_variable_off, logging_stream, logging_rule);
 }
 
-void generate_node_v3(Problem_Instance *current_node, 
-                      Problem_Instance **problems, int *problem_instance_length,
-                      int number_of_nodes_to_generate, float epsilon,
-                      int max_profit, int n, int *sol_prime, char *problem_name)
+/* Node selection and dequeuing algorithm */
+Problem_Instance *select_and_dequeue_node(LL_Problem_Queue *node_queue)
 {
-  /* My third method: we're going to branch on the variables with the highest 
-   * FPTAS with some high epsilon */
+  /* This method is largely a placeholder */
+  /* It doesn't do much yet, but I made this function to accomodate growth */
+  //Problem_Instance *selected_node = dequeue(node_queue);
+  Problem_Instance *selected_node = LL_dequeue(node_queue);
+  return selected_node;
+}
 
-  /* TODO make this more efficient (it can probably be easily done)*/
-  // For each i in n
-  int temp_variable_statuses[n];
-  int a_sol_prime[n];
-  int profits_prime[n];
-  int best_variables[n];
-  int list_of_these_profits[n];
-  float K = epsilon * max_profit / n;
-  int this_profit;
-  int best_found_profit = 0;
-  int best_variable = -1;
+/* General case node bounds derivation algorithm */
+void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
+                 int x[], int capacity, int n, int z, int *lower_bound_ptr, 
+                 int *upper_bound_ptr, char *problem_file, int DP_method, 
+                 int logging_rule, FILE *logging_stream, double eps)
+{ 
+  /* lower_bound_ptr and upper_bound_ptr are both output parameters */
+  /* Solve the FPTAS with current node */
+  if (eps == 0.0) eps = 0.002;
+  double K;
+  int sol_prime[n];
+  int *profits_prime = (int *) malloc(n * sizeof(*profits_prime));
 
-  /* Debug */
-  int iterations = 0;
-
-  /* Tentative list of best variables initialisation*/
-  for (int i = 0; i < n; i++)
-    best_variables[i] = -1;
-
-  for (int i = 0; i < n; i++)
+  /* Run the FPTAS */
+  if(DP_method == SMART_DP)
   {
-    if (!current_node->read_only_variables[i])
-    {
-      for (int j = 0; j < n; j++)
-        temp_variable_statuses[j] = current_node->turned_on_variables[i];
-
-
-      temp_variable_statuses[i] = 2;
-      FPTAS(5.0, current_node->profits, current_node->weights, 
-            current_node->x_opt, a_sol_prime, n, current_node->capacity, 
-            current_node->z_opt, 1, 2, problem_name, &K, profits_prime, 1,
-            temp_variable_statuses, current_node->turned_on_variables);
-      /* Get profit(S') */
-      this_profit = 0;
-      for(int j = 0; j < n; j++)
-        if (a_sol_prime[j] == 1)
-          this_profit += current_node->profits[j];
-    
-      /* Plant any variables which were constrained to be on in */
-      for(int j = 0; j < n; j++)
-      //TODO replace 2 with a symbolic constant
-        if (temp_variable_statuses[j] == 2) 
-          this_profit += current_node->profits[j];
-      
-      /* Check if this is the highest profit so far */
-      if (this_profit > best_found_profit)
-      {
-        best_variable = i;
-        best_found_profit = this_profit;
-      }
-      
-      /* Add it to a list of profits */
-      list_of_these_profits[i] = this_profit;
-
-      /* Debug */
-      iterations++;
-    }
+    printf("SMART DYNAMIC PROGRAAAAAAAAAAAMMING\n");
+    exit(-1);
   }
-  /* Add all the best variables to a list */
-  int best_variables_counter = 0;
-  for (int i = 0; i < n; i++)
-    if(list_of_these_profits[i] == best_found_profit)
-      best_variables[best_variables_counter++] = i;
-
-  /* Debug */
-  if(best_variable == -1)
+  else
   {
-    printf("No best variable found?\n");
+    if(logging_rule == FULL_LOGGING)
+      fprintf(logging_stream, "\t\tCalling FPTAS for bounds (epsilon: %f, meth"
+              "od: %s\n", eps, DP_method==VASIRANI ? "Vasirani" : "Williamson "
+              "& Shmoys)");
+
+    FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z,
+          BINARY_SOL, SIMPLE_SUM, problem_file, &K, profits_prime, 
+          DP_method, current_node->variable_statuses);
+  }
+
+  /* Then, from the solution sets returned from the FPTAS, derive bounds */
+  int fptas_lower_bound = 0;
+  double fptas_upper_bound = 0;
+  for (int i = 0; i < n; i++)
+    if (sol_prime[i] == 1)
+    {
+      fptas_lower_bound += profits[i];
+      if (K > 1)  
+        fptas_upper_bound += K * profits_prime[i];
+      else
+        fptas_upper_bound += profits[i];
+    }
+  fptas_upper_bound += n*K; 
+
+  *lower_bound_ptr = fptas_lower_bound;
+  *upper_bound_ptr = (int) fptas_upper_bound;
+
+  free(profits_prime);
+}
+
+
+/* Post order node freeing algorithm */
+void post_order_tree_clean(Problem_Instance *node)
+{
+  /* Todo this I need the pointers to the children too */
+  if (node == NULL)
     return;
-  }
-
-  for(int i = 0; i < best_variables_counter; i++)
-  {
-    best_variable = best_variables[i];
-    printf("Variable %d%s branches on %d\n", current_node->branched_variable,
-           current_node->branched_variable_status ? "-ON" : "-OFF",
-           best_variable);
-
-    /* We have our variable chosen... */
-    Problem_Instance *generated_node_variable_on;
-    if((generated_node_variable_on = 
-        malloc(sizeof(Problem_Instance)))==NULL)
-    {
-      printf("Failure to allocate for an 'on' instance.\n");
-      continue;
-    }
-    Problem_Instance *generated_node_variable_off;
-    if((generated_node_variable_off = 
-                           malloc(sizeof(Problem_Instance)))==NULL)
-    {
-      printf("Failure to alloacte for an 'off' instance.\n");
-      continue;
-    }
   
-    /* Generate the first node */
-    generated_node_variable_on->profits = current_node->profits;
-    generated_node_variable_on->weights = current_node->weights;
-    generated_node_variable_on->capacity = current_node->capacity;
-    generated_node_variable_on->z_opt = current_node->z_opt;
-    generated_node_variable_on->x_opt = current_node->x_opt;
-    //TODO Dynamically allocate pointers to list for the stuff
-    /* Make the turned_on_variable list */
-    generated_node_variable_on->read_only_variables = 
-      (int *) calloc(n, sizeof(int *));
-    for (int j = 0; j < n; j++) 
-      generated_node_variable_on->read_only_variables[j] = 
-        current_node->read_only_variables[j];
-    generated_node_variable_on->turned_on_variables = 
-      (int *) calloc(n, sizeof(int *));
-    for (int j = 0; j < n; j++) 
-      generated_node_variable_on->turned_on_variables[j] = 
-        current_node->turned_on_variables[j];
-    generated_node_variable_on->epsilon = current_node->epsilon;
-    generated_node_variable_on->read_only_variables[best_variable] = 1;
-    generated_node_variable_on->turned_on_variables[best_variable] =
-      VARIABLE_ON;
-    generated_node_variable_on->branched_variable = best_variable;
-    generated_node_variable_on->branched_variable_status = VARIABLE_ON;
-    generated_node_variable_on->depth = current_node->depth + 1;
-
-    /* Generate the second node */
-    generated_node_variable_off->profits = current_node->profits;
-    generated_node_variable_off->weights = current_node->weights;
-    generated_node_variable_off->capacity = current_node->capacity;
-    generated_node_variable_off->z_opt = current_node->z_opt;
-    generated_node_variable_off->x_opt = current_node->x_opt;
-    //TODO Make sure allocation actually works
-    generated_node_variable_off->read_only_variables = 
-      (int *) calloc(n, sizeof(int *));
-    for (int j = 0; j < n; j++) 
-      generated_node_variable_off->read_only_variables[j] = 
-        current_node->read_only_variables[j];
-    generated_node_variable_off->turned_on_variables = 
-      (int *) calloc(n, sizeof(int *));
-    for (int j = 0; j < n; j++) 
-      generated_node_variable_off->turned_on_variables[j] = 
-        current_node->turned_on_variables[j]; 
-    generated_node_variable_off->epsilon = current_node->epsilon;
-    generated_node_variable_off->turned_on_variables[best_variable] = 
-      VARIABLE_OFF;
-    generated_node_variable_off->read_only_variables[best_variable] = 1;
-    generated_node_variable_off->branched_variable = best_variable;
-    generated_node_variable_off->branched_variable_status = VARIABLE_OFF;
-    generated_node_variable_off->depth = current_node->depth + 1;
+  post_order_tree_clean(node->on_child);
   
-    /* Put them on the top */
-    problems[(*problem_instance_length)++] = generated_node_variable_off;
-    problems[(*problem_instance_length)++] = generated_node_variable_on;
-    /* Okay this should be all g */ 
-  }
+  post_order_tree_clean(node->off_child);
+
+  free(node->variable_statuses);
+  free(node);
 }
 
-Problem_Instance *select_node(Problem_Instance *nodes[], int *end_of_list)
+/* Queue Data Structure Methods */
+/* Problem Queue method: create_queue */
+Problem_Queue *create_queue(int capacity)
 {
-  /* My first method: I wanna have a bit of a stack mentality to this
-   * So, pick the one at the top of the stack. (Assuming I maintain the stack 
-   * so that the next generated node with a variable turned off is at the head
-   *  of the stack). This is sort of depth-first ish */
-  Problem_Instance *output_problem_instance = nodes[*end_of_list - 1];
-  nodes[(*end_of_list)--] = NULL;
-  return output_problem_instance;
+  Problem_Queue *queue = (Problem_Queue*) malloc(sizeof(Problem_Queue));
+  queue->capacity = capacity;
+  queue->front = queue->size = 0;
+  queue->rear = capacity - 1;
+  queue->array = (Problem_Instance **) malloc(queue->capacity * sizeof(Problem_Instance*));
+  return queue;
 }
 
-Problem_Instance *select_node_priority_to_upnodes(Problem_Instance *nodes[],
-                                                  int *end_of_list)
+/* Problem Queue method: is_full*/
+int is_full(Problem_Queue *queue)
 {
-  /* My first method: I wanna have a bit of a stack mentality to this
-   * So, pick the one at the top of the stack. (Assuming I maintain the stack 
-   * so that the next generated node with a variable turned off is at the head
-   *  of the stack). This is sort of depth-first ish */
-  Problem_Instance *output_problem_instance;
-  for (int i = *end_of_list; i > 0; i--)
+  return (queue->size == queue->capacity);
+}
+
+/* Problem Queue method: is_empty */
+int is_empty(Problem_Queue *queue)
+{
+  return (queue->size == 0);
+}
+
+/* Problem Queue method: enqueue */
+void enqueue(Problem_Queue *queue, Problem_Instance *problem)
+{
+  if(is_full(queue))
+    return;
+  queue->rear = (queue->rear + 1)%queue->capacity;
+  queue->array[queue->rear] = problem;
+  queue->size = queue->size + 1;
+}
+
+/* Problem Queue method: dequeue */
+Problem_Instance *dequeue(Problem_Queue *queue)
+{
+  if(is_empty(queue))
+    return NULL;
+  Problem_Instance *node = queue->array[queue->front];
+  queue->array[queue->front] = NULL;
+  queue->front = (queue->front + 1)%queue->capacity;
+  queue->size = queue->size - 1;
+  return node;
+}
+
+/* Problem Queue method: front */
+Problem_Instance *front(Problem_Queue *queue)
+{
+  if(is_empty(queue))
+    return NULL;
+  return queue->array[queue->front];
+}
+
+/* Problem Queue method: rear */
+Problem_Instance *rear(Problem_Queue *queue)
+{
+  if (is_empty(queue))
+    return NULL;
+  return queue->array[queue->rear];
+}
+
+
+/* LL Queue Data structure methods */
+/* LL Problem Queue method: create queue */
+LL_Problem_Queue *LL_create_queue(void)
+{
+  LL_Problem_Queue *queue = (LL_Problem_Queue*) malloc(sizeof(LL_Problem_Queue));
+  queue->head = NULL;
+  queue->tail = NULL;
+  queue->size = 0;
+  return queue;
+}
+
+/* LL Problem Queue method: enqueue */
+void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem, FILE *logging_stream, int logging_rule)
+{
+  LL_Node_Queue_Item *new_item = (LL_Node_Queue_Item *) malloc(sizeof(LL_Node_Queue_Item));
+  new_item->problem = problem;
+  if(queue->size == 0)
   {
-    if(nodes[i]->branched_variable_status == VARIABLE_ON)
-    {
-      *end_of_list--;
-      output_problem_instance = nodes[i];
-      for (int j = i; j < *end_of_list; i++)
-        nodes[j] = nodes[j+1];
-      return output_problem_instance; 
-    }
+    queue->head = new_item;
+    queue->tail = new_item;
+    queue->size = 1;
   }
-  /* Otherwise just pop the top */
-  nodes[(*end_of_list)--] = NULL;
-  return output_problem_instance;
+  else if(queue->size >= NODE_OVERFLOW)
+  {
+    printf("%d nodes in queue! Abandon ship!\n", NODE_OVERFLOW);
+    if(logging_rule != NO_LOGGING)
+      fprintf(logging_stream, "NODE OVERFLOW AAAAAAAAAAAAAAAAAAAHH-- \n");
+    exit(-1);
+  }
+  else
+  {
+    new_item->in_front = queue->tail;
+    queue->tail->behind = new_item;
+    queue->tail = new_item;
+    queue->size++;
+  }
 }
+
+/* LL Problem Queue method: dequeue */
+Problem_Instance *LL_dequeue(LL_Problem_Queue *queue)
+{
+  if(queue->size == 0)
+    return NULL;
+  
+  Problem_Instance *dequeued_problem = queue->head->problem;
+  LL_Node_Queue_Item *temp_node_pointer = queue->head->behind;
+  free(queue->head);
+  queue->head = temp_node_pointer;
+  queue->size -= 1;
+  return dequeued_problem;
+}
+

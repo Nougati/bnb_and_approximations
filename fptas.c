@@ -461,6 +461,7 @@ void make_profit_primes(int profits[], int profits_prime[], double K, int n,
         double scaled_profit = profits[i]/K;
         profits_prime[i] = floor(scaled_profit);
     }
+  /* If K < 1, then profits would be inflated, so we simply solve exactly */
   else
     for(int i = 0; i < n; i++)
       profits_prime[i] = profits[i];

@@ -1,0 +1,8 @@
+branch_and_bound : fptas.o
+	gcc -o branch_and_bound branch_and_bound.c -lm -g
+
+fptas.o : fptas.c
+	gcc -c fptas.c -lm -g
+
+clean :
+	rm fptas.o branch_and_bound

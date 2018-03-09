@@ -10,7 +10,7 @@
  *****************************************************************************/
 
 #define TESTING
-#include "branch_and_bound_2.c"
+#include "branch_and_bound.c"
 #include <gtest/gtest.h>
 #include <time.h>
 #include <math.h>
