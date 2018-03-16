@@ -67,11 +67,12 @@ typedef struct linked_list_p_queue
 Problem_Instance *define_root_node(int n);
 
 void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
-                                   int capacity, int z, int *z_out, int sol_out[],
-                                   int n, char *problem_file, 
+                                   int capacity, int z, int *z_out, 
+                                   int sol_out[], int n, char *problem_file, 
                                    int branching_strategy, time_t seed,
                                    int DP_method, int logging_rule, 
-                                   FILE *logging_stream, double epsilon);
+                                   FILE *logging_stream, double epsilon, 
+                                   int *number_of_nodes);
 
 int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z, 
                                int n, int capacity, char *problem_file);
@@ -225,6 +226,7 @@ int main(int argc, char *argv[]) {
 
   /* Output variables */
   int z_out = 0;
+  int number_of_nodes = -1;
   int sol_out[n];
 
   /* Start timer */
@@ -234,11 +236,13 @@ int main(int argc, char *argv[]) {
   branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, problem_file, branching_strategy,
                                 seed, DP_method, logging_rule, logging_stream, 
-                                epsilon); 
+                                epsilon, &number_of_nodes);
 
   /* Stop timer */
   t = clock() - t;
   double time_taken = ((double)t)/CLOCKS_PER_SEC;
+
+  printf("No of nodes: %d\n", count);
 
   if(branching_strategy == RANDOM_BRANCHING) printf("Seed: %ld\n", seed);
 
@@ -263,7 +267,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                                    int sol_out[], int n, char *problem_file, 
                                    int branching_strategy, time_t seed, 
                                    int DP_method, int logging_rule, 
-                                   FILE *logging_stream, double eps)
+                                   FILE *logging_stream, double eps, int *number_of_nodes)
 { 
   /* Logging functionality */
   time_t t = time(NULL);
@@ -389,9 +393,9 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
     }
   }
   #ifndef TESTING
-  printf("No of nodes: %d\n", count);
   #endif
   *z_out = global_lower_bound;
+  *number_of_nodes = count;
   if(logging_rule != NO_LOGGING)
     fprintf(logging_stream, "\nAlgorithm finished! Result: %d / %d, %d nodes g"
                             "enerated.\n▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄"

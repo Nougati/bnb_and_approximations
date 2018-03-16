@@ -32,6 +32,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -43,7 +44,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -59,6 +60,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -70,7 +72,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -86,6 +88,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -97,7 +100,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream,epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
 
   }
@@ -115,6 +118,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -126,7 +130,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -143,6 +147,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -154,7 +159,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -171,6 +176,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -182,7 +188,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -199,6 +205,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -210,7 +217,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -227,6 +234,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -238,7 +246,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -255,6 +263,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -266,7 +275,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -282,6 +291,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -293,7 +303,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -309,6 +319,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weakl
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -320,7 +331,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weakl
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -336,6 +347,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weakl
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -347,7 +359,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weakl
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -363,6 +375,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weakl
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -374,7 +387,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weakl
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -390,6 +403,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weakl
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -401,7 +415,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weakl
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -417,6 +431,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weakl
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -428,7 +443,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weakl
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -444,6 +459,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weakl
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -455,7 +471,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weakl
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -471,6 +487,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weakl
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -482,7 +499,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weakl
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -498,6 +515,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weakl
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -509,7 +527,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weakl
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -525,6 +543,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weakl
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -536,7 +555,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weakl
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -552,6 +571,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weakl
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -563,7 +583,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weakl
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -579,6 +599,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stron
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -590,7 +611,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stron
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -606,6 +627,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stron
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -617,7 +639,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stron
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -633,6 +655,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stron
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -644,7 +667,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stron
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -660,6 +683,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stron
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -671,7 +695,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stron
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -687,6 +711,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stron
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -698,7 +723,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stron
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -714,6 +739,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stron
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -725,7 +751,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stron
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -741,6 +767,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stron
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -752,7 +779,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stron
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -768,6 +795,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stron
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -779,7 +807,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stron
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -795,6 +823,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stron
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -806,7 +835,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stron
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -822,6 +851,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stron
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -833,7 +863,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stron
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -850,6 +880,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -861,7 +892,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -877,6 +908,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -888,7 +920,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -904,6 +936,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -915,7 +948,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -932,6 +965,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -943,7 +977,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -960,6 +994,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -971,7 +1006,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -988,6 +1023,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -999,7 +1035,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1016,6 +1052,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1027,7 +1064,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1044,6 +1081,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1055,7 +1093,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1072,6 +1110,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1083,7 +1122,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1099,6 +1138,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1110,7 +1150,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1126,6 +1166,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1137,7 +1178,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1153,6 +1194,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1164,7 +1206,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1180,6 +1222,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1191,7 +1234,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1207,6 +1250,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1218,7 +1262,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1234,6 +1278,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1245,7 +1290,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1261,6 +1306,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1272,7 +1318,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1288,6 +1334,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1299,7 +1346,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1315,6 +1362,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1326,7 +1374,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1342,6 +1390,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1353,7 +1402,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1369,6 +1418,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1380,7 +1430,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1396,6 +1446,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1407,7 +1458,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1423,6 +1474,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1434,7 +1486,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1450,6 +1502,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1461,7 +1514,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1477,6 +1530,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1488,7 +1542,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1504,6 +1558,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1515,7 +1570,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1531,6 +1586,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1542,7 +1598,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1558,6 +1614,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1569,7 +1626,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1585,6 +1642,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1596,7 +1654,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1612,6 +1670,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1623,7 +1682,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1639,6 +1698,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -1650,7 +1710,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1667,6 +1727,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_u
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -1678,7 +1739,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1694,6 +1755,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_u
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -1705,7 +1767,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1721,6 +1783,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_u
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -1732,7 +1795,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1749,6 +1812,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_u
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -1760,7 +1824,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1777,6 +1841,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_u
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -1788,7 +1853,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1805,6 +1870,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_u
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -1816,7 +1882,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1833,6 +1899,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_u
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -1844,7 +1911,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1861,6 +1928,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_u
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -1872,7 +1940,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1889,6 +1957,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_u
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -1900,7 +1969,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1916,6 +1985,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_u
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -1927,7 +1997,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1943,6 +2013,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_w
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -1954,7 +2025,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1970,6 +2041,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_w
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -1981,7 +2053,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -1997,6 +2069,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_w
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -2008,7 +2081,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2024,6 +2097,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_w
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -2035,7 +2109,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2051,6 +2125,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_w
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -2062,7 +2137,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2078,6 +2153,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_w
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -2089,7 +2165,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2105,6 +2181,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_w
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -2116,7 +2193,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2132,6 +2209,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_w
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -2143,7 +2221,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2159,6 +2237,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_w
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -2170,7 +2249,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2186,6 +2265,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_w
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -2197,7 +2277,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2213,6 +2293,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_s
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -2224,7 +2305,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2240,6 +2321,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_s
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -2251,7 +2333,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2267,6 +2349,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_s
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -2278,7 +2361,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2294,6 +2377,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_s
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -2305,7 +2389,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2321,6 +2405,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_s
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -2332,7 +2417,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2348,6 +2433,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_s
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -2359,7 +2445,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2375,6 +2461,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_s
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -2386,7 +2473,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2402,6 +2489,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_s
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -2413,7 +2501,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2429,6 +2517,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_s
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -2440,7 +2529,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2456,6 +2545,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_s
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -2467,7 +2557,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
                                   
     ASSERT_EQ(z_out, z);
   }
@@ -2484,6 +2574,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorr
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -2495,7 +2586,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorr
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2511,6 +2602,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorr
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -2522,7 +2614,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorr
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2538,6 +2630,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorr
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -2549,7 +2642,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorr
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
 
   }
@@ -2567,6 +2660,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorr
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -2578,7 +2672,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorr
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2595,6 +2689,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorr
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -2606,7 +2701,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorr
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2623,6 +2718,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorr
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -2634,7 +2730,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorr
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2651,6 +2747,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorr
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -2662,7 +2759,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorr
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2679,6 +2776,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorr
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -2690,7 +2788,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorr
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2707,6 +2805,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorr
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -2718,7 +2817,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorr
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2734,6 +2833,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorr
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -2745,7 +2845,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorr
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2761,6 +2861,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weakly
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -2772,7 +2873,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weakly
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2788,6 +2889,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weakly
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -2799,7 +2901,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weakly
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2815,6 +2917,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weakly
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -2826,7 +2929,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weakly
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2842,6 +2945,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weakly
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -2853,7 +2957,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weakly
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2869,6 +2973,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weakly
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -2880,7 +2985,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weakly
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2896,6 +3001,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weakly
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -2907,7 +3013,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weakly
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2923,6 +3029,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weakly
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -2934,7 +3041,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weakly
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2950,6 +3057,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weakly
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -2961,7 +3069,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weakly
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -2977,6 +3085,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weakly
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -2988,7 +3097,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weakly
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3004,6 +3113,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weakly
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -3015,7 +3125,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weakly
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3031,6 +3141,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_strong
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -3042,7 +3153,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_strong
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3058,6 +3169,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_strong
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -3069,7 +3181,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_strong
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3085,6 +3197,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_strong
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -3096,7 +3209,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_strong
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3112,6 +3225,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_strong
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -3123,7 +3237,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_strong
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3139,6 +3253,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_strong
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -3150,7 +3265,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_strong
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3166,6 +3281,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_strong
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -3177,7 +3293,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_strong
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3193,6 +3309,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_strong
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -3204,7 +3321,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_strong
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3220,6 +3337,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_strong
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -3231,7 +3349,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_strong
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3247,6 +3365,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_strong
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -3258,7 +3377,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_strong
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3274,6 +3393,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_strong
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -3285,7 +3405,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_strong
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3302,6 +3422,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_u
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3313,7 +3434,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3329,6 +3450,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_u
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3340,7 +3462,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3356,6 +3478,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_u
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3367,7 +3490,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3384,6 +3507,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_u
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3395,7 +3519,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3412,6 +3536,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_u
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3423,7 +3548,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3440,6 +3565,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_u
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3451,7 +3577,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3468,6 +3594,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_u
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3479,7 +3606,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3496,6 +3623,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_u
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3507,7 +3635,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3524,6 +3652,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_u
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3535,7 +3664,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3551,6 +3680,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_u
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3562,7 +3692,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3578,6 +3708,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_w
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3589,7 +3720,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3605,6 +3736,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_w
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3616,7 +3748,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3632,6 +3764,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_w
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3643,7 +3776,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3659,6 +3792,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_w
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3670,7 +3804,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3686,6 +3820,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_w
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3697,7 +3832,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3713,6 +3848,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_w
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3724,7 +3860,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3740,6 +3876,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_w
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3751,7 +3888,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3767,6 +3904,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_w
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3778,7 +3916,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3794,6 +3932,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_w
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3805,7 +3944,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3821,6 +3960,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_w
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3832,7 +3972,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3848,6 +3988,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_s
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3859,7 +4000,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3875,6 +4016,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_s
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3886,7 +4028,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3902,6 +4044,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_s
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3913,7 +4056,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3929,6 +4072,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_s
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3940,7 +4084,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3956,6 +4100,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_s
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3967,7 +4112,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -3983,6 +4128,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_s
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -3994,7 +4140,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4010,6 +4156,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_s
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -4021,7 +4168,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4037,6 +4184,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_s
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -4048,7 +4196,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4064,6 +4212,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_s
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -4075,7 +4224,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4091,6 +4240,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_s
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -4102,7 +4252,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4119,6 +4269,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_un
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4130,7 +4281,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_un
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4146,6 +4297,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_un
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4157,7 +4309,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_un
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4173,6 +4325,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_un
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4184,7 +4337,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_un
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4201,6 +4354,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_un
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4212,7 +4366,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_un
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4229,6 +4383,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_un
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4240,7 +4395,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_un
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4257,6 +4412,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_un
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4268,7 +4424,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_un
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4285,6 +4441,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_un
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4296,7 +4453,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_un
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4313,6 +4470,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_un
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4324,7 +4482,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_un
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4341,6 +4499,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_un
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4352,7 +4511,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_un
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4368,6 +4527,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_un
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4379,7 +4539,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_un
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4395,6 +4555,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_we
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4406,7 +4567,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_we
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4422,6 +4583,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_we
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4433,7 +4595,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_we
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4449,6 +4611,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_we
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4460,7 +4623,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_we
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4476,6 +4639,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_we
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4487,7 +4651,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_we
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4503,6 +4667,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_we
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4514,7 +4679,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_we
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4530,6 +4695,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_we
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4541,7 +4707,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_we
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4557,6 +4723,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_we
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4568,7 +4735,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_we
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4584,6 +4751,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_we
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4595,7 +4763,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_we
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4611,6 +4779,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_we
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4622,7 +4791,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_we
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4638,6 +4807,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_we
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4649,7 +4819,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_we
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4665,6 +4835,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_st
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4676,7 +4847,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_st
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4692,6 +4863,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_st
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4703,7 +4875,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_st
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4719,6 +4891,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_st
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4730,7 +4903,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_st
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4746,6 +4919,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_st
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4757,7 +4931,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_st
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4773,6 +4947,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_st
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4784,7 +4959,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_st
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4800,6 +4975,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_st
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4811,7 +4987,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_st
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4827,6 +5003,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_st
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4838,7 +5015,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_st
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4854,6 +5031,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_st
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4865,7 +5043,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_st
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4881,6 +5059,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_st
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4892,7 +5071,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_st
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4908,6 +5087,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_st
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -4919,7 +5099,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_st
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
                                   
     ASSERT_EQ(z_out, z);
   }
@@ -4936,6 +5116,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_unc
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -4947,7 +5128,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_unc
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4963,6 +5144,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_unc
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -4974,7 +5156,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_unc
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -4990,6 +5172,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_unc
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5001,7 +5184,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_unc
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
 
   }
@@ -5019,6 +5202,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_unc
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5030,7 +5214,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_unc
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5047,6 +5231,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_unc
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5058,7 +5243,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_unc
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5075,6 +5260,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_unc
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5086,7 +5272,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_unc
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5103,6 +5289,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_unc
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5114,7 +5301,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_unc
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5131,6 +5318,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_unc
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5142,7 +5330,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_unc
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5159,6 +5347,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_unc
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5170,7 +5359,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_unc
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5186,6 +5375,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_unc
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5197,7 +5387,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_unc
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5213,6 +5403,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5224,7 +5415,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5240,6 +5431,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5251,7 +5443,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5267,6 +5459,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5278,7 +5471,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5294,6 +5487,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5305,7 +5499,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5321,6 +5515,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5332,7 +5527,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5348,6 +5543,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5359,7 +5555,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5375,6 +5571,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5386,7 +5583,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5402,6 +5599,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5413,7 +5611,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5429,6 +5627,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5440,7 +5639,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5456,6 +5655,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5467,7 +5667,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5483,6 +5683,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_str
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5494,7 +5695,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_str
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5510,6 +5711,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_str
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5521,7 +5723,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_str
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5537,6 +5739,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_str
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5548,7 +5751,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_str
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5564,6 +5767,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_str
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5575,7 +5779,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_str
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5591,6 +5795,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_str
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5602,7 +5807,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_str
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5618,6 +5823,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_str
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5629,7 +5835,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_str
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5645,6 +5851,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_str
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5656,7 +5863,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_str
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5672,6 +5879,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_str
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5683,7 +5891,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_str
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5699,6 +5907,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_str
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5710,7 +5919,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_str
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5726,6 +5935,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_str
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
@@ -5737,7 +5947,7 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_str
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5754,6 +5964,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -5765,7 +5976,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5781,6 +5992,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -5792,7 +6004,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5808,6 +6020,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -5819,7 +6032,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5836,6 +6049,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -5847,7 +6061,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5864,6 +6078,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -5875,7 +6090,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5892,6 +6107,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -5903,7 +6119,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5920,6 +6136,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -5931,7 +6148,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5948,6 +6165,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -5959,7 +6177,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -5976,6 +6194,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -5987,7 +6206,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6003,6 +6222,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6014,7 +6234,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6030,6 +6250,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6041,7 +6262,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6057,6 +6278,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6068,7 +6290,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6084,6 +6306,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6095,7 +6318,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6111,6 +6334,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6122,7 +6346,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6138,6 +6362,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6149,7 +6374,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6165,6 +6390,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6176,7 +6402,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6192,6 +6418,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6203,7 +6430,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6219,6 +6446,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6230,7 +6458,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6246,6 +6474,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6257,7 +6486,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6273,6 +6502,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6284,7 +6514,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6300,6 +6530,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6311,7 +6542,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6327,6 +6558,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6338,7 +6570,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6354,6 +6586,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6365,7 +6598,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6381,6 +6614,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6392,7 +6626,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6408,6 +6642,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6419,7 +6654,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6435,6 +6670,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6446,7 +6682,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6462,6 +6698,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6473,7 +6710,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6489,6 +6726,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6500,7 +6738,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6516,6 +6754,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6527,7 +6766,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6543,6 +6782,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
@@ -6554,7 +6794,7 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6571,6 +6811,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -6582,7 +6823,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6598,6 +6839,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -6609,7 +6851,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6625,6 +6867,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -6636,7 +6879,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6653,6 +6896,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -6664,7 +6908,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6681,6 +6925,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -6692,7 +6937,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6709,6 +6954,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -6720,7 +6966,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6737,6 +6983,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -6748,7 +6995,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6765,6 +7012,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -6776,7 +7024,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6793,6 +7041,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -6804,7 +7053,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6820,6 +7069,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -6831,7 +7081,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6847,6 +7097,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -6858,7 +7109,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6874,6 +7125,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -6885,7 +7137,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6901,6 +7153,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -6912,7 +7165,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6928,6 +7181,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -6939,7 +7193,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6955,6 +7209,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -6966,7 +7221,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -6982,6 +7237,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -6993,7 +7249,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -7009,6 +7265,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -7020,7 +7277,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -7036,6 +7293,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -7047,7 +7305,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -7063,6 +7321,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -7074,7 +7333,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -7090,6 +7349,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -7101,7 +7361,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -7117,6 +7377,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -7128,7 +7389,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -7144,6 +7405,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -7155,7 +7417,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -7171,6 +7433,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -7182,7 +7445,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -7198,6 +7461,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -7209,7 +7473,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -7225,6 +7489,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -7236,7 +7501,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -7252,6 +7517,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -7263,7 +7529,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -7279,6 +7545,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -7290,7 +7557,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -7306,6 +7573,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -7317,7 +7585,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -7333,6 +7601,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -7344,7 +7613,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
@@ -7360,6 +7629,7 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
@@ -7371,27 +7641,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
                                   
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_uncorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000.csv";
+  const char *problem_file = "knapPI_1_200_1000.csv";
   /* For each 1_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7399,26 +7670,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_unc
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_uncorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000.csv";
+  const char *problem_file = "knapPI_1_200_10000.csv";
   /* For each 1_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7426,26 +7698,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_unc
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_uncorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_100000.csv";
+  const char *problem_file = "knapPI_1_200_100000.csv";
   /* For each 1_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7453,28 +7726,29 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_unc
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
 
   }
 }
 
   /* For each 1_50_1000000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_uncorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000000.csv";
+  const char *problem_file = "knapPI_1_200_1000000.csv";
   /* For each 1_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7482,27 +7756,28 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_unc
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
   /* For each 1_50_10000000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_uncorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000000.csv";
+  const char *problem_file = "knapPI_1_200_10000000.csv";
   /* For each 1_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7510,27 +7785,28 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_unc
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_1000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_uncorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000.csv";
+  const char *problem_file = "knapPI_1_500_1000.csv";
   /* For each 1_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7538,27 +7814,28 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_unc
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_10000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_uncorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000.csv";
+  const char *problem_file = "knapPI_1_500_10000.csv";
   /* For each 1_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7566,27 +7843,28 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_unc
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_100000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_uncorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_100000.csv";
+  const char *problem_file = "knapPI_1_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7594,27 +7872,28 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_unc
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_1000000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_uncorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000000.csv";
+  const char *problem_file = "knapPI_1_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7622,26 +7901,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_unc
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 /* For each 1_100_10000000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_uncorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000000.csv";
+  const char *problem_file = "knapPI_1_500_10000000.csv";
   /* For each 1_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7649,26 +7929,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_unc
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_weaklycorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weaklycorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000.csv";
+  const char *problem_file = "knapPI_2_200_1000.csv";
   /* For each 2_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7676,26 +7957,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_wea
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_weaklycorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weaklycorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000.csv";
+  const char *problem_file = "knapPI_2_200_10000.csv";
   /* For each 1_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7703,26 +7985,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_wea
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_weaklycorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weaklycorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_100000.csv";
+  const char *problem_file = "knapPI_2_200_100000.csv";
   /* For each 2_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7730,26 +8013,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_wea
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_weaklycorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weaklycorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000000.csv";
+  const char *problem_file = "knapPI_2_200_1000000.csv";
   /* For each 2_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7757,26 +8041,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_wea
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_weaklycorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weaklycorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000000.csv";
+  const char *problem_file = "knapPI_2_200_10000000.csv";
   /* For each 2_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7784,26 +8069,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_wea
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_weaklycorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weaklycorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000.csv";
+  const char *problem_file = "knapPI_2_500_1000.csv";
   /* For each 2_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7811,26 +8097,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_wea
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_weaklycorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weaklycorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000.csv";
+  const char *problem_file = "knapPI_2_500_10000.csv";
   /* For each 1_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7838,26 +8125,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_wea
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_weaklycorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weaklycorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_100000.csv";
+  const char *problem_file = "knapPI_2_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7865,26 +8153,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_wea
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_weaklycorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weaklycorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000000.csv";
+  const char *problem_file = "knapPI_2_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7892,26 +8181,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_wea
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_weaklycorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_weaklycorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000000.csv";
+  const char *problem_file = "knapPI_2_500_10000000.csv";
   /* For each 2_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7919,26 +8209,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_wea
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_stronglycorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stronglycorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000.csv";
+  const char *problem_file = "knapPI_3_200_1000.csv";
   /* For each 3_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7946,26 +8237,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_str
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_stronglycorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stronglycorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000.csv";
+  const char *problem_file = "knapPI_3_200_10000.csv";
   /* For each 3_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -7973,26 +8265,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_str
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_stronglycorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stronglycorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_100000.csv";
+  const char *problem_file = "knapPI_3_200_100000.csv";
   /* For each 2_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8000,26 +8293,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_str
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_stronglycorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stronglycorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000000.csv";
+  const char *problem_file = "knapPI_3_200_1000000.csv";
   /* For each 3_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8027,26 +8321,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_str
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_stronglycorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stronglycorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000000.csv";
+  const char *problem_file = "knapPI_3_200_10000000.csv";
   /* For each 3_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8054,26 +8349,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_str
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_stronglycorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stronglycorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000.csv";
+  const char *problem_file = "knapPI_3_500_1000.csv";
   /* For each 3_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8081,26 +8377,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_str
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_stronglycorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stronglycorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000.csv";
+  const char *problem_file = "knapPI_3_500_10000.csv";
   /* For each 3_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8108,26 +8405,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_str
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_stronglycorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stronglycorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_100000.csv";
+  const char *problem_file = "knapPI_3_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8135,26 +8433,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_str
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_stronglycorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stronglycorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000000.csv";
+  const char *problem_file = "knapPI_3_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8162,26 +8461,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_str
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_stronglycorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_stronglycorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000000.csv";
+  const char *problem_file = "knapPI_3_500_10000000.csv";
   /* For each 3_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8189,27 +8489,28 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_medium_eps_str
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
   /* Linear enum branching */
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_uncorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_uncorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000.csv";
+  const char *problem_file = "knapPI_1_200_1000.csv";
   /* For each 1_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8217,26 +8518,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_uncorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_uncorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000.csv";
+  const char *problem_file = "knapPI_1_200_10000.csv";
   /* For each 1_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8244,26 +8546,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_uncorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_uncorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_100000.csv";
+  const char *problem_file = "knapPI_1_200_100000.csv";
   /* For each 1_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8271,27 +8574,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
   /* For each 1_50_1000000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_uncorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_uncorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000000.csv";
+  const char *problem_file = "knapPI_1_200_1000000.csv";
   /* For each 1_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8299,27 +8603,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
   /* For each 1_50_10000000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_uncorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_uncorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000000.csv";
+  const char *problem_file = "knapPI_1_200_10000000.csv";
   /* For each 1_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8327,27 +8632,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_1000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_uncorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_uncorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000.csv";
+  const char *problem_file = "knapPI_1_500_1000.csv";
   /* For each 1_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8355,27 +8661,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_10000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_uncorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_uncorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000.csv";
+  const char *problem_file = "knapPI_1_500_10000.csv";
   /* For each 1_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8383,27 +8690,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_100000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_uncorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_uncorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_100000.csv";
+  const char *problem_file = "knapPI_1_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8411,27 +8719,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_1000000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_uncorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_uncorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000000.csv";
+  const char *problem_file = "knapPI_1_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8439,26 +8748,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 /* For each 1_100_10000000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_uncorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_uncorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000000.csv";
+  const char *problem_file = "knapPI_1_500_10000000.csv";
   /* For each 1_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8466,26 +8776,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_weaklycorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_weaklycorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000.csv";
+  const char *problem_file = "knapPI_2_200_1000.csv";
   /* For each 2_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8493,26 +8804,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_weaklycorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_weaklycorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000.csv";
+  const char *problem_file = "knapPI_2_200_10000.csv";
   /* For each 1_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8520,26 +8832,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_weaklycorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_weaklycorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_100000.csv";
+  const char *problem_file = "knapPI_2_200_100000.csv";
   /* For each 2_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8547,26 +8860,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_weaklycorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_weaklycorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000000.csv";
+  const char *problem_file = "knapPI_2_200_1000000.csv";
   /* For each 2_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8574,26 +8888,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_weaklycorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_weaklycorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000000.csv";
+  const char *problem_file = "knapPI_2_200_10000000.csv";
   /* For each 2_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8601,26 +8916,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_weaklycorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_weaklycorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000.csv";
+  const char *problem_file = "knapPI_2_500_1000.csv";
   /* For each 2_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8628,26 +8944,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_weaklycorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_weaklycorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000.csv";
+  const char *problem_file = "knapPI_2_500_10000.csv";
   /* For each 1_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8655,26 +8972,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_weaklycorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_weaklycorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_100000.csv";
+  const char *problem_file = "knapPI_2_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8682,26 +9000,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_weaklycorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_weaklycorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000000.csv";
+  const char *problem_file = "knapPI_2_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8709,26 +9028,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_weaklycorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_weaklycorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000000.csv";
+  const char *problem_file = "knapPI_2_500_10000000.csv";
   /* For each 2_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8736,26 +9056,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_stronglycorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_stronglycorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000.csv";
+  const char *problem_file = "knapPI_3_200_1000.csv";
   /* For each 3_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8763,26 +9084,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_stronglycorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_stronglycorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000.csv";
+  const char *problem_file = "knapPI_3_200_10000.csv";
   /* For each 3_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8790,26 +9112,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_stronglycorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_stronglycorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_100000.csv";
+  const char *problem_file = "knapPI_3_200_100000.csv";
   /* For each 2_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8817,26 +9140,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_stronglycorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_stronglycorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000000.csv";
+  const char *problem_file = "knapPI_3_200_1000000.csv";
   /* For each 3_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8844,26 +9168,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_stronglycorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_stronglycorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000000.csv";
+  const char *problem_file = "knapPI_3_200_10000000.csv";
   /* For each 3_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8871,26 +9196,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_stronglycorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_stronglycorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000.csv";
+  const char *problem_file = "knapPI_3_500_1000.csv";
   /* For each 3_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8898,26 +9224,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_stronglycorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_stronglycorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000.csv";
+  const char *problem_file = "knapPI_3_500_10000.csv";
   /* For each 3_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8925,26 +9252,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_stronglycorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_stronglycorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_100000.csv";
+  const char *problem_file = "knapPI_3_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8952,26 +9280,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_stronglycorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_stronglycorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000000.csv";
+  const char *problem_file = "knapPI_3_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -8979,26 +9308,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_eps_stronglycorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_auto_eps_stronglycorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000000.csv";
+  const char *problem_file = "knapPI_3_500_10000000.csv";
   /* For each 3_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9006,27 +9336,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_medium_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
   /* Truncation Branching */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_uncorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_uncorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000.csv";
+  const char *problem_file = "knapPI_1_200_1000.csv";
   /* For each 1_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9034,26 +9365,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_uncorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_uncorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000.csv";
+  const char *problem_file = "knapPI_1_200_10000.csv";
   /* For each 1_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9061,26 +9393,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_uncorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_uncorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_100000.csv";
+  const char *problem_file = "knapPI_1_200_100000.csv";
   /* For each 1_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9088,27 +9421,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
   /* For each 1_50_1000000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_uncorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_uncorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000000.csv";
+  const char *problem_file = "knapPI_1_200_1000000.csv";
   /* For each 1_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9116,27 +9450,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
   /* For each 1_50_10000000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_uncorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_uncorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000000.csv";
+  const char *problem_file = "knapPI_1_200_10000000.csv";
   /* For each 1_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9144,27 +9479,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_1000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_uncorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_uncorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000.csv";
+  const char *problem_file = "knapPI_1_500_1000.csv";
   /* For each 1_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9172,27 +9508,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_10000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_uncorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_uncorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000.csv";
+  const char *problem_file = "knapPI_1_500_10000.csv";
   /* For each 1_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9200,27 +9537,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_100000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_uncorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_uncorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_100000.csv";
+  const char *problem_file = "knapPI_1_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9228,27 +9566,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_1000000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_uncorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_uncorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000000.csv";
+  const char *problem_file = "knapPI_1_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9256,26 +9595,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 /* For each 1_100_10000000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_uncorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_uncorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000000.csv";
+  const char *problem_file = "knapPI_1_500_10000000.csv";
   /* For each 1_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9283,26 +9623,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_weaklycorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_weaklycorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000.csv";
+  const char *problem_file = "knapPI_2_200_1000.csv";
   /* For each 2_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9310,26 +9651,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_weaklycorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_weaklycorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000.csv";
+  const char *problem_file = "knapPI_2_200_10000.csv";
   /* For each 1_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9337,26 +9679,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_weaklycorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_weaklycorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_100000.csv";
+  const char *problem_file = "knapPI_2_200_100000.csv";
   /* For each 2_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9364,26 +9707,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_weaklycorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_weaklycorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000000.csv";
+  const char *problem_file = "knapPI_2_200_1000000.csv";
   /* For each 2_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9391,26 +9735,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_weaklycorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_weaklycorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000000.csv";
+  const char *problem_file = "knapPI_2_200_10000000.csv";
   /* For each 2_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9418,26 +9763,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_weaklycorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_weaklycorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000.csv";
+  const char *problem_file = "knapPI_2_500_1000.csv";
   /* For each 2_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9445,26 +9791,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_weaklycorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_weaklycorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000.csv";
+  const char *problem_file = "knapPI_2_500_10000.csv";
   /* For each 1_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9472,26 +9819,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_weaklycorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_weaklycorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_100000.csv";
+  const char *problem_file = "knapPI_2_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9499,26 +9847,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_weaklycorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_weaklycorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000000.csv";
+  const char *problem_file = "knapPI_2_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9526,26 +9875,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_weaklycorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_weaklycorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000000.csv";
+  const char *problem_file = "knapPI_2_500_10000000.csv";
   /* For each 2_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9553,26 +9903,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_stronglycorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_stronglycorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000.csv";
+  const char *problem_file = "knapPI_3_200_1000.csv";
   /* For each 3_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9580,26 +9931,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_stronglycorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_stronglycorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000.csv";
+  const char *problem_file = "knapPI_3_200_10000.csv";
   /* For each 3_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9607,26 +9959,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_stronglycorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_stronglycorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_100000.csv";
+  const char *problem_file = "knapPI_3_200_100000.csv";
   /* For each 2_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9634,26 +9987,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_stronglycorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_stronglycorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000000.csv";
+  const char *problem_file = "knapPI_3_200_1000000.csv";
   /* For each 3_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9661,26 +10015,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_stronglycorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_stronglycorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000000.csv";
+  const char *problem_file = "knapPI_3_200_10000000.csv";
   /* For each 3_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9688,26 +10043,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_stronglycorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_stronglycorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000.csv";
+  const char *problem_file = "knapPI_3_500_1000.csv";
   /* For each 3_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9715,26 +10071,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_stronglycorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_stronglycorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000.csv";
+  const char *problem_file = "knapPI_3_500_10000.csv";
   /* For each 3_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9742,26 +10099,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_stronglycorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_stronglycorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_100000.csv";
+  const char *problem_file = "knapPI_3_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9769,26 +10127,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_stronglycorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_stronglycorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000000.csv";
+  const char *problem_file = "knapPI_3_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9796,26 +10155,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps_stronglycorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_auto_eps_stronglycorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.6;
+  double epsilon = 0.0;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000000.csv";
+  const char *problem_file = "knapPI_3_500_10000000.csv";
   /* For each 3_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9823,27 +10183,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_medium_eps
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
                                   
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_uncorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000.csv";
+  const char *problem_file = "knapPI_1_200_1000.csv";
   /* For each 1_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9851,26 +10212,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_un
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_uncorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000.csv";
+  const char *problem_file = "knapPI_1_200_10000.csv";
   /* For each 1_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9878,26 +10240,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_un
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_uncorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_100000.csv";
+  const char *problem_file = "knapPI_1_200_100000.csv";
   /* For each 1_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9905,28 +10268,29 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_un
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
 
   }
 }
 
   /* For each 1_50_1000000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_uncorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000000.csv";
+  const char *problem_file = "knapPI_1_200_1000000.csv";
   /* For each 1_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9934,27 +10298,28 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_un
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
   /* For each 1_50_10000000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_uncorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000000.csv";
+  const char *problem_file = "knapPI_1_200_10000000.csv";
   /* For each 1_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9962,27 +10327,28 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_un
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_1000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_uncorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000.csv";
+  const char *problem_file = "knapPI_1_500_1000.csv";
   /* For each 1_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -9990,27 +10356,28 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_un
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_10000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_uncorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000.csv";
+  const char *problem_file = "knapPI_1_500_10000.csv";
   /* For each 1_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10018,27 +10385,28 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_un
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_100000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_uncorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_100000.csv";
+  const char *problem_file = "knapPI_1_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10046,27 +10414,28 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_un
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_1000000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_uncorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000000.csv";
+  const char *problem_file = "knapPI_1_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10074,26 +10443,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_un
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 /* For each 1_100_10000000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_uncorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_uncorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000000.csv";
+  const char *problem_file = "knapPI_1_500_10000000.csv";
   /* For each 1_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10101,26 +10471,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_un
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_weaklycorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weaklycorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000.csv";
+  const char *problem_file = "knapPI_2_200_1000.csv";
   /* For each 2_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10128,26 +10499,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_we
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_weaklycorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weaklycorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000.csv";
+  const char *problem_file = "knapPI_2_200_10000.csv";
   /* For each 1_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10155,26 +10527,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_we
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_weaklycorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weaklycorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_100000.csv";
+  const char *problem_file = "knapPI_2_200_100000.csv";
   /* For each 2_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10182,26 +10555,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_we
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_weaklycorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weaklycorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000000.csv";
+  const char *problem_file = "knapPI_2_200_1000000.csv";
   /* For each 2_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10209,26 +10583,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_we
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_weaklycorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weaklycorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000000.csv";
+  const char *problem_file = "knapPI_2_200_10000000.csv";
   /* For each 2_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10236,26 +10611,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_we
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_weaklycorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weaklycorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000.csv";
+  const char *problem_file = "knapPI_2_500_1000.csv";
   /* For each 2_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10263,26 +10639,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_we
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_weaklycorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weaklycorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000.csv";
+  const char *problem_file = "knapPI_2_500_10000.csv";
   /* For each 1_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10290,26 +10667,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_we
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_weaklycorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weaklycorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_100000.csv";
+  const char *problem_file = "knapPI_2_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10317,26 +10695,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_we
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_weaklycorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weaklycorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000000.csv";
+  const char *problem_file = "knapPI_2_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10344,26 +10723,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_we
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_weaklycorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_weaklycorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000000.csv";
+  const char *problem_file = "knapPI_2_500_10000000.csv";
   /* For each 2_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10371,26 +10751,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_we
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_stronglycorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_stronglycorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000.csv";
+  const char *problem_file = "knapPI_3_200_1000.csv";
   /* For each 3_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10398,26 +10779,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_st
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_stronglycorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_stronglycorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000.csv";
+  const char *problem_file = "knapPI_3_200_10000.csv";
   /* For each 3_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10425,26 +10807,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_st
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_stronglycorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_stronglycorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_100000.csv";
+  const char *problem_file = "knapPI_3_200_100000.csv";
   /* For each 2_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10452,26 +10835,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_st
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_stronglycorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_stronglycorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000000.csv";
+  const char *problem_file = "knapPI_3_200_1000000.csv";
   /* For each 3_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10479,26 +10863,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_st
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_stronglycorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_stronglycorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000000.csv";
+  const char *problem_file = "knapPI_3_200_10000000.csv";
   /* For each 3_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10506,26 +10891,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_st
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_stronglycorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_stronglycorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000.csv";
+  const char *problem_file = "knapPI_3_500_1000.csv";
   /* For each 3_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10533,26 +10919,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_st
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_stronglycorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_stronglycorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000.csv";
+  const char *problem_file = "knapPI_3_500_10000.csv";
   /* For each 3_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10560,26 +10947,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_st
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_stronglycorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_stronglycorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_100000.csv";
+  const char *problem_file = "knapPI_3_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10587,26 +10975,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_st
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_stronglycorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_stronglycorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000000.csv";
+  const char *problem_file = "knapPI_3_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10614,26 +11003,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_st
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_stronglycorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_low_eps_stronglycorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000000.csv";
+  const char *problem_file = "knapPI_3_500_10000000.csv";
   /* For each 3_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10641,27 +11031,28 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midhigh_eps_st
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
   /* Linear enum branching */
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_uncorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_uncorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000.csv";
+  const char *problem_file = "knapPI_1_200_1000.csv";
   /* For each 1_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10669,26 +11060,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_uncorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_uncorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000.csv";
+  const char *problem_file = "knapPI_1_200_10000.csv";
   /* For each 1_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10696,26 +11088,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_uncorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_uncorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_100000.csv";
+  const char *problem_file = "knapPI_1_200_100000.csv";
   /* For each 1_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10723,27 +11116,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
   /* For each 1_50_1000000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_uncorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_uncorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000000.csv";
+  const char *problem_file = "knapPI_1_200_1000000.csv";
   /* For each 1_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10751,27 +11145,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
   /* For each 1_50_10000000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_uncorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_uncorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000000.csv";
+  const char *problem_file = "knapPI_1_200_10000000.csv";
   /* For each 1_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10779,27 +11174,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_1000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_uncorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_uncorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000.csv";
+  const char *problem_file = "knapPI_1_500_1000.csv";
   /* For each 1_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10807,27 +11203,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_10000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_uncorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_uncorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000.csv";
+  const char *problem_file = "knapPI_1_500_10000.csv";
   /* For each 1_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10835,27 +11232,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_100000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_uncorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_uncorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_100000.csv";
+  const char *problem_file = "knapPI_1_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10863,27 +11261,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_1000000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_uncorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_uncorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000000.csv";
+  const char *problem_file = "knapPI_1_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10891,26 +11290,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 /* For each 1_100_10000000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_uncorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_uncorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000000.csv";
+  const char *problem_file = "knapPI_1_500_10000000.csv";
   /* For each 1_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10918,26 +11318,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_weaklycorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_weaklycorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000.csv";
+  const char *problem_file = "knapPI_2_200_1000.csv";
   /* For each 2_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10945,26 +11346,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_weaklycorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_weaklycorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000.csv";
+  const char *problem_file = "knapPI_2_200_10000.csv";
   /* For each 1_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10972,26 +11374,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_weaklycorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_weaklycorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_100000.csv";
+  const char *problem_file = "knapPI_2_200_100000.csv";
   /* For each 2_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -10999,26 +11402,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_weaklycorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_weaklycorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000000.csv";
+  const char *problem_file = "knapPI_2_200_1000000.csv";
   /* For each 2_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11026,26 +11430,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_weaklycorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_weaklycorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000000.csv";
+  const char *problem_file = "knapPI_2_200_10000000.csv";
   /* For each 2_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11053,26 +11458,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_weaklycorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_weaklycorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000.csv";
+  const char *problem_file = "knapPI_2_500_1000.csv";
   /* For each 2_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11080,26 +11486,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_weaklycorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_weaklycorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000.csv";
+  const char *problem_file = "knapPI_2_500_10000.csv";
   /* For each 1_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11107,26 +11514,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_weaklycorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_weaklycorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_100000.csv";
+  const char *problem_file = "knapPI_2_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11134,26 +11542,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_weaklycorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_weaklycorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000000.csv";
+  const char *problem_file = "knapPI_2_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11161,26 +11570,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_weaklycorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_weaklycorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000000.csv";
+  const char *problem_file = "knapPI_2_500_10000000.csv";
   /* For each 2_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11188,26 +11598,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_stronglycorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_stronglycorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000.csv";
+  const char *problem_file = "knapPI_3_200_1000.csv";
   /* For each 3_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11215,26 +11626,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_stronglycorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_stronglycorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000.csv";
+  const char *problem_file = "knapPI_3_200_10000.csv";
   /* For each 3_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11242,26 +11654,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_stronglycorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_stronglycorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_100000.csv";
+  const char *problem_file = "knapPI_3_200_100000.csv";
   /* For each 2_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11269,26 +11682,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_stronglycorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_stronglycorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000000.csv";
+  const char *problem_file = "knapPI_3_200_1000000.csv";
   /* For each 3_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11296,26 +11710,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_stronglycorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_stronglycorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000000.csv";
+  const char *problem_file = "knapPI_3_200_10000000.csv";
   /* For each 3_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11323,26 +11738,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_stronglycorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_stronglycorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000.csv";
+  const char *problem_file = "knapPI_3_500_1000.csv";
   /* For each 3_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11350,26 +11766,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_stronglycorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_stronglycorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000.csv";
+  const char *problem_file = "knapPI_3_500_10000.csv";
   /* For each 3_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11377,26 +11794,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_stronglycorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_stronglycorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_100000.csv";
+  const char *problem_file = "knapPI_3_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11404,26 +11822,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_stronglycorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_stronglycorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000000.csv";
+  const char *problem_file = "knapPI_3_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11431,26 +11850,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_eps_stronglycorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_low_eps_stronglycorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000000.csv";
+  const char *problem_file = "knapPI_3_500_10000000.csv";
   /* For each 3_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11458,27 +11878,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midhigh_e
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
   /* Truncation Branching */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_uncorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_uncorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000.csv";
+  const char *problem_file = "knapPI_1_200_1000.csv";
   /* For each 1_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11486,26 +11907,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_uncorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_uncorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000.csv";
+  const char *problem_file = "knapPI_1_200_10000.csv";
   /* For each 1_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11513,26 +11935,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_uncorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_uncorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_100000.csv";
+  const char *problem_file = "knapPI_1_200_100000.csv";
   /* For each 1_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11540,27 +11963,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
   /* For each 1_50_1000000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_uncorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_uncorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000000.csv";
+  const char *problem_file = "knapPI_1_200_1000000.csv";
   /* For each 1_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11568,27 +11992,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
   /* For each 1_50_10000000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_uncorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_uncorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000000.csv";
+  const char *problem_file = "knapPI_1_200_10000000.csv";
   /* For each 1_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11596,27 +12021,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_1000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_uncorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_uncorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000.csv";
+  const char *problem_file = "knapPI_1_500_1000.csv";
   /* For each 1_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11624,27 +12050,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_10000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_uncorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_uncorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000.csv";
+  const char *problem_file = "knapPI_1_500_10000.csv";
   /* For each 1_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11652,27 +12079,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_100000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_uncorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_uncorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_100000.csv";
+  const char *problem_file = "knapPI_1_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11680,27 +12108,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_1000000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_uncorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_uncorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000000.csv";
+  const char *problem_file = "knapPI_1_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11708,26 +12137,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 /* For each 1_100_10000000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_uncorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_uncorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000000.csv";
+  const char *problem_file = "knapPI_1_500_10000000.csv";
   /* For each 1_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11735,26 +12165,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_weaklycorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_weaklycorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000.csv";
+  const char *problem_file = "knapPI_2_200_1000.csv";
   /* For each 2_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11762,26 +12193,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_weaklycorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_weaklycorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000.csv";
+  const char *problem_file = "knapPI_2_200_10000.csv";
   /* For each 1_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11789,26 +12221,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_weaklycorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_weaklycorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_100000.csv";
+  const char *problem_file = "knapPI_2_200_100000.csv";
   /* For each 2_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11816,26 +12249,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_weaklycorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_weaklycorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000000.csv";
+  const char *problem_file = "knapPI_2_200_1000000.csv";
   /* For each 2_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11843,26 +12277,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_weaklycorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_weaklycorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000000.csv";
+  const char *problem_file = "knapPI_2_200_10000000.csv";
   /* For each 2_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11870,26 +12305,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_weaklycorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_weaklycorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000.csv";
+  const char *problem_file = "knapPI_2_500_1000.csv";
   /* For each 2_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11897,26 +12333,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_weaklycorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_weaklycorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000.csv";
+  const char *problem_file = "knapPI_2_500_10000.csv";
   /* For each 1_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11924,26 +12361,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_weaklycorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_weaklycorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_100000.csv";
+  const char *problem_file = "knapPI_2_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11951,26 +12389,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_weaklycorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_weaklycorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000000.csv";
+  const char *problem_file = "knapPI_2_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -11978,26 +12417,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_weaklycorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_weaklycorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000000.csv";
+  const char *problem_file = "knapPI_2_500_10000000.csv";
   /* For each 2_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12005,26 +12445,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_stronglycorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_stronglycorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000.csv";
+  const char *problem_file = "knapPI_3_200_1000.csv";
   /* For each 3_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12032,26 +12473,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_stronglycorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_stronglycorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000.csv";
+  const char *problem_file = "knapPI_3_200_10000.csv";
   /* For each 3_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12059,26 +12501,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_stronglycorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_stronglycorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_100000.csv";
+  const char *problem_file = "knapPI_3_200_100000.csv";
   /* For each 2_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12086,26 +12529,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_stronglycorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_stronglycorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000000.csv";
+  const char *problem_file = "knapPI_3_200_1000000.csv";
   /* For each 3_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12113,26 +12557,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_stronglycorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_stronglycorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000000.csv";
+  const char *problem_file = "knapPI_3_200_10000000.csv";
   /* For each 3_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12140,26 +12585,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_stronglycorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_stronglycorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000.csv";
+  const char *problem_file = "knapPI_3_500_1000.csv";
   /* For each 3_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12167,26 +12613,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_stronglycorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_stronglycorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000.csv";
+  const char *problem_file = "knapPI_3_500_10000.csv";
   /* For each 3_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12194,26 +12641,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_stronglycorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_stronglycorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_100000.csv";
+  const char *problem_file = "knapPI_3_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12221,26 +12669,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_stronglycorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_stronglycorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000000.csv";
+  const char *problem_file = "knapPI_3_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12248,26 +12697,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_eps_stronglycorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_low_eps_stronglycorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 0.9;
+  double epsilon = 0.01;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000000.csv";
+  const char *problem_file = "knapPI_3_500_10000000.csv";
   /* For each 3_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12275,27 +12725,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midhigh_ep
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
                                   
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_uncorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_uncorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000.csv";
+  const char *problem_file = "knapPI_1_200_1000.csv";
   /* For each 1_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12303,26 +12754,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_uncor
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_uncorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_uncorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000.csv";
+  const char *problem_file = "knapPI_1_200_10000.csv";
   /* For each 1_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12330,26 +12782,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_uncor
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_uncorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_uncorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_100000.csv";
+  const char *problem_file = "knapPI_1_200_100000.csv";
   /* For each 1_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12357,28 +12810,29 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_uncor
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
 
   }
 }
 
   /* For each 1_50_1000000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_uncorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_uncorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000000.csv";
+  const char *problem_file = "knapPI_1_200_1000000.csv";
   /* For each 1_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12386,27 +12840,28 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_uncor
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
   /* For each 1_50_10000000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_uncorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_uncorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000000.csv";
+  const char *problem_file = "knapPI_1_200_10000000.csv";
   /* For each 1_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12414,27 +12869,28 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_uncor
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_1000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_uncorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_uncorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000.csv";
+  const char *problem_file = "knapPI_1_500_1000.csv";
   /* For each 1_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12442,27 +12898,28 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_uncor
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_10000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_uncorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_uncorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000.csv";
+  const char *problem_file = "knapPI_1_500_10000.csv";
   /* For each 1_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12470,27 +12927,28 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_uncor
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_100000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_uncorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_uncorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_100000.csv";
+  const char *problem_file = "knapPI_1_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12498,27 +12956,28 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_uncor
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_1000000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_uncorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_uncorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000000.csv";
+  const char *problem_file = "knapPI_1_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12526,26 +12985,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_uncor
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 /* For each 1_100_10000000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_uncorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_uncorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000000.csv";
+  const char *problem_file = "knapPI_1_500_10000000.csv";
   /* For each 1_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12553,26 +13013,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_uncor
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_weaklycorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_weaklycorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000.csv";
+  const char *problem_file = "knapPI_2_200_1000.csv";
   /* For each 2_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12580,26 +13041,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_weakl
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_weaklycorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_weaklycorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000.csv";
+  const char *problem_file = "knapPI_2_200_10000.csv";
   /* For each 1_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12607,26 +13069,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_weakl
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_weaklycorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_weaklycorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_100000.csv";
+  const char *problem_file = "knapPI_2_200_100000.csv";
   /* For each 2_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12634,26 +13097,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_weakl
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_weaklycorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_weaklycorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000000.csv";
+  const char *problem_file = "knapPI_2_200_1000000.csv";
   /* For each 2_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12661,26 +13125,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_weakl
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_weaklycorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_weaklycorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000000.csv";
+  const char *problem_file = "knapPI_2_200_10000000.csv";
   /* For each 2_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12688,26 +13153,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_weakl
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_weaklycorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_weaklycorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000.csv";
+  const char *problem_file = "knapPI_2_500_1000.csv";
   /* For each 2_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12715,26 +13181,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_weakl
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_weaklycorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_weaklycorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000.csv";
+  const char *problem_file = "knapPI_2_500_10000.csv";
   /* For each 1_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12742,26 +13209,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_weakl
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_weaklycorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_weaklycorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_100000.csv";
+  const char *problem_file = "knapPI_2_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12769,26 +13237,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_weakl
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_weaklycorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_weaklycorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000000.csv";
+  const char *problem_file = "knapPI_2_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12796,26 +13265,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_weakl
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_weaklycorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_weaklycorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000000.csv";
+  const char *problem_file = "knapPI_2_500_10000000.csv";
   /* For each 2_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12823,26 +13293,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_weakl
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_stronglycorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_stronglycorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000.csv";
+  const char *problem_file = "knapPI_3_200_1000.csv";
   /* For each 3_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12850,26 +13321,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_stron
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_stronglycorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_stronglycorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000.csv";
+  const char *problem_file = "knapPI_3_200_10000.csv";
   /* For each 3_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12877,26 +13349,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_stron
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_stronglycorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_stronglycorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_100000.csv";
+  const char *problem_file = "knapPI_3_200_100000.csv";
   /* For each 2_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12904,26 +13377,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_stron
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_stronglycorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_stronglycorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000000.csv";
+  const char *problem_file = "knapPI_3_200_1000000.csv";
   /* For each 3_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12931,26 +13405,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_stron
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_stronglycorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_stronglycorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000000.csv";
+  const char *problem_file = "knapPI_3_200_10000000.csv";
   /* For each 3_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12958,26 +13433,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_stron
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_stronglycorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_stronglycorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000.csv";
+  const char *problem_file = "knapPI_3_500_1000.csv";
   /* For each 3_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -12985,26 +13461,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_stron
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_stronglycorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_stronglycorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000.csv";
+  const char *problem_file = "knapPI_3_500_10000.csv";
   /* For each 3_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13012,26 +13489,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_stron
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_stronglycorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_stronglycorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_100000.csv";
+  const char *problem_file = "knapPI_3_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13039,26 +13517,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_stron
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_stronglycorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_stronglycorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000000.csv";
+  const char *problem_file = "knapPI_3_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13066,26 +13545,27 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_stron
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_stronglycorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_stronglycorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = RANDOM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000000.csv";
+  const char *problem_file = "knapPI_3_500_10000000.csv";
   /* For each 3_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13093,27 +13573,28 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_high_eps_stron
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
   /* Linear enum branching */
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_uncorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_uncorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000.csv";
+  const char *problem_file = "knapPI_1_200_1000.csv";
   /* For each 1_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13121,26 +13602,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_uncorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_uncorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000.csv";
+  const char *problem_file = "knapPI_1_200_10000.csv";
   /* For each 1_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13148,26 +13630,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_uncorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_uncorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_100000.csv";
+  const char *problem_file = "knapPI_1_200_100000.csv";
   /* For each 1_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13175,27 +13658,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
   /* For each 1_50_1000000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_uncorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_uncorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000000.csv";
+  const char *problem_file = "knapPI_1_200_1000000.csv";
   /* For each 1_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13203,27 +13687,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
   /* For each 1_50_10000000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_uncorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_uncorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000000.csv";
+  const char *problem_file = "knapPI_1_200_10000000.csv";
   /* For each 1_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13231,27 +13716,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_1000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_uncorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_uncorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000.csv";
+  const char *problem_file = "knapPI_1_500_1000.csv";
   /* For each 1_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13259,27 +13745,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_10000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_uncorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_uncorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000.csv";
+  const char *problem_file = "knapPI_1_500_10000.csv";
   /* For each 1_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13287,27 +13774,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_100000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_uncorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_uncorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_100000.csv";
+  const char *problem_file = "knapPI_1_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13315,27 +13803,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_1000000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_uncorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_uncorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000000.csv";
+  const char *problem_file = "knapPI_1_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13343,26 +13832,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 /* For each 1_100_10000000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_uncorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_uncorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000000.csv";
+  const char *problem_file = "knapPI_1_500_10000000.csv";
   /* For each 1_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13370,26 +13860,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_weaklycorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_weaklycorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000.csv";
+  const char *problem_file = "knapPI_2_200_1000.csv";
   /* For each 2_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13397,26 +13888,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_weaklycorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_weaklycorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000.csv";
+  const char *problem_file = "knapPI_2_200_10000.csv";
   /* For each 1_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13424,26 +13916,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_weaklycorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_weaklycorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_100000.csv";
+  const char *problem_file = "knapPI_2_200_100000.csv";
   /* For each 2_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13451,26 +13944,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_weaklycorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_weaklycorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000000.csv";
+  const char *problem_file = "knapPI_2_200_1000000.csv";
   /* For each 2_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13478,26 +13972,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_weaklycorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_weaklycorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000000.csv";
+  const char *problem_file = "knapPI_2_200_10000000.csv";
   /* For each 2_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13505,26 +14000,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_weaklycorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_weaklycorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000.csv";
+  const char *problem_file = "knapPI_2_500_1000.csv";
   /* For each 2_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13532,26 +14028,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_weaklycorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_weaklycorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000.csv";
+  const char *problem_file = "knapPI_2_500_10000.csv";
   /* For each 1_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13559,26 +14056,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_weaklycorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_weaklycorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_100000.csv";
+  const char *problem_file = "knapPI_2_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13586,26 +14084,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_weaklycorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_weaklycorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000000.csv";
+  const char *problem_file = "knapPI_2_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13613,26 +14112,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_weaklycorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_weaklycorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000000.csv";
+  const char *problem_file = "knapPI_2_500_10000000.csv";
   /* For each 2_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13640,26 +14140,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_stronglycorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_stronglycorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000.csv";
+  const char *problem_file = "knapPI_3_200_1000.csv";
   /* For each 3_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13667,26 +14168,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_stronglycorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_stronglycorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000.csv";
+  const char *problem_file = "knapPI_3_200_10000.csv";
   /* For each 3_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13694,26 +14196,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_stronglycorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_stronglycorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_100000.csv";
+  const char *problem_file = "knapPI_3_200_100000.csv";
   /* For each 2_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13721,26 +14224,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_stronglycorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_stronglycorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000000.csv";
+  const char *problem_file = "knapPI_3_200_1000000.csv";
   /* For each 3_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13748,26 +14252,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_stronglycorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_stronglycorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000000.csv";
+  const char *problem_file = "knapPI_3_200_10000000.csv";
   /* For each 3_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13775,26 +14280,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_stronglycorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_stronglycorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000.csv";
+  const char *problem_file = "knapPI_3_500_1000.csv";
   /* For each 3_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13802,26 +14308,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_stronglycorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_stronglycorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000.csv";
+  const char *problem_file = "knapPI_3_500_10000.csv";
   /* For each 3_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13829,26 +14336,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_stronglycorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_stronglycorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_100000.csv";
+  const char *problem_file = "knapPI_3_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13856,26 +14364,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_stronglycorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_stronglycorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000000.csv";
+  const char *problem_file = "knapPI_3_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13883,26 +14392,27 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_stronglycorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_midlow_eps_stronglycorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = LINEAR_ENUM_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000000.csv";
+  const char *problem_file = "knapPI_3_500_10000000.csv";
   /* For each 3_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13910,27 +14420,28 @@ TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_high_eps_
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
   /* Truncation Branching */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_uncorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_uncorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000.csv";
+  const char *problem_file = "knapPI_1_200_1000.csv";
   /* For each 1_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13938,26 +14449,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_uncorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_uncorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000.csv";
+  const char *problem_file = "knapPI_1_200_10000.csv";
   /* For each 1_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13965,26 +14477,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_uncorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_uncorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_100000.csv";
+  const char *problem_file = "knapPI_1_200_100000.csv";
   /* For each 1_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -13992,27 +14505,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
   /* For each 1_50_1000000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_uncorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_uncorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000000.csv";
+  const char *problem_file = "knapPI_1_200_1000000.csv";
   /* For each 1_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14020,27 +14534,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
   /* For each 1_50_10000000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_uncorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_uncorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000000.csv";
+  const char *problem_file = "knapPI_1_200_10000000.csv";
   /* For each 1_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14048,27 +14563,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_1000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_uncorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_uncorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000.csv";
+  const char *problem_file = "knapPI_1_500_1000.csv";
   /* For each 1_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14076,27 +14592,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_10000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_uncorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_uncorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000.csv";
+  const char *problem_file = "knapPI_1_500_10000.csv";
   /* For each 1_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14104,27 +14621,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_100000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_uncorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_uncorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_100000.csv";
+  const char *problem_file = "knapPI_1_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14132,27 +14650,28 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
 /* For each 1_100_1000000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_uncorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_uncorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000000.csv";
+  const char *problem_file = "knapPI_1_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14160,26 +14679,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 /* For each 1_100_10000000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_uncorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_uncorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000000.csv";
+  const char *problem_file = "knapPI_1_500_10000000.csv";
   /* For each 1_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14187,26 +14707,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_u
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_weaklycorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_weaklycorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000.csv";
+  const char *problem_file = "knapPI_2_200_1000.csv";
   /* For each 2_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14214,26 +14735,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_weaklycorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_weaklycorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000.csv";
+  const char *problem_file = "knapPI_2_200_10000.csv";
   /* For each 1_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14241,26 +14763,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_weaklycorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_weaklycorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_100000.csv";
+  const char *problem_file = "knapPI_2_200_100000.csv";
   /* For each 2_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14268,26 +14791,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_weaklycorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_weaklycorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000000.csv";
+  const char *problem_file = "knapPI_2_200_1000000.csv";
   /* For each 2_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14295,26 +14819,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_weaklycorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_weaklycorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000000.csv";
+  const char *problem_file = "knapPI_2_200_10000000.csv";
   /* For each 2_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14322,26 +14847,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_weaklycorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_weaklycorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000.csv";
+  const char *problem_file = "knapPI_2_500_1000.csv";
   /* For each 2_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14349,26 +14875,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_weaklycorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_weaklycorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000.csv";
+  const char *problem_file = "knapPI_2_500_10000.csv";
   /* For each 1_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14376,26 +14903,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_weaklycorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_weaklycorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_100000.csv";
+  const char *problem_file = "knapPI_2_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14403,26 +14931,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_weaklycorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_weaklycorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000000.csv";
+  const char *problem_file = "knapPI_2_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14430,26 +14959,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_weaklycorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_weaklycorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000000.csv";
+  const char *problem_file = "knapPI_2_500_10000000.csv";
   /* For each 2_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14457,26 +14987,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_w
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_stronglycorrelated_50_1000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_stronglycorrelated_200_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000.csv";
+  const char *problem_file = "knapPI_3_200_1000.csv";
   /* For each 3_50_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14484,26 +15015,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_stronglycorrelated_50_10000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_stronglycorrelated_200_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000.csv";
+  const char *problem_file = "knapPI_3_200_10000.csv";
   /* For each 3_50_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14511,26 +15043,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_stronglycorrelated_50_100000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_stronglycorrelated_200_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_100000.csv";
+  const char *problem_file = "knapPI_3_200_100000.csv";
   /* For each 2_50_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14538,26 +15071,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_stronglycorrelated_50_1000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_stronglycorrelated_200_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000000.csv";
+  const char *problem_file = "knapPI_3_200_1000000.csv";
   /* For each 3_50_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14565,26 +15099,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_stronglycorrelated_50_10000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_stronglycorrelated_200_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000000.csv";
+  const char *problem_file = "knapPI_3_200_10000000.csv";
   /* For each 3_50_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14592,26 +15127,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_stronglycorrelated_100_1000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_stronglycorrelated_500_1000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000.csv";
+  const char *problem_file = "knapPI_3_500_1000.csv";
   /* For each 3_100_1000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14619,26 +15155,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_stronglycorrelated_100_10000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_stronglycorrelated_500_10000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000.csv";
+  const char *problem_file = "knapPI_3_500_10000.csv";
   /* For each 3_100_10000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14646,26 +15183,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_stronglycorrelated_100_100000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_stronglycorrelated_500_100000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_100000.csv";
+  const char *problem_file = "knapPI_3_500_100000.csv";
   /* For each 1_100_100000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14673,26 +15211,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_stronglycorrelated_100_1000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_stronglycorrelated_500_1000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000000.csv";
+  const char *problem_file = "knapPI_3_500_1000000.csv";
   /* For each 1_100_1000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14700,26 +15239,27 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_stronglycorrelated_100_10000000)
+TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_midlow_eps_stronglycorrelated_500_10000000)
 {
   /* Need to test each branching strategy against all instances */
   /* This tests 4000 different problems for each strategy */
-  double epsilon = 1.5;
+  double epsilon = 0.3;
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
+  int number_of_nodes = 1;
   /* Random branching */
   int branching_strategy = TRUNCATION_BRANCHING;
   time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000000.csv";
+  const char *problem_file = "knapPI_3_500_10000000.csv";
   /* For each 3_100_10000000 */
   for(int i = 1; i <= 1; i++)
   {
@@ -14727,2463 +15267,12 @@ TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_high_eps_s
     int sol_out[n];
     branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
+																	DP_method, logging_rule, logging_stream, epsilon, &number_of_nodes);
                                   
     ASSERT_EQ(z_out, z);
   }
 }
 
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_uncorrelated_50_1000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000.csv";
-  /* For each 1_50_1000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_uncorrelated_50_10000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000.csv";
-  /* For each 1_50_10000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_uncorrelated_50_100000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_100000.csv";
-  /* For each 1_50_100000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-
-  }
-}
-
-  /* For each 1_50_1000000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_uncorrelated_50_1000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000000.csv";
-  /* For each 1_50_1000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-  /* For each 1_50_10000000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_uncorrelated_50_10000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000000.csv";
-  /* For each 1_50_10000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-/* For each 1_100_1000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_uncorrelated_100_1000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000.csv";
-  /* For each 1_100_1000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-/* For each 1_100_10000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_uncorrelated_100_10000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000.csv";
-  /* For each 1_100_10000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-/* For each 1_100_100000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_uncorrelated_100_100000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_100000.csv";
-  /* For each 1_100_100000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-/* For each 1_100_1000000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_uncorrelated_100_1000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000000.csv";
-  /* For each 1_100_1000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-/* For each 1_100_10000000 */
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_uncorrelated_100_10000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000000.csv";
-  /* For each 1_100_10000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_weaklycorrelated_50_1000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000.csv";
-  /* For each 2_50_1000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_weaklycorrelated_50_10000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000.csv";
-  /* For each 1_50_10000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_weaklycorrelated_50_100000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_100000.csv";
-  /* For each 2_50_100000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_weaklycorrelated_50_1000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000000.csv";
-  /* For each 2_50_1000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_weaklycorrelated_50_10000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000000.csv";
-  /* For each 2_50_10000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_weaklycorrelated_100_1000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000.csv";
-  /* For each 2_100_1000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_weaklycorrelated_100_10000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000.csv";
-  /* For each 1_100_10000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_weaklycorrelated_100_100000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_100000.csv";
-  /* For each 1_100_100000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_weaklycorrelated_100_1000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000000.csv";
-  /* For each 1_100_1000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_weaklycorrelated_100_10000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000000.csv";
-  /* For each 2_100_10000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_stronglycorrelated_50_1000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000.csv";
-  /* For each 3_50_1000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_stronglycorrelated_50_10000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000.csv";
-  /* For each 3_50_10000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_stronglycorrelated_50_100000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_100000.csv";
-  /* For each 2_50_100000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_stronglycorrelated_50_1000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000000.csv";
-  /* For each 3_50_1000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_stronglycorrelated_50_10000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000000.csv";
-  /* For each 3_50_10000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_stronglycorrelated_100_1000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000.csv";
-  /* For each 3_100_1000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_stronglycorrelated_100_10000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000.csv";
-  /* For each 3_100_10000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_stronglycorrelated_100_100000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_100000.csv";
-  /* For each 1_100_100000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_stronglycorrelated_100_1000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000000.csv";
-  /* For each 1_100_1000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_veryhigh_eps_stronglycorrelated_100_10000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = RANDOM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000000.csv";
-  /* For each 3_100_10000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-  /* Linear enum branching */
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_uncorrelated_50_1000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000.csv";
-  /* For each 1_50_1000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_uncorrelated_50_10000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000.csv";
-  /* For each 1_50_10000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_uncorrelated_50_100000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_100000.csv";
-  /* For each 1_50_100000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-  /* For each 1_50_1000000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_uncorrelated_50_1000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000000.csv";
-  /* For each 1_50_1000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-  /* For each 1_50_10000000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_uncorrelated_50_10000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000000.csv";
-  /* For each 1_50_10000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-/* For each 1_100_1000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_uncorrelated_100_1000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000.csv";
-  /* For each 1_100_1000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-/* For each 1_100_10000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_uncorrelated_100_10000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000.csv";
-  /* For each 1_100_10000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-/* For each 1_100_100000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_uncorrelated_100_100000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_100000.csv";
-  /* For each 1_100_100000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-/* For each 1_100_1000000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_uncorrelated_100_1000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000000.csv";
-  /* For each 1_100_1000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-/* For each 1_100_10000000 */
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_uncorrelated_100_10000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000000.csv";
-  /* For each 1_100_10000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_weaklycorrelated_50_1000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000.csv";
-  /* For each 2_50_1000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_weaklycorrelated_50_10000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000.csv";
-  /* For each 1_50_10000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_weaklycorrelated_50_100000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_100000.csv";
-  /* For each 2_50_100000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_weaklycorrelated_50_1000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000000.csv";
-  /* For each 2_50_1000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_weaklycorrelated_50_10000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000000.csv";
-  /* For each 2_50_10000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_weaklycorrelated_100_1000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000.csv";
-  /* For each 2_100_1000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_weaklycorrelated_100_10000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000.csv";
-  /* For each 1_100_10000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_weaklycorrelated_100_100000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_100000.csv";
-  /* For each 1_100_100000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_weaklycorrelated_100_1000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000000.csv";
-  /* For each 1_100_1000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_weaklycorrelated_100_10000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000000.csv";
-  /* For each 2_100_10000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_stronglycorrelated_50_1000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000.csv";
-  /* For each 3_50_1000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_stronglycorrelated_50_10000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000.csv";
-  /* For each 3_50_10000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_stronglycorrelated_50_100000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_100000.csv";
-  /* For each 2_50_100000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_stronglycorrelated_50_1000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000000.csv";
-  /* For each 3_50_1000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_stronglycorrelated_50_10000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000000.csv";
-  /* For each 3_50_10000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_stronglycorrelated_100_1000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000.csv";
-  /* For each 3_100_1000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_stronglycorrelated_100_10000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000.csv";
-  /* For each 3_100_10000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_stronglycorrelated_100_100000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_100000.csv";
-  /* For each 1_100_100000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_stronglycorrelated_100_1000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000000.csv";
-  /* For each 1_100_1000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, linear_enum_branching_willshmoy_veryhigh_eps_stronglycorrelated_100_10000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = LINEAR_ENUM_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000000.csv";
-  /* For each 3_100_10000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-  /* Truncation Branching */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_uncorrelated_50_1000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000.csv";
-  /* For each 1_50_1000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_uncorrelated_50_10000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000.csv";
-  /* For each 1_50_10000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_uncorrelated_50_100000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_100000.csv";
-  /* For each 1_50_100000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-  /* For each 1_50_1000000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_uncorrelated_50_1000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_1000000.csv";
-  /* For each 1_50_1000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-  /* For each 1_50_10000000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_uncorrelated_50_10000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_50_10000000.csv";
-  /* For each 1_50_10000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-/* For each 1_100_1000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_uncorrelated_100_1000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000.csv";
-  /* For each 1_100_1000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-/* For each 1_100_10000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_uncorrelated_100_10000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000.csv";
-  /* For each 1_100_10000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-/* For each 1_100_100000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_uncorrelated_100_100000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_100000.csv";
-  /* For each 1_100_100000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-/* For each 1_100_1000000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_uncorrelated_100_1000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_1000000.csv";
-  /* For each 1_100_1000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-/* For each 1_100_10000000 */
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_uncorrelated_100_10000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_1_100_10000000.csv";
-  /* For each 1_100_10000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_weaklycorrelated_50_1000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000.csv";
-  /* For each 2_50_1000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_weaklycorrelated_50_10000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000.csv";
-  /* For each 1_50_10000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_weaklycorrelated_50_100000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_100000.csv";
-  /* For each 2_50_100000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_weaklycorrelated_50_1000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_1000000.csv";
-  /* For each 2_50_1000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_weaklycorrelated_50_10000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_50_10000000.csv";
-  /* For each 2_50_10000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_weaklycorrelated_100_1000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000.csv";
-  /* For each 2_100_1000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_weaklycorrelated_100_10000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000.csv";
-  /* For each 1_100_10000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_weaklycorrelated_100_100000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_100000.csv";
-  /* For each 1_100_100000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_weaklycorrelated_100_1000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_1000000.csv";
-  /* For each 1_100_1000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_weaklycorrelated_100_10000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_2_100_10000000.csv";
-  /* For each 2_100_10000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_stronglycorrelated_50_1000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000.csv";
-  /* For each 3_50_1000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_stronglycorrelated_50_10000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000.csv";
-  /* For each 3_50_10000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_stronglycorrelated_50_100000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_100000.csv";
-  /* For each 2_50_100000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_stronglycorrelated_50_1000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_1000000.csv";
-  /* For each 3_50_1000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_stronglycorrelated_50_10000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_50_10000000.csv";
-  /* For each 3_50_10000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_stronglycorrelated_100_1000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000.csv";
-  /* For each 3_100_1000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_stronglycorrelated_100_10000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000.csv";
-  /* For each 3_100_10000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_stronglycorrelated_100_100000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_100000.csv";
-  /* For each 1_100_100000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_stronglycorrelated_100_1000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_1000000.csv";
-  /* For each 1_100_1000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-    ASSERT_EQ(z_out, z);
-  }
-}
-
-TEST(branch_and_bound_correctnessTest, truncation_branching_willshmoy_veryhigh_eps_stronglycorrelated_100_10000000)
-{
-  /* Need to test each branching strategy against all instances */
-  /* This tests 4000 different problems for each strategy */
-  double epsilon = 5;
-  FILE *logging_stream = stdout;
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  /* Random branching */
-  int branching_strategy = TRUNCATION_BRANCHING;
-  time_t seed = time(NULL);
-  const char *problem_file = "knapPI_3_100_10000000.csv";
-  /* For each 3_100_10000000 */
-  for(int i = 1; i <= 1; i++)
-  {
-    pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, (char*) problem_file, i);
-    int sol_out[n];
-    branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
-                                sol_out, n, (char*) problem_file, branching_strategy, seed,
-																	DP_method, logging_rule, logging_stream, epsilon);
-                                  
-    ASSERT_EQ(z_out, z);
-  }
-}
 
 int main(int argc, char **argv)
 {

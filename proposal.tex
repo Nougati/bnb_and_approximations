@@ -30,19 +30,42 @@ MIP solvers are used in almost every industry in real world optimisation problem
 
 \section{Research Context / Background}
 
-Define B\&B from Conforti
+The branch and bound strategy is a algorithm design framework for combinatorial optimisation, and has a wealth of research surrounding it. To define the strategy the reader is advised to use the description provided by \cite{BOOK:1}.
 
-Define AA + Heuristic, visiting Vasirani along the way.
+For our purposes, we will define a \textit{heuristic} as an algorithm which provides a feasible, but not necessarily optimal, solution to a problem. Heuristics allow us to trade accuracy for a faster run time, which may be undesirably large if solved to optimality.
+
+We now define an \textit{approximation algorithm}, as a heuristic which has a worst case guarantee on the solution returned. That is, we can define strict bounds which we know the solution will reside. One can parameterise the tightness of these bounds with respect to an optimal solution, by selecting an error parameter we will refer to as $\epsilon$. In general, for a maximisation problem, the bounds on the quality of the approximate solution $z_h$, relative to optimal solution $z$, is $(1-\epsilon)\cdot z < z_h < z$.   
+
+PUT WOSLEY HERE?!
+
+For this discussion, we merge the concepts of approximations and branch and bound by addressing the Knapsack problem as a case study. A \textit{Fully Polynomial Time Approximation Scheme} (FPTAS) is introduced for Knapsack in \cite{BOOK:2}, where the reader is referred to for formal definitions and proofs. A proof is outlined, showing that the scheme adheres to our definition of an approximation algorithm.
+
+
 
 \section{Research Design}
 
 \subsection{Methodologies}
 
-Sort of a scientific approach sort of thing
+The aim of this research is to iteratively explore methods of improving the performance of our branch and bound algorithm. 
+
+Our main question is: \textbf{can we use approximation algorithms to compute dual bounds effectively in a branch and bound scheme for combinatorial optimisation problems?}
+
+In particular, our research methodology is driven by systematically addressing the following questions:
+
+\begin{itemize}
+\item What branching, searching, and pruning strategies will improve our performance?
+\item How can we exploit the concept of warm starting to evaluate bounds quicker?
+\item Which problem types benefit most from the proposed approach?
+\end{itemize}
+
+As the project progresses, these questions will develop into subquestions themselves as further information is understood.
+
+We will use automated performance logging and characterise the approaches based on this. Comparisons will be done incrementally so to emphasise the effects of any changes made to the algorithm.
 
 \subsection{Proposed Thesis chapter headings}
 Abstract, introduction, literature review, the pledge, the turn, the prestige, discussion, conclusion, counselling for people recovering from our sweet showmanship
 \subsection{Timetable}
+
 13th of April - Proposal
 25th of May - Literature Review / Interim Presentation
 <Whatever day S2, Wk14 is> Final Presentation
