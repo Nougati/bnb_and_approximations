@@ -1180,19 +1180,21 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
   }
   FILE *fp;
   char str[256];
-  char * pch;
+  char *pch;
   char problem_number_str[100];
 
   /* Get data about the instance itself
    * TODO Get this supporting instance types of more than one digit */
   int coefficient_size;
-  sscanf(problem_file, "knapPI_%*d_%d_%d.csv", n, &coefficient_size);
+  int instance_type;
+  sscanf(problem_file, "knapPI_%d_%d_%d.csv", &instance_type, n, &coefficient_size);
   int ndigits = floor(log10(abs(*n)))+1;
   int cdigits = floor(log10(abs(coefficient_size)))+1;
   int pnodigits = floor(log10(abs(problem_number)))+1;
 
   /* From this, we deduce the length of the instance name */
   int instance_name_width = 11+ndigits+cdigits+pnodigits;
+  if (instance_type > 9) instance_name_width++;
 
   /* Problem number needs to be concatenated onto char array instance_name */
   /* So, we convert it to a string. */
@@ -1218,7 +1220,7 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
   }
 
   /* Find instance in file */
-  while(strncmp(fgets(str, sizeof(str), fp), instance_name, instance_name_width) != 0)
+  while(strncmp(fgets(str, sizeof(str), fp), instance_name, instance_name_width) != 0) //TODO This is where its segfaulting w/ instance type 11
     ;
 
   /* Extract n */

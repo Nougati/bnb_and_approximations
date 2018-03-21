@@ -62,7 +62,6 @@ typedef struct linked_list_p_queue
   int size;
 } LL_Problem_Queue;
 
-
 /* Branch and Bound Declarations */
 Problem_Instance *define_root_node(int n);
 
@@ -113,6 +112,12 @@ Problem_Instance *rear(Problem_Queue *queue);
 LL_Problem_Queue *LL_create_queue(void);
 void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem, FILE *logging_stream, int logging_rule);
 Problem_Instance *LL_dequeue(LL_Problem_Queue *queue);
+
+/*TODO Make benchmarking program that will define this as an external variable.
+ * In addition, we need to make a makefile for benchmarking that will compile 
+ * both the benchmarking program and this one so that the variable is 
+ * guaranteed to be known about. */
+int bytes_allocated;
 
 /* Main function */
 #ifndef TESTING
@@ -242,12 +247,12 @@ int main(int argc, char *argv[]) {
   t = clock() - t;
   double time_taken = ((double)t)/CLOCKS_PER_SEC;
 
-  printf("No of nodes: %d\n", count);
+  printf("No of nodes: %d\n", number_of_nodes);
 
   if(branching_strategy == RANDOM_BRANCHING) printf("Seed: %ld\n", seed);
 
-  printf("Answer: %d/%d (%s), time taken: %lf\n" , z_out, z, z_out == z ? "Pass"
-         "!" : "Failure!", time_taken);
+  printf("Answer: %d/%d (%s), time taken: %lf\nBytes allocated: %d\n" , z_out, z, z_out == z ? "Pass"
+         "!" : "Failure!", time_taken, bytes_allocated);
 
   /* Clean up */  
   free(profits);
@@ -269,6 +274,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                                    int DP_method, int logging_rule, 
                                    FILE *logging_stream, double eps, int *number_of_nodes)
 { 
+  bytes_allocated = 0;
   /* Logging functionality */
   time_t t = time(NULL);
   struct tm tm = *localtime(&t);
@@ -392,8 +398,6 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                 current_node->ID, branching_variable);
     }
   }
-  #ifndef TESTING
-  #endif
   *z_out = global_lower_bound;
   *number_of_nodes = count;
   if(logging_rule != NO_LOGGING)
@@ -415,6 +419,7 @@ int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z,
   double K;
   int sol_prime[n]; 
   int *profits_prime = (int *) malloc(n * sizeof(*profits_prime));
+  bytes_allocated += n * sizeof(*profits_prime);
   int node_statuses[n];
   for (int i = 0; i < n; i++) node_statuses[i] = VARIABLE_UNCONSTRAINED;
 
@@ -499,8 +504,10 @@ Problem_Instance *define_root_node(int n)
 {
   Problem_Instance *root_instance =
                            (Problem_Instance*) malloc(sizeof(Problem_Instance));
+  bytes_allocated += sizeof(Problem_Instance);
   root_instance->parent = NULL;
   root_instance->variable_statuses = (int *) malloc(n * sizeof(int));
+  bytes_allocated += n*sizeof(int);
   for(int i = 0; i < n; i++) 
     root_instance->variable_statuses[i] = VARIABLE_UNCONSTRAINED;
   return root_instance;
@@ -517,6 +524,7 @@ void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
                           (Problem_Instance *) malloc(sizeof(Problem_Instance));
   Problem_Instance *generated_node_variable_off = 
                           (Problem_Instance *) malloc(sizeof(Problem_Instance));
+  bytes_allocated += 2*sizeof(Problem_Instance);
 
   parent->on_child = generated_node_variable_on;
   parent->off_child = generated_node_variable_off;
@@ -530,6 +538,7 @@ void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
   generated_node_variable_on->parent = parent;
   generated_node_variable_on->variable_statuses =
                                     (int *) malloc(sizeof(int) * n);
+  bytes_allocated += n*sizeof(int);
   for(int i = 0; i < n; i++)
     generated_node_variable_on->variable_statuses[i] = 
                                      parent->variable_statuses[i];  
@@ -542,6 +551,7 @@ void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
   generated_node_variable_off->parent = parent;
   generated_node_variable_off->variable_statuses =
                                     (int *) malloc(sizeof(int) * n);
+  bytes_allocated += n*sizeof(int);
   for(int i = 0; i < n; i++)
     generated_node_variable_off->variable_statuses[i] = 
                                      parent->variable_statuses[i];  
@@ -579,6 +589,7 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
   double K;
   int sol_prime[n];
   int *profits_prime = (int *) malloc(n * sizeof(*profits_prime));
+  bytes_allocated += n*sizeof(*profits_prime);
 
   /* Run the FPTAS */
   if(DP_method == SMART_DP)
@@ -618,7 +629,6 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
   free(profits_prime);
 }
 
-
 /* Post order node freeing algorithm */
 void post_order_tree_clean(Problem_Instance *node)
 {
@@ -634,15 +644,18 @@ void post_order_tree_clean(Problem_Instance *node)
   free(node);
 }
 
+
 /* Queue Data Structure Methods */
 /* Problem Queue method: create_queue */
 Problem_Queue *create_queue(int capacity)
 {
   Problem_Queue *queue = (Problem_Queue*) malloc(sizeof(Problem_Queue));
+  bytes_allocated += sizeof(Problem_Queue);
   queue->capacity = capacity;
   queue->front = queue->size = 0;
   queue->rear = capacity - 1;
   queue->array = (Problem_Instance **) malloc(queue->capacity * sizeof(Problem_Instance*));
+  bytes_allocated += queue->capacity * sizeof(Problem_Instance*);
   return queue;
 }
 
@@ -702,6 +715,7 @@ Problem_Instance *rear(Problem_Queue *queue)
 LL_Problem_Queue *LL_create_queue(void)
 {
   LL_Problem_Queue *queue = (LL_Problem_Queue*) malloc(sizeof(LL_Problem_Queue));
+  bytes_allocated += sizeof(LL_Problem_Queue);
   queue->head = NULL;
   queue->tail = NULL;
   queue->size = 0;
@@ -712,6 +726,7 @@ LL_Problem_Queue *LL_create_queue(void)
 void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem, FILE *logging_stream, int logging_rule)
 {
   LL_Node_Queue_Item *new_item = (LL_Node_Queue_Item *) malloc(sizeof(LL_Node_Queue_Item));
+  bytes_allocated += sizeof(LL_Node_Queue_Item);
   new_item->problem = problem;
   if(queue->size == 0)
   {
