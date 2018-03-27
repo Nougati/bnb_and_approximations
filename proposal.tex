@@ -8,7 +8,7 @@
   \vspace{1cm}
   {\scshape\Large Project Proposal \par}
   \vspace{1.5cm}
-  {\huge Using approximation algorithms with Branch and Bound optimisation problems\par}
+  {\huge Implicit enumeration with dual bounds from approximation algorithms\par}
   \vspace{2cm}
   {\Large Nelson Frew\par}
   \vfill
@@ -20,25 +20,25 @@
 \tableofcontents
 \newpage
 \section{Introduction}
-We aim to investigate the use of approximation algorithms within a branch and bound scheme. In particular, we are focused on using approximations as a method of providing dual bounds which have a worst case bounding. 
+We aim to investigate the use of approximation algorithms (AAs) within a branch and bound scheme. Specifically, we are focused on using approximations as a method of providing dual bounds with guarantees. 
 
-This project is concerned with using such methods to explore new paths in general optimisation problem solving. Since such an approach is unique, we seek to explore configurations of this branch and bound with approximation which achieve efficient running times. The major points of interest for doing this include optimal branching strategies, node selection schemes, and incorporating warm starting.
+To explore the merit of this approach, we will investigate possible configurations which improve performance. The major points of interest for this include optimal branching strategies, node selection schemes, and incorporating warm starting.
 
-Our objective is to craft an approach, using this scheme, to solve branch and bound optimisation problems quickly. If this is achieved, a new promising direction of research for optimisation researchers and approximations researchers may be revealed. Moreover, this project investigates a method with a worst-case guarantee on dual bounds, a key problem in traditional LP relaxations.
+Our objective is to craft an approach to solve branch and bound optimisation problems quickly with dual bounds obtained from AAs. In achieving this, a new direction for both optimisation and approximations researchers may be revealed. Moreover, dual bounds from traditional LP relaxations can be arbitrarily poor, a key issue that this project addresses.
 
-MIP solvers are used in almost every industry in real world optimisation problems, due to the ubiquity of a need for both resource minimisation (expenditure) and maximisation (turnover). A high quality MIP solver is, then, a concern of businesses and developers alike. This avenue of research, then, has potential implications reaching across industries globally.
+MIP solvers are used in almost every industry in real world optimisation problems, due to the ubiquity of a need for both resource minimisation (expenditure) and maximisation (turnover). It is in the interest of developers and businesses that continued research is done to improve the efficiency of these solvers. By targeting a key bottleneck in MIP solver computation, this project is a concern of such stakeholders across all industries. 
 
 \section{Research Context / Background}
 
-The branch and bound strategy is a algorithm design framework for combinatorial optimisation, and has a wealth of research surrounding it. To define the strategy the reader is advised to use the description provided by \cite{BOOK:1}.
+The branch and bound strategy is a well studied algorithm framework for combinatorial optimisation, and the reader is advised to use the description provided by \cite{BOOK:1} for a detailed description of the method.
 
-For our purposes, we will define a \textit{heuristic} as an algorithm which provides a feasible, but not necessarily optimal, solution to a problem. Heuristics allow us to trade accuracy for a faster run time, which may be undesirably large if solved to optimality.
+For our purposes, we will define a \textit{heuristic} as an algorithm which provides a feasible, but not necessarily optimal, solution to a problem. Heuristics allow us to trade an optimality guarantee for a faster run time, which may be unrealistically long if solved to optimality.
 
-We now define an \textit{approximation algorithm}, as a heuristic which has a worst case guarantee on the solution returned. That is, we can define strict bounds which we know the solution will reside. One can parameterise the tightness of these bounds with respect to an optimal solution, by selecting an error parameter we will refer to as $\epsilon$. In general, for a maximisation problem, the bounds on the quality of the approximate solution $z_h$, relative to optimal solution $z$, is $(1-\epsilon)\cdot z < z_h < z$.   
+We will now define an \textit{AA} as a heuristic which has a worst case guarantee on the solution returned. By introducing an error parameter $\epsilon$, it is sometimes possible to improve the guarantee of the approximation by accepting performance penalties. In such a case, for a maximisation problem, one example of bounds on the quality of the approximate solution $z_h$, relative to optimal solution $z$, is $(1-\epsilon)\cdot z < z_h < z$.   
 
-PUT WOSLEY HERE?!
+Guarantees on heuristic qualities in the field of optimisation was specifically addressed in \cite{WOSLEY}, where a general heuristic analysis method is given. Worst case analyses of various heuristics for \textit{bin packing}, \textit{longest undirected hamilitonian tours}, among others, showed guarantees are heavily problem specific. Methods of embedding heuristics into branch and bound schemes are also proposed, showing that heuristics can work in tandem with LP relaxations in the construction of a branch and bound algorithm.
 
-For this discussion, we merge the concepts of approximations and branch and bound by addressing the Knapsack problem as a case study. A \textit{Fully Polynomial Time Approximation Scheme} (FPTAS) is introduced for Knapsack in \cite{BOOK:2}, where the reader is referred to for formal definitions and proofs. A proof is outlined, showing that the scheme adheres to our definition of an approximation algorithm.
+For this discussion, we will explore concepts of approximations within branch and bound, utilising the Knapsack problem as a case study. To do this, a \textit{Fully Polynomial Time Approximation Scheme} (FPTAS) is introduced for Knapsack in \cite{BOOK:2}, where the reader is referred to for formal definitions and proofs. By definition, FPTAS's adhere to our definition of an AA.
 
 
 
@@ -46,11 +46,9 @@ For this discussion, we merge the concepts of approximations and branch and boun
 
 \subsection{Methodologies}
 
-The aim of this research is to iteratively explore methods of improving the performance of our branch and bound algorithm. 
+The aim of this research is to iteratively explore methods of improving the performance of our branch and bound algorithm. Specifically we are asking \textbf{can we use approximation algorithms to compute dual bounds effectively in a branch and bound scheme for combinatorial optimisation problems?}
 
-Our main question is: \textbf{can we use approximation algorithms to compute dual bounds effectively in a branch and bound scheme for combinatorial optimisation problems?}
-
-In particular, our research methodology is driven by systematically addressing the following questions:
+Our research methodology will be driven by systematically addressing the following questions:
 
 \begin{itemize}
 \item What branching, searching, and pruning strategies will improve our performance?
@@ -62,93 +60,59 @@ As the project progresses, these questions will develop into subquestions themse
 
 We will use automated performance logging and characterise the approaches based on this. Comparisons will be done incrementally so to emphasise the effects of any changes made to the algorithm.
 
+\newpage
 \subsection{Proposed Thesis chapter headings}
 We expect the thesis to follow this general format:
-\begin{itemize}
+\begin{enumerate}
   \item Abstract
   \item Introduction
   \item Literature review
-  \item Method section: Initial parameterisation
-  \item Method section: Evaluated improvements
-  \item Method section: Fully improved approached
+  \item Method section: Initial parameterisation and results
+  \item Method section: Algorithm revision and results 
+  \item Method section: Fully improved approach
   \item Discussion
   \item Conclusion
   \item Bibliography / References
-\end{itemize}
+\end{enumerate}
 \subsection{Timetable}
 The proposed timetable for successful completion of this project is as follows:
 
-S1.1  - 26/02
+\begin{center}
+  \begin{tabular}{||c | c||}
+  \hline
+  Date & Milestone \\ [0.5ex]
+  \hline\hline
+  16/04 & Explore branching \\
+  \hline
+  28/05 & Explore node selection \\
+  \hline
+  04/06 & Interim presentation, Lit. Rev  \\
+  \hline
+  30/07 & Explore warm starting \\
+  \hline
+  27/08 & Generalisations of method \\
+  \hline
+  10/09 & Problem type evaluation \\
+  \hline
+  01/10 & Thesis drafting process \\
+  \hline
+  29/10 & Final presentation \\
+  \hline 
+  05/11 & Thesis submission \\ [1ex]
+  \hline
+  \end{tabular}
+\end{center}
 
-S1.2  - 05/03
+Of course, as the project progresses, this timetable may be subject to change.
 
-S1.3  - 12/03
-
-S1.4  - 19/03
-
-S1.5  - 26/03
-
-Break - 02/04
-
-S1.6  - 09/04: 13th April - Proposal due
-
-S1.7  - 16/04
-
-S1.8  - 23/04: Explore branching
-
-S1.9  - 30/04
-
-S1.10 - 07/05
-
-S1.11 - 14/05
-
-S1.12 - 21/05
-
-S1.13 - 28/05: Explore node selection
-
-S1.14 - 04/06: Iterim Presentation, 8th June - Literature review
-
-S1.15 - 11/06
-
-S2.01 - 23/07
-
-S2.02 - 30/07: Explore warm starting
-
-S2.03 - 06/08
-
-S2.04 - 13/08
-
-S2.05 - 20/08
-
-S2.06 - 27/08: Explore MIP generalisations with strategy
-
-S2.07 - 03/09
-
-S2.08 - 10/09
-
-S2.09 - 17/09: Evaluate performance with respect to problem types
-
-Break - 24/09
-
-S2.10 - 01/10: Drafting thesis
-
-S2.11 - 08/10
-
-S2.12 - 15/10
-
-S2.13 - 22/10
-
-S2.14 - 29/10: Final presentation
-
-S2.15 - 05/11: 9th of November Thesis Submission
-
+\newpage
 \subsection{Potential Difficulties}
 As is the case with any research project, there are some setbacks which should be acknowledged.
 \begin{itemize}
   \item Insufficient planning
   \item Ineffective idea development
   \item Substandard adoption of secondary texts
-  \item Erroneous practice in artifact development
+  \item Poor practice in artifact development
   \item Improper styling techniques
 \end{itemize}
 
