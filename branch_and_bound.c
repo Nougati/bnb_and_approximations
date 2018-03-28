@@ -21,97 +21,19 @@
 #define PARTIAL_LOGGING 1
 #define FULL_LOGGING 2
 #define FILE_LOGGING 3
+#define MEMORY_EXCEEDED 1
+#define TIMEOUT 2
 #define NODE_OVERFLOW 1500000
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <limits.h>
+#include "bench_extern.h"
+#include "branch_and_bound.h"
+#include "pisinger_reader.h"
 #include "fptas.c"
 
-/* Structure Declarations */
-typedef struct p_instance
-{
-  struct p_instance *parent;
-  int *variable_statuses;
-  int lower_bound;
-  int upper_bound;
-  int ID;
-  struct p_instance *on_child;
-  struct p_instance *off_child;
-} Problem_Instance;
-
-typedef struct queue 
-{
-  int front, rear, size, capacity;
-  struct p_instance** array;
-} Problem_Queue;
-
-/*WIP*/
-typedef struct linked_list_item
-{
-  struct linked_list_item *in_front;
-  struct linked_list_item *behind;
-  struct p_instance *problem;
-} LL_Node_Queue_Item;
-
-typedef struct linked_list_p_queue
-{
-  struct linked_list_item *head;
-  struct linked_list_item *tail;
-  int size;
-} LL_Problem_Queue;
-
-/* Branch and Bound Declarations */
-Problem_Instance *define_root_node(int n);
-
-void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
-                                   int capacity, int z, int *z_out, 
-                                   int sol_out[], int n, char *problem_file, 
-                                   int branching_strategy, time_t seed,
-                                   int DP_method, int logging_rule, 
-                                   FILE *logging_stream, double epsilon, 
-                                   int *number_of_nodes);
-
-int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z, 
-                               int n, int capacity, char *problem_file);
-
-int find_branching_variable(int n, int z, int *read_only_variables, 
-                            int branching_strategy, int *profits);
-
-void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
-                          int branching_variable, 
-                          LL_Problem_Queue *problems_list, int *count, 
-                          FILE *logging_stream, int logging_rule);
-
-Problem_Instance *select_and_dequeue_node(LL_Problem_Queue *node_queue);
-
-void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
-                 int x[], int capacity, int n, int z, int *lower_bound_ptr, 
-                 int *upper_bound_ptr, char *problem_file, int DP_method,
-                 int logging_rule, FILE *logging_stream, double eps);
-
-void post_order_tree_clean(Problem_Instance *root_node);
-
-/* Queue Declarations */
-Problem_Queue *create_queue(int capacity);
-
-int is_full(Problem_Queue *queue);
-
-int is_empty(Problem_Queue *queue);
-
-void enqueue(Problem_Queue *queue, Problem_Instance *node);
-
-Problem_Instance *dequeue(Problem_Queue *queue);
-
-Problem_Instance *front(Problem_Queue *queue);
-
-Problem_Instance *rear(Problem_Queue *queue);
-
-/* LL Queue Declarations */
-LL_Problem_Queue *LL_create_queue(void);
-void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem, FILE *logging_stream, int logging_rule);
-Problem_Instance *LL_dequeue(LL_Problem_Queue *queue);
 
 /*TODO Make benchmarking program that will define this as an external variable.
  * In addition, we need to make a makefile for benchmarking that will compile 
@@ -227,12 +149,17 @@ int main(int argc, char *argv[]) {
   strcpy(problem_file, argv[1]);
 
   /* Read problem */
-  pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file, problem_no);
+  pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, problem_file,
+                  problem_no);
 
   /* Output variables */
   int z_out = 0;
   int number_of_nodes = -1;
   int sol_out[n];
+
+  /* Turn off limits */
+  int memory_allocation_limit = -1;
+  int timeout = -1;
 
   /* Start timer */
   clock_t t = clock();
@@ -241,7 +168,8 @@ int main(int argc, char *argv[]) {
   branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, problem_file, branching_strategy,
                                 seed, DP_method, logging_rule, logging_stream, 
-                                epsilon, &number_of_nodes);
+                                epsilon, &number_of_nodes, 
+                                memory_allocation_limit, &t, timeout);
 
   /* Stop timer */
   t = clock() - t;
@@ -251,8 +179,8 @@ int main(int argc, char *argv[]) {
 
   if(branching_strategy == RANDOM_BRANCHING) printf("Seed: %ld\n", seed);
 
-  printf("Answer: %d/%d (%s), time taken: %lf\nBytes allocated: %d\n" , z_out, z, z_out == z ? "Pass"
-         "!" : "Failure!", time_taken, bytes_allocated);
+  printf("Answer: %d/%d (%s), time taken: %lf\nBytes allocated: %d\n" , z_out,
+         z, z_out == z ? "Pass!" : "Failure!", time_taken, bytes_allocated);
 
   /* Clean up */  
   free(profits);
@@ -272,8 +200,32 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                                    int sol_out[], int n, char *problem_file, 
                                    int branching_strategy, time_t seed, 
                                    int DP_method, int logging_rule, 
-                                   FILE *logging_stream, double eps, int *number_of_nodes)
+                                   FILE *logging_stream, double eps, 
+                                   int *number_of_nodes,
+                                   int memory_allocation_limit, clock_t *start_time, 
+                                   int timeout)
 { 
+  /* Branch and bound algorithm for 0,1 Knapsack!
+   *  profits: array of profits
+   *  weights: array of weights
+   *  x: solution array
+   *  capacity: problem capacity
+   *  z: solution optimal
+   *  z_out: computed optimal (output parameter)
+   *  sol_out: computed optimal solution (output parameter)
+   *  n: number of items for the instance
+   *  problem_file: string of the problem file reading from (I think this is 
+   *                only here because of the badly designed VV DP
+   *  branching_strategy:
+   *    -tb, -rb, or -le
+   *  seed: only relevant for -rb 
+   *  DP_method: -vv or -ws
+   *  logging_rule: NO_LOGGING, PARTIAL_LOGGING, FULL_LOGGING, FILE_LOGGING
+   *  logging_stream: either stdio or a file
+   *  eps: epsilon for the problem
+   *  number of nodes: how many nodes are generated through the algorithm 
+   *                  (output parameter)
+   * */
   bytes_allocated = 0;
   /* Logging functionality */
   time_t t = time(NULL);
@@ -396,6 +348,23 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
       if(logging_rule != NO_LOGGING)
         fprintf(logging_stream, "\t Node %d branched on variable %d\n",
                 current_node->ID, branching_variable);
+
+      /* Check for overallocation */
+      int overallocation = is_boundary_exceeded(memory_allocation_limit, *start_time, timeout);
+      if(overallocation)
+        /* Exit, returning current best guess */
+        if(overallocation == MEMORY_EXCEEDED)
+        {
+          bytes_allocated = -1;
+          *z_out = global_lower_bound;
+          return;
+        }
+        else if (overallocation == TIMEOUT)
+        {
+          *start_time = -1;
+          return;
+        }
+      /* Else, loop again */
     }
   }
   *z_out = global_lower_bound;
@@ -644,6 +613,23 @@ void post_order_tree_clean(Problem_Instance *node)
   free(node);
 }
 
+/* Bechmarking auzax: Boundary checking method */
+int is_boundary_exceeded(int memory_limit, clock_t start_time, int timeout)
+{
+
+  /* First check if memory limit has been exceeded */
+  if (memory_limit != -1 && bytes_allocated > memory_limit)
+    return MEMORY_EXCEEDED;
+
+  /* Then check if timeout is reached */
+  clock_t elapsed = clock() - start_time;
+  double time_taken = ((double)elapsed)/CLOCKS_PER_SEC;
+  if (timeout != -1 && time_taken > timeout)
+    return TIMEOUT;
+
+  /* Else no boundary is exceeded */
+  return 0;
+} 
 
 /* Queue Data Structure Methods */
 /* Problem Queue method: create_queue */

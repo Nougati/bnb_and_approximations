@@ -24,6 +24,9 @@
  *    resolve to incorporate them eventually.                                * 
  *   Also, there are no Vasrani DP tests for this as the algorithm has not   * 
  *    been worked on with the B&B algorithm.                                 * 
+ *  TODO:                                                                    *
+ *    Update all the calls to branch and bound to include the limiting       *
+ *     parameters                                                            *
  *****************************************************************************/
 
 #define TESTING
