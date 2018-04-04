@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
              "where benchmark_set can be\n\ttiny_n\n\tsmall_n\n\tmidlow_n\n\t"
              "medium_n\n\tmidhigh_n\n\tbig_n\n\thuge_n\n\tmassive_n\nand memor"
              "y_limit can be\n\ta positve integer number of bytes to cap alloc"
-             "ation to\n\tor -1 if no limit.\n\tand timeout can be\n\ta positi"
+             "ation to\n\tor -1 if no limit.\nand timeout can be\n\ta positi"
              "ve integer number of seconds to limit computation to\n\tor -1 if"
              "time is to be unbounded.\n", argv[0]);
   if(argc != 5)
@@ -104,21 +104,25 @@ int main(int argc, char *argv[])
   int z_out = 0;
   int number_of_nodes = 1;
 
+  fprintf(benchmark_stream, "File name, problem #, runtime, memory allocated\n");
   /* Then if tiny_n */
-  if (strcmp("tiny_n", argv[4]) == 0)
+  if (strcmp("tiny_n", argv[1]) == 0)
   {
     /* Run for n=50 */
     n = 50;
 
     /* Computer for each instance type, and coeffient type */
-      /* TODO maybe turn t into an external variable */
     for(int i = 0; i < 7; i++)
+    {
+      printf("Running for intance %d.\n", i);
       for(int j = 0; j < 5; j++)    
       {
+        printf("\tRunning for coefficient type %d\n", j);
         snprintf(file_name_holder, 30, "knapPI_%s_%d_%s.csv", 
                  instance_types_1[i], n, coefficient_types[j]);
-        for(int k = 1; k <= 100; i++)
+        for(int k = 1; k <= 100; k++)
         {
+          printf("\t\tRunning for problem %d\n", k);
           pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, file_name_holder, k);
           int sol_out[n];
           clock_t t = clock();
@@ -129,23 +133,26 @@ int main(int argc, char *argv[])
                                         &number_of_nodes, 
                                         memory_allocation_limit, &t, timeout);
 
-          char *stringified_time;
+          char stringified_time[30];
           if (t == -1.0)
             strcpy(stringified_time, "TIMEOUT");
           else
           {
             clock_t elapsed = clock() - t;
-            sprintf(stringified_time, "%ld", elapsed);
+            double time_taken = ((double) elapsed)/CLOCKS_PER_SEC;
+            sprintf(stringified_time, "%lf", time_taken);
           }
-          char *stringified_memory;
-          if(bytes_allocated = -1)
+          char stringified_memory[30];
+          if(bytes_allocated == -1)
             strcpy(stringified_memory, "MEMORY LIMITED EXCEEDED");
           else
             sprintf(stringified_memory, "%d", bytes_allocated);
 
-          fprintf(benchmark_stream, "%s, %s, %s", file_name_holder, stringified_time, stringified_memory);
+          fprintf(benchmark_stream, "%s, %d, %s, %s\n", file_name_holder, k, stringified_time, 
+                  stringified_memory);
         }
       }
+    }
     /* TODO Run all the 'hard' instances for this n */
   }
   /* Else if small_n */

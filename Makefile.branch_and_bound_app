@@ -1,0 +1,17 @@
+branch_and_bound_app : branch_and_bound_app.o branch_and_bound.o fptas.o pisinger_reader.o
+	gcc branch_and_bound_app.o branch_and_bound.o fptas.o pisinger_reader.o -g -o branch_and_bound_app -lm
+
+branch_and_bound_app.o : branch_and_bound_app.c
+	gcc -c branch_and_bound_app.c -g -lm 
+
+branch_and_bound.o : branch_and_bound.c
+	gcc -c branch_and_bound.c -g -lm
+
+fptas.o : fptas.c
+	gcc -c fptas.c -g -lm
+
+pisinger_reader.o : pisinger_reader.c
+	gcc -c pisinger_reader.c -g -lm
+
+clean :
+	rm branch_and_bound_app branch_and_bound.o fptas.o pisinger_reader.o 

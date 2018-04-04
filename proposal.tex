@@ -1,5 +1,7 @@
 \documentclass[12pt, a4paper]{article}
 \usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\graphicspath{{images/}}
 
 \begin{document}
 \begin{titlepage}
@@ -20,47 +22,46 @@
 \tableofcontents
 \newpage
 \section{Introduction}
-We aim to investigate the use of approximation algorithms (AAs) within a branch and bound scheme. Specifically, we are focused on using approximations as a method of providing dual bounds with guarantees. 
+In Mixed Integer Programming (MIP), the state-of-the-art method for obtaining a solution is Branch and Bound. The scheme works by finding what are known as \emph{primal} and \emph{dual} bounds on the optimal solution, and enumerates feasible solutions within these while systematically tightening them. We aim to investigate the use of approximation algorithms (AAs) within a branch and bound scheme as a method of providing dual bounds with guarantees, to see if such an approach will succeed in effectively solving MIPs with known AAs. 
 
-To explore the merit of this approach, we will investigate possible configurations which improve performance. The major points of interest for this include optimal branching strategies, node selection schemes, and incorporating warm starting.
+To explore the merit of this approach, we will investigate possible configurations with the aim of improving performance. This may include include optimal branching strategies, node selection schemes, and incorporating warm starting. In particular, we wish to see how the structure of this method can lend itself to these configurations.
 
-Our objective is to craft an approach to solve branch and bound optimisation problems quickly with dual bounds obtained from AAs. In achieving this, a new direction for both optimisation and approximations researchers may be revealed. Moreover, dual bounds from traditional LP relaxations can be arbitrarily poor, a key issue that this project addresses.
+One major drawback of dual bounds provided by LP relaxations is they can be arbitrarily poor: succesfully providing a method with guarantees targets this issue specifically. Further, AAs have the ability to derive both primal and dual bounds simultaneously. From this project, it is collaterally possible that a new direction for both optimisation and approximations researchers may be revealed should such a method exist. 
 
-MIP solvers are used in almost every industry in real world optimisation problems, due to the ubiquity of a need for both resource minimisation (expenditure) and maximisation (turnover). It is in the interest of developers and businesses that continued research is done to improve the efficiency of these solvers. By targeting a key bottleneck in MIP solver computation, this project is a concern of such stakeholders across all industries. 
+MIP solvers are used in almost every industry in real world optimisation problems, with applications in advertising, portfolio management, and numerous scheduling problems. It is then in the interest of researchers, developers, businesses that continued research is done to improve the efficiency of these solvers. By targeting a key bottleneck in MIP solver computation, this project is a concern of such stakeholders across all industries. 
 
 \section{Research Context / Background}
 
-The branch and bound strategy is a well studied algorithm framework for combinatorial optimisation, and the reader is advised to use the description provided by \cite{BOOK:1} for a detailed description of the method.
+For our purposes, we will define a \textit{heuristic} as an algorithm which provides a feasible solution to a problem with emphasis on speed. Heuristics achieve this by trading an optimality guarantee for a faster run time, which may be unrealistically long if solved to optimality, however these may be arbitrarily poor.
 
-For our purposes, we will define a \textit{heuristic} as an algorithm which provides a feasible, but not necessarily optimal, solution to a problem. Heuristics allow us to trade an optimality guarantee for a faster run time, which may be unrealistically long if solved to optimality.
+We distinguish an AA as a heuristic which has a worst case guarantee on the solution returned. By introducing an error parameter $\epsilon$, it is sometimes possible to parameterise the guarantee of the approximation while having a variable impact on the compute time. In such a case, for a maximisation problem, one example of bounds on the quality of the approximate solution $z_h$, relative to optimal solution $z$, is $(1-\epsilon)\cdot z < z_h < z$.   
 
-We will now define an \textit{AA} as a heuristic which has a worst case guarantee on the solution returned. By introducing an error parameter $\epsilon$, it is sometimes possible to improve the guarantee of the approximation by accepting performance penalties. In such a case, for a maximisation problem, one example of bounds on the quality of the approximate solution $z_h$, relative to optimal solution $z$, is $(1-\epsilon)\cdot z < z_h < z$.   
+The context for this project's direction follows from the chronology of MIP and AA research alike. Solving MIP problems was revolutionised after the Branch and Bound algorithm was first proposed in 1960 \cite{LandDoig}, which became a seminal paper in the field. As research progressed further with this new scheme, a new field of AAs was opening up during the 1970's with works on Knapsack \cite{IbarraKim}, TSP \cite{CristofidesTSP}, Facility-location \cite{CornuejolsFisherNemhauser}, among many others, all appearing in quick succession. Following this, in 1980, Wolsey \cite{WOLSEY} proposed a method of combining the findings from approximation algorithms with branch and bound: one of the few treatments of the topic that exists today. In his paper, Wolsey posits a general AA worst-case analysis technique, and applies what is found to create implicit enumeration for a branch and bound with both AA bounds and LP relaxations. 
 
-Guarantees on heuristic qualities in the field of optimisation was specifically addressed in \cite{WOSLEY}, where a general heuristic analysis method is given. Worst case analyses of various heuristics for \textit{bin packing}, \textit{longest undirected hamilitonian tours}, among others, showed guarantees are heavily problem specific. Methods of embedding heuristics into branch and bound schemes are also proposed, showing that heuristics can work in tandem with LP relaxations in the construction of a branch and bound algorithm.
+The basis for this project follows from specifically this point, and acknowledges one key property of AAs: by using the AA bounds, we can not only obtain the \textit{a priori} (inferred) dual bounds, we can use analysis techniques to also derive \textit{a posteriori} primal bounds with guarantees. In doing this, we omit the need for the use of LPs in successfully carrying out a branch and bound search.
 
-For this discussion, we will explore concepts of approximations within branch and bound, utilising the Knapsack problem as a case study. To do this, a \textit{Fully Polynomial Time Approximation Scheme} (FPTAS) is introduced for Knapsack in \cite{BOOK:2}, where the reader is referred to for formal definitions and proofs. By definition, FPTAS's adhere to our definition of an AA.
-
-
+For the beginning of this project, we explore concepts of approximations within branch and bound, utilising the Knapsack problem as a case study. To do this, a \textit{Fully Polynomial Time Approximation Scheme} (FPTAS) is introduced for Knapsack in \cite{BOOK:2}, where the reader is referred to for formal definitions and proofs. A key point is that we are interested in exploring FPTAS's which use dynamic programming (DP). Since DP algorithms lend themselves to partially computed problems, we are interested in also warm starting subproblems with these. By definition, FPTAS's adhere to our definition of an AA.
 
 \section{Research Design}
 
 \subsection{Methodologies}
 
-The aim of this research is to iteratively explore methods of improving the performance of our branch and bound algorithm. Specifically we are asking \textbf{can we use approximation algorithms to compute dual bounds effectively in a branch and bound scheme for combinatorial optimisation problems?}
+The aim of this research is to iteratively explore methods of improving the performance of our branch and bound algorithm. Specifically we are asking \textbf{can we use approximation algorithms to compute dual bounds effectively in a branch and bound scheme for combinatorial optimisation problems?}\\
 
 Our research methodology will be driven by systematically addressing the following questions:
 
 \begin{itemize}
-\item What branching, searching, and pruning strategies will improve our performance?
-\item How can we exploit the concept of warm starting to evaluate bounds quicker?
-\item Which problem types benefit most from the proposed approach?
+\item What branching, searching, and pruning strategies does this strategy benefit most from?
+\item Given that we are looking at FPTAS's with DP algorithms, to what extent does this approach lend itself to the concept of warm starting in branch and bound?
+\item What relationships, if any, exist between problem types and this method?
 \end{itemize}
 
 As the project progresses, these questions will develop into subquestions themselves as further information is understood.
 
 We will use automated performance logging and characterise the approaches based on this. Comparisons will be done incrementally so to emphasise the effects of any changes made to the algorithm.
 
-\newpage
+Particularly, the research methodology will follow a \textit{design science} philosophy. This entails a series of systematic re-evaluations of artifacts in light of research questions, which will take place throughout the duration of the project. 
+
 \subsection{Proposed Thesis chapter headings}
 We expect the thesis to follow this general format:
 \begin{enumerate}
@@ -74,6 +75,7 @@ We expect the thesis to follow this general format:
   \item Conclusion
   \item Bibliography / References
 \end{enumerate}
+\newpage
 \subsection{Timetable}
 The proposed timetable for successful completion of this project is as follows:
 
@@ -105,7 +107,6 @@ The proposed timetable for successful completion of this project is as follows:
 
 Of course, as the project progresses, this timetable may be subject to change.
 
-\newpage
 \subsection{Potential Difficulties}
 As is the case with any research project, there are some setbacks which should be acknowledged.
 \begin{itemize}
@@ -117,7 +118,7 @@ As is the case with any research project, there are some setbacks which should b
 \end{itemize}
 
 \section{Deliverables / Outcomes}
-We expect there to be a series of deliverables associated with the completion of this project. In addition to this proposal, we will provide a literature review, an interim and final presentation, and a final thesis. Moreover, as is expected with design science research approaches, we aim to have publicly available artifacts for each point in the research, hosted online. It is hoped that the mechanisms will be available as a library that can be used.
+We expect there to be a series of deliverables associated with the completion of this project. In addition to this proposal, a literature review, an interim and final presentation, and a final thesis will be provided. Moreover, as is expected with design science research approaches, we aim to have publicly available artifacts for each point in the research, hosted online. It is hoped that the mechanisms will be available as a library that can be freely used.
 
 \section{Bibliography / References}
 \bibliography{proposal}
