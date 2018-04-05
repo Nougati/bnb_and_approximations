@@ -330,6 +330,10 @@ TEST(branch_and_bound_mechanismTest, find_boundsTest){
   int *profits, *weights, *x;
   int n, z, capacity;
   char problem_file[100];
+  int DP_method = WILLIAMSON_SHMOY;
+  int logging_rule = NO_LOGGING;
+  FILE *logging_stream = stdout;
+  double eps = 0.02;
 
   /* Edit problem file here */
   char file[] = "knapPI_3_50_1000.csv";
@@ -349,7 +353,7 @@ TEST(branch_and_bound_mechanismTest, find_boundsTest){
   /* Derive bounds */ 
   find_bounds(test_problem, profits, weights, x, capacity, n, z, 
               &test_problem->lower_bound, &test_problem->upper_bound, 
-              problem_file);
+              problem_file, DP_method, logging_rule, logging_stream, eps);
 
   /* Assert UB >= z >= LB*/
   ASSERT_GE(test_problem->upper_bound, z);
@@ -369,9 +373,13 @@ TEST(branch_and_bound_mechanismTest, generate_and_enqueue_nodesTest){
   //int n = rand() % 10000 + 50;
   int n = 10;
   int queue_capacity = n;
+  int count = 0;
+  FILE *logging_stream = stdout;
+  int logging_rule = NO_LOGGING;
 
   /* Create an empty queue */
-  Problem_Queue *test_problem_queue = create_queue(queue_capacity);
+  //Problem_Queue *test_problem_queue = create_queue(queue_capacity);
+  LL_Problem_Queue *test_problem_queue = LL_create_queue();
 
   /* Generate a random number to represent the variable to branch on */
   int branching_var = rand() % n;
@@ -415,19 +423,21 @@ TEST(branch_and_bound_mechanismTest, generate_and_enqueue_nodesTest){
 
 
   /* Run generate_and_enqueue */
-  generate_and_enqueue_nodes(test_problem_instance, n, branching_var, test_problem_queue);
+  generate_and_enqueue_nodes(test_problem_instance, n, branching_var, test_problem_queue, &count, logging_stream, logging_rule);
 
 
   /* Compare the lists, asserting equality */
   /* First list */
-  Problem_Instance *child_problem_instance = dequeue(test_problem_queue);
+  //Problem_Instance *child_problem_instance = dequeue(test_problem_queue);
+  Problem_Instance *child_problem_instance = LL_dequeue(test_problem_queue);
   for(int i = 0; i < n; i++)
     ASSERT_EQ(child_problem_instance->variable_statuses[i], expected_variable_statuses_on[i]);
   free(child_problem_instance->variable_statuses);
   free(child_problem_instance); 
 
   /* Second list  */
-  child_problem_instance = dequeue(test_problem_queue);
+  //child_problem_instance = dequeue(test_problem_queue);
+  child_problem_instance = LL_dequeue(test_problem_queue);
   for(int i = 0; i < n; i++)
     ASSERT_EQ(child_problem_instance->variable_statuses[i], expected_variable_statuses_off[i]);
   free(child_problem_instance->variable_statuses);
@@ -446,14 +456,15 @@ TEST(branch_and_bound_mechanismTest, select_and_dequeue_nodesTest){
    * pass for thee b&b which has a FIFO strategy for node selection. */
   /* Generate a queue and some amount of problems and put them into the queue*/
   int queue_capacity = rand() % 1000000; 
-  Problem_Queue *test_problem_queue = create_queue(queue_capacity);
+  //Problem_Queue *test_problem_queue = create_queue(queue_capacity);
+  LL_Problem_Queue *test_problem_queue = LL_create_queue();
   int no_problems = rand() % queue_capacity;
   Problem_Instance *first_instance;
-  enqueue(test_problem_queue, first_instance);
+  LL_enqueue(test_problem_queue, first_instance, stdout, NO_LOGGING);
   for (int i = 0; i < no_problems-1; i++)
   {
     Problem_Instance *arbitrary_instance;
-    enqueue(test_problem_queue, arbitrary_instance);
+    LL_enqueue(test_problem_queue, arbitrary_instance, stdout, NO_LOGGING);
   } 
 
   /* Select and dequeue the node */
@@ -462,12 +473,12 @@ TEST(branch_and_bound_mechanismTest, select_and_dequeue_nodesTest){
   /* Ensure that queue returned the expected instance */
   ASSERT_EQ(dequeued_instance, first_instance);
 
-  /* Ensure that it isn't in the list anymore */
+  /* Ensure that it isn't in the list anymore 
   while(!is_empty(test_problem_queue))
   {
     Problem_Instance *a_problem = dequeue(test_problem_queue);
     ASSERT_NE(a_problem, first_instance);
-  }
+  }*/
 }
 
 /* Tests for computing the optimal value*/
@@ -476,6 +487,16 @@ TEST(branch_and_bound_mechanismTest, returns_optimal_value_uncorrelated){
   int *profits, *weights, *x;
   int n, z, capacity;
   char problem_file[100];
+  int branching_strategy = TRUNCATION_BRANCHING;
+  int seed = 0;
+  int DP_method = WILLIAMSON_SHMOY;
+  int logging_rule = NO_LOGGING;
+  FILE *logging_stream = stdout;
+  double eps = 0.02;
+  int number_of_nodes = -1;
+  int memory_allocation_limit = -1;
+  clock_t t = clock();
+  int timeout = -1;
 
   /* Edit problem file here */
   char file[] = "knapPI_1_50_1000.csv";
@@ -487,9 +508,12 @@ TEST(branch_and_bound_mechanismTest, returns_optimal_value_uncorrelated){
   /* Output variables */
   int z_out = 0;
   int sol_out[n];
-
-  branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, sol_out, n, problem_file); 
   
+
+  branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, sol_out, n, problem_file,
+                                branching_strategy, seed, DP_method, logging_rule, logging_stream, eps, 
+                                &number_of_nodes, memory_allocation_limit, &t, timeout); 
+
   ASSERT_EQ(z_out, z);
 }
 
@@ -498,6 +522,16 @@ TEST(branch_and_bound_mechanismTest, returns_optimal_value_weaklycorrelated){
   int *profits, *weights, *x;
   int n, z, capacity;
   char problem_file[100];
+  int branching_strategy = TRUNCATION_BRANCHING;
+  int seed = 0;
+  int DP_method = WILLIAMSON_SHMOY;
+  int logging_rule = NO_LOGGING;
+  FILE *logging_stream = stdout;
+  double eps = 0.02;
+  int number_of_nodes = -1;
+  int memory_allocation_limit = -1;
+  clock_t t = clock();
+  int timeout = -1;
 
   /* Edit problem file here */
   char file[] = "knapPI_2_50_1000.csv";
@@ -511,8 +545,9 @@ TEST(branch_and_bound_mechanismTest, returns_optimal_value_weaklycorrelated){
   int sol_out[n];
 
   /* Solve */
-  branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, sol_out, n, problem_file); 
-  
+  branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, sol_out, n, problem_file,
+                                branching_strategy, seed, DP_method, logging_rule, logging_stream, eps, 
+                                &number_of_nodes, memory_allocation_limit, &t, timeout); 
   ASSERT_EQ(z_out, z);
 }
 
@@ -521,6 +556,16 @@ TEST(branch_and_bound_mechanismTest, returns_optimal_value_stronglycorrelated){
   int *profits, *weights, *x;
   int n, z, capacity;
   char problem_file[100];
+  int branching_strategy = TRUNCATION_BRANCHING;
+  int seed = 0;
+  int DP_method = WILLIAMSON_SHMOY;
+  int logging_rule = NO_LOGGING;
+  FILE *logging_stream = stdout;
+  double eps = 0.02;
+  int number_of_nodes = -1;
+  int memory_allocation_limit = -1;
+  clock_t t = clock();
+  int timeout = -1;
 
   /* Edit problem file here */
   char file[] = "knapPI_3_50_1000.csv";
@@ -534,8 +579,9 @@ TEST(branch_and_bound_mechanismTest, returns_optimal_value_stronglycorrelated){
   int sol_out[n];
 
   /* Solve */
-  branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, sol_out, n, problem_file); 
-  
+  branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, sol_out, n, problem_file, 
+                                branching_strategy, seed, DP_method, logging_rule, logging_stream, eps, 
+                                &number_of_nodes, memory_allocation_limit, &t, timeout); 
   ASSERT_EQ(z_out, z);
 }
 

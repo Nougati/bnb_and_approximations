@@ -14,4 +14,4 @@ pisinger_reader.o : pisinger_reader.c
 	gcc -c pisinger_reader.c -g -lm
 
 clean :
-	rm branch_and_bound_app branch_and_bound.o fptas.o pisinger_reader.o 
+	rm branch_and_bound_app branch_and_bound_app.o branch_and_bound.o fptas.o pisinger_reader.o 
