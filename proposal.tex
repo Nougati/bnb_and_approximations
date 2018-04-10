@@ -32,15 +32,10 @@ MIP solvers are used in almost every industry in real world optimisation problem
 
 \section{Research Context / Background}
 
-For our purposes, we will define a \textit{heuristic} as an algorithm which provides a feasible solution to a problem with emphasis on speed. Heuristics achieve this by trading an optimality guarantee for a faster run time, which may be unrealistically long if solved to optimality, however these may be arbitrarily poor.
+For our purposes, we will define a \textit{heuristic} as an algorithm which provides a feasible solution to a problem with emphasis on speed. Heuristics can quickly return a solution to a problem which may take too long when solved to optimality. However, heuristic solutions may be arbitrarily poor. On the other hand, an AA is a heuristic which has a worst case guarantee on the solution returned. If an AA returns a solution $z$ guaranteed to be within a constant factor $\alpha$ of the optimal value $OPT$, such that $z \in [\alpha \cdot OPT, OPT]$ (for a maximisation problem) we call it a \emph{constant ratio approximation scheme}. If such a scheme runs in time proportional to a polynomial in the instance size, and $\alpha = (1-\epsilon)$ for error parameter $\epsilon > 0$, the approximation is a \emph{polynomial time approximation scheme} (PTAS), Further, if a PTAS runs in time proportional to both the instance size and $\frac{1}{\epsilon}$, it is known as a \emph{fully polynomial time approximation scheme} (FPTAS).
 
-We distinguish an AA as a heuristic which has a worst case guarantee on the solution returned. By introducing an error parameter $\epsilon$, it is sometimes possible to parameterise the guarantee of the approximation while having a variable impact on the compute time. In such a case, for a maximisation problem, one example of bounds on the quality of the approximate solution $z_h$, relative to optimal solution $z$, is $(1-\epsilon)\cdot z < z_h < z$.   
+\textbf{TODO: WORK IT HARDER MAKE IT BETTER DO IT FASTER MAKES US STRONGER MORE THAN EVER HOUR AFTER OUR WORK IS NEVER OVER}Solving MIP problems was revolutionised after the Branch and Bound algorithm was first proposed in 1960 \cite{LandDoig}, which became a seminal paper in the field. As research progressed further with this new scheme, a new field of AAs was opening up during the 1970's with works on Knapsack \cite{IbarraKim}, TSP \cite{CristofidesTSP}, Facility-location \cite{CornuejolsFisherNemhauser}, among many others, all appearing in quick succession. Following this, in 1980, Wolsey \cite{WOLSEY} proposed a method of combining the findings from approximation algorithms with branch and bound: one of the few treatments of the topic that exists today. In his paper, Wolsey posits a general AA worst-case analysis technique, and applies what is found to create implicit enumeration for a branch and bound with both AA bounds and LP relaxations. 
 
-The context for this project's direction follows from the chronology of MIP and AA research alike. Solving MIP problems was revolutionised after the Branch and Bound algorithm was first proposed in 1960 \cite{LandDoig}, which became a seminal paper in the field. As research progressed further with this new scheme, a new field of AAs was opening up during the 1970's with works on Knapsack \cite{IbarraKim}, TSP \cite{CristofidesTSP}, Facility-location \cite{CornuejolsFisherNemhauser}, among many others, all appearing in quick succession. Following this, in 1980, Wolsey \cite{WOLSEY} proposed a method of combining the findings from approximation algorithms with branch and bound: one of the few treatments of the topic that exists today. In his paper, Wolsey posits a general AA worst-case analysis technique, and applies what is found to create implicit enumeration for a branch and bound with both AA bounds and LP relaxations. 
-
-The basis for this project follows from specifically this point, and acknowledges one key property of AAs: by using the AA bounds, we can not only obtain the \textit{a priori} (inferred) dual bounds, we can use analysis techniques to also derive \textit{a posteriori} primal bounds with guarantees. In doing this, we omit the need for the use of LPs in successfully carrying out a branch and bound search.
-
-For the beginning of this project, we explore concepts of approximations within branch and bound, utilising the Knapsack problem as a case study. To do this, a \textit{Fully Polynomial Time Approximation Scheme} (FPTAS) is introduced for Knapsack in \cite{BOOK:2}, where the reader is referred to for formal definitions and proofs. A key point is that we are interested in exploring FPTAS's which use dynamic programming (DP). Since DP algorithms lend themselves to partially computed problems, we are interested in also warm starting subproblems with these. By definition, FPTAS's adhere to our definition of an AA.
 
 \section{Research Design}
 
@@ -52,11 +47,11 @@ Our research methodology will be driven by systematically addressing the followi
 
 \begin{itemize}
 \item What branching, searching, and pruning strategies does this strategy benefit most from?
-\item Given that we are looking at FPTAS's with DP algorithms, to what extent does this approach lend itself to the concept of warm starting in branch and bound?
+\item For various problems and their respective AAs, how well can this strategy perform?
 \item What relationships, if any, exist between problem types and this method?
 \end{itemize}
 
-As the project progresses, these questions will develop into subquestions themselves as further information is understood.
+As the project progresses, these questions will develop into subquestions themselves as further information is obtained.
 
 We will use automated performance logging and characterise the approaches based on this. Comparisons will be done incrementally so to emphasise the effects of any changes made to the algorithm.
 
@@ -108,13 +103,15 @@ The proposed timetable for successful completion of this project is as follows:
 Of course, as the project progresses, this timetable may be subject to change.
 
 \subsection{Potential Difficulties}
-As is the case with any research project, there are some setbacks which should be acknowledged.
+As is the case with any research project, there are potential setbacks which should be acknowledged. Further, work on the project until this point has indicated that the following issues have the capacity to disrupt research:
 \begin{itemize}
-  \item Insufficient planning
-  \item Ineffective idea development
-  \item Substandard adoption of secondary texts
-  \item Poor practice in artifact development
-  \item Improper styling techniques
+  \item Insufficient planning leading to poor time investments in workflow.
+  \item Development of key project questions and ideas not addressed in adequate depth. This could be a result of both poor understanding and issues with planning.
+  \item Application and artifact development which is predicated on incorrect theoretical understanding, i.e. implementing something without full ability to give justification.
+  \item Substandard adoption of secondary texts related to specific functionality, leading to oversights in a particular artifact's design.
+  \item Poor coding practices and organisation of files leading technical errors which may disrupt work.
+  \item Insufficient test coverage of artifacts potentially leading to faulty/buggy software.
+  \item Lack of adherence to good backup and versioning practices. 
 \end{itemize}
 
 \section{Deliverables / Outcomes}
