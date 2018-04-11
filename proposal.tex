@@ -32,10 +32,10 @@ MIP solvers are used in almost every industry in real world optimisation problem
 
 \section{Research Context / Background}
 
-For our purposes, we will define a \textit{heuristic} as an algorithm which provides a feasible solution to a problem with emphasis on speed. Heuristics can quickly return a solution to a problem which may take too long when solved to optimality. However, heuristic solutions may be arbitrarily poor. On the other hand, an AA is a heuristic which has a worst case guarantee on the solution returned. If an AA returns a solution $z$ guaranteed to be within a constant factor $\alpha$ of the optimal value $OPT$, such that $z \in [\alpha \cdot OPT, OPT]$ (for a maximisation problem) we call it a \emph{constant ratio approximation scheme}. If such a scheme runs in time proportional to a polynomial in the instance size, and $\alpha = (1-\epsilon)$ for error parameter $\epsilon > 0$, the approximation is a \emph{polynomial time approximation scheme} (PTAS), Further, if a PTAS runs in time proportional to both the instance size and $\frac{1}{\epsilon}$, it is known as a \emph{fully polynomial time approximation scheme} (FPTAS).
+For our purposes, we will define a \textit{heuristic} as an algorithm which provides a feasible solution to a problem with emphasis on speed. Heuristics can quickly return a solution to a problem which may take too long when solved to optimality. A key caveat, however, is that heuristic solutions can be arbitrarily poor. AAs extend heuristics by providing a worst case guarantee on the solution returned. If an AA returns a solution $z$ guaranteed to be within a constant factor $\alpha$ of the optimal value $OPT$, such that $z \in [\alpha \cdot OPT, OPT]$ (for a maximisation problem) we call it a \emph{constant ratio approximation scheme}. If such a scheme runs in time proportional to a polynomial in the instance size, and $\alpha = (1-\epsilon)$ for error parameter $\epsilon > 0$, the approximation is a \emph{polynomial time approximation scheme} (PTAS), Further, if a PTAS runs in time proportional to both the instance size and $\frac{1}{\epsilon}$, it is known as a \emph{fully polynomial time approximation scheme} (FPTAS). For a detailed description of such approximation schemes and their associated proofs, the reader is directed to \cite{BOOK:2} for further reading.
 
-\textbf{TODO: WORK IT HARDER MAKE IT BETTER DO IT FASTER MAKES US STRONGER MORE THAN EVER HOUR AFTER OUR WORK IS NEVER OVER}Solving MIP problems was revolutionised after the Branch and Bound algorithm was first proposed in 1960 \cite{LandDoig}, which became a seminal paper in the field. As research progressed further with this new scheme, a new field of AAs was opening up during the 1970's with works on Knapsack \cite{IbarraKim}, TSP \cite{CristofidesTSP}, Facility-location \cite{CornuejolsFisherNemhauser}, among many others, all appearing in quick succession. Following this, in 1980, Wolsey \cite{WOLSEY} proposed a method of combining the findings from approximation algorithms with branch and bound: one of the few treatments of the topic that exists today. In his paper, Wolsey posits a general AA worst-case analysis technique, and applies what is found to create implicit enumeration for a branch and bound with both AA bounds and LP relaxations. 
 
+Following Dantzig's \cite{Dantzig} Simplex method contribution in 1947, the problem of solving efficiently LPs to optimality had been sufficiently addressed within the fields of Engineering and Applied Mathematics. However, solving discrete optimisation problems, known as Integer Programs (IPs), remained an open problem. Research splintered following this: exactly solving IPs and active pusuit of polynomial time algorithms for hard problems and their variants. Research into optimally solving IPs led to Land and Doig's initial branch and bound method \cite{LandDoig} in 1960, but had little application due to limitations in computing hardware at the time. On the other hand, in a response to the growing category of NP-hard problems which IP was a part of, Computational Complexity Theory research began. Concerns with finding polynomially bounded algorithms led to compromising optimality for efficiency, in what became AA research through the 1970s. Approximations for Knapsack \cite{IbarraKim}, TSP \cite{CristofidesTSP}, Facility-location \cite{CornuejolsFisherNemhauser}, and many others were devised through the decade. Responding to the progress of both fields, in 1980 Wolsey \cite{WOLSEY} produced a general analysis technique attempting to unify AAs of the 1970s with the Branch and Bound algorithm of 1960. Wolsey provided a general analysis technique related approximation worst-cases with optimal LP relaxation solutions, and devised a branch and bound procedure from these components. However, since this point, to our knowledge, no further work has been done in investigating the relationship between approximations and branch and bound. It is not known whether a stronger link exists.
 
 \section{Research Design}
 
@@ -70,7 +70,6 @@ We expect the thesis to follow this general format:
   \item Conclusion
   \item Bibliography / References
 \end{enumerate}
-\newpage
 \subsection{Timetable}
 The proposed timetable for successful completion of this project is as follows:
 
@@ -105,13 +104,11 @@ Of course, as the project progresses, this timetable may be subject to change.
 \subsection{Potential Difficulties}
 As is the case with any research project, there are potential setbacks which should be acknowledged. Further, work on the project until this point has indicated that the following issues have the capacity to disrupt research:
 \begin{itemize}
-  \item Insufficient planning leading to poor time investments in workflow.
+  \item Adaptations of known AAs to our scheme; while some methods are known, in optimising and weaving individual AAs may be a key issue.
+  \item The bridging of theoretically proven approximation algorithms to practical applications: algorithms specified for theoretical conclusions can predicate themselves on design choices unsuitable for practical application.
   \item Development of key project questions and ideas not addressed in adequate depth. This could be a result of both poor understanding and issues with planning.
   \item Application and artifact development which is predicated on incorrect theoretical understanding, i.e. implementing something without full ability to give justification.
-  \item Substandard adoption of secondary texts related to specific functionality, leading to oversights in a particular artifact's design.
-  \item Poor coding practices and organisation of files leading technical errors which may disrupt work.
-  \item Insufficient test coverage of artifacts potentially leading to faulty/buggy software.
-  \item Lack of adherence to good backup and versioning practices. 
+  \item Substandard adoption of secondary texts related to specific functionality, leading to oversights in a particular artifact's design. This relates to not fully utilising research output of a particular problem's approximation schemes.
 \end{itemize}
 
 \section{Deliverables / Outcomes}
