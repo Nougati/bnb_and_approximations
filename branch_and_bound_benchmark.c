@@ -3,29 +3,19 @@
  *   Implements a series of benchmarks on instances of KP for my B&B algo    *
  *   Input parameters will decide how this algorithm will function           *
  *   Input parameters to me made:                                            *
- t the program currently does:
-  It expects input
-    <file> <benchmark set> <memory limit> <timeout> <file_out>
-  If benchmark set is
-    "tiny_n"
-      for n=50
-        runs instances 1-9 w/ coeff 1000-10000000
-
-  It does WS, TB and 
-What I want it to do:
-  Fail if the out file is not a csv
-  It needs to be more flexible:
-    should be able to specify any subset to benchmark
-  Be able to go into instance types
-  
-
-Some refactoring thoughts:
-  Can I just run the benchmark as a function and assign a value to n, running the benchmark?
-
-void benchmark(char *n_set, char *coefficient_set, char *instance_set, char *branching_stategies)
-benchmark_instance(instance_type, problem_no, timeout, allocation_limit)
-*                                                                           *
+ *  argv[0] : filename                                                       *
+ *  argv[1] : memory limit                                                   *
+ *  argv[2] : timeout                                                        *
+ *  argv[3] : file out                                                       *
+ *  argv[4] : DP types                                                       *
+ *  argv[5] : branching strategy                                             *
+ *  argv[6] : instance set                                                   *
+ *  argv[7] : n set                                                          *
+ *  argv[8] : coefficient set                                                *
+ *  argv[9] : problem subset                                                 *
+ *                                                                           *
  *****************************************************************************/
+/* TODO sort out all this shit */
 #define INCLUDE_FPTAS
 #define TESTING
 #define nP 1
@@ -60,11 +50,11 @@ benchmark_instance(instance_type, problem_no, timeout, allocation_limit)
 #include <time.h>
 #include <limits.h>
 #include <string.h>
+#include "branch_and_bound_benchmark.h"
 #include "bench_extern.h"
 #include "branch_and_bound.h"
 #include "pisinger_reader.h"
 
-void benchmark(char *n_set, char *coefficient_set, char *instance_set, char *branching_strategies);
 /* If memory has been exceeded, bytes_allocated will be -1 (so we write "memory
      exceeeded to log" */
 /* If time has been exceeded, start_time will be -1 */
@@ -88,145 +78,87 @@ int main(int argc, char *argv[])
   /* First verify the given arguments */
   if(argc == 2)
     if (strcmp("help", argv[1]) == 0)
-      printf("Format: %s <benchmark set> <memory limit> <timeout> <file out>\n"
-             "where benchmark_set can be\n\ttiny_n\n\tsmall_n\n\tmidlow_n\n\t"
-             "medium_n\n\tmidhigh_n\n\tbig_n\n\thuge_n\n\tmassive_n\nand memor"
-             "y_limit can be\n\ta positve integer number of bytes to cap alloc"
-             "ation to\n\tor -1 if no limit.\nand timeout can be\n\ta positi"
-             "ve integer number of seconds to limit computation to\n\tor -1 if"
-             "time is to be unbounded.\n", argv[0]);
-  if(argc != 5)
+    {
+      printf("To run this benchmark, there are two ways:\n\t1. Input \"%s -w\" t"
+             "o run the instance set customisation wizard.\n\t2. Input \"%s <mem"
+             "ory limit> <timeout> <file out> <DP types> <branching strategy set"
+             "> <instance set> <n set> <coefficient set> <problem subset>\n",
+             arg[0], arg[0]);
+      printf("By using the wizard, you can choose all the parameters from questi"
+             "on prompts. Following the wizard will give you an input if you wan"
+             "t to run that specific configuration again.\n");
+      printf("The format for each is:\n"
+               "\t branching strats: a string of three bits\n"
+               "\t\t Where each respective bit is linear enum, random, then trun"
+               "cation branching\n"
+             "DP type is first flag VV, second flag WS.\n"
+             "Instances, n category, and coefficients have each index in the str"
+             "ing as flags for the respective type in ascending order. (1st is 5"
+             "0 for n, 2nd is 100, etc).\n"
+             "This differs from problen instance where you simply specify, for s"
+             "ome input n, the first n problems in a problem file. For example, "
+             "for input 1, only the first problem of each file will be run.\n");
+      exit(-1);
+    }
+
+  if(strcmp("-w", argv[1] == 0))
   {
-    printf("Format: %s <benchmark set> <memory limit> <timeout> <file out>\n"
-           "Type \"%s help\" for info on input options.\n", argv[0], argv[0]);
+    printf("Wizard!\n");
     exit(-1);
   }
 
-  /* Convert memory_limit to integer */
-  int memory_allocation_limit = atoi(argv[2]);
+  if(argc != 5)
+  {
+    printf("Format: \"%s <memory limit> <timeout> <file out> <branching strategy"           " set> <instance set> <n set> <coefficient set> <problem subset>\"\no"           "r\n \"%s -w\" for wizard\n Type \"%s help\" for info on input option"           "s.\n", argv[0], argv[0]);
+    exit(-1);
+  }
 
-  /* Convert timeout to integer */
-  int timeout = atoi(argv[3]);
+  /* TODO validate inputs 
+   *  Probably just run a function with each argv in it 
+   *  So at this point we assume that all the args are great */  
+  
+  int memory_allocation_limit = atoi(argv[1]);
+  int timeout = atoi(argv[2]);
+  FILE *file_out = fopen(argv[3],"a");
 
-  char file_name_holder[30];
-  const char *instance_types_1[] = { "1", "2", "3", "4", "5", "6", "9"};
-  const char *coefficient_types[] = {"1000", "10000", "100000", "1000000", 
-                                     "10000000"};
-  const char *instance_types_2[] = {"11", "12", "13", "14", "15", "16"};
+  /* Copy DP types string */
+  char DP_set[2 + 1];
+  strncpy(DP_set, argv[4], sizeof(DP_set));
+  DP_set[3] = '\0';
 
-  /* Problem variables */
-  double epsilon = 0.0;
-  FILE *logging_stream  = stdout;
-  FILE *benchmark_stream = fopen(argv[4],"a");
-  int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int branching_strategy = TRUNCATION_BRANCHING;
-  int seed = 0;
-  int n, capacity, z;
-  int *profits, *weights, *x;
-  int z_out = 0;
-  int number_of_nodes = 1;
+  /* Copy branching set string */
+  char branching_set[BRANCH_STRAT_NO_OF_OPTIONS + 1];
+  strncpy(branching_set, argv[5], sizeof(branching_set));
+  branching_set[BRANCH_STRAT_NO_OF_OPTIONS + 1] = '\0';
 
-  fprintf(benchmark_stream, "File name, problem #, runtime, memory allocated\n");
-  /* Then if tiny_n */
-  if (strcmp("tiny_n", argv[1]) == 0)
-  {
-    /* Run for n=50 */
-    n = 50;
+  /* Copy instance set string*/
+  char instance_set[13 + 1];
+  strncpy(instance_set, argv[6], sizeof(instance_set));  
+  instance_set[14] = '\0';
+  
+  /* Copy n_set string */
+  char n_set[8 + 1];
+  strncpy(n_set, argv[7], sizeof(instance_set));
+  instance_set[9] = '\0';
 
-    /* Compute for each instance type, and coefficient type */
-    for(int i = 0; i < 7; i++)
-    {
-      printf("Running for instance %d.\n", i);
-      for(int j = 0; j < 5; j++)    
-      {
-        printf("\tRunning for coefficient type %d\n", j);
-        snprintf(file_name_holder, 30, "knapPI_%s_%d_%s.csv", 
-                 instance_types_1[i], n, coefficient_types[j]);
-        for(int k = 1; k <= 100; k++)
-        {
-          printf("\t\tRunning for problem %d\n", k);
-          pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, file_name_holder, k);
-          int sol_out[n];
-          clock_t t = clock();
-          branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, 
-                                        &z_out, sol_out, n, file_name_holder,
-                                        branching_strategy, seed, DP_method, 
-                                        logging_rule, logging_stream, epsilon,
-                                        &number_of_nodes, 
-                                        memory_allocation_limit, &t, timeout);
+  /* Copy coefficient set string */
+  char coefficient_set[5 + 1];
+  strncpy(coefficient_set, argv[8], sizeof(coefficient_set));
+  coefficient_set[6] = '\0';
 
-          char stringified_time[30];
-          if (t == -1.0)
-            strcpy(stringified_time, "TIMEOUT");
-          else
-          {
-            clock_t elapsed = clock() - t;
-            double time_taken = ((double) elapsed)/CLOCKS_PER_SEC;
-            sprintf(stringified_time, "%lf", time_taken);
-          }
-          char stringified_memory[30];
-          if(bytes_allocated == -1)
-            strcpy(stringified_memory, "MEMORY LIMITED EXCEEDED");
-          else
-            sprintf(stringified_memory, "%d", bytes_allocated);
+  int problem_subset = atoi(argv[9]);  
 
-          fprintf(benchmark_stream, "%s, %d, %s, %s\n", file_name_holder, k, stringified_time, 
-                  stringified_memory);
-        }
-      }
-    }
-    /* TODO Run all the 'hard' instances for this n */
-  }
-  /* Else if small_n */
-  if (strcmp("small_n", argv[4]) == 0)
-  {
-    /* Run for n=100 */
-    /* Log to file_out */
-  }
-  /* Else if midlow_n */
-  if (strcmp("midlow_n", argv[4]) == 0)
-  {
-    /* Run for n=200 */
-    /* Log to file_out */
-  }
-  /* Else if medium_n */
-  if (strcmp("medium_n", argv[4]) == 0)
-  {
-    /* Run for n=500 */
-    /* Log to file_out */
-  }
-  /* Else if midhigh_n */
-  if (strcmp("midhigh_n", argv[4]) == 0)
-  {
-    /* Run for n=1000 */
-    /* Log to file_out */
-  }
-  /* Else if big_n */
-  if (strcmp("big_n", argv[4]) == 0)
-  {
-    /* Run for n=2000 */
-    /* Log to file_out */
-  }
-  /* Else if huge_n */
-  if (strcmp("huge_n", argv[4]) == 0)
-  {
-    /* Run for n=5000 */
-    /* Log to file_out */
-  }
-  /* Else if massive_n */
-  if (strcmp("massive_n", argv[4]) == 0)
-  {
-    /* Run for n=10000 */
-    /* Log to file_out */
-  }
+  benchmark(memory_allocation_limit, time_out, DP_set, n_set, coefficient_set, 
+            instance_set, DPs, branching_strategies, benchmark_stream, 
+            problem_subset);
 
   return 0;
 }
 
-void benchmark(int memory_allocation_limit, int timeout, char *n_set, 
-               char *coefficient_set, char *instance_set, 
-               char *branching_strategies)
+void benchmark(int memory_allocation_limit, int timeout, char *DP_set, 
+               char *n_set, char *coefficient_set, char *instance_set, 
+               char *branching_strategies, FILE *benchmark_stream, 
+               int problem_subset)
 {
   /* Parameterisations to enumerate through */
   char file_name_holder[30];
@@ -234,28 +166,43 @@ void benchmark(int memory_allocation_limit, int timeout, char *n_set,
   const char *coefficient_types[] = {"1000", "10000", "100000", "1000000", 
                                      "10000000"};
   const char *instance_types_2[] = {"11", "12", "13", "14", "15", "16"};
-  const char *n_types[] = {"50", "100", "200", "500", "1000", "2000", "5000", "10000"}
+  const char *n_types[] = {"50", "100", "200", "500", "1000", "2000", "5000",
+                           "10000"};
+
+  fprintf(benchmark_stream, "File name, problem #, runtime, memory allocate"
+                            "d\n");
 
   /* Filetype enumeration begin */
-  /* For each branching_strategy */
-  for(int i = 0; i < 3; i++)
+  /* TODO change iterators to their respective names (h -> DP_method)*/
+  /* For each DP method */
+  for(int h = 0; h < 2; h++)
   {
-    /* For each instance */
-    for(int j = 0; j < 7; j++)
+    /* TODO if this DP's index is off, go to next iteration*/
+    /* For each branching_strategy */
+    for(int i = 0; i < 3; i++)
     {
-      /* For each n */
-      for(int k = 0; k < 8; k++)
+      /* TODO if this branching strat's index is off, go to next iteration*/
+      /* For each instance type*/
+      for(int j = 0; j < 7; j++)
       {
-        /* For each coefficient type */
-        for(int l = 0; l < 5; l++)
+        /* TODO if this instance type's index is off, go to next iteration*/
+        /* For each n */
+        for(int k = 0; k < 8; k++)
         {
-          /* For each problem instance */
-          for(int m = 0; m <= 100; m++)
+          /* TODO if this n's index is off, go to next iteration*/
+          /* For each coefficient type */
+          for(int l = 0; l < 5; l++)
           {
-            /* Prepare filename */
-
-            /* Run the benchmark */
-                        
+            /* TODO if this coefficient's index is off, go to next iteration*/
+            /* For each problem instance */
+            for(int m = 0; m <= problem_subset; m++)
+            {
+              /* TODO Prepare filename */
+              /* Run the benchmark */
+              benchmark_instance(file_name_holder, m, timeout, DP_method,
+                                memory_allocation_limit, benchmark_stream,
+                                branching_strategy);
+            }
           }
         }
       }
@@ -264,22 +211,21 @@ void benchmark(int memory_allocation_limit, int timeout, char *n_set,
 }
 
 void benchmark_instance(char *instance_name, int problem_no, int timeout, 
-                        int allocation_limit, FILE *benchmark_stream)
+                        int DP_method, int allocation_limit,                                             FILE *benchmark_stream, int branching_strategy)
 {
   /* Problem variables */
   double epsilon = 0.0;
   FILE *logging_stream  = stdout;
-  FILE *benchmark_stream = fopen(argv[4],"a");
   int logging_rule = NO_LOGGING;
-  int DP_method = WILLIAMSON_SHMOY;
-  int branching_strategy = TRUNCATION_BRANCHING;
+  /*TODO randomly generate seed*/
   int seed = 0;
   int n, capacity, z;
   int *profits, *weights, *x;
   int z_out = 0;
   int number_of_nodes = 1;
 
-  pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, file_name_holder, k);
+  pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, file_name_holder,
+                  k);
   int sol_out[n];
   clock_t t = clock();
   branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, 
@@ -304,6 +250,6 @@ void benchmark_instance(char *instance_name, int problem_no, int timeout,
   else
     sprintf(stringified_memory, "%d", bytes_allocated);
 
-  fprintf(benchmark_stream, "%s, %d, %s, %s\n", file_name_holder, k, stringified_time, 
-          stringified_memory);
+  fprintf(benchmark_stream, "%s, %d, %s, %s\n", file_name_holder, k, 
+          stringified_time, stringified_memory);
 }

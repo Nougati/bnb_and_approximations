@@ -1,0 +1,1 @@
+#define BRANCH_STRAT_NO_OF_OPTIONS 3
