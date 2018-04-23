@@ -16,10 +16,6 @@
 
 int bytes_allocated;
 
-/* Main function */
-#ifndef TESTING
-#endif
-
 
 /* Branch and bound methods */
 /* Branch and bound algorithm */
@@ -83,8 +79,8 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
   /* While our node queue is not empty: */
   while((first_iteration) || (node_queue->size >= 1))
   {
+    fflush(stdout);
     iterations++;
-
     /* Logging functionality */
     if(logging_rule != NO_LOGGING)
       fprintf(logging_stream, "\nStarting loop iteration %d (Node queue size: %d"
@@ -219,7 +215,6 @@ int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z,
   bytes_allocated += n * sizeof(*profits_prime);
   int node_statuses[n];
   for (int i = 0; i < n; i++) node_statuses[i] = VARIABLE_UNCONSTRAINED;
-
   FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z,
         BINARY_SOL, SIMPLE_SUM, problem_file, &K, profits_prime, 
         WILLIAMSON_SHMOY, node_statuses);
@@ -453,8 +448,9 @@ int is_boundary_exceeded(int memory_limit, clock_t start_time, int timeout)
   clock_t elapsed = clock() - start_time;
   double time_taken = ((double)elapsed)/CLOCKS_PER_SEC;
   if (timeout != -1 && time_taken > timeout)
+  {
     return TIMEOUT;
-
+  }
   /* Else no boundary is exceeded */
   return 0;
 } 

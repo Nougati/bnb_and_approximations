@@ -86,8 +86,8 @@ int main(int argc, char *argv[])
       printf("To run this benchmark, there are two ways:\n\t1. Input \"%s -w\" t"
              "o run the instance set customisation wizard.\n\t2. Input \"%s <mem"
              "ory limit> <timeout> <file out> <DP types> <branching strategy set"
-             "> <instance set> <n set> <coefficient set> <problem subset>\n",
-             argv[0], argv[0]);
+             "> <instance set> <n set> <coefficient set> <problem subset> <hard "
+             "instance set> <hard n set>\n", argv[0], argv[0]);
       printf("By using the wizard, you can choose all the parameters from questi"
              "on prompts. Following the wizard will give you an input if you wan"
              "t to run that specific configuration again.\n");
@@ -102,6 +102,12 @@ int main(int argc, char *argv[])
              "This differs from problen instance where you simply specify, for s"
              "ome input n, the first n problems in a problem file. For example, "
              "for input 1, only the first problem of each file will be run.\n");
+      printf("Data formats of inputs:\n");
+      printf("Memory limit (bytes):\tint\ntimeout (seconds):\tint\nfile out:\t\tchar "
+             "array (any length)\nDP Types:\t\t2 bits\nbranching strategies:\t3 bits"
+             "\ninstance set:\t\t7 bits\nn set:\t\t\t8 bits\ncoefficient set:\t5 bits\npr"
+             "oblem subset:\t\tinteger in range [1,100]\n<hard instance set:\t6 bit"
+             "s\nhard n set:\t\t9 bits\n");
       exit(-1);
     }
     else if(strcmp("-w", argv[1]) == 0)
@@ -112,12 +118,16 @@ int main(int argc, char *argv[])
   } 
 
 
-  if(argc != 10)
+  if(argc != 12)
   {
-    printf("Format: \"%s <memory limit> <timeout> <file out> <DP set> <branching strateg"
-           "y set> <instance set> <n set> <coefficient set> <problem subset>"
-           "\"\nor\n \"%s -w\" for wizard\n Type \"%s help\" for info on input "
-           "options.\n", argv[0], argv[0], argv[0]);
+    printf("This application takes either 2 or 12 arguments.\n");
+    printf("Format: \"%s <memory limit> <timeout> <file out> <DP set> <branchi"
+           "ng strategy set> <instance set> <n set> <coefficient set> <problem"
+           " subset> <hard instance set> <hard n set>\"\nor\n \"%s -w\" for w"
+           "izard\n Type \"%s help\" for info on input options.\n", argv[0], 
+           argv[0], argv[0]);
+    printf("i.e. %s int int char[] char[2] char[3] char[7] char[8] char[5] in"
+           "t char[6] char[9]\n", argv[0]);
     exit(-1);
   }
 
@@ -135,18 +145,18 @@ int main(int argc, char *argv[])
   DP_set[2] = '\0';
 
   /* Copy branching set string */
-  char branching_set[BRANCH_STRAT_NO_OF_OPTIONS + 1];
+  char branching_set[BRANCH_STRAT_NO_OF_OPTIONS];
   strncpy(branching_set, argv[5], sizeof(branching_set));
-  branching_set[BRANCH_STRAT_NO_OF_OPTIONS + 1] = '\0';
+  branching_set[BRANCH_STRAT_NO_OF_OPTIONS] = '\0';
 
   /* Copy instance set string*/
-  char instance_set[13];
+  char instance_set[7];
   strncpy(instance_set, argv[6], sizeof(instance_set));  
-  instance_set[13] = '\0';
+  instance_set[7] = '\0';
   
   /* Copy n_set string */
   char n_set[8];
-  strncpy(n_set, argv[7], sizeof(instance_set));
+  strncpy(n_set, argv[7], sizeof(n_set));
   instance_set[8] = '\0';
 
   /* Copy coefficient set string */
@@ -156,11 +166,21 @@ int main(int argc, char *argv[])
 
   int problem_subset = atoi(argv[9]);  
 
+  /* Copy hard instance set string*/
+  char hard_instance_set[6];
+  strncpy(hard_instance_set, argv[10], sizeof(hard_instance_set));
+  hard_instance_set[6] = '\0';
+  
+  /* Copy hard_n_set string */
+  char hard_n_set[9];
+  strncpy(hard_n_set, argv[11], sizeof(hard_n_set));
+  hard_n_set[9] = '\0';
 
-  printf("Memory allocation limit: %d\nTimeout: %d\nDP_Set: %s\nBranching set: %s\nInstance set:%s\n n_set: %s\nCoefficient set: %s\nProblem subset: %d\n", memory_allocation_limit, timeout, DP_set, branching_set, instance_set, n_set, coefficient_set, problem_subset);
+  printf("Memory allocation limit: %d\nTimeout: %d\nDP_Set: %s\nBranching set: %s\nInstance set:%s\n n_set: %s\nCoefficient set: %s\nProblem subset: %d\nhard_instance_set: %s\nhard_n_set: %s\n", memory_allocation_limit, timeout, DP_set, branching_set, instance_set, n_set, coefficient_set, problem_subset, hard_instance_set, hard_n_set);
 
   benchmark(memory_allocation_limit, timeout, DP_set, n_set, coefficient_set, 
-            instance_set, branching_set, file_out, problem_subset);
+            instance_set, branching_set, file_out, problem_subset,
+            hard_instance_set, hard_n_set);
 
   return 0;
 }
@@ -168,16 +188,19 @@ int main(int argc, char *argv[])
 void benchmark(int memory_allocation_limit, int timeout, char *DP_set, 
                char *n_set, char *coefficient_set, char *instance_set, 
                char *branching_strategies, FILE *benchmark_stream, 
-               int problem_subset)
+               int problem_subset, char *hard_instance_set, char *hard_n_set)
 {
   /* Parameterisations to enumerate through */
   char file_name_holder[30];
   const char *instance_types_1[] = { "1", "2", "3", "4", "5", "6", "9" };
   const char *coefficient_types[] = {"1000", "10000", "100000", "1000000", 
                                      "10000000"};
-  const char *instance_types_2[] = {"11", "12", "13", "14", "15", "16"};
   const char *n_types[] = {"50", "100", "200", "500", "1000", "2000", "5000",
                            "10000"};
+  /* Second instance types */
+  const char *instance_types_2[] = {"11", "12", "13", "14", "15", "16"};
+  const char *n_types_2[] = {"20", "50", "100", "200", "500", "1000", "2000",
+                             "5000", "10000"}; 
 
   fprintf(benchmark_stream, "File name, problem #, runtime, memory allocate"
                             "d\n");
@@ -203,7 +226,7 @@ void benchmark(int memory_allocation_limit, int timeout, char *DP_set,
         if(strncmp(&instance_set[j],"0", 1)==0)
           continue;
 
-        /* For each n */
+        /* For each n (easy instances) */
         for(int k = 0; k < 8; k++)
         {
           if(strncmp(&n_set[k],"0", 1)==0)
@@ -227,6 +250,31 @@ void benchmark(int memory_allocation_limit, int timeout, char *DP_set,
                                 memory_allocation_limit, benchmark_stream,
                                 branching_strategy);
             }
+          }
+        }
+      }
+      /* For each instance type (hard)*/
+      for(int j = 0; j < 6; j++)
+      {
+        if(strncmp(&hard_instance_set[j],"0", 1)==0)
+          continue;
+
+        /* For each n (hard instances) */
+        for(int k = 0; k < 9; k++)
+        {
+          if(strncmp(&hard_n_set[k],"0", 1)==0)
+            continue;
+          /* For each problem instance */
+          for(int m = 1; m <= problem_subset; m++)
+          {
+            snprintf(file_name_holder, 30, "knapPI_%s_%s_1000.csv", 
+                     instance_types_2[j], n_types_2[k]);
+
+            /* Run the benchmark */
+            printf("%s\n", file_name_holder);
+            benchmark_instance(file_name_holder, m, timeout, DP_method,
+                              memory_allocation_limit, benchmark_stream,
+                              branching_strategy);
           }
         }
       }

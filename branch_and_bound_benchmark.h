@@ -7,4 +7,4 @@ void benchmark_instance(char *file_name_holder, int problem_no, int timeout,
 void benchmark(int memory_allocation_limit, int timeout, char *DP_set, 
                char *n_set, char *coefficient_set, char *instance_set,
                char *branching_strategies, FILE *benchmark_stream, 
-               int problem_set);
+               int problem_set, char *hard_instance_set, char *hard_n_set);
