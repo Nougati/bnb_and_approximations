@@ -14,7 +14,6 @@
  *  argv[8] : coefficient set                                                *
  *  argv[9] : problem subset                                                 *
  *                                                                           *
- *  TODO Timeout does not work!                                              *
  *  TODO Wizard!                                                             *
  *  TODO Move all the defines into a header file                             *
  *                                                                           *
