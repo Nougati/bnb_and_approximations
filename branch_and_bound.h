@@ -64,7 +64,8 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                                    int timeout);
 
 int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z, 
-                               int n, int capacity, char *problem_file);
+                               int n, int capacity, char *problem_file,
+                               int DP_method);
 
 int find_branching_variable(int n, int z, int *read_only_variables, 
                             int branching_strategy, int *profits);

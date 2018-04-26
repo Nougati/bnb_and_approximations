@@ -93,7 +93,8 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
       current_node->upper_bound = INT_MAX;
       current_node->ID = count;
       global_lower_bound = find_heuristic_initial_GLB(profits, weights, x, z, 
-                                                  n, capacity, problem_file);
+                                                  n, capacity, problem_file,
+                                                  DP_method);
       current_node->lower_bound = global_lower_bound;
       first_iteration = FALSE;
       if(logging_rule != NO_LOGGING)
@@ -205,7 +206,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
 
 /* Initial global lower bound heuristic */
 int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z, 
-                               int n, int capacity, char *problem_file)
+                               int n, int capacity, char *problem_file, int DP_method)
 {
   /* Run the FPTAS on the original problem with high epsilon */
   double eps = 0.002;
@@ -217,7 +218,7 @@ int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z,
   for (int i = 0; i < n; i++) node_statuses[i] = VARIABLE_UNCONSTRAINED;
   FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z,
         BINARY_SOL, SIMPLE_SUM, problem_file, &K, profits_prime, 
-        WILLIAMSON_SHMOY, node_statuses);
+        DP_method, node_statuses);
 
   int fptas_profit = 0;
   for (int i = 0; i < n; i++)
