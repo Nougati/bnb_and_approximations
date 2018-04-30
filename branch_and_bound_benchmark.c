@@ -88,7 +88,6 @@ int main(int argc, char *argv[])
     }
     else if(strcmp("-w", argv[1]) == 0)
     {
-      /* TODO lol wizard */
       printf("Wizard!\n");
 
       printf("Please enter the limit on memory allocation (bytes):\n");
@@ -102,13 +101,15 @@ int main(int argc, char *argv[])
       char input_str[100];
       /* Prompt user for DP types */
       char DP_types[] = "00";  
+
       printf("Enter the DP types you want to toggle (of vv or ws), and input 0 when done.\n");
       do{
         scanf("%s", input_str);
-        if(strcmp(input_str,"vv")==0) DP_types[0] = ( DP_types[0] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"ws")==0) DP_types[1] = ( DP_types[1] == '0' ? '1' : '0' );
+        if(strcmp(input_str,"vv")==0) DP_types[0] = 
+                                            ( DP_types[0] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"ws")==0) DP_types[1] = 
+                                            ( DP_types[1] == '0' ? '1' : '0' );
         printf("DP_types: %s\n", DP_types);
-        /* TODO Make sure they pick something! */
       }while(strncmp(input_str, "0", 1) != 0);
 
       /* Prompt user for branching strats */
@@ -116,11 +117,13 @@ int main(int argc, char *argv[])
       printf("Enter the branch strategies you want to toggle (of le, rb, tb)\n");
       do{
         scanf("%s", input_str);
-        if(strcmp(input_str,"le")==0) branch_strats[0] = ( branch_strats[0] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"rb")==0) branch_strats[1] = ( branch_strats[1] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"tb")==0) branch_strats[2] = ( branch_strats[2] == '0' ? '1' : '0' );
+        if(strcmp(input_str,"le")==0) branch_strats[0] = 
+                                        ( branch_strats[0] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"rb")==0) branch_strats[1] = 
+                                        ( branch_strats[1] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"tb")==0) branch_strats[2] = 
+                                        ( branch_strats[2] == '0' ? '1' : '0' );
         printf("branch_strats: %s\n", branch_strats);
-        /* Make sure they pick something! */
       }while(strncmp(input_str, "0", 1) != 0);
       
       /* Prompt user for Instance set */
@@ -128,13 +131,20 @@ int main(int argc, char *argv[])
       printf("Enter the instance types you want to toggle (1-6 and 9)\n");
       do{
         scanf("%s", input_str);
-        if(strcmp(input_str,"1")==0) instance_set[0] = ( instance_set[0] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"2")==0) instance_set[1] = ( instance_set[1] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"3")==0) instance_set[2] = ( instance_set[2] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"4")==0) instance_set[3] = ( instance_set[3] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"5")==0) instance_set[4] = ( instance_set[4] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"6")==0) instance_set[5] = ( instance_set[5] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"9")==0) instance_set[6] = ( instance_set[6] == '0' ? '1' : '0' );
+        if(strcmp(input_str,"1")==0) instance_set[0] =
+                                        ( instance_set[0] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"2")==0) instance_set[1] = 
+                                        ( instance_set[1] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"3")==0) instance_set[2] = 
+                                        ( instance_set[2] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"4")==0) instance_set[3] = 
+                                        ( instance_set[3] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"5")==0) instance_set[4] = 
+                                        ( instance_set[4] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"6")==0) instance_set[5] = 
+                                        ( instance_set[5] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"9")==0) instance_set[6] = 
+                                        ( instance_set[6] == '0' ? '1' : '0' );
         printf("instance_set: %s\n", instance_set);
       }while(strncmp(input_str, "0", 1) != 0);
 
@@ -143,27 +153,41 @@ int main(int argc, char *argv[])
       printf("Enter the n-types you want to toggle (50, 100, 200, 500, 1000, 2000, 5000, 10000)\n");
       do{
         scanf("%s", input_str);
-        if(strcmp(input_str,"50")==0) n_set[0] = ( n_set[0] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"100")==0) n_set[1] = ( n_set[1] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"200")==0) n_set[2] = ( n_set[2] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"500")==0) n_set[3] = ( n_set[3] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"1000")==0) n_set[4] = ( n_set[4] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"2000")==0) n_set[5] = ( n_set[5] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"5000")==0) n_set[6] = ( n_set[6] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"10000")==0) n_set[7] = ( n_set[7] == '0' ? '1' : '0' );
+        if(strcmp(input_str,"50")==0) n_set[0] =
+                                             ( n_set[0] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"100")==0) n_set[1] = 
+                                             ( n_set[1] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"200")==0) n_set[2] = 
+                                             ( n_set[2] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"500")==0) n_set[3] = 
+                                             ( n_set[3] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"1000")==0) n_set[4] =
+                                             ( n_set[4] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"2000")==0) n_set[5] = 
+                                             ( n_set[5] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"5000")==0) n_set[6] = 
+                                             ( n_set[6] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"10000")==0) n_set[7] = 
+                                             ( n_set[7] == '0' ? '1' : '0' );
         printf("n_set: %s\n", n_set);
       }while(strncmp(input_str, "0", 1) != 0);
 
       /* Prompt user for coefficient set */
       char coefficient_set[] = "00000";
-      printf("Enter the coefficient types you want to toggle (of 1000, 10000, 100000, 1000000, 10000000)\n");
+      printf("Enter the coefficient types you want to toggle (of 1000, 10000," 
+              "100000, 1000000, 10000000)\n");
       do{
         scanf("%s", input_str);
-        if(strcmp(input_str,"1000")==0) coefficient_set[0] = ( coefficient_set[0] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"10000")==0) coefficient_set[1] = ( coefficient_set[1] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"100000")==0) coefficient_set[2] = ( coefficient_set[2] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"1000000")==0) coefficient_set[3] = ( coefficient_set[3] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"10000000")==0) coefficient_set[4] = ( coefficient_set[4] == '0' ? '1' : '0' );
+        if(strcmp(input_str,"1000")==0) coefficient_set[0] = 
+                                     ( coefficient_set[0] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"10000")==0) coefficient_set[1] = 
+                                     ( coefficient_set[1] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"100000")==0) coefficient_set[2] = 
+                                     ( coefficient_set[2] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"1000000")==0) coefficient_set[3] = 
+                                     ( coefficient_set[3] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"10000000")==0) coefficient_set[4] = 
+                                     ( coefficient_set[4] == '0' ? '1' : '0' );
         printf("coefficient_set: %s\n", coefficient_set);
       }while(strncmp(input_str, "0", 1) != 0);
 
@@ -171,46 +195,79 @@ int main(int argc, char *argv[])
       int problem_subset = 0;
       printf("Enter the first n problems you want to compute of an instance type\n");
       do{
-        scanf("%s", input_str);
+        scanf("%d", &problem_subset);
         /* Make sure they pick a reasonable number! */
-      }while(problem_subset >= 1 && problem_subset <= 100);
+      }while(problem_subset < 1 || problem_subset > 100);
 
       /* Prompt user for hard instance set */
       char hard_instance_set[] = "000000";
       printf("Enter the hard instance types you want to toggle (of 11-16)\n");
       do{
         scanf("%s", input_str);
-        if(strcmp(input_str,"11")==0) hard_instance_set[0] = ( hard_instance_set[0] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"12")==0) hard_instance_set[1] = ( hard_instance_set[1] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"13")==0) hard_instance_set[2] = ( hard_instance_set[2] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"14")==0) hard_instance_set[3] = ( hard_instance_set[3] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"15")==0) hard_instance_set[4] = ( hard_instance_set[4] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"16")==0) hard_instance_set[5] = ( hard_instance_set[5] == '0' ? '1' : '0' );
+        if(strcmp(input_str,"11")==0) hard_instance_set[0] = 
+                                ( hard_instance_set[0] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"12")==0) hard_instance_set[1] = 
+                                ( hard_instance_set[1] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"13")==0) hard_instance_set[2] = 
+                                ( hard_instance_set[2] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"14")==0) hard_instance_set[3] = 
+                                ( hard_instance_set[3] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"15")==0) hard_instance_set[4] = 
+                                ( hard_instance_set[4] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"16")==0) hard_instance_set[5] = 
+                                ( hard_instance_set[5] == '0' ? '1' : '0' );
         printf("hard_instance_set: %s\n", hard_instance_set);
-        /* TODO Make sure they pick something if they didn't before! */
       }while(strncmp(input_str, "0", 1) != 0);
 
       /* Prompt user for hard n set*/
       char hard_n_set[] = "000000000";
-      printf("Enter the hard n types you want to toggle (20, 50, 100, 200, 500, 1000, 2000, 5000, 10000\n");
+      printf("Enter the hard n types you want to toggle (20, 50, 100, 200, 500,"
+             " 1000, 2000, 5000, 10000\n");
       do{
         scanf("%s", input_str);
-        if(strcmp(input_str,"20")==0) hard_n_set[0] = ( hard_n_set[0] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"50")==0) hard_n_set[1] = ( hard_n_set[1] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"100")==0) hard_n_set[2] = ( hard_n_set[2] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"200")==0) hard_n_set[3] = ( hard_n_set[3] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"500")==0) hard_n_set[4] = ( hard_n_set[4] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"1000")==0) hard_n_set[5] = ( hard_n_set[5] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"2000")==0) hard_n_set[6] = ( hard_n_set[6] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"5000")==0) hard_n_set[7] = ( hard_n_set[7] == '0' ? '1' : '0' );
-        else if(strcmp(input_str,"10000")==0) hard_n_set[8] = ( hard_n_set[8] == '0' ? '1' : '0' );
+        if(strcmp(input_str,"20")==0) hard_n_set[0] = 
+                                ( hard_n_set[0] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"50")==0) hard_n_set[1] = 
+                                ( hard_n_set[1] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"100")==0) hard_n_set[2] = 
+                                ( hard_n_set[2] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"200")==0) hard_n_set[3] = 
+                                ( hard_n_set[3] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"500")==0) hard_n_set[4] = 
+                                ( hard_n_set[4] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"1000")==0) hard_n_set[5] = 
+                                ( hard_n_set[5] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"2000")==0) hard_n_set[6] = 
+                                ( hard_n_set[6] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"5000")==0) hard_n_set[7] = 
+                                ( hard_n_set[7] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"10000")==0) hard_n_set[8] = 
+                                ( hard_n_set[8] == '0' ? '1' : '0' );
         printf("hard_n_set: %s\n", hard_n_set);
-        /* TODO Make sure they pick something if they didn't before! */
       }while(strncmp(input_str, "0", 1) != 0);
 
-      /*TODO Run benchmark with these*/
+      printf("Memory allocation limit: %d\n"
+             "Timeout: %d\n"
+             "DP_Set: %s\n"
+             "Branching set: %s\n"
+             "Instance set: %s\n"
+             "n_set: %s\n"
+             "Coefficient set: %s\n"
+             "Problem subset: %d\n"
+             "hard_instance_set: %s\n"
+             "hard_n_set: %s\n", 
+              memory_allocation_limit, timeout, DP_types, branch_strats, instance_set,
+              n_set, coefficient_set, problem_subset, hard_instance_set, hard_n_set); 
+
+
+      FILE *benchmark_stream = fopen("out.csv","a"); 
+      printf("Your seed is:\n%s %d %d %s %s %s %s %s %s %d %s %s\n", argv[0], memory_allocation_limit, timeout, "out.csv", DP_types, branch_strats, instance_set, n_set, coefficient_set, problem_subset, hard_instance_set, hard_n_set);
       
-      exit(-1);
+      benchmark(memory_allocation_limit, timeout, DP_types, n_set, 
+                coefficient_set, instance_set, branch_strats, benchmark_stream,
+                problem_subset, hard_instance_set, hard_n_set);
+
+      return 0;
     }
   } 
 
@@ -231,6 +288,9 @@ int main(int argc, char *argv[])
   /* TODO validate inputs 
    *  Probably just run a function with each argv in it 
    *  So at this point we assume that all the args are great */  
+  command_line_validation(argv[1], argv[2], argv[3], argv[4], argv[5],
+                          argv[6], argv[7], argv[8], argv[9], argv[10], 
+                          argv[11]);
   
   int memory_allocation_limit = atoi(argv[1]);
   int timeout = atoi(argv[2]);
@@ -411,3 +471,139 @@ void benchmark_instance(char *file_name_holder, int problem_no, int timeout,
          DP_str_arr[DP_method], branching_strats[branching_strategy], problem_no, stringified_time, 
          stringified_memory, number_of_nodes, average_time_per_node);
 }
+
+void command_line_validation(const char argv1[], const char argv2[], 
+                             const char argv3[], const char argv4[], 
+                             const char argv5[], const char argv6[],
+                             const char argv7[], const char argv8[],
+                             const char argv9[], const char argv10[],
+                             const char argv11[])
+{
+  /* Check argv[1]: memory limit */
+  int memory_limit = atoi(argv1);
+  if (memory_limit < 1)
+  {
+    printf("Memory limit (argv[1]) makes no sense! Exiting...\n");
+    exit(-1);
+  }
+  /* Check argv[2]: timeout */
+  int timeout = atoi(argv2);
+  if (timeout < 1)
+  {
+    printf("Timeout (argv[2]) makes no sense! Exiting...\n");
+    exit(-1);
+  }
+  int n;
+  /* Check argv[3]: file out */
+  n = strlen(argv3);
+  if(argv3[n-4] != 'c' ||
+     argv3[n-3] != 's' ||
+     argv3[n-2] != 'v')
+  {
+    printf("File out (argv[3]) should be a csv! Exiting...\n");
+    exit(-1);
+  } 
+  
+  /* Check argv[4]: DP types */
+  n = strlen(argv4);
+  if(n != 2)
+  {
+    printf("DP types (argv[4]) should be of length 2! Exiting...\n");
+    exit(-1);
+  }  
+  for(int i = 0; i < n; i++)
+  {
+    if(argv4[i] != '0' && argv4[i] != '1')
+    {
+      printf("DP_types (argv[4]) should only contain 1's and 0's! Exiting..\n");
+      exit(-1);
+    }
+  }
+
+  /* Check argv[5]: Branching strategy */
+  n = strlen(argv5);
+  if(n != 3)
+  {
+    printf("Branching strategies (argv[5]) should be of length 3! Exiting...\n");
+    exit(-1);
+  }
+  for(int i = 0; i < n; i++)
+  {
+    if(argv5[i] != '0' && argv5[i] != '1')
+    {
+      printf("Branching strategies string (argv[5]) should only contain 1's and 0's! Exiting..\n");
+      exit(-1);
+    }
+  } 
+
+  /* Check argv[6]: Instance set */
+  n = strlen(argv6);
+  if(n != 7)
+  {
+    printf("Instance set string (argv[6]) should be of length 7! Exiting...\n");
+    exit(-1);
+  }
+
+  /* Check argv[7]: n set */
+  n = strlen(argv7);
+  if(n != 8)
+  {
+    printf("n set (argv[6]) should be of length 8! Exiting...\n");
+    exit(-1);
+  }
+
+
+  /* Check argv[8]: coefficient set */
+  n = strlen(argv8);
+  if(n != 5)
+  {
+    printf("n set (argv[8]) should be of length 5! Exiting...\n");
+    exit(-1);
+  }
+  for(int i = 0; i < n; i++)
+  {
+    if(argv8[i] != '0' && argv8[i] != '1')
+    {
+      printf("n set string (argv[8]) should only contain 1's and 0's! Exiting..\n");
+      exit(-1);
+    }
+  }
+
+  /* Check argv[9]: problem subset */
+  int problem_subset = atoi(argv9);
+  if(problem_subset < 1 || problem_subset > 100)
+  {
+    printf("Inappropriate problem subset (argv[9]). Exiting...\n");
+    exit(-1);
+  }
+  
+  /* Check argv[10]: hard instance set */
+  n = strlen(argv10);
+  if(n != 7)
+  {
+    printf("n set (argv[10]) should be of length 7! Exiting...\n");
+    exit(-1);
+  }
+
+  /* Check argv[11]: hard n set */
+  n = strlen(argv11);
+  if(n != 9)
+  {
+    printf("n set (argv[11]) should be of length 9! Exiting...\n");
+    exit(-1);
+  }
+}
+/*
+ *  argv[0] : filename                                                       *
+ *  argv[1] : memory limit                                                   *
+ *  argv[2] : timeout                                                        *
+ *  argv[3] : file out                                                       *
+ *  argv[4] : DP types                                                       *
+ *  argv[5] : branching strategy                                             *
+ *  argv[6] : instance set                                                   *
+ *  argv[7] : n set                                                          *
+ *  argv[8] : coefficient set                                                *
+ *  argv[9] : problem subset                                                 *
+ *  argv[10] : hard instance set                                             *
+ * - argv[11] : hard n set                                                    *
+*/

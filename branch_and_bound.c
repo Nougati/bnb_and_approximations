@@ -168,8 +168,19 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                   "g...\n");
         continue;
       }
+      int node_limit_flag = 0;
       generate_and_enqueue_nodes(current_node, n, branching_variable, 
-                                 node_queue, &count, logging_stream, logging_rule);
+                                 node_queue, &count, logging_stream, logging_rule,
+                                 &node_limit_flag);
+      if(node_limit_flag)
+      { 
+        printf("Node overflow! More than %d\n", NODE_OVERFLOW);
+        *z_out = global_lower_bound;
+        /* Total clean up */
+        free(node_queue);
+        post_order_tree_clean(root_node);
+        return;
+      } 
       if(logging_rule != NO_LOGGING)
         fprintf(logging_stream, "\t Node %d branched on variable %d\n",
                 current_node->ID, branching_variable);
@@ -182,11 +193,17 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
         {
           bytes_allocated = -1;
           *z_out = global_lower_bound;
+          /* Total clean up */
+          free(node_queue);
+          post_order_tree_clean(root_node);
           return;
         }
         else if (overallocation == TIMEOUT)
         {
           *start_time = -1;
+          /* Total clean up */
+          free(node_queue);
+          post_order_tree_clean(root_node);
           return;
         }
       /* Else, loop again */
@@ -309,7 +326,8 @@ Problem_Instance *define_root_node(int n)
 /* Generation and node enqueuing algorithm */
 void generate_and_enqueue_nodes(Problem_Instance *parent, int n, 
                           int branching_variable, LL_Problem_Queue *problem_queue,
-                          int *count, FILE *logging_stream, int logging_rule)
+                          int *count, FILE *logging_stream, int logging_rule, 
+                          int *node_limit_flag)
 {
   /* This will just use the structure Problem_Queue to enqueue it */
   /* Allocate for each node */
@@ -355,9 +373,11 @@ void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
 
   /* Place into priority queue (for now just append) */
   //enqueue(problems_list, generated_node_variable_on);
-  LL_enqueue(problem_queue, generated_node_variable_on, logging_stream, logging_rule);
+  LL_enqueue(problem_queue, generated_node_variable_on, logging_stream, 
+             logging_rule, node_limit_flag);
   //enqueue(problems_list, generated_node_variable_off);
-  LL_enqueue(problem_queue, generated_node_variable_off, logging_stream, logging_rule);
+  LL_enqueue(problem_queue, generated_node_variable_off, logging_stream, 
+             logging_rule, node_limit_flag);
 }
 
 /* Node selection and dequeuing algorithm */
@@ -440,8 +460,11 @@ void post_order_tree_clean(Problem_Instance *node)
 /* Bechmarking auzax: Boundary checking method */
 int is_boundary_exceeded(int memory_limit, clock_t start_time, int timeout)
 {
+  /* First check if full memory limit has been exceed (5gb)*/
+  if (bytes_allocated > GLOBAL_MEMORY_LIMIT)
+    return MEMORY_EXCEEDED;
 
-  /* First check if memory limit has been exceeded */
+  /* Then check if user memory limit has been exceeded */
   if (memory_limit != -1 && bytes_allocated > memory_limit)
     return MEMORY_EXCEEDED;
 
@@ -534,7 +557,8 @@ LL_Problem_Queue *LL_create_queue(void)
 }
 
 /* LL Problem Queue method: enqueue */
-void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem, FILE *logging_stream, int logging_rule)
+void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem, 
+              FILE *logging_stream, int logging_rule, int *node_limit_flag)
 {
   LL_Node_Queue_Item *new_item = (LL_Node_Queue_Item *) malloc(sizeof(LL_Node_Queue_Item));
   bytes_allocated += sizeof(LL_Node_Queue_Item);
@@ -550,7 +574,7 @@ void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem, FILE *loggin
     printf("%d nodes in queue! Abandon ship!\n", NODE_OVERFLOW);
     if(logging_rule != NO_LOGGING)
       fprintf(logging_stream, "NODE OVERFLOW AAAAAAAAAAAAAAAAAAAHH-- \n");
-    exit(-1);
+    *node_limit_flag = 1;
   }
   else
   {

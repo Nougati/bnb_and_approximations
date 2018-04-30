@@ -16,6 +16,7 @@
 #define MEMORY_EXCEEDED 1
 #define TIMEOUT 2
 #define NODE_OVERFLOW 1500000
+#define GLOBAL_MEMORY_LIMIT 5368709120
 
 /* Structure Declarations */
 typedef struct p_instance
@@ -73,7 +74,8 @@ int find_branching_variable(int n, int z, int *read_only_variables,
 void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
                           int branching_variable, 
                           LL_Problem_Queue *problems_list, int *count, 
-                          FILE *logging_stream, int logging_rule);
+                          FILE *logging_stream, int logging_rule,
+                          int *node_limit_flag);
 
 Problem_Instance *select_and_dequeue_node(LL_Problem_Queue *node_queue);
 
@@ -103,6 +105,7 @@ Problem_Instance *rear(Problem_Queue *queue);
 
 /* LL Queue Declarations */
 LL_Problem_Queue *LL_create_queue(void);
-void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem, FILE *logging_stream, int logging_rule);
+void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem, 
+                FILE *logging_stream, int logging_rule, int *node_limit_flag);
 Problem_Instance *LL_dequeue(LL_Problem_Queue *queue);
 

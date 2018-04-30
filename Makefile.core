@@ -1,8 +1,14 @@
-branch_and_bound : fptas.o
-	gcc -o branch_and_bound branch_and_bound.c -lm -g
+branch_and_bound : branch_and_bound.o fptas.o pisinger_reader.o
+	gcc branch_and_bound.o fptas.o pisinger_reader.o -o branch_and_bound -lm -g
 
+branch_and_bound.o : branch_and_bound.c
+	gcc -c branch_and_bound.c -g -lm
+
+pisinger_reader.o : pisinger_reader.c
+	gcc -c pisinger_reader.c -g -lm
+     
 fptas.o : fptas.c
 	gcc -c fptas.c -lm -g
 
 clean :
-	rm fptas.o branch_and_bound
+	rm branch_and_bound.o pisinger_reader.o fptas.o branch_and_bound
