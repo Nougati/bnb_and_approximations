@@ -12,3 +12,4 @@ void benchmark(int memory_allocation_limit, int timeout, char *DP_set,
 
 void command_line_validation(const char argv1[], const char argv2[], const char argv3[], const char argv4[], const char argv5[], const char argv6[], const char argv7[], const char argv8[], const char argv9[], const char argv10[], const char argv11[]);
 
+int file_test(const char file_name[]);

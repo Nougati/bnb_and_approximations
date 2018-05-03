@@ -9,7 +9,7 @@ set(SOURCE ./branch_and_bound_short_correctness_test.cpp ./branch_and_bound.c ./
 
 
 # Link runTests with what we want to test and the GTest and pthread library
-add_executable(runTests ${SOURCE})
+add_executable(shortTests ${SOURCE})
 #add_executable(runTests branch_and_bound_short_correctness_test.cpp)
-target_link_libraries(runTests ${GTEST_LIBRARIES} pthread)
+target_link_libraries(shortTests ${GTEST_LIBRARIES} pthread)
 

@@ -99,6 +99,7 @@ int main(int argc, char *argv[])
       scanf("%d", &timeout); 
   
       char input_str[100];
+
       /* Prompt user for DP types */
       char DP_types[] = "00";  
 
@@ -246,22 +247,34 @@ int main(int argc, char *argv[])
         printf("hard_n_set: %s\n", hard_n_set);
       }while(strncmp(input_str, "0", 1) != 0);
 
-      printf("Memory allocation limit: %d\n"
-             "Timeout: %d\n"
-             "DP_Set: %s\n"
-             "Branching set: %s\n"
-             "Instance set: %s\n"
-             "n_set: %s\n"
-             "Coefficient set: %s\n"
-             "Problem subset: %d\n"
-             "hard_instance_set: %s\n"
-             "hard_n_set: %s\n", 
-              memory_allocation_limit, timeout, DP_types, branch_strats, instance_set,
-              n_set, coefficient_set, problem_subset, hard_instance_set, hard_n_set); 
+      /* Prompt user for output filename */
+      printf("Finally, enter the file that you want the benchmark to be written to.\n");
+      do{
+        scanf("%s", input_str);
+      }while(!file_test(input_str)); 
+
+      
+      printf("\nYour benchmark parameters are:\n"
+             "Memory allocation limit: \t%d\n"
+             "Timeout: \t\t\t%d\n"
+             "DP_Set: \t\t\t%s\n"
+             "Branching set: \t\t\t%s\n"
+             "Instance set: \t\t\t%s\n"
+             "n_set: \t\t\t\t%s\n"
+             "Coefficient set: \t\t%s\n"
+             "Problem subset: \t\t%d\n"
+             "hard_instance_set: \t\t%s\n"
+             "hard_n_set: \t\t\t%s\n\n", 
+              memory_allocation_limit, timeout, DP_types, branch_strats, 
+              instance_set, n_set, coefficient_set, problem_subset, 
+              hard_instance_set, hard_n_set); 
 
 
-      FILE *benchmark_stream = fopen("out.csv","a"); 
-      printf("Your seed is:\n%s %d %d %s %s %s %s %s %s %d %s %s\n", argv[0], memory_allocation_limit, timeout, "out.csv", DP_types, branch_strats, instance_set, n_set, coefficient_set, problem_subset, hard_instance_set, hard_n_set);
+      FILE *benchmark_stream = fopen(input_str,"a"); 
+      printf("Your seed is:\n%s %d %d %s %s %s %s %s %s %d %s %s\n", argv[0], 
+            memory_allocation_limit, timeout, "out.csv", DP_types, 
+            branch_strats, instance_set, n_set, coefficient_set, problem_subset, 
+            hard_instance_set, hard_n_set);
       
       benchmark(memory_allocation_limit, timeout, DP_types, n_set, 
                 coefficient_set, instance_set, branch_strats, benchmark_stream,
@@ -378,7 +391,7 @@ void benchmark(int memory_allocation_limit, int timeout, char *DP_set,
                        instance_types_1[j], n_types[k], coefficient_types[l]);
             
               /* Run the benchmark */
-              printf("%s\n", file_name_holder);
+              printf("Running on %s...\n", file_name_holder);
               benchmark_instance(file_name_holder, m, timeout, DP_method,
                                 memory_allocation_limit, benchmark_stream,
                                 branching_strategy);
@@ -593,17 +606,17 @@ void command_line_validation(const char argv1[], const char argv2[],
     exit(-1);
   }
 }
-/*
- *  argv[0] : filename                                                       *
- *  argv[1] : memory limit                                                   *
- *  argv[2] : timeout                                                        *
- *  argv[3] : file out                                                       *
- *  argv[4] : DP types                                                       *
- *  argv[5] : branching strategy                                             *
- *  argv[6] : instance set                                                   *
- *  argv[7] : n set                                                          *
- *  argv[8] : coefficient set                                                *
- *  argv[9] : problem subset                                                 *
- *  argv[10] : hard instance set                                             *
- * - argv[11] : hard n set                                                    *
-*/
+
+int file_test(const char file_name[])
+{
+  int n = strlen(file_name);
+  if(file_name[n-4] != '.' ||
+     file_name[n-3] != 'c' ||
+     file_name[n-2] != 's' ||
+     file_name[n-1] != 'v') 
+  {
+    printf("Filename should end with .csv!\n");
+    return 0;
+  }
+  return 1;
+}
