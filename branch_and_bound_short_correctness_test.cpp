@@ -60,7 +60,6 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_auto_eps_uncor
     free(profits);
     free(weights);
     free(x);
-    /* TODO For each test I gotta free profits, weights and x, and close logging stream */
   }
 }
 
@@ -6169,9 +6168,9 @@ TEST(branch_and_bound_correctnessTest, random_branching_willshmoy_midlow_eps_wea
   FILE *logging_stream = stdout;
   int logging_rule = NO_LOGGING;
   int DP_method = WILLIAMSON_SHMOY;
+  int z_out = 0;
   int n, capacity, z;
   int *profits, *weights, *x;
-  int z_out = 0;
   int number_of_nodes = 1;
   clock_t t = clock();
   int timeout = -1;

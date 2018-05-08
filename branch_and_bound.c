@@ -176,7 +176,10 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
       { 
         printf("Node overflow! More than %d\n", NODE_OVERFLOW);
         *z_out = global_lower_bound;
+
         /* Total clean up */
+        while (!LL_dequeue(node_queue))
+          ; 
         free(node_queue);
         post_order_tree_clean(root_node);
         return;
@@ -194,6 +197,8 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
           bytes_allocated = -1;
           *z_out = global_lower_bound;
           /* Total clean up */
+          while (!LL_dequeue(node_queue))
+            ; 
           free(node_queue);
           post_order_tree_clean(root_node);
           return;
@@ -202,6 +207,8 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
         {
           *start_time = -1;
           /* Total clean up */
+          while (!LL_dequeue(node_queue))
+            ; 
           free(node_queue);
           post_order_tree_clean(root_node);
           return;
@@ -560,7 +567,8 @@ LL_Problem_Queue *LL_create_queue(void)
 void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem, 
               FILE *logging_stream, int logging_rule, int *node_limit_flag)
 {
-  LL_Node_Queue_Item *new_item = (LL_Node_Queue_Item *) malloc(sizeof(LL_Node_Queue_Item));
+  LL_Node_Queue_Item *new_item = 
+    (LL_Node_Queue_Item *) malloc(sizeof(LL_Node_Queue_Item));
   bytes_allocated += sizeof(LL_Node_Queue_Item);
   new_item->problem = problem;
   if(queue->size == 0)
