@@ -1,0 +1,41 @@
+---
+ title: Implicit enumeration with dual bounds from approximation algorithms
+ author: Nelson Frew
+ output: pdf_document
+ bibliography: report.bib
+---
+
+# Introduction
+
+Within Mixed-Integer Programming (MIP), (Cite) we are concerned with solving optimisation problems where at least one of the variables is restricted to be integer. Such problems of The state of the art method for doing this is the Branch-and-Bound algorithm, to which the reader is referred to (cite) for details. The manner in which dual bounds are obtained at within the algorithm is pivotal to its efficiency; however the general method of relaxing variables to a continuous domain and finding a bound from this solution can be arbritarily poor. In this report, we present a method of computing dual bounds by using the guarantees provided by approximation algorithms (AAs). We show the current form of the proof of concept for this method, and outline the next steps to be undertaken following this.    
+
+# Background
+In this section I have to demonstrate the gap that this project fills.\cite{wolsey80}
+
+The inception of Dantzig's Simplex method (Cite) in 1947 created a shift in research from linear programming to discrete optimisation problems, which led to what is now known as Land and Doig's branch-and-bound algorithm. Simultenously, this same shifting of research questions gave rise to Computational Complexity Theory (Cite) which provided the foundations for the field of approximation algorithmss. It was not until Wosley \cite{wolsey80} that the Branch-and-Bound was used in light of the rise of approximation research, where he provided a general analysis technique for related approximation worst-cases with optimal LP relaxation solutions and achieved implicit enumeration from this. However, as far we know, since this, no further work has been done in this area. 
+
+
+# Methodology
+In this section I have to describe what my proof of concept is meant to do
+
+To demonstrate the potential of using Branch-and-Bound with approximations, first we will describe the theoretical groundwork for this project, and then describe the implementation details of the applications at this point. 
+
+
+## Approximation algorithms introduction
+For the scope of the proof of concept, we look at using branch-and-bound with approximations in solving the 0,1 Knapsack problem (KP) (Cite). We describe the process of constructing a *fully polynomial time approximation scheme* (FPTAS) for KP. The strategy for deriving an FPTAS operates on using an existing dynamic programming algorithm (DP) with a modified version of the original problem. We briefly examine two ways of achieving this.
+
+## Dynamic programming algorithms for the 0,1 Knapsack
+
+## Implementation of approximation schemes
+In this section I provide the description of my current implementation
+
+## Use of these algorithms within Branch and Bound
+In this section I tie it all together.
+
+
+# References
+\bibliography{report}
+\bibliographystyle{plain}
+
+
+
