@@ -1,18 +1,25 @@
 ---
  title: Implicit enumeration with dual bounds from approximation algorithms
  author: Nelson Frew
+ header-includes:
+  - \usepackage{amsmath}
+  - \usepackage[linesnumbered,ruled]{algorithm2e}
  output: pdf_document
  bibliography: report.bib
 ---
+
+\makeatletter
+\def\BState{\State\hskip-\ALG@thistlm}
+\makeatother
 
 # Introduction
 
 Within Mixed-Integer Programming (MIP), (Cite) we are concerned with solving optimisation problems where at least one of the variables is restricted to be integer. Such problems of The state of the art method for doing this is the Branch-and-Bound algorithm, to which the reader is referred to (cite) for details. The manner in which dual bounds are obtained at within the algorithm is pivotal to its efficiency; however the general method of relaxing variables to a continuous domain and finding a bound from this solution can be arbritarily poor. In this report, we present a method of computing dual bounds by using the guarantees provided by approximation algorithms (AAs). We show the current form of the proof of concept for this method, and outline the next steps to be undertaken following this.    
 
 # Background
-In this section I have to demonstrate the gap that this project fills.\cite{wolsey80}
+In this section I have to demonstrate the gap that this project fills. (Cite Wolsey)
 
-The inception of Dantzig's Simplex method (Cite) in 1947 created a shift in research from linear programming to discrete optimisation problems, which led to what is now known as Land and Doig's branch-and-bound algorithm. Simultenously, this same shifting of research questions gave rise to Computational Complexity Theory (Cite) which provided the foundations for the field of approximation algorithmss. It was not until Wosley \cite{wolsey80} that the Branch-and-Bound was used in light of the rise of approximation research, where he provided a general analysis technique for related approximation worst-cases with optimal LP relaxation solutions and achieved implicit enumeration from this. However, as far we know, since this, no further work has been done in this area. 
+The inception of Dantzig's Simplex method (Cite) in 1947 created a shift in research from linear programming to discrete optimisation problems, which led to what is now known as Land and Doig's branch-and-bound algorithm. Simultenously, this same shifting of research questions gave rise to Computational Complexity Theory (Cite) which provided the foundations for the field of approximation algorithmss. It was not until Wosley (Cite Wolsey) that the Branch-and-Bound was used in light of the rise of approximation research, where he provided a general analysis technique for related approximation worst-cases with optimal LP relaxation solutions and achieved implicit enumeration from this. However, as far we know, since this, no further work has been done in this area. 
 
 
 # Methodology
@@ -20,20 +27,111 @@ In this section I have to describe what my proof of concept is meant to do
 
 To demonstrate the potential of using Branch-and-Bound with approximations, first we will describe the theoretical groundwork for this project, and then describe the implementation details of the applications at this point. 
 
-
-## Approximation algorithms introduction
+## Dynamic programming algorithms for the 0,1 Knapsack
 For the scope of the proof of concept, we look at using branch-and-bound with approximations in solving the 0,1 Knapsack problem (KP) (Cite). We describe the process of constructing a *fully polynomial time approximation scheme* (FPTAS) for KP. The strategy for deriving an FPTAS operates on using an existing dynamic programming algorithm (DP) with a modified version of the original problem. We briefly examine two ways of achieving this.
 
-## Dynamic programming algorithms for the 0,1 Knapsack
+The first DP discussed in this section is the same as is introduced by Vazirani (Cite) on his section about KP. We define KP as follows: given $n$ items with associate weights $w_i$ and values $v_i$, and weight capacity $W$,
+
+\begin{itemize}
+  \item[] maximise $\sum_{i=1}^{n} v_i x_i$
+  \item[] subject to $\sum_{i=1}^{n} w_i x_i \leq W$ and $x_i \in \{0,1\}$
+\end{itemize}
+
+A DP to solve this as described by (Cite Vasirani) is as follows: let $P$ be the value of the most valuable object in the item set, and let $A(i,p)$ be the minimal weight of the solution to KP with only the first $i$ items, where the total value is exactly $p$. If ne such $A(i,p)$ can exist, that is, the first $i$ items cannot yield a value of $p$ and so cannot have an associated minimal weight, $A(i,p)=\inf$. The DP recurrence can be defined as follows:  
+
+\begin{equation}
+  A(i+1,p) = \begin{cases}
+    \text{min} \{A(i,p), w_{i+i} + A(i,p-v_{i+1})\} \text{, if }v_{i+1}<p \\
+    A(i+1, p) = A(i,p) \text{ otherwise}
+  \end{cases}
+\end{equation}
+
+The solution is given, then, by finding $max\{p | A(n,p) \leq W\}$. This provides exact computation in $O(n^2 P)$, as shown by (Cite Vazirani).
+
+The second DP of interest is shown in (Cite Williamson and Shmoy). For this, we maintain an array, where each entry $A(j)$ for $j=1,...,n$ is a solution pair $(w, p)$. An entry $A(j)=(w,v)$ indicates that there is a solution from the first $j$ items that has weight $w$ and value $v$. The concept of *domination* is used to establish an algorithm in this case. A pair $(w,v)$ dominates pair $(w', v')$ if $w\leq w'$ and $v \geq v'$. 
+
+The pseudocode for the DP is, then:
+
+\begin{algorithm}[H]
+  \SetAlgoLined
+  \KwData{A set of $n$ items with associated weights and values}
+  \KwResult{The weight and value pair of the optimal solution }
+  $A(1) \leftarrow  \{(0,0),(w_1,v_1)\}$\;
+  \For{$j \leftarrow 2$ to $n$}{
+    $A(j) \leftarrow A(j-1)$\;
+    \ForEach{$(w',v') \in A(j-1)$}{
+      \If{$w' + w_j \leq B$}{
+        Add $(w' + w_j, v' + v_j)$ to A(j)\;  
+      }
+    }
+    Remove dominated pairs from $A(j)$;\
+  }
+  \Return{max$_{(w,v)\in A(n)} v$}
+\caption{Second Dynamic Programming Algorithm for the 0,1 Knapsack}
+\end{algorithm}
+
+## Approximation algorithms introduction
+In order to create an FPTAS for KP, we simplify the original problem instance slightly by ignoring some amount of the least significant bits on the values, parameterised by an introduced error parameter $\epsilon$. Then, we simply use a provided DP to solve the simplified problem, which provides us with our FPTAS (see (Cite Vazirani) (Cite William and Shmoy) for detailed treatments).
+
+\begin{algorithm}[H]
+  \SetAlgoLined
+  \KwData{A KP problem instance, and error parameter $\epsilon$.}
+  \KwResult{The weight and value pair of the optimal solution}
+  Given $\epsilon$, let $K = \frac{\epsilon P}{n}$\;
+  For each object $i$, define adjusted values $v'=\left \lfloor \frac{v_i}{K}\right \rfloor$\;
+  Run a DP with these adjusted item values\;
+  Return the solution set provided by the DP\;
+\caption{Fully Polynomial Time Approximation Scheme for Knapsack}
+\end{algorithm}
 
 ## Implementation of approximation schemes
-In this section I provide the description of my current implementation
+The current implementation for the FPTAS is as follows (details relevant to its Branch-and-Bound implementation have been omitted).
+```{c, results="hide", eval=FALSE}
+void FPTAS(double eps,int *profits, int *weights, int *x, int *sol_prime, 
+          const int n, int capacity, const int z, const int sol_flag, 
+          const int bounding_method, const char *problem_file, double *K,
+          int *profits_prime, const int DP_method, const int *variable_statuses)
+{
+  /* Find max profit item */
+  int P = DP_max_profit(profits, n);
+  
+  /* Define K */
+  *K = define_K(eps, P, n);
+
+  /* Derive adjusted profits */
+  make_profit_primes(profits, profits_prime, *K, n, variable_statuses);
+
+  if(capacity >= 0) 
+  {
+    /* Now with amended profits list "profits_primes," solve the DP */
+    if (DP_method == VASIRANI)
+      DP(profits_prime, weights, x, sol_prime, n, capacity,z, sol_flag, 
+        bounding_method, problem_file);
+
+    else if (DP_method == WILLIAMSON_SHMOY)
+    {
+      /* Make problem item struct array */
+      struct problem_item items_prime[n];
+      for(int i = 0; i < n; i++)
+      {
+        items_prime[i].weight = weights[i];
+        items_prime[i].profit = profits_prime[i];
+      }
+      int result = williamson_shmoys_DP(items_prime, capacity, n, sol_prime);
+    }
+  }
+  for(int i = 0; i < n; i++)
+    if(variable_statuses[i] == VARIABLE_ON);
+      sol_prime[i] = 1;
+}
+```
+
+
 
 ## Use of these algorithms within Branch and Bound
 In this section I tie it all together.
 
 
-# References
 \bibliography{report}
 \bibliographystyle{plain}
 
