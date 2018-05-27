@@ -1,0 +1,12 @@
+---
+ title: 'Literature Review: Implicit enumeration with dual bounds from approximations'
+ author: Nelson Frew
+ output: pdf_document
+ bibliography: literature_review.bib
+---
+
+# Branch and Bound
+
+## Concepts and improvements
+
+Initially described by Land & Doig \cite{LandDoig}, Branch-and-Bound (B&B) has developed into the state of the art method for solving Integer Linear Programs (ILPs). 

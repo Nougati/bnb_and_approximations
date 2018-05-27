@@ -272,7 +272,7 @@ int main(int argc, char *argv[])
 
       FILE *benchmark_stream = fopen(input_str,"a"); 
       printf("Your seed is:\n%s %d %d %s %s %s %s %s %s %d %s %s\n", argv[0], 
-            memory_allocation_limit, timeout, "out.csv", DP_types, 
+            memory_allocation_limit, timeout, input_str, DP_types, 
             branch_strats, instance_set, n_set, coefficient_set, problem_subset, 
             hard_instance_set, hard_n_set);
       
