@@ -314,5 +314,3 @@ instance | n | coeffcients | problem # | runtime | memory allocated | node count
 \bibliography{report}
 \bibliographystyle{plain}
 
-
-

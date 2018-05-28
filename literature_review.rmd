@@ -7,6 +7,40 @@
 
 # Branch and Bound
 
-## Concepts and improvements
+Some assorted things:
 
-Initially described by Land & Doig \cite{LandDoig}, Branch-and-Bound (B&B) has developed into the state of the art method for solving Integer Linear Programs (ILPs). 
+ - Mitra (1973): examined the flexibility of B&B, and tested some branching+subproblem selection strategies
+ - Linderoth & Savelsbergh (1999): survey of B&B research results; some search strategies presented
+ - Achterberg et al. (2005): generalisation of SOTA strong branching, and pseudocost branching
+ - Morrison et al. (2016): presentation of recent advances with regards to pruning, searching and branching.
+ - Ralphs & Guzelsoy (2006): warm starting methodogy within symphony callable library
+ - To find: papers which study bounds more specifically
+
+So, general flow:
+ 
+ - Introduce topic: IPs, B&Bs, bounds, approximations and bounds
+ - Introduce bounds research
+ - Then all auxiliary research
+ - just say we know [this fact] because of [this person] in a sequence I guess.\cite{Ralphs}
+
+
+The field of Discrete Optimisation encompasses a broad scope of hard optimisation application, modelling discrete decision making and logistics problems, one such example being Mixed-Integer Programming. In MIP research, we are concerned with solving optimisation problems where a set of the optimisation variables must be integer. The state-of-the-art method for achieving this is the Branch-and-Bound (B&B) framework, a divide-and-conquer search strategy which implicitly enumerates through all solutions in a problem's search space to find an optimal solution. Integral to the performance of the scheme, *dual bounds* provide the bases for implicit enumeration. A common method to obtain the dual bounds is to solve the dual of a relaxation of the problem. Other parameters, such as branching, pruning, and node selection strategies, all have individual impacts on the efficiency of B&B which have been researched extensively. Due to the complexity of MIP and pure Integer Programming (IP) problems \cite{Papadimitriou}, approximation research as arisen to find feasible solutions with guarantees in polynomial time. (Come back and redo this intro later)
+
+Initially described by \cite{LandDoig}, B&B has seen much improvement since its inception. [In order to find ways to establish bounds, it was originally suggested that we [Whatever Land and Doig said]. [1-2 more sentences about how this works]. Building on this, [Blah on whatever came from this]. [Then if it's not already at LP, take it to LP, then Lagrangean, the SDP]. Following the rise of approximations research in the 1970s, \cite{Wolsey} provided a means of using known approximation schemes to find bounds. Beyond this, to our knowledge, investigations into obtaining bounds have limited research.
+
+Proposed initially with strong theoretical interest, [Find some introduction to penalties] suggested that penalising changes in the objective function value for branching variables would facilitate faster search. However, penalties within the B&B were examined by \cite{Mitra} and were found to not have considerable impact on performance. Following years of success with B&B, for a time, major strategies included [whatever is in linderoth], to which \cite{Linderoth} responded with new strategies involving [blah]. In particular, this research is done (with?/without?) LP relaxations for bounds.  
+
+Other research involving branching was done by \cite{Achterberg}, and \cite{Morrison} has provided an overview of pruning, searching and branching in B&B.
+
+
+
+## Warm Starting: probably won't use this
+
+We know because of \cite{Ralphs} that Warm Starting can be used to improve performance for Integer Programming (IP) problems. Done by constructing a warm start tree with a chosen percentage of an initial problem, the technique has been shown to noticeably improve performance. Such work founded components used in state-of-the-art algorithms today, such as (EXAMPLES HERE LOL). Over time, the technique has become an integral part of efficiency in IP algorithms. 
+
+
+
+
+\bibliography{literature_review}
+\bibliographystyle{plain} 
+
