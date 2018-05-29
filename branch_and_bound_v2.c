@@ -429,30 +429,17 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
   }
 
   /* Then, from the solution sets returned from the FPTAS, derive bounds */
-  /* Begin old a posteriori */
   int fptas_lower_bound = 0;
-  double fptas_upper_bound = 0;
-  for (int i = 0; i < n; i++)
-    if (sol_prime[i] == 1)
-    {
-      fptas_lower_bound += profits[i];
-      if (K > 1)  
-        fptas_upper_bound += K * profits_prime[i];
-      else
-        fptas_upper_bound += profits[i];
-    }
-  fptas_upper_bound += n*K; 
-  /* End old a posteriori */
-  /* Start New a posteriori */
+  int fptas_upper_bound = 0;
+
+  /* Start New a posteriori: a posteriori is derived by rounded up profits */
   int amount_truncated = 0;
   for (int i = 0; i < n; i++)
     if (sol_prime[i] == 1)
     {
       fptas_lower_bound += profits[i];
-      amount_truncated += profits[i] - K*profits_prime[i];
+      fptas_upper_bound += K * profits_prime[i];
     }
-  // p(S'') + truncated amount
-  /* End new a posteriori*/
 
   *lower_bound_ptr = fptas_lower_bound;
   *upper_bound_ptr = (int) fptas_upper_bound;
