@@ -1,5 +1,6 @@
 #define BRANCH_STRAT_NO_OF_OPTIONS 3
 #define NELEMS(x) (sizeof(x) / sizeof((x)[0]))
+#define BENCHMARKING
 
 void benchmark_instance(char *file_name_holder, int problem_no, int timeout, 
                        int DP_method, int allocation_limit, 

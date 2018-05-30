@@ -15,6 +15,8 @@
 #include <time.h>
 #include "fptas.h"
 #include "pisinger_reader.h"
+#include "branch_and_bound.h"
+#include "bench_extern.h"
 
 /* Preprocessor definitions */
 
@@ -32,8 +34,6 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
        void *: "pointer to void",                int *: "pointer to int",         \
       default: "other")
 
-
-/* Main function */
 
 /* FPTAS Functions */
 /* FPTAS core function */
@@ -80,6 +80,7 @@ void FPTAS(double eps,
 
   /* Derive adjusted profits (and trivialise constrained nodes 0) */
   make_profit_primes(profits, profits_prime, *K, n, variable_statuses); 
+
   /* Symbolic profits (just for the computation) */
   int symbolic_profits_prime[n];
   for (int i = 0; i < n; i++) symbolic_profits_prime[i] = 0;
@@ -90,16 +91,30 @@ void FPTAS(double eps,
   for (int i = 0; i < n; i++)
     if (variable_statuses[i] == VARIABLE_ON)
       capacity -= weights[i];
-
   for (int i = 0; i < n; i++) sol_prime[i] = 0;
+
   /* Feasibility check */
   if (capacity >= 0)
   {
     /* Now with amended profits list "profit_primes," solve the DP */
+    /*... With Vazirani's DP */
     if (DP_method == VASIRANI)
+    {
+      #if defined BENCHMARKING
+      clock_t start_time = clock();
+      #endif
+
       DP(symbolic_profits_prime, weights, x, sol_prime, n, capacity, z, 
          sol_flag, bounding_method, problem_file);
 
+      #if defined BENCHMARKING
+      clock_t elapsed = clock() - start_time;
+      double time_taken = ((double)elapsed)/CLOCKS_PER_SEC;
+      append_to_dynamic_array(times_per_node, time_taken);
+      #endif
+    }
+
+    /*... or Williamson and Shmoys. */
     else if (DP_method == WILLIAMSON_SHMOY)
     {
       /* Make problem item struct array */
@@ -109,9 +124,20 @@ void FPTAS(double eps,
         items_prime[i].weight = weights[i];
         items_prime[i].profit = symbolic_profits_prime[i];
       }
+      //#if defined BENCHMARKING
+      clock_t start_time = clock();
+      //#endif
+
       int result = williamson_shmoys_DP(items_prime, capacity, n, sol_prime);
 
+      //#if defined BENCHMARKING
+      clock_t elapsed = clock() - start_time;
+      double time_taken = ((double)elapsed)/CLOCKS_PER_SEC;
+      append_to_dynamic_array(times_per_node, time_taken);
+      //#endif
     }
+
+    /* Force any variables on if necessary */
     for(int i = 0; i < n; i++) 
       if(variable_statuses[i] == VARIABLE_ON)
         sol_prime[i] = 1;

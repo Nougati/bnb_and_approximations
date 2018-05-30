@@ -24,14 +24,14 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include "bench_extern.h"
 #include "branch_and_bound.h"
+#include "bench_extern.h"
 #include "pisinger_reader.h"
 #include "fptas.h"
 
 int main(int argc, char *argv[]) {
   /* Dynamic Input variable support */
-  int n, capacity, z, opt_profit;
+  int n, capacity, z;
   int *profits, *weights, *x;
   char problem_file[100];
 

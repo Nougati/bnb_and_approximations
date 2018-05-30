@@ -36,6 +36,7 @@ typedef struct queue
   struct p_instance** array;
 } Problem_Queue;
 
+
 /*WIP*/
 typedef struct linked_list_item
 {
@@ -50,6 +51,7 @@ typedef struct linked_list_p_queue
   struct linked_list_item *tail;
   int size;
 } LL_Problem_Queue;
+
 
 /* Branch and Bound Declarations */
 Problem_Instance *define_root_node(int n);
@@ -88,6 +90,7 @@ void post_order_tree_clean(Problem_Instance *root_node);
 
 int is_boundary_exceeded(int memory_limit, clock_t start_time, int timeout);
 
+
 /* Queue Declarations */
 Problem_Queue *create_queue(int capacity);
 
@@ -103,9 +106,25 @@ Problem_Instance *front(Problem_Queue *queue);
 
 Problem_Instance *rear(Problem_Queue *queue);
 
+
 /* LL Queue Declarations */
 LL_Problem_Queue *LL_create_queue(void);
+
 void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem, 
                 FILE *logging_stream, int logging_rule, int *node_limit_flag);
+
 Problem_Instance *LL_dequeue(LL_Problem_Queue *queue);
 
+
+/* Dynamic Array Declarations  */
+typedef struct {
+  double *array;
+  size_t used;
+  size_t size;
+} Dynamic_Array;
+
+void initialise_dynamic_array(Dynamic_Array **dynamic_array, size_t initial_size);
+
+void append_to_dynamic_array(Dynamic_Array *dynamic_array, double element);
+
+void free_dynamic_array(Dynamic_Array *dynamic_array);

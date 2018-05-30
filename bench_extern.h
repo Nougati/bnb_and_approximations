@@ -3,3 +3,4 @@
  *****************************************************************************/
 
 extern int bytes_allocated;
+extern Dynamic_Array *times_per_node;

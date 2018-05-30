@@ -16,11 +16,6 @@
  *  argv[10] : hard instance set                                             *
  *  argv[11] : hard n set                                                    *
  *                                                                           *
- *  TODO Wizard: validate inputs                                             *
- *  TODO Validate CLArgs inpus                                               *
- *  TODO Run benchmark via wizard                                            *
- *  TODO Make sure the wizard returns the generated input                    *
- *                                                                           *
  *****************************************************************************/
 
 #include <stdio.h>
@@ -29,8 +24,8 @@
 #include <limits.h>
 #include <string.h>
 #include "branch_and_bound_benchmark.h"
-#include "bench_extern.h"
 #include "branch_and_bound.h"
+#include "bench_extern.h"
 #include "fptas.h"
 #include "pisinger_reader.h"
 
@@ -199,7 +194,6 @@ int main(int argc, char *argv[])
         scanf("%d", &problem_subset);
         /* Make sure they pick a reasonable number! */
       }while(problem_subset < 1 || problem_subset > 100);
-
       /* Prompt user for hard instance set */
       char hard_instance_set[] = "000000";
       printf("Enter the hard instance types you want to toggle (of 11-16)\n");
@@ -271,14 +265,15 @@ int main(int argc, char *argv[])
 
 
       FILE *benchmark_stream = fopen(input_str,"a"); 
+      fprintf(benchmark_stream, "ass\n");      
       printf("Your seed is:\n%s %d %d %s %s %s %s %s %s %d %s %s\n", argv[0], 
             memory_allocation_limit, timeout, input_str, DP_types, 
             branch_strats, instance_set, n_set, coefficient_set, problem_subset, 
             hard_instance_set, hard_n_set);
-      
       benchmark(memory_allocation_limit, timeout, DP_types, n_set, 
                 coefficient_set, instance_set, branch_strats, benchmark_stream,
                 problem_subset, hard_instance_set, hard_n_set);
+      fclose(benchmark_stream);
 
       return 0;
     }
@@ -327,6 +322,7 @@ int main(int argc, char *argv[])
   benchmark(memory_allocation_limit, timeout, argv[4], argv[7], argv[8], 
             argv[6], argv[5], file_out, problem_subset,
             argv[10], argv[11]);
+  fclose(file_out);
 
   return 0;
 }
@@ -471,6 +467,13 @@ void benchmark_instance(char *file_name_holder, int problem_no, int timeout,
     sprintf(stringified_time, "%lf", time_taken);
     average_time_per_node = time_taken/(double)number_of_nodes;
   }
+
+  /* True average time per node */  
+  double true_average_time_per_node = 0;
+  for(int i = 0; i < times_per_node->used; i++)
+    true_average_time_per_node += times_per_node->array[i];
+  true_average_time_per_node /= times_per_node->used;
+
   char stringified_memory[30];
   if(bytes_allocated == -1)
     strcpy(stringified_memory, "MEMORY LIMITED EXCEEDED");
@@ -480,9 +483,10 @@ void benchmark_instance(char *file_name_holder, int problem_no, int timeout,
   char *DP_str_arr[] = {"Vazirani", "Williamson Shmoy"}; 
   char *branching_strats[] = {"Linear Enum", "Random", "Truncation"};
 
-  fprintf(benchmark_stream, "%s, %s, %s, %d, %s, %s, %d, %lf\n", file_name_holder,
+  fprintf(benchmark_stream, "%s, %s, %s, %d, %s, %s, %d, %lf, %lf\n", file_name_holder,
          DP_str_arr[DP_method], branching_strats[branching_strategy], problem_no, stringified_time, 
-         stringified_memory, number_of_nodes, average_time_per_node);
+         stringified_memory, number_of_nodes, average_time_per_node, true_average_time_per_node);
+  printf("Performance logged.\n");
 }
 
 void command_line_validation(const char argv1[], const char argv2[], 
@@ -509,9 +513,9 @@ void command_line_validation(const char argv1[], const char argv2[],
   int n;
   /* Check argv[3]: file out */
   n = strlen(argv3);
-  if(argv3[n-4] != 'c' ||
-     argv3[n-3] != 's' ||
-     argv3[n-2] != 'v')
+  if(argv3[n-3] != 'c' ||
+     argv3[n-2] != 's' ||
+     argv3[n-1] != 'v')
   {
     printf("File out (argv[3]) should be a csv! Exiting...\n");
     exit(-1);
@@ -592,9 +596,9 @@ void command_line_validation(const char argv1[], const char argv2[],
   
   /* Check argv[10]: hard instance set */
   n = strlen(argv10);
-  if(n != 7)
+  if(n != 6)
   {
-    printf("n set (argv[10]) should be of length 7! Exiting...\n");
+    printf("n set (argv[10]) should be of length 6! Exiting...\n");
     exit(-1);
   }
 

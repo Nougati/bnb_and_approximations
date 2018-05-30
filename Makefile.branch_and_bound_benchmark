@@ -1,3 +1,7 @@
+CC=gcc
+CC_FLAGS = -g -Wall -Wextra -fsanitize=address -fsanitize=undefined
+CC_LIBRARIES=-lm
+
 branch_and_bound_benchmark : branch_and_bound.o branch_and_bound_benchmark.o fptas.o pisinger_reader.o
 	gcc branch_and_bound.o branch_and_bound_benchmark.o fptas.o pisinger_reader.o -o branch_and_bound_benchmark -g -lm 
 

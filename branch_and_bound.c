@@ -8,13 +8,13 @@
 #include <time.h>
 #include <limits.h>
 #include <math.h>
-#include "bench_extern.h"
 #include "branch_and_bound.h"
+#include "bench_extern.h"
 #include "pisinger_reader.h"
 #include "fptas.h"
 
 int bytes_allocated;
-
+Dynamic_Array *times_per_node;
 
 /* Branch and bound methods */
 /* Branch and bound algorithm */
@@ -49,7 +49,12 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
    *  number of nodes: how many nodes are generated through the algorithm 
    *                  (output parameter)
    * */
+  
+  /* Initialise externals */
   bytes_allocated = 0;
+  initialise_dynamic_array(&times_per_node, 1000);
+     //TODO find a better number than 1000
+  
   /* Logging functionality */
   time_t t = time(NULL);
   struct tm tm = *localtime(&t);
@@ -64,9 +69,9 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
             tm.tm_sec, problem_file, eps);
   }
 
+  /* Initialise variables */
   int count = 0;
   int branching_variable;
-  //Problem_Queue *node_queue = create_queue(n);
   LL_Problem_Queue *node_queue = LL_create_queue(); 
   Problem_Instance *root_node = define_root_node(n);
   srand(seed);
@@ -78,14 +83,14 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
   /* While our node queue is not empty: */
   while((first_iteration) || (node_queue->size >= 1))
   {
-    fflush(stdout);
+    fflush(stdout); // This was just to make sure that things were being printed.
     iterations++;
     /* Logging functionality */
     if(logging_rule != NO_LOGGING)
       fprintf(logging_stream, "\nStarting loop iteration %d (Node queue size: %d"
               ")\n", iterations, node_queue->size);
 
-    /* Get next node */
+    /* Get next node and find its bounds */
     if(first_iteration)
     {
       current_node = root_node;
@@ -104,7 +109,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
     {
       /* Take node N off queue by some node selection scheme */
       current_node = select_and_dequeue_node(node_queue);
-
+      
       /* Derive the LB and UB for node N with the FPTAS */
       find_bounds(current_node, profits, weights, x, capacity, n, z,
                   &current_node->lower_bound, &current_node->upper_bound,
@@ -217,14 +222,19 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
   }
   *z_out = global_lower_bound;
   *number_of_nodes = count;
+
+  /* Logging stuff*/
   if(logging_rule != NO_LOGGING)
     fprintf(logging_stream, "\nAlgorithm finished! Result: %d / %d, %d nodes g"
                             "enerated.\n▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄"
                             "▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n\n", *z_out, 
             z, count);
+
   /* Total clean up */
   free(node_queue);
   post_order_tree_clean(root_node);
+  free_dynamic_array(times_per_node);
+  free(times_per_node);
 }
 
 /* Initial global lower bound heuristic */
@@ -604,5 +614,34 @@ Problem_Instance *LL_dequeue(LL_Problem_Queue *queue)
   queue->head = temp_node_pointer;
   queue->size -= 1;
   return dequeued_problem;
+}
+
+// Dynamic Array method: Initialise
+void initialise_dynamic_array(Dynamic_Array **dynamic_array, size_t initial_size)
+{
+  Dynamic_Array *tmp = *dynamic_array = (Dynamic_Array*)malloc(sizeof(Dynamic_Array));
+  tmp->array = (double *)malloc(initial_size * sizeof(double));
+  tmp->used = 0;
+  tmp->size = initial_size;
+}
+
+// Dynamic Array method: Append
+void append_to_dynamic_array(Dynamic_Array *dynamic_array, double element)
+{
+  if (dynamic_array->used == dynamic_array->size)
+  {
+    dynamic_array->size *= 2;
+    dynamic_array->array = (double *)realloc(dynamic_array->array, 
+                                         dynamic_array->size * sizeof(double));
+  }
+  dynamic_array->array[dynamic_array->used++] = element; 
+}
+
+// Dynamic Array method: Free 
+void free_dynamic_array(Dynamic_Array *dynamic_array)
+{
+  free(dynamic_array->array);
+  dynamic_array->array = NULL;
+  dynamic_array->used = dynamic_array->size = 0;
 }
 
