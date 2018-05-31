@@ -86,7 +86,7 @@ int main(int argc, char *argv[])
       printf("Wizard!\n");
 
       printf("Please enter the limit on memory allocation (bytes):\n");
-      int memory_allocation_limit;
+      unsigned memory_allocation_limit;
       scanf("%d", &memory_allocation_limit);
 
       printf("Please enter the limit on run-time (seconds):\n");

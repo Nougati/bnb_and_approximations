@@ -21,8 +21,9 @@
 /* Structure Declarations */
 typedef struct p_instance
 {
-  struct p_instance *parent;
   int *variable_statuses;
+  int parent_upper_bound;
+  int parent_ID;
   int lower_bound;
   int upper_bound;
   int ID;

@@ -13,4 +13,8 @@ Following the rise of Approximations research in the 1970s, Wolsey (1980) (cite 
 
 Within this context we situate our work building on the ideas provided by Wolsey (1980), and in response to the limitations of current relaxation techniques, by leveraging approximation algorithm guarantees, to create implicit enumeration from *a posteriori* dual bounds.
 
+Format: 
 
+ - Discrete Optimisation, B&B and LP
+ - Approximations
+ - B&B with approximations 

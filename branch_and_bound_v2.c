@@ -1,6 +1,8 @@
 /******************************************************************************
- * Branch_and_bound version 1.1                                               *
- * This version uses the "rounding up" a posteriori bound                     *
+ * Branch_and_bound version 1.0                                               *
+ * Implements the B&B with the new a posteriori bound                         *
+ * TODO:                                                                      *
+ *  - There is a memory leak somewhere in this with 5_50_1000 instances       *
  ******************************************************************************/
 
 #include <stdio.h>
@@ -8,13 +10,13 @@
 #include <time.h>
 #include <limits.h>
 #include <math.h>
-#include "bench_extern.h"
 #include "branch_and_bound.h"
+#include "bench_extern.h"
 #include "pisinger_reader.h"
 #include "fptas.h"
 
 int bytes_allocated;
-
+Dynamic_Array *times_per_node;
 
 /* Branch and bound methods */
 /* Branch and bound algorithm */
@@ -49,7 +51,12 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
    *  number of nodes: how many nodes are generated through the algorithm 
    *                  (output parameter)
    * */
+  
+  /* Initialise externals */
   bytes_allocated = 0;
+  initialise_dynamic_array(&times_per_node, 1000);
+     //TODO find a better number than 1000
+  
   /* Logging functionality */
   time_t t = time(NULL);
   struct tm tm = *localtime(&t);
@@ -64,9 +71,9 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
             tm.tm_sec, problem_file, eps);
   }
 
+  /* Initialise variables */
   int count = 0;
   int branching_variable;
-  //Problem_Queue *node_queue = create_queue(n);
   LL_Problem_Queue *node_queue = LL_create_queue(); 
   Problem_Instance *root_node = define_root_node(n);
   srand(seed);
@@ -75,17 +82,17 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
   int global_lower_bound;
   int iterations = 0;
 
-  /* While our node queue is not empty: */
+  /* MAIN LOOP: While our node queue is not empty: */
   while((first_iteration) || (node_queue->size >= 1))
   {
-    fflush(stdout);
     iterations++;
     /* Logging functionality */
     if(logging_rule != NO_LOGGING)
       fprintf(logging_stream, "\nStarting loop iteration %d (Node queue size: %d"
               ")\n", iterations, node_queue->size);
 
-    /* Get next node */
+    /* Get next node and find its bounds */
+    /* TODO separate this from the loop */
     if(first_iteration)
     {
       current_node = root_node;
@@ -104,7 +111,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
     {
       /* Take node N off queue by some node selection scheme */
       current_node = select_and_dequeue_node(node_queue);
-
+      
       /* Derive the LB and UB for node N with the FPTAS */
       find_bounds(current_node, profits, weights, x, capacity, n, z,
                   &current_node->lower_bound, &current_node->upper_bound,
@@ -113,19 +120,23 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
       if(logging_rule != NO_LOGGING)
         fprintf(logging_stream, "\tNode %d (parent: %d) - bounds established: "
                                 "lower: %d, upper: %d (GLB: %d)\n", 
-                current_node->ID, current_node->parent->ID, 
+                current_node->ID, current_node->parent_ID, 
                 current_node->lower_bound, current_node->upper_bound,
                 global_lower_bound);
     }
 
-    /* If UB < GLB, we safely prune this branch and continue to loop */
+    /* If UB <= GLB, we safely prune this branch and continue to loop */
+    /* TODO Does this second 'if' condition make sense? */
     if ((current_node->ID != 0) && 
         ((current_node->upper_bound <= global_lower_bound) || 
-         (current_node->upper_bound > current_node->parent->upper_bound)))  
+         (current_node->upper_bound > current_node->parent_upper_bound)))  
     {
       if(logging_rule != NO_LOGGING)
         fprintf(logging_stream, "\tUpper bound is lower that GLB! Pruning node b"
                 "ranch.\n");
+      free(current_node->variable_statuses);
+      free(current_node);
+      current_node = NULL;
       continue;
     }
 
@@ -141,14 +152,14 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
 
     /* If for N's parent's upper bound, UB_p, UB > UB_p, UB = UB_p */
     if (current_node->ID != 0 &&
-        current_node->upper_bound > current_node->parent->upper_bound)
+        current_node->upper_bound > current_node->parent_upper_bound)
     {
       if(logging_rule != NO_LOGGING)
         fprintf(logging_stream, "\tParent's upper bound is lower; reducing thi"
                 "s node's upper bound from %d to %d\n",
-                current_node->upper_bound, current_node->parent->upper_bound);
+                current_node->upper_bound, current_node->parent_upper_bound);
 
-      current_node->upper_bound = current_node->parent->upper_bound;
+      current_node->upper_bound = current_node->parent_upper_bound;
     }
 
     /* If UB > GLB, we branch on the variable */
@@ -157,9 +168,11 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
       if(logging_rule != NO_LOGGING)
         fprintf(logging_stream, "\tUB > GLB; branching on variable.\n");
 
+      /* Find branching variable accoring to some strategy */
       branching_variable = find_branching_variable(n, z, 
                                               current_node->variable_statuses,
                                               branching_strategy, profits);
+      /* Logging stuff */
       if (branching_variable == -1) 
       {
         if(logging_rule != NO_LOGGING)
@@ -168,9 +181,22 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
         continue;
       }
       int node_limit_flag = 0;
+
+      /* Generate children */
       generate_and_enqueue_nodes(current_node, n, branching_variable, 
                                  node_queue, &count, logging_stream, logging_rule,
                                  &node_limit_flag);
+
+      if(logging_rule != NO_LOGGING)
+        fprintf(logging_stream, "\t Node %d branched on variable %d\n",
+                current_node->ID, branching_variable);
+
+      /* Free current node */
+      free(current_node->variable_statuses);
+      free(current_node);
+      current_node = NULL;
+
+      /* Check if node overflow has occurred */
       if(node_limit_flag)
       { 
         printf("Node overflow! More than %d\n", NODE_OVERFLOW);
@@ -180,16 +206,13 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
         while (!LL_dequeue(node_queue))
           ; 
         free(node_queue);
-        post_order_tree_clean(root_node);
         return;
       } 
-      if(logging_rule != NO_LOGGING)
-        fprintf(logging_stream, "\t Node %d branched on variable %d\n",
-                current_node->ID, branching_variable);
 
       /* Check for overallocation */
       int overallocation = is_boundary_exceeded(memory_allocation_limit, *start_time, timeout);
       if(overallocation)
+      {
         /* Exit, returning current best guess */
         if(overallocation == MEMORY_EXCEEDED)
         {
@@ -199,7 +222,6 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
           while (!LL_dequeue(node_queue))
             ; 
           free(node_queue);
-          post_order_tree_clean(root_node);
           return;
         }
         else if (overallocation == TIMEOUT)
@@ -209,22 +231,32 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
           while (!LL_dequeue(node_queue))
             ; 
           free(node_queue);
-          post_order_tree_clean(root_node);
           return;
         }
+      }
       /* Else, loop again */
     }
   }
   *z_out = global_lower_bound;
   *number_of_nodes = count;
+
+  /* Logging stuff*/
   if(logging_rule != NO_LOGGING)
     fprintf(logging_stream, "\nAlgorithm finished! Result: %d / %d, %d nodes g"
                             "enerated.\n▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄"
                             "▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n\n", *z_out, 
             z, count);
+
   /* Total clean up */
+  if(current_node != NULL)
+  {
+    free(current_node->variable_statuses);
+    free(current_node);
+    current_node = NULL;
+  }
   free(node_queue);
-  post_order_tree_clean(root_node);
+  free_dynamic_array(times_per_node);
+  free(times_per_node);
 }
 
 /* Initial global lower bound heuristic */
@@ -321,7 +353,8 @@ Problem_Instance *define_root_node(int n)
   Problem_Instance *root_instance =
                            (Problem_Instance*) malloc(sizeof(Problem_Instance));
   bytes_allocated += sizeof(Problem_Instance);
-  root_instance->parent = NULL;
+  root_instance->parent_ID = 0;
+  root_instance->parent_upper_bound = INT_MAX;
   root_instance->variable_statuses = (int *) malloc(n * sizeof(int));
   bytes_allocated += n*sizeof(int);
   for(int i = 0; i < n; i++) 
@@ -350,9 +383,11 @@ void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
   generated_node_variable_on->ID = ++(*count);
   generated_node_variable_off->ID = ++(*count);
 
+
   /* Inherit parent's traits */
   /* First node */
-  generated_node_variable_on->parent = parent;
+  generated_node_variable_on->parent_ID = parent->ID;
+  generated_node_variable_on->parent_upper_bound = parent->upper_bound;
   generated_node_variable_on->variable_statuses =
                                     (int *) malloc(sizeof(int) * n);
   bytes_allocated += n*sizeof(int);
@@ -364,8 +399,9 @@ void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
   generated_node_variable_on->on_child = NULL;
   generated_node_variable_on->off_child = NULL;
 
-  /* Second node */
-  generated_node_variable_off->parent = parent;
+  /* Then, second node */
+  generated_node_variable_off->parent_ID = parent->ID;
+  generated_node_variable_off->parent_upper_bound = parent->upper_bound;
   generated_node_variable_off->variable_statuses =
                                     (int *) malloc(sizeof(int) * n);
   bytes_allocated += n*sizeof(int);
@@ -377,13 +413,14 @@ void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
   generated_node_variable_off->on_child = NULL;
   generated_node_variable_off->off_child = NULL;
 
+
   /* Place into priority queue (for now just append) */
-  //enqueue(problems_list, generated_node_variable_on);
   LL_enqueue(problem_queue, generated_node_variable_on, logging_stream, 
              logging_rule, node_limit_flag);
-  //enqueue(problems_list, generated_node_variable_off);
   LL_enqueue(problem_queue, generated_node_variable_off, logging_stream, 
              logging_rule, node_limit_flag);
+
+  /* Parent is freed outside */
 }
 
 /* Node selection and dequeuing algorithm */
@@ -432,7 +469,7 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
   int fptas_lower_bound = 0;
   int fptas_upper_bound = 0;
 
-  /* Start New a posteriori: a posteriori is derived by rounded up profits */
+  /* Start new a posteriori: a posteriori is derived by rounded up profits */
   int amount_truncated = 0;
   for (int i = 0; i < n; i++)
     if (sol_prime[i] == 1)
@@ -454,10 +491,13 @@ void post_order_tree_clean(Problem_Instance *node)
   if (node == NULL)
     return;
   
+  /* Recurse down 'on' subtree */
   post_order_tree_clean(node->on_child);
   
+  /* Recurse down 'off' subtree */
   post_order_tree_clean(node->off_child);
 
+  /* Then, free the node we're up to. */
   free(node->variable_statuses);
   free(node);
 }
@@ -603,5 +643,34 @@ Problem_Instance *LL_dequeue(LL_Problem_Queue *queue)
   queue->head = temp_node_pointer;
   queue->size -= 1;
   return dequeued_problem;
+}
+
+/* Dynamic Array method: Initialise */
+void initialise_dynamic_array(Dynamic_Array **dynamic_array, size_t initial_size)
+{
+  Dynamic_Array *tmp = *dynamic_array = (Dynamic_Array*)malloc(sizeof(Dynamic_Array));
+  tmp->array = (double *)malloc(initial_size * sizeof(double));
+  tmp->used = 0;
+  tmp->size = initial_size;
+}
+
+/* Dynamic Array method: Append */
+void append_to_dynamic_array(Dynamic_Array *dynamic_array, double element)
+{
+  if (dynamic_array->used == dynamic_array->size)
+  {
+    dynamic_array->size *= 2;
+    dynamic_array->array = (double *)realloc(dynamic_array->array, 
+                                         dynamic_array->size * sizeof(double));
+  }
+  dynamic_array->array[dynamic_array->used++] = element; 
+}
+
+/* Dynamic Array method: Free */
+void free_dynamic_array(Dynamic_Array *dynamic_array)
+{
+  free(dynamic_array->array);
+  dynamic_array->array = NULL;
+  dynamic_array->used = dynamic_array->size = 0;
 }
 
