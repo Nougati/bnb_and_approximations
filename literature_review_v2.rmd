@@ -1,53 +1,126 @@
 ---
- title: 'Literature Review: Implicit enumeration with dual bounds from approximations'
- author: Nelson Frew
  output: pdf_document
 ---
 
+\begin{titlepage}
+  \centering
+  {\scshape\LARGE Monash University \par}
+  \vspace{1cm}
+  {\scshape\Large Literature Review \par}
+  \vspace{1.5cm}
+  {\huge Implicit enumeration with dual bounds from approximation algorithms \par}
+  \vspace{2cm}
+  {\Large Nelson Frew \par}
+  \vfill
+  supervised by \par
+  Dr. Pierre Le Bodic
+  \vfill
+  {\large \today\par}
+\end{titlepage}
+# Abstract
 
-** Discrete Optimisation solves "these" problems **
+Fuck!
 
-The field of Discrete Optimisation studies methods to solve optimisation problems where variables may be constrained to take discrete values (for example, integers) to be valid for a solution. Classic problems in Discrete Optimisation include scheduling, shortest path problems, and the Knapsack problem. 
+\newpage
+\tableofcontents
+\newpage
 
-** We can solve such problems with MIP techniques **
+# Introduction
 
-Mixed-Integer Programming (MIP) refers to a set of modelling and solving techniques where at least one of the variable must be integer. 
+**Discrete Optimisation solves "these" problems**
 
-** The state of the art for MIP is B&B **
+The field of Discrete Optimisation studies methods to solve optimisation problems where variables may be constrained to take discrete values (for example, integers) to be valid for a solution. The field is closely related with both Combinatorial optimisation and Integer Programming, as it is often the case that if one can be formulated as a discrete optimisation problem, it can also be formulated as an integer or combinatorial optimisation problem. Generally, the difference in the nomenclature is due to an emphasis on particular problem origins, but the essence remains the same. Consequently, research in the field addresses a wide variety of problems types. Classic problems in Discrete Optimisation include scheduling, shortest path problems, and the cutting stock problem. 
 
-We can often formulate Discrete Optimisation problems as Mixed-Integer Programs; the state of the art method for solving problems in MIP to use the Branch-and-Bound (B&B) approach, introduced by Land and Doig (1960) with further work done by Dakin (1965).
+**We can solve such problems with MIP techniques**
 
-** B&B works like this; key to its performance is branching, pruning and searching **
+One widely used method of solving such problems is by using Mixed-Integer Programming (MIP).
+ MIP refers to a set of modelling and solving techniques for problems where at least one of the variable must be integer, by formulating problems as a *Mixed-Integer Program*. 
+ In such a case, we formulate it as follows: we want to maximise/minimise $z = c x$, where $c$ contains problem data, and vector $x$ contains variables to be optimised.
+ Constraints on optimising the objective function are generally linear normally denoted by an inequality on a matrix $A$ and vector $b$, and the variables can be specified to be integer or continuous.
+ For further reference on the formulation of a Mixed-Integer Program, we refer the reader to \cite{Conforti}.
+ 
+**The state of the art for MIP is B&B**
 
-The essence of the B&B approach resides in partially enumerating through possible solutions in order to derive bounds on where the optimal value can be. 
-By establishing bounds on what can possibly be a solution, we can prune our enumeration tree down each branch which cannot possibly permit values in this range, a process referred to as *bounding*.
- If a partially enumerated solution doesn't violate our bounds, we create "children" solutions that partially enumerate from the parent solution further, known as *branching*.
+Since we can formulate Discrete Optimisation problems as Mixed-Integer Programs we examine the state of the art method for solving such formulations: the Branch-and-Bound (B&B) approach.
+ Introduced by Land and Doig (1960)\cite{Land} with further work done by Dakin (1965)\cite{Dakin}, B&B optimises the objective by a divide-and-conquer approach on the searchspace, systematically locating a solution in a process known as implicit enumeration.
+ To implicitly enumerate something, we make inferences about where a valid solution can reside from information garnered through the search.
+ To demonstrate how this might be done, we describe the B&B approach.
+
+#Branch-and-bound 
+
+## Overview 
+
+**B&B works like this; key to its performance is branching, pruning and searching**
+
+TODO: Redo this with better description about partial enumeration instead of standard enumeration (might have to reference relaxations).
+
+To carry out a B&B search, we construct a tree where each node represents some allocation of values to the decision variables, where a fully constructed tree would have every possible permutation of this.
+ We enumerate through nodes in our search tree, simply establishing bounds on the optimal values for the solutions that we examine.
+ If a solution doesn't violate our bounds, we create "children" solutions that continue enumeration from this parent solution, known as *branching*.
+ By establishing bounds on what can possibly be a solution, we can implicitly enumerate through node's children by pruning our enumeration tree down each branch which cannot possibly permit values in this range: this is referred to as *bounding*.
  If partial enumeration yields a feasible solution, with a value better than our current bound, we update our bound to better inform the bounding of future solutions.
- As a result, when we have enumerated through the solutions which our bounds have permitted, we will have found the optimal solution. The bounds which facilitate the bounding process are known as the *primal* and *dual bounds* of the search, which, for a maximisation problem, would correspond to the*upper* and *lower* bounds on the optimal value, respectively.  
+ As a result, when we have enumerated through the solutions which our bounds have permitted, we will have found the optimal solution. 
+ The bounds which facilitate the bounding process are known as the *primal* and *dual bounds* of the search, which, for a maximisation problem, would correspond to the *upper* and *lower* bounds on the optimal value, respectively.  
 As such, the main ways to improve the performance of a B&B resides in improves its *branching*, *bounding*, and *searching* strategies.
 
-** Branching is hard! ** 
+## Branching strategies
+**Branching is hard!**
 
-** 'Finding' dual bounds **
+As search continues down a search tree, the level of partial enumeration increases on a solution by constraining another variable at each level of depth.
+ The issue that immediately arises is deciding what the best method for this is.
+ A basic strategy may come to mind is to simply branch on the variable with the largest fractional component, however Achterberg et al. (2005) \cite{Achterberg} has showed this to be as bad as random selection. 
+ Tomlin (1970) \cite{Tomlin} introduced the concept of *use penalties* to inform the branching process, where "up penalties" and "down penalties" were calculated for each variable based on their respective fractional components, and the variable with the largest penalty in either direction was chosen.
+ Mitra (1973)\cite{Mitra} conducted computational experiments which demonstrated such approaches may have limited use, but acknowledging that the similar strategies proposed by Benichou (1971)\cite{Benichou} involving "pseudocosts" on variables may advantages.
+ Morrison et al. (2016) \cite{Morrison}, in a survey of branching strategies, proposed a distinction between branching strategies based on the constraints on decision variables: *binary* and non-binary, or *wide*, strategies.
+ Between each category of branching, there are benefits and drawbacks related to each with regards to tree depth and problem type.
+ There has been concentrated research on branching strategies for many years, and is still an active area of work.
+ A detailed survey of the literature and the current questions in research are provided in \cite{Morrison} where the reader is directed for further reading.
 
-** SDP, SDP relaxations, Lagrange and lagrange relaxations, LP and LP relaxations **
+# Methods of bounding an optimal solution
+**'Finding' dual bounds**
 
-** B&B with regards to cutting planes, presolvers and primal heuristics **
+Another highly important component of B&B's success is the method of bounding partially enumerated solutions.
+ In general, this is done by *relaxing* the problem in some way, then solving the resultant problem.
+ A relaxation of a problem is the removal of any constraints in the formulation in order to manifest a computationally simpler, but nevertheless related subproblem.
+ By removing constraints from the original problem, the relaxed feasible region will naturally subsume the region of the original problem, so finding relaxations that minimise this region's growth is key.
 
-** Description of Warm starting **
+**SDP, SDP relaxations, Lagrange and lagrange relaxations, LP and LP relaxations**
 
-** Using hard problems as a common denominator, Approximations research and their interest proving high quality $\alpha$-approx algos, into quality guarantees **
+## Extensions and improvements 
 
-** Knapsack case study: Dynamic Programming, FPTAS's, pseudopolynomial time solutions **
+**B&B with regards to cutting planes, presolvers and primal heuristics**
 
-** Exploiting Problem structure vs the one-size-fits-all LP: "Some things are easier to obtain via combinatorial algorithms than LP (blossom algorithm vs blossom inequalities" **
+# Linear programming and warm starting
 
-** Quality guarantees and hwo this relates back to LP's folly in the face of problems **
+**Description of Warm starting**
 
-** Wolsey and his magical mystery tour **
+# Approximations
 
-** Extending from here with construction of duals w/ AAs **
+## Overview
 
-** Conclude: we have all these assets, here is where this positions us**
+**Using hard problems as a common denominator, Approximations research and their interest proving high quality $\alpha$-approx algos, into quality guarantees**
 
+## Case study: Finding an approximation scheme for Knapsack
 
+**Knapsack case study: Dynamic Programming, FPTAS's, pseudopolynomial time solutions**
+
+# Problem structure and the general LP formulation
+
+**Exploiting Problem structure vs the one-size-fits-all LP: "Some things are easier to obtain via combinatorial algorithms than LP (blossom algorithm vs blossom inequalities"**
+
+**Quality guarantees and hwo this relates back to LP's folly in the face of problems**
+
+# Relating approximations to LP values
+
+**Wolsey and his magical mystery tour**
+
+# Implicitly enumerating with approximations
+
+**Extending from here with construction of duals w/ AAs**
+
+# Conclusion
+
+**Conclude: we have all these assets, here is where this positions us**
+n
+\bibliography{literature_review_v2}
+\bibliographystyle{plain}
