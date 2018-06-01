@@ -4,26 +4,20 @@
  output: pdf_document
 ---
 
-Flow: 
 
- 1. Discrete optimisation solves these problems
- 2. We can solve such discrete problems w/ MIP techniques
- 3. The state of the art for MIP is B&B
- 4. B&B works like this
- 5. Key to its performance is branching, pruning, and searching
- 6. Finding "dual bounds"
- 7. SDP, LR's then LP: Methods for solving LP, and how does LP behave with some instances (vertex cover)
- 8. Some kind of transition
- 9. Approximation algorithms for hard problems 
- 10.  Quality guarantees
- 11. Anything else?
- 12. Quality guarantees with regards to LP
- 13. Wolsey and his B&B w/ AAs + LP
- 14. Extending from here with construction of Duals w/ AA's
+** Discrete Optimisation solves "these" problems **
 
-** Points 1, 2, 3 **
+The field of Discrete Optimisation studies methods to solve optimisation problems where variables may be constrained to take discrete values (for example, integers) to be valid for a solution. Classic problems in Discrete Optimisation include scheduling, shortest path problems, and the Knapsack problem. 
 
-The field of Discrete Optimisation studies methods to solve optimisation problems where variables may be constrained to take discrete values (for example, integers) to be valid for a solution. Classic problems in Discrete Optimisation include scheduling, shortest path problems, and the Knapsack problem. Mixed-Integer Programming (MIP) refers to a set of modelling and solving techniques where at least one of the variable must be integer. We can often formulate Discrete Optimisation problems as Mixed-Integer Programs; the state of the art method for solving problems in MIP to use the Branch-and-Bound (B&B) approach, introduced by Land and Doig (1960) with further work done by Dakin (1965).
+** We can solve such problems with MIP techniques **
+
+Mixed-Integer Programming (MIP) refers to a set of modelling and solving techniques where at least one of the variable must be integer. 
+
+** The state of the art for MIP is B&B **
+
+We can often formulate Discrete Optimisation problems as Mixed-Integer Programs; the state of the art method for solving problems in MIP to use the Branch-and-Bound (B&B) approach, introduced by Land and Doig (1960) with further work done by Dakin (1965).
+
+** B&B works like this; key to its performance is branching, pruning and searching **
 
 The essence of the B&B approach resides in partially enumerating through possible solutions in order to derive bounds on where the optimal value can be. 
 By establishing bounds on what can possibly be a solution, we can prune our enumeration tree down each branch which cannot possibly permit values in this range, a process referred to as *bounding*.
@@ -31,9 +25,29 @@ By establishing bounds on what can possibly be a solution, we can prune our enum
  If partial enumeration yields a feasible solution, with a value better than our current bound, we update our bound to better inform the bounding of future solutions.
  As a result, when we have enumerated through the solutions which our bounds have permitted, we will have found the optimal solution. The bounds which facilitate the bounding process are known as the *primal* and *dual bounds* of the search, which, for a maximisation problem, would correspond to the*upper* and *lower* bounds on the optimal value, respectively.  
 As such, the main ways to improve the performance of a B&B resides in improves its *branching*, *bounding*, and *searching* strategies.
- 
+
+** Branching is hard! ** 
+
+** 'Finding' dual bounds **
+
+** SDP, SDP relaxations, Lagrange and lagrange relaxations, LP and LP relaxations **
+
+** B&B with regards to cutting planes, presolvers and primal heuristics **
+
+** Description of Warm starting **
+
+** Using hard problems as a common denominator, Approximations research and their interest proving high quality $\alpha$-approx algos, into quality guarantees **
+
+** Knapsack case study: Dynamic Programming, FPTAS's, pseudopolynomial time solutions **
+
+** Exploiting Problem structure vs the one-size-fits-all LP: "Some things are easier to obtain via combinatorial algorithms than LP (blossom algorithm vs blossom inequalities" **
+
+** Quality guarantees and hwo this relates back to LP's folly in the face of problems **
+
+** Wolsey and his magical mystery tour **
+
+** Extending from here with construction of duals w/ AAs **
+
+** Conclude: we have all these assets, here is where this positions us**
 
 
-
-Citations to add:
- - Dantzig and the original KP.
