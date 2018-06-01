@@ -1,29 +1,9 @@
 /* Preprocessor definitions */
-#define INCLUDE_FPTAS
-#define nP 1
-#define SIMPLE_SUM 2
-#define RATIO_BOUND 3
-#define BINARY_SOL 1
-#define VARIABLE_ON 2
-#define VARIABLE_UNCONSTRAINED 1
-#define VARIABLE_OFF 0
-#define LINEAR_ENUM_BRANCHING 0
-#define RANDOM_BRANCHING 1
-#define TRUNCATION_BRANCHING 2
-#define TRUE 1
-#define FALSE 0
-#define NO_LOGGING 0
-#define PARTIAL_LOGGING 1
-#define FULL_LOGGING 2
-#define FILE_LOGGING 3
-#define MEMORY_EXCEEDED 1
-#define TIMEOUT 2
-#define NODE_OVERFLOW 1500000
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include "branch_and_bound_app.h"
 #include "branch_and_bound.h"
 #include "bench_extern.h"
 #include "pisinger_reader.h"
