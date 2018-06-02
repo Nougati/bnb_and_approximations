@@ -19,7 +19,7 @@
 \end{titlepage}
 # Abstract
 
-Fuck!
+Implicit enumeration refers to a divide-and-conquer problem solving strategy where we can enumerate through a problem's solutions without specifically finding each solution's value. This has broad uses within many fields of Computer Science, one such example being in Mixed-Integer Programming's (MIP) Branch-and-Bound (B&B). To omit evaluation of solutions from our search, we analyse them with regards to bounds established on where the optimal value can reside, known as dual bounds. Traditionally, bounds are found by relaxing the problem formulation so that it can be solved efficiently, however such approaches may perform arbitrarily poorly according to problem type. In this literature review, we describe the research context with particular reference to MIP and B&B, linking with relevant research in the area that leads to our new approach of deriving dual bounds: approximation algorithms.
 
 \newpage
 \tableofcontents
@@ -81,10 +81,16 @@ As search continues down a search tree, the level of partial enumeration increas
 
 Another highly important component of B&B's success is the method of bounding partially enumerated solutions.
  In general, this is done by *relaxing* the problem in some way, then solving the resultant problem.
- A relaxation of a problem is the removal of any constraints in the formulation in order to manifest a computationally simpler, but nevertheless related subproblem.
- By removing constraints from the original problem, the relaxed feasible region will naturally subsume the region of the original problem, so finding relaxations that minimise this region's growth is key.
+ A relaxation of a problem is the removal of any constraints in its formulation in order to manifest a computationally simpler, but nevertheless closely related subproblem.
+ By removing constraints from the original problem, the relaxed feasible region will naturally subsume the region of the original problem. We want to optimise the objective in this relaxation in order to bound the optimal solution, so finding relaxations that minimise this region's growth is key.
 
 **SDP, SDP relaxations, Lagrange and lagrange relaxations, LP and LP relaxations**
+
+Within the context of MIP, there have been various methods to achieve this: with Semidefinite Programming (SDP), Lagrangian relaxations, and Linear Programming (LP) relaxations.
+ (TODO: Talk about LP here).
+ In SDP, one formulates the problem with the constraint that the matrix optimised over must be *positive semidefinite* (refer to Vandeberghe & Boyd (1996) \cite{Vandeberghe} and Alizadeh (1993) for details).
+ Predicated on this, Lovasz & Schrijver (1991) \cite{Lovasz} presented an SDP relaxation method thatcould target Integer Programming (IP) problems specifically.
+ A *Lagrangian relaxation* \cite{Geoffrion}, involves removing a "hard" constraint from the original problem, then optimising over a variable which penalises the objective value for violations of this removed constraint, rather than naming such solutions as infeasible. 
 
 ## Extensions and improvements 
 
