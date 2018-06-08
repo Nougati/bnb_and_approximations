@@ -1,7 +1,11 @@
 ---
  header-includes:
   - \usepackage{amsmath}
+  - \usepackage{amssymb}
   - \usepackage[linesnumbered,ruled]{algorithm2e}
+  - \usepackage{accents}
+  - \newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
+  - \input{functions}
  output: pdf_document
  bibliography: literaturereviewv2.bib
 ---
@@ -21,14 +25,18 @@
   {\Large Nelson Frew \par}
   \vfill
   supervised by \par
-  Dr. Pierre Le Bodic
+  Dr. Pierre Le Bodic \& Arthur Mahéo
   \vfill
   {\large \today\par}
 \end{titlepage}
 
 # Abstract
 
-Implicit enumeration refers to a divide-and-conquer problem solving strategy where we can enumerate through a problem's solutions without specifically finding each solution's value. This has broad uses within many fields of Computer Science, one such example being in Mixed-Integer Programming's (MIP) Branch-and-Bound (B&B). To omit evaluation of solutions from our search, we analyse them with regards to bounds established on where the optimal value can reside, known as dual bounds. Traditionally, bounds are found by relaxing the problem formulation so that it can be solved efficiently, however such approaches may perform arbitrarily poorly according to problem type. In this literature review, we describe the research context with particular reference to MIP and B&B, linking with relevant research in the area that leads to our new approach of deriving dual bounds: approximation algorithms.
+Implicit enumeration refers to a divide-and-conquer problem solving strategy where we can enumerate through a problem's solutions without specifically finding each solution.
+ This has broad uses within many fields of Computer Science, one such example being in Mixed-Integer Programming's (MIP) Branch-and-Bound (B&B).
+ To omit evaluation of solutions from our search, we analyse them with regards to bounds established on where the optimal value can reside, known as dual bounds.
+ Traditionally, bounds are found by relaxing the problem formulation so that it can be solved efficiently, however such approaches may perform arbitrarily poorly according to problem type.
+ In this literature review, we describe the research context with particular reference to MIP and B&B, linking with relevant research in the area that leads to our new approach of deriving dual bounds: approximation algorithms.
 
 \newpage
 \tableofcontents
@@ -36,81 +44,140 @@ Implicit enumeration refers to a divide-and-conquer problem solving strategy whe
 
 # Introduction
 
-The field of Discrete Optimisation studies methods to solve optimisation problems where variables may be constrained to take discrete values (for example, integers) to be valid for a solution. The field is closely related with both Combinatorial optimisation and Integer Programming, as it is often the case that if one can be formulated as a discrete optimisation problem, it can also be formulated as an integer or combinatorial optimisation problem. Generally, the difference in the nomenclature is due to an emphasis on particular problem origins, but the essence remains the same. Consequently, research in the field addresses a wide variety of problems types. Classic problems in Discrete Optimisation include scheduling, shortest path problems, and the cutting stock problem. 
 
-One widely used method of solving such problems is by using Mixed-Integer Programming (MIP).
- MIP refers to a set of modelling and solving techniques for problems where at least one of the variable must be integer, by formulating problems as a *Mixed-Integer Program*. 
- In such a case, we formulate it as follows: we want to maximise/minimise $z = c x$, where $c$ contains problem data, and vector $x$ contains variables to be optimised.
- Constraints on optimising the objective function are generally linear normally denoted by an inequality on a matrix $A$ and vector $b$, and the variables can be specified to be integer or continuous.
- For further reference on the formulation of a Mixed-Integer Program, we refer the reader to \cite{Conforti}.
- 
-Since we can formulate Discrete Optimisation problems as Mixed-Integer Programs we examine the state of the art method for solving such formulations: the Branch-and-Bound (B&B) approach.
- Introduced by Land and Doig (1960)\cite{Land} with further work done by Dakin (1965)\cite{Dakin}, B&B optimises the objective by a divide-and-conquer approach on the searchspace, systematically locating a solution in a process known as implicit enumeration.
- To implicitly enumerate something, we make inferences about where a valid solution can reside from information garnered through the search.
- To demonstrate how this might be done, we describe the B&B approach.
+Discrete optimisation studies methods to solve optimisation problems involving discrete decision making.
+ For example, discrete optimisation addresses a large range of problems, including scheduling, shortest path and cutting stock problems.
+ A widely used method for solving such problems is Mixed-Integer Programming: a set of modelling and solving techniques for problems where at least one variable must be integer. In this report, we consider maximisation problems where all constraints are linear. Their formulation as Mixed-Integer Programs (MIPs) is as follfows:
+
+\begin{equation*}
+\begin{array}{ll@{}ll}
+\text{maximse}  & \displaystyle cx+hy &\\
+\text{subject to}  & \displaystyle Ax + Gy \leq b \\
+                   &x \geq 0 \text{ integral}\\
+                   &y \geq 0  
+\end{array}
+\end{equation*}
+
+ In this case, removing the integrality constraint results in a Linear Program (LP).
+ This is called an LP relaxation.
+ While a MIP is an NP-hard problem, solving an LP can be done in polynomial time \cite{InteriorPoint}.
+
+The state of the art method for solving MIPs is the Branch-and-Bound (B&B), which uses the LP relaxations to achieve *implicit enumeration*.
+ First, the integer constraints are removed, and subproblems are created by constraining individual variables in some way.
+ These subproblems are solved as LPs which provide an upper bound on the integer solution.
+ By using the solution of a subproblem as an upper bound, we can deduce if a better solution can be found by constraining it further; if its solution is lower than our lower bound on the original MIP, we can safely remove this problem from our search.
+
+If optimality is not required, exact methods such as the B&B can be replaced with Approximation Algorithms (AAs).
+ An AA for a problem is an algorithm guaranteed to provide a value within a constant factor of the optimal value.
+ Because optimality does not need to be proven, AAs can be run much faster than exact solvers.
+ When maximising, the guarantee on the optimal solution is a lower bound, and one can analytically derive an upper bound on the optimal value from this information.
+ Given this, one can construct a B&B scheme using only AAs to bound subproblems.
+ We present a premise to explore such an approach by exploiting information gained about the problem after the appoximation has been found.
+
+In this literature review, we will address the context of all the concepts discusses so far. We first describe the B&B and discuss research in improving it, and then introduce the context of AAs with the Knapsack Problem (KP) as an example. In the final sections, we show how this relates to our work and conclude with the project's next steps.
 
 #Branch-and-bound 
 
 ## Overview 
 
-B&B finds an optimal solution by establishing *primal* and *dual* bounds on the optimal value.
-If we are maximising a value, the dual bounds are an upper bound on the optimal and the primal bounds are the lower bounds.
- To establish these, we relax the problem by removing a 'hard' constraint, and solve this version.
- We then constrain a variable to a feasible value in the problem (known as branching) and solve the relaxations of these to find the dual bounds, we have bounds on where optimal can be within these constraints.
- If, for maximisation, the dual bounds are less than the original problem's primal bounds, we know that constraining variables in this way cannot yield an optimal result, so we remove it from our search (known as bounding).
- If the relaxation gives a feasible solution to the original problem, and this is higher than our best primal bound, we know that the optimal value is at least this much, and use it as our new primal bound.
- If the dual bounds from this constrained solution are not associated to a feasible solution, but are still above the highest known primal bounds, we branch further by constraining another variable to feasible values.
- We continue this process of choosing a partially enumerated solution and solving relaxations until we implicitly enumerated through the solution space.
- 
-Questions that arise from this description may include: how do we choose a variable to constrain? How do we relax our solution and obtain dual bounds? How do we decide which partially enumerated solutions to solve next? 
- These questions are in fact non-trivial, and comprise a large component of the research in B&B.
- We briefly discuss research conducted which aims to improves the performance of a B&B in terms of its *branching*, *bounding*, and *searching* strategies.
+Solving a MIP with B&B involves establishing *primal* and *dual* bounds on the optimal value.
+It starts with relaxing the pronlem entirely, then explore partial assignments by constraining variables to given values.
+Each partial assignment is a relaxation of the problem. Therefore, successive partial assignments will yield a monotonically incresing value.
+Thus, if the value of such an assignment (dual bound at a node) exceeds our primal bound, we can stop the exploration (boungind or pruning). Otherwise, we keep exploring.
+In case we have an integer solution, we can update our primal bound.
+
+The B&B algorithm, as described by \cite{Conforti}, is shown below: let $(x^i, y^i)$ be the optimal solution to linear program $LP_i$, $(x*, y*)$ denote an optimal solution and $z*$ the optimal solution of the MIP, and let $\mathcal{L}$ denote the list of nodes yet to be solve (i.e. not pruned nor branched on)\;
+
+\begin{algorithm}[H]
+  \SetAlgoLined
+  \KwData{A Mixed-Integer Program.}
+  \KwResult{The optimal solution value}
+  Set $\mathcal{L}:={N_0}$, set $\ubar z := -\infty$, set  $(x*, y*):=\emptyset$\;
+  \While{$\mathcal{L}$ is not empty}
+  {
+  Choose a node $N_i$ from $\mathcal{L}$, and delete it from $\mathcal{L}$\;
+  Solve $LP_i$\;
+  \If{$LP_i$ is infeasible}
+  {
+  Go to step 3\;
+  }
+  \Else
+  {
+  Let $(x^i, y^i)$ be an optimal solution of $LP_i$ and $z_i$ be its objective value\:
+  }
+  \eIf{$z_i \leq \ubar z $}
+  {
+  Go to step 3\;
+  }
+  {
+  \If{$(x^i, y^i)$ is feasible to the MIP}
+  {
+  Set $\ubar z$ $:=$ $z_i$\;
+  Set $(x^*, y*)$ $:=$ $(x^i , y^i)$\;
+  Go to step 3\;
+  }
+  }
+  \Else
+  {
+  From $LP_i$ construct $k \geq 2$ linear programs $K_{i1}, \dots, LP_{ik}$ with smaller feasible regions whose union does not contain $(x^i, y^i)$, but contains all the solutions of $LP_i$ with $x \in \mathbb{Z}$\;
+  Add the corresponding new nodse $N_{i1},\dots, N_{ik}$ to $\mathcal{L}$ and go to step 3.
+  }
+
+  Return $\ubar z$\;
+  }
+\caption{Branch and Bound algorithm for Mixed-Integer Programming}
+\end{algorithm}
+
+
+From this descripion, we still need to determine: the best variable to branch on, the best way to relax a solution, and which partial solution to solve next.
+ These questions are in fact non-trivial and active research areas within Mixed-Integer Programming.
+ We briefly discuss research which aims to improves the performance of a B&B in terms of its *branching*, *bounding*, and *searching* strategies.
 
 ## Branching strategies
 
-As search continues down a search tree, the level of partial enumeration increases on a solution by constraining another variable at each level of depth.
- The issue that immediately arises is deciding what the best method for this is.
- A basic strategy may come to mind is to simply branch on the variable with the largest fractional component, however Achterberg et al. (2005) \cite{Achterberg} has showed this to be as bad as random selection. 
- Tomlin (1970) \cite{Tomlin} introduced the concept of *use penalties* to inform the branching process, where "up penalties" and "down penalties" were calculated for each variable based on their respective fractional components, and the variable with the largest penalty in either direction was chosen.
- Mitra (1973)\cite{Mitra} conducted computational experiments which demonstrated such approaches may have limited use, but acknowledging that the similar strategies proposed by Benichou (1971)\cite{Benichou} involving "pseudocosts" on variables may advantages.
- Morrison et al. (2016) \cite{Morrison}, in a survey of branching strategies, proposed a distinction between branching strategies based on the constraints on decision variables: *binary* and non-binary, or *wide*, strategies.
- Between each category of branching, there are benefits and drawbacks related to each with regards to tree depth and problem type.
- There has been concentrated research on branching strategies for many years, and is still an active area of work.
- A detailed survey of the literature and the current questions in research are provided in \cite{Morrison} where the reader is directed for further reading.
+To partially enumerate solutions, we need to decided which variables to constrain.
+ A basic strategy is to branch on the variable with the largest fractional component, however \cite{Achterberg} has showed this to be as bad as random selection. 
+ Tomlin \cite{Tomlin} introduced the concept of *use penalties* to inform the branching process, where "up penalties" and "down penalties" were calculated for each variable based on their respective fractional components, the variable with the largest penalty in either direction was chosen.
+ Mitra \cite{Mitra} conducted computational experiments which demonstrated the limited use of such approaches, but acknowledged that the similar strategies proposed by \cite{Benichou}, involving "pseudocosts" on variables, may advantages.
+ To organise the numerous branching methods, \cite{Morrison} proposed two broad categorisations of strategies: *binary* and non-binary, or *wide*.
+ Each category of branching has benefits and drawbacks depending on tree depth and problem type.
+ There has been concentrated research on branching strategies for many years, and it is still an active area.
+ A detailed survey of the literature and the current questions in research are provided in \cite{Morrison}, where the reader is directed for further reading.
+
 
 # Methods of bounding an optimal solution
 
-Another highly important component of B&B's success is the method of bounding partially enumerated solutions.
- In general, this is done by *relaxing* the problem in some way, then solving the resultant problem.
- A relaxation of a problem is the removal of any constraints in its formulation in order to manifest a computationally simpler, but nevertheless closely related subproblem.
- By removing constraints from the original problem, the relaxed feasible region will naturally subsume the region of the original problem. We want to optimise the objective in this relaxation in order to bound the optimal solution, so finding relaxations that minimise this region's growth is key.
+Another important component of the B&B's success is the method of bounding partially enumerated solutions, which are relaxed forms of the original problem.
+ By removing constraints from the original problem, the relaxed feasible region will naturally subsume the region of the original problem.
+ We want to optimise the objective of this relaxation in order to bound the optimal solution. 
+ By finding better relaxations, we minimise the size of the search tree.
 
-Within the context of MIP, there have been various methods to achieve this: with Linear Programming (LP) relaxations, Semidefinite Programming (SDP) relaxations (see Vandeberghe & Boyd (1996) \cite{Vandeberghe}, Alizadeh (1993), and Lovasz & Shrijver (1991) \cite{Lovasz}), and Lagrangian relaxations \cite{Geoffrion}.
- LP is similar to IP in that they are both solving optimisation problems that are constrained by linear expressions, with the difference them being IP's intregrality constraint.
- Solving Linear Programs has been done with efficiency ever since the introduction of the Simplex by Dantzi (1947) \cite{Dantzig}.
- Due to their similarity, LP is a often used to obtain a relaxation of a given IP, by removing the intrality constraint.
- Despite being widely used, however, LP relaxations are hardly universally applicable: for example, linear relaxations for Vertex Cover generally provide very little information with regards to the optimal solution.
+Within the Mixed-Integer Programming field, there have been various methods to achieve this: LP relaxations, Semidefinite Programming relaxations (see \cite{Vendenberghe, Lovasz}), and Lagrangian relaxations \cite{Geoffrion}.
+ Solving Linear Programs has been done efficiently ever since the introduction of the Simplex by Dantzig (1947) \cite{Dantzig}.
+ However LP relaxations can provide weak bounding: for example, LP relaxations for Vertex Cover are generally far from the optimal value.  
 
 ## Extensions, improvements, and related techniques 
 
-The state of the art methods for solving Mixed-Integer Programs does not normally rely on the B&B alone.
- One common extension to the method include the introduction of cutting-planes \cite{Gomory} to produce the Branch-and-Cut algorithm.
-In the cutting plane approach, introduced by Dantzig et al. (1954) \cite{DantzigFulkersonJohnson} and generalised by Gomory (1958) one solves a linear relaxation of a program and formulates a constraint (a cutting plane) that separates this solution from the search space. 
-A Branch-and-Cut \cite{PadbergRinaldi1} \cite{PadbergRinaldi2} is simply a branch and bound approach that can decide to add these cutting planes instead of branching on a solution.
+State-of-the-art solvers for MIPs often combine B&B strategies with various extensions to improve performance.
+ One common extension to the method includes using cutting-planes \cite{Gomory} to produce the Branch-and-Cut algorithm.
+In the cutting plane approach, introduced by Johnson et al. (1954) \cite{DantzigFulkersonJohnson} and extended to general IPs by Gomory (1958) one solves a linear relaxation of a program and formulates a constraint (a cutting plane) that separates this solution from the search space. 
+A Branch-and-Cut \cite{PadbergRinaldi1, PadbergRinaldi2} is simply a B&B approach that can decide to add these cutting planes instead of branching on a solution.
 For a more detailed treatment, the reader is referred to \cite{Conforti}.
-Other key methods for extending the B&B are presolving techniques (REFERENCE?) and primal heuristics(REFERENCE).
+Other key methods for extending the B&B are presolving techniques \cite{Mahajan} and primal heuristics \cite{berthold2006primal}.
 
 Another related concept is the idea of *warm starting a solution* in linear programming.
  In short, warm starting is a method to exploit information gained about the problem from previous computations to inform future ones.
- Ralphs and Guzelsoy (2006) \cite{Ralphs} linked this concept specifically in regards to Integer Programming.
+ One simple method to do this is to use previous computations in finding a starting primal bound in a B&B.
+ Ralphs and Guzelsoy (2006) \cite{Ralphs} made links to this concept specifically in regards to Integer Programming.
+
 
 # Approximations
 
 ## Overview
 
-Related to the study of computationally complex problems, the field of Approximation Algorithms (AAs) arose to provide polynomial-time approximations where no efficient optimal solution algorithm was known.
+Within the study of computationally difficult problems, the field of Approximation Algorithms (AAs) arose to provide fast approximations where no efficient optimal solution algorithm was known.
  Specifically, AA research involves finding algorithms with solution values provably within a factor of the optimal value.
- We refer to an algorithm as an $\alpha$-approximation algorithm if regardless of instance it will return a value within a constant factor $alpha$ of optimal.
+ We refer to an algorithm as an $\alpha$-approximation algorithm if, regardless of instance, it will return a value within a constant factor $alpha$ of the optimal.
  For a detailed treatment, we refer the reader to the book by Vazirani (2001) \cite{Vazirani}.
 
 ## Case study: Finding an approximation scheme for Knapsack
@@ -118,28 +185,30 @@ Related to the study of computationally complex problems, the field of Approxima
 To illustrate the nature of AA research we demonstrate with a description of an approximation to the classic problem in computer science, the Knapsack Problem (KP).
  KP is defined as follows: given $n$ items with associated weights $w_i$ and values $v_i$, and Knapsack capicity $W$, our program is
 
-\begin{itemize}
-  \item[] maximise $\sum_{i=1}^{n} v_i x_i$
-  \item[] subject to $\sum_{i=1}^{n} w_i x_i \leq W$ and $x_i \in \{0,1\}$
-\end{itemize}
+\begin{equation*}
+\begin{array}{ll@{}ll}
+\text{minimize}  & \displaystyle\sum\limits_{i=1}^{n} v_{i}&x_{i} &\\
+\text{subject to}& \displaystyle\sum\limits_{i=1}^{n}     &w_{i} x_{i} \leq W, \text{ and } x_{i} \in \{0,1\}\\
+                 &  
+\end{array}
+\end{equation*}
 
-To solve this problem, we refer to the Dynamic Programming algorithm (DP) as described by \cite{Vazirani}: let $P$ be the value of the most valuable object in the item set, and let $A(i,p)$ be the minimal weight of the solution to KP with only the first $i$ items available, where the total value is exactly $p$.
- If no such set can exist (that is, the first $i$ items cannot yield a value of $p$ and so cannot have an associated minimal weight), $A(i,p) = \infty$.
+To solve this problem, we refer to the Dynamic Programming (DP) algorithm as described by \cite{Vazirani}: let $P$ be the value of the most valuable object in the item set, and let $A(i,p)$ be the minimal weight of the solution to the KP with only the first $i$ items available, where the total value is exactly $p$.
+ If no such set exists \footnote{that is, the first $i$ items cannot yield a value of $p$ and so cannot have an associated minimal weight}, $A(i,p) = \infty$.
  The DP recurrence can be defined as follows:
 
 \begin{equation}
-  A(i+1,p = \begin{cases}
+  A(i+1,p) = \begin{cases}
     \text{min} \{A(i,p), w_{i+1} + A(i,p-v_{i+1})\} \text{, if }v_{i+1}<p \\
     A(i+1, p) = A(i,p) \text{ otherwise}
   \end{cases}
 \end{equation}
 
-The solution is given, then by finding $max\{p | A(n,p) \leq W\}$.
- This provides exact computation in $O(n^2 P)$, as shown by \cite{Vazirani}.
+The solution is given, then, by finding max$\{p | A(n,p) \leq W\}$, providing exact computation in $O(n^2 P)$, as shown by \cite{Vazirani}.
  
-From this DP, we now derive a *Fully Polynomial Time Approximation Scheme* (FPTAS) for KP, by introducing an error parameter $\epsilon$.
+From this DP algorithm, we now derive a *Fully Polynomial Time Approximation Scheme* (FPTAS) for the KP, by introducing an error parameter $\epsilon$.
  We call an algorithm an FPTAS if its runtime is bounded by a polynomial both in its instance size and $1/\epsilon$.
- In the case of KP, we construct an FPTAS by ignoring some amount of the least significant bits of the profit values, parameterised by $\epsilon$.
+ In the case of the KP, we construct an FPTAS by truncating values of the profits, parameterised by $\epsilon$.
 
 \begin{algorithm}[H]
   \SetAlgoLined
@@ -152,12 +221,13 @@ From this DP, we now derive a *Fully Polynomial Time Approximation Scheme* (FPTA
 \caption{FPTAS for Knapsack}
 \end{algorithm}
 
-The guarantee associate with this FPTAS is that the values returned by this algorithm are guaranteed to be, for optimal value OPT, at least $(1-\epsilon)\cdot OPT$.
+This algorithm guarantees that its solution is at least $1-\epsilon)\cdot z_O$, for optimal value $z_O$.
+
  The proof for this result is as follows: let $z_{S'}$ be the value of the solution set $S'$ obtained from the FPTAS, and $z_O$ be the value of the optimal solution set $O$. 
  Also, let $z'_{S'}$ be the value of the solution set with adjusted/truncated values value the FPTAS's solution set $S'$, and $z'_O$ be the optimal solution set with similarly adjusted value for all items. 
 
 Because of the flooring operation truncating off at most $K$ we know that the difference between $z_{O}$ and $K \cdot z'_{O}$ would be at most $nK$.
- Further, since $z'_{S'}$ is the optimal value for the adjusted profits, $z'_{O}$ cannot exceed it.
+ Furthermore, since $z'_{S'}$ is the optimal value for the adjusted profits, $z'_{O}$ cannot exceed it.
  So,
 
 $$z_{O} - nK \leq K \cdot z'_O \leq K \cdot z'_{S'} \leq z_{S'} \leq z_O$$ 
@@ -177,23 +247,24 @@ For further details and the proof associated with the time complexity of this sc
 An important observation of the FPTAS for KP is that it is achieved specifically by exploiting the problem structure.
  It is for this reason that LP programming can perform arbitrarily badly: it is inherently a general formulation.
  Further, there are algorithms where solutions are just easier to obtain combinatorially than with LP formulations.
- For example, for finding the maximum matching of a graph, the combinatorially oriented Blossom Algorithm performs better than formulating an LP with blossom inequalities (CITE).
- Simply, the main drawback to LP is that there is no provable guarantee on solution quality with LP techniques.
+ For example, finding the maximum matching of a graph: the combinatorially oriented Blossom Algorithm performs better than formulating an LP with blossom inequalities (CITE).
+ The main drawback to LP is that there is no provable guarantee on solution quality.
 
 # Relating approximations to LP values
 
 As far as we know, the sole dedicated treatment that has been given to both AAs and LPs within the scope of implicit enumeration was provided by Wolsey (1980) \cite{Wolsey}.
- Wolsey provided a general analysis technique for AAs to relate them to LP relaxation solutions, with the objective of reflecting the relation between primal and dual bounds in a B&B.
- For an approximate solution value $Z^H$, and LP relaxation solution value $Z^{LP}$, he derived inequalities of the form $Z^H \leq r Z^{LP} + s$ for $r\geq 1$.
+ Wolsey provided a general analysis technique for relating AAs to LP relaxation solutions. 
+ The objective was to reflect the relation between primal and dual bounds in a B&B.
+ For an approximate solution value $Z^H$, and LP relaxation solution value $Z^{LP}$, he derived inequalities of the form "$Z^H \leq r Z^{LP} + s$ for $r\geq 1$".
  This analysis was extended to formulations on the Bin Packing Problem, Longest Undirected Hamiltonian Tours, Minimum Length Eularian Tours and the Chinese Postman Problem.
- From these components, Wolsey showed that it was possible to achieve implicit enumeration in the form of a Branch-and-Bound algorithm, with the observation that AAs are usually computed with partial enumeration.
+ Wolsey then showed that it was possible to achieve implicit enumeration in the form of a Branch-and-Bound algorithm.
  Specifically, he showed that AAs, when used in this way, would monotonically approach the value of the relaxation as the level of enumeration increased.
  The product is the only implicit enumeration scheme leveraging AA guarantees to find an optimal value that we are aware of.
 
 # Implicitly enumerating with approximations
 
-With the work from Wolsey, we can see that AAs can be used to achieve implicit enumeration with LP relaxations operating as both the dual bounds and as a point of convergence for the solution values of the AAs.
- However, we can omit the use of LP entirely by observing the following properties following from the analysis on KP where we saw:
+With the work from Wolsey, we can see that AAs can be used to achieve implicit enumeration by using an LP relaxation which operates as both a dual bound and as a point of convergence for the solution values of the AAs.
+ However, we can omit the use of LP entirely by observing the following properties from the analysis on the KP where we saw:
 
 $$(1-\epsilon) \cdot z_O \leq z_{S'} \leq z_O$$
 
@@ -205,6 +276,40 @@ We find upper and lower bounds on the optimal value:
 
 $$z_O \in [z_{S'}, K \cdot z'_{S'} + nK]$$
 
+To use these within a branch and bound, the psuedocode is as follows:
+
+\begin{algorithm}[H]
+  \SetAlgoLined
+  \KwData{A MIP instance, and an AA for the given problem.}
+  \KwResult{The Weight and value pair of the optimal solution}
+  Let $\bar z :=$ approximate solution\;
+  \While{$\mathcal{L}$ is not empty}
+  {
+  Choose a node $N_i$ from $\mathcal{L}$, and delete it from $\mathcal{L}$\;
+  Run the AA, deriving upper bound (UB) and lower bound (LB) in the process\;
+  \If{UB $\leq \bar z$}
+  {
+  Go to step 3\;
+  }
+  \Else
+  {
+  \If{LB$>\bar z$}
+  {
+  $\bar z := $ LB\;
+  }
+  }
+  \If{for $N_i$'s parent's UB, $UB_p$, $UB > UB_p$}
+  {
+  Set $UB := UB_p$
+  }
+  \Else
+  {
+  Choose a variable to branch on, then generate and enqueue new child nodes;\
+  }
+  Return $\ubar z$\;
+  }
+\caption{Branch and Bound with Approximation Algorithms}
+\end{algorithm}
 
 # Conclusion
 
