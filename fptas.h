@@ -1,3 +1,6 @@
+#ifndef FPTAS_H
+#define FPTAS_H
+
 #define VASIRANI 0
 #define WILLIAMSON_SHMOY 1
 #define SMART_DP 2
@@ -9,6 +12,10 @@
 #define VARIABLE_ON 2
 #define VARIABLE_UNCONSTRAINED 1
 #define VARIABLE_OFF 0
+#define APRIORI_DUAL 0
+#define APOSTERIORI_DUAL_PLUS_NK 1
+#define APOSTERIORI_DUAL_NK_MINUS_OMEGA 2
+#define APOSTERIORI_DUAL_ROUNDUP 3
 
 /* Structure definitions */
 struct problem_item
@@ -55,21 +62,11 @@ int DP_p_upper_bound(const int problem_profits[],
                      const int P,
                      const int bounding_method);
 
-void FPTAS(double eps, 
-           int *profits,
-           int *weights,
-           int *x,
-           int *sol_prime,
-           const int n,
-           int capacity,
-           const int z,
-           const int sol_flag,
-           const int bounding_method,
-           const char *problem_file,
-           double *K,
-           int *profits_prime,
-           const int DP_method,
-           const int *variable_statuses);
+void FPTAS(double eps, int *profits, int *weights, int *x, int *sol_prime,
+           const int n, int capacity, const int z, const int sol_flag,
+           const int bounding_method, const char *problem_file, double *K,
+           int *profits_prime, const int DP_method,
+           const int *variable_statuses, const int dualbound_type);
 
 int DP_max_profit(const int problem_profits[],
                   const int n);
@@ -82,13 +79,15 @@ void make_profit_primes(int *profits,
                         int *profits_prime,
                         double K,
                         int n,
-                        const int *active_nodes);
+                        const int *active_nodes,
+                        const int dualbound_type);
 
 void make_symbolic_profit_primes(int *profits,
                         int *profits_prime,
                         double K,
                         int n,
-                        const int *active_nodes);
+                        const int *active_nodes,
+                        const int dualbound_type);
 
 void DP_fill_in_base_cases(const int width,
                            const int n,
@@ -122,3 +121,19 @@ int DP_derive_solution_set(int n,
 int p_upper_bound_aux(const int problem_profits[],
                       const int n);
 
+/* Dynamic Array Declarations */
+typedef struct {
+  double *array;
+  size_t used;
+  size_t size;
+} Dynamic_Array;
+
+void initialise_dynamic_array(Dynamic_Array **dynamic_array, size_t initial_size);
+
+void append_to_dynamic_array(Dynamic_Array *dynamic_array, double element);
+
+void free_dynamic_array(Dynamic_Array *dynamic_array);
+
+
+
+#endif

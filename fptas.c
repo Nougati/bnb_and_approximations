@@ -1,4 +1,4 @@
-/**fptas2.c********************************************************************
+/**fptas.c*********************************************************************
  *                                                                            *
  *  Really big epsilons:                                                      *
  *    Basically for epsilon >= 1, the lower bound guarantee relative to OPT   *
@@ -7,16 +7,16 @@
  *                                                                            *
  ******************************************************************************/
 
-#include <stdio.h>
 #include <math.h>
 #include <assert.h> 
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include "fptas.h"
+#include "bench_extern.h"
 #include "pisinger_reader.h"
 #include "branch_and_bound.h"
-#include "bench_extern.h"
+
 
 /* Preprocessor definitions */
 
@@ -35,23 +35,15 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
       default: "other")
 
 
+Dynamic_Array *times_per_node;
+
 /* FPTAS Functions */
 /* FPTAS core function */
-void FPTAS(double eps, 
-           int *profits,
-           int *weights,
-           int *x,
-           int *sol_prime,
-           const int n,
-           int capacity,
-           const int z,
-           const int sol_flag,
-           const int bounding_method,
-           const char *problem_file,
-           double *K,
-           int *profits_prime,
-           const int DP_method,
-           const int *variable_statuses){
+void FPTAS(double eps, int *profits, int *weights, int *x, int *sol_prime,
+           const int n, int capacity, const int z, const int sol_flag,
+           const int bounding_method, const char *problem_file, double *K,
+           int *profits_prime, const int DP_method,
+           const int *variable_statuses, const int dualbound_type){
   /* Description
    *  Recreates the FPTAS for the 0,1 KP as described by V. Vasirani in his
    *   chapter on Knapsack in Approximation Algorithms.
@@ -79,13 +71,13 @@ void FPTAS(double eps,
   *K = define_K(eps, P, n);
 
   /* Derive adjusted profits (and trivialise constrained nodes 0) */
-  make_profit_primes(profits, profits_prime, *K, n, variable_statuses); 
+  make_profit_primes(profits, profits_prime, *K, n, variable_statuses, dualbound_type);
 
   /* Symbolic profits (just for the computation) */
   int symbolic_profits_prime[n];
   for (int i = 0; i < n; i++) symbolic_profits_prime[i] = 0;
   make_symbolic_profit_primes(profits, symbolic_profits_prime, *K, n, 
-                              variable_statuses);
+                              variable_statuses, dualbound_type);
 
   /* Adjust capacity according to nodes constrained to be in */
   for (int i = 0; i < n; i++)
@@ -100,14 +92,14 @@ void FPTAS(double eps,
     /*... With Vazirani's DP */
     if (DP_method == VASIRANI)
     {
-      #if defined BENCHMARKING
+      #ifdef BENCHMARKING
       clock_t start_time = clock();
       #endif
 
       DP(symbolic_profits_prime, weights, x, sol_prime, n, capacity, z, 
          sol_flag, bounding_method, problem_file);
 
-      #if defined BENCHMARKING
+      #ifdef BENCHMARKING
       clock_t elapsed = clock() - start_time;
       double time_taken = ((double)elapsed)/CLOCKS_PER_SEC;
       append_to_dynamic_array(times_per_node, time_taken);
@@ -124,17 +116,17 @@ void FPTAS(double eps,
         items_prime[i].weight = weights[i];
         items_prime[i].profit = symbolic_profits_prime[i];
       }
-      //#if defined BENCHMARKING
+      #ifdef BENCHMARKING
       clock_t start_time = clock();
-      //#endif
+      #endif
 
       int result = williamson_shmoys_DP(items_prime, capacity, n, sol_prime);
 
-      //#if defined BENCHMARKING
+      #ifdef BENCHMARKING
       clock_t elapsed = clock() - start_time;
       double time_taken = ((double)elapsed)/CLOCKS_PER_SEC;
       append_to_dynamic_array(times_per_node, time_taken);
-      //#endif
+      #endif
     }
 
     /* Force any variables on if necessary */
@@ -166,7 +158,7 @@ float define_K(double eps, int P, int n){
 
 /* FPTAS: Make profit primes */
 void make_profit_primes(int profits[], int profits_prime[], double K, int n,
-                        const int *variable_statuses){
+                        const int *variable_statuses, const int dualbound_type)
  /* 
   * Description: 
   *  Derives the adjusted profits set profits', which is made by scaling every
@@ -179,20 +171,41 @@ void make_profit_primes(int profits[], int profits_prime[], double K, int n,
   *  As eps increases, K increases, and so the profit' of each item will get scaled further
   *   and further downwards. Since P is the max, it will be scaled to 1 for eps = 1 
   */
-  if(K > 1)
-    for(int i=0; i < n; i++)
-    {
-        double scaled_profit = profits[i]/K;
-        profits_prime[i] = floor(scaled_profit);
-    }
-  /* If K < 1, then profits would be inflated, so we simply solve exactly */
-  else
-    for(int i = 0; i < n; i++)
-      profits_prime[i] = profits[i];
+{
+  switch(dualbound_type)
+  {
+    /* Case: we need to round up */
+    case APOSTERIORI_DUAL_ROUNDUP :
+      if(K > 1)
+        for(int i=0; i < n; i++)
+        {
+            double scaled_profit = profits[i]/K;
+            profits_prime[i] = ceil(scaled_profit);
+        }
+      /* If K < 1, then profits would be inflated, so we simply solve exactly */
+      else
+        for(int i = 0; i < n; i++)
+          profits_prime[i] = profits[i];
+      break;
+    /* For all other dual bounds, we round down */
+    default :
+      if(K > 1)
+        for(int i=0; i < n; i++)
+        {
+            double scaled_profit = profits[i]/K;
+            profits_prime[i] = floor(scaled_profit);
+        }
+      /* If K < 1, then profits would be inflated, so we simply solve exactly */
+      else
+        for(int i = 0; i < n; i++)
+          profits_prime[i] = profits[i];
+  }
 }
 
 /* FPTAS: Make symbolic profit primes function */ 
-void make_symbolic_profit_primes(int profits[], int symbolic_profits_prime[], double K, int n, const int *variable_statuses){ 
+void make_symbolic_profit_primes(int profits[], int symbolic_profits_prime[], 
+                                double K, int n, const int *variable_statuses, 
+                                const int dualbound_type){ 
  /* Description: 
   *  Derives the adjusted profits set profits', which is made by scaling every
   *   profit down by 1/K and flooring the result, while zeroing constrained variables.
@@ -206,30 +219,60 @@ void make_symbolic_profit_primes(int profits[], int symbolic_profits_prime[], do
   *   and further downwards. Since P is the max, it will be scaled to 1 for eps = 1 
   *   
   */
-  if(K > 1)
-  { 
-    for(int i=0; i < n; i++)
-    {
-      if(variable_statuses[i] == VARIABLE_UNCONSTRAINED)
-      {
-        double scaled_profit = profits[i]/K;
-        symbolic_profits_prime[i] = floor(scaled_profit);
-      }
-      else
-        symbolic_profits_prime[i] = VARIABLE_OFF; // We just make the item dominated
-    }
-  }
-  else
+
+  switch(dualbound_type)
   {
-    for(int i = 0; i < n; i++)
-    {
-      if(variable_statuses[i] == VARIABLE_UNCONSTRAINED)
-      {
-        symbolic_profits_prime[i] = profits[i];
+    /* Case: we need to round up */
+    case APOSTERIORI_DUAL_ROUNDUP :
+      if(K > 1)
+      { 
+        for(int i=0; i < n; i++)
+        {
+          if(variable_statuses[i] == VARIABLE_UNCONSTRAINED)
+          {
+            double scaled_profit = profits[i]/K;
+            symbolic_profits_prime[i] = ceil(scaled_profit);
+          }
+          else
+            symbolic_profits_prime[i] = VARIABLE_OFF; // We just make the item dominated
+        }
       }
       else
-        symbolic_profits_prime[i] = VARIABLE_OFF;
-    } 
+      {
+        for(int i = 0; i < n; i++)
+        {
+          if(variable_statuses[i] == VARIABLE_UNCONSTRAINED)
+            symbolic_profits_prime[i] = profits[i];
+          else
+            symbolic_profits_prime[i] = VARIABLE_OFF;
+        } 
+      }
+      break;
+    /* All other cases: we round down */
+    default :
+      if(K > 1)
+      { 
+        for(int i=0; i < n; i++)
+        {
+          if(variable_statuses[i] == VARIABLE_UNCONSTRAINED)
+          {
+            double scaled_profit = profits[i]/K;
+            symbolic_profits_prime[i] = floor(scaled_profit);
+          }
+          else
+            symbolic_profits_prime[i] = VARIABLE_OFF; // We just make the item dominated
+        }
+      }
+      else
+      {
+        for(int i = 0; i < n; i++)
+        {
+          if(variable_statuses[i] == VARIABLE_UNCONSTRAINED)
+            symbolic_profits_prime[i] = profits[i];
+          else
+            symbolic_profits_prime[i] = VARIABLE_OFF;
+        } 
+      }
   }
 }
 
@@ -880,6 +923,35 @@ void print_list(struct solution_pair* node)
     printf("%d ", node->profit);
     node = node->next;
   }
+}
+
+/* Dynamic Array method: Initialise */
+void initialise_dynamic_array(Dynamic_Array **dynamic_array, size_t initial_size)
+{
+  Dynamic_Array *tmp = *dynamic_array = (Dynamic_Array*)malloc(sizeof(Dynamic_Array));
+  tmp->array = (double *)malloc(initial_size * sizeof(double));
+  tmp->used = 0;
+  tmp->size = initial_size;
+}
+
+/* Dynamic Array method: Append */
+void append_to_dynamic_array(Dynamic_Array *dynamic_array, double element)
+{
+  if (dynamic_array->used == dynamic_array->size)
+  {
+    dynamic_array->size *= 2;
+    dynamic_array->array = (double *)realloc(dynamic_array->array, 
+                                         dynamic_array->size * sizeof(double));
+  }
+  dynamic_array->array[dynamic_array->used++] = element; 
+}
+
+/* Dynamic Array method: Free */
+void free_dynamic_array(Dynamic_Array *dynamic_array)
+{
+  free(dynamic_array->array);
+  dynamic_array->array = NULL;
+  dynamic_array->used = dynamic_array->size = 0;
 }
 
 

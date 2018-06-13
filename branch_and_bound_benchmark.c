@@ -16,6 +16,10 @@
  *  argv[10] : hard instance set                                             *
  *  argv[11] : hard n set                                                    *
  *                                                                           *
+ *  TODO                                                                     *
+ *    The sanitiser is picking up a memory leak in this!                     *
+ *    ave. time per node is for some reason -nan                             *
+ *                                                                           *
  *****************************************************************************/
 
 #include <stdio.h>
@@ -25,14 +29,17 @@
 #include <string.h>
 #include "branch_and_bound_benchmark.h"
 #include "branch_and_bound.h"
-#include "bench_extern.h"
 #include "fptas.h"
+#include "bench_extern.h"
 #include "pisinger_reader.h"
 
 /* If memory has been exceeded, bytes_allocated will be -1 (so we write "memory
      exceeeded to log" */
 /* If time has been exceeded, start_time will be -1 */
 
+
+#ifndef MAIN
+#define MAIN
 int main(int argc, char *argv[])
 {
   /* branch_and_bound_benchmark.c main()
@@ -58,7 +65,7 @@ int main(int argc, char *argv[])
              "o run the instance set customisation wizard.\n\t2. Input \"%s <mem"
              "ory limit> <timeout> <file out> <DP types> <branching strategy set"
              "> <instance set> <n set> <coefficient set> <problem subset> <hard "
-             "instance set> <hard n set>\n", argv[0], argv[0]);
+             "instance set> <hard n set> <dualbounds>\n", argv[0], argv[0]);
       printf("By using the wizard, you can choose all the parameters from questi"
              "on prompts. Following the wizard will give you an input if you wan"
              "t to run that specific configuration again.\n");
@@ -78,7 +85,7 @@ int main(int argc, char *argv[])
              "array (any length)\nDP Types:\t\t2 bits\nbranching strategies:\t3 bits"
              "\ninstance set:\t\t7 bits\nn set:\t\t\t8 bits\ncoefficient set:\t5 bits\npr"
              "oblem subset:\t\tinteger in range [1,100]\n<hard instance set:\t6 bit"
-             "s\nhard n set:\t\t9 bits\n");
+             "s\nhard n set:\t\t9 bits\n<dualbounds>:\t\t 4 bits");
       exit(-1);
     }
     else if(strcmp("-w", argv[1]) == 0)
@@ -241,6 +248,22 @@ int main(int argc, char *argv[])
         printf("hard_n_set: %s\n", hard_n_set);
       }while(strncmp(input_str, "0", 1) != 0);
 
+      char dualbound_types_set[] = "0000";
+      printf("Enter the dual bound strategies you want to toggle (apriori, +nK,"
+             "+nK-omega, roundup).\n");
+      do{
+        scanf("%s", input_str);
+        if(strcmp(input_str,"apriori")==0) dualbound_types_set[0] = 
+                                ( dualbound_types_set[0] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"+nK")==0) dualbound_types_set[1] = 
+                                ( dualbound_types_set[1] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"+nK-omega")==0) dualbound_types_set[2] = 
+                                ( dualbound_types_set[2] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"roundup")==0) dualbound_types_set[3] = 
+                                ( dualbound_types_set[3] == '0' ? '1' : '0' );
+        printf("dualbound_types_set: %s\n", dualbound_types_set);
+      }while(strncmp(input_str, "0", 1) != 0);
+
       /* Prompt user for output filename */
       printf("Finally, enter the file that you want the benchmark to be written to.\n");
       do{
@@ -258,21 +281,23 @@ int main(int argc, char *argv[])
              "Coefficient set: \t\t%s\n"
              "Problem subset: \t\t%d\n"
              "hard_instance_set: \t\t%s\n"
-             "hard_n_set: \t\t\t%s\n\n", 
+             "hard_n_set: \t\t\t%s\n"
+             "dualbound_types_set: \t\t%s\n\n",
               memory_allocation_limit, timeout, DP_types, branch_strats, 
               instance_set, n_set, coefficient_set, problem_subset, 
-              hard_instance_set, hard_n_set); 
-
+              hard_instance_set, hard_n_set, dualbound_types_set); 
 
       FILE *benchmark_stream = fopen(input_str,"a"); 
       fprintf(benchmark_stream, "ass\n");      
-      printf("Your seed is:\n%s %d %d %s %s %s %s %s %s %d %s %s\n", argv[0], 
+      printf("Your seed is:\n%s %d %d %s %s %s %s %s %s %d %s %s %s\n", argv[0], 
             memory_allocation_limit, timeout, input_str, DP_types, 
             branch_strats, instance_set, n_set, coefficient_set, problem_subset, 
-            hard_instance_set, hard_n_set);
+            hard_instance_set, hard_n_set, dualbound_types_set);
+
       benchmark(memory_allocation_limit, timeout, DP_types, n_set, 
                 coefficient_set, instance_set, branch_strats, benchmark_stream,
-                problem_subset, hard_instance_set, hard_n_set);
+                problem_subset, hard_instance_set, hard_n_set, dualbound_types_set);
+
       fclose(benchmark_stream);
 
       return 0;
@@ -280,25 +305,23 @@ int main(int argc, char *argv[])
   } 
 
 
-  if(argc != 12)
+  if(argc != 13)
   {
-    printf("This application takes either 2 or 12 arguments.\n");
+    printf("This application takes either 2 or 13 arguments.\n");
     printf("Format: \"%s <memory limit> <timeout> <file out> <DP set> <branchi"
            "ng strategy set> <instance set> <n set> <coefficient set> <problem"
-           " subset> <hard instance set> <hard n set>\"\nor\n \"%s -w\" for w"
-           "izard\n Type \"%s help\" for info on input options.\n", argv[0], 
-           argv[0], argv[0]);
+           " subset> <hard instance set> <hard n set> <dualbound set>\"\nor\n "
+           "\"%s -w\" for wizard\n Type \"%s help\" for info on input options."
+           "\n", argv[0], argv[0], argv[0]);
     printf("i.e. %s int int char[] char[2] char[3] char[7] char[8] char[5] in"
-           "t char[6] char[9]\n", argv[0]);
+           "t char[6] char[9] char[4]\n", argv[0]);
     exit(-1);
   }
-
-  /* TODO validate inputs 
-   *  Probably just run a function with each argv in it 
-   *  So at this point we assume that all the args are great */  
+  
+  /* Validate inputs */
   command_line_validation(argv[1], argv[2], argv[3], argv[4], argv[5],
                           argv[6], argv[7], argv[8], argv[9], argv[10], 
-                          argv[11]);
+                          argv[11], argv[12]);
   
   int memory_allocation_limit = atoi(argv[1]);
   int timeout = atoi(argv[2]);
@@ -315,22 +338,25 @@ int main(int argc, char *argv[])
          "Coefficient set: %s\n"
          "Problem subset: %s\n"
          "hard_instance_set: %s\n"
-         "hard_n_set: %s\n", 
+         "hard_n_set: %s\n"
+         "dualbound_types_set: %s\n",
          argv[1], argv[2], argv[4], argv[5], argv[6],
-         argv[7], argv[8], argv[9], argv[10], argv[11]);
+         argv[7], argv[8], argv[9], argv[10], argv[11], argv[12]);
 
   benchmark(memory_allocation_limit, timeout, argv[4], argv[7], argv[8], 
             argv[6], argv[5], file_out, problem_subset,
-            argv[10], argv[11]);
+            argv[10], argv[11], argv[12]);
   fclose(file_out);
 
   return 0;
 }
+#endif
 
 void benchmark(int memory_allocation_limit, int timeout, char *DP_set, 
                char *n_set, char *coefficient_set, char *instance_set, 
                char *branching_strategies, FILE *benchmark_stream, 
-               int problem_subset, char *hard_instance_set, char *hard_n_set)
+               int problem_subset, char *hard_instance_set, char *hard_n_set,
+               char *dualbound_types_set)
 {
   /* Parameterisations to enumerate through */
   char file_name_holder[30];
@@ -344,8 +370,10 @@ void benchmark(int memory_allocation_limit, int timeout, char *DP_set,
   const char *n_types_2[] = {"20", "50", "100", "200", "500", "1000", "2000",
                              "5000", "10000"}; 
 
-  fprintf(benchmark_stream, "File name, DP method, branching strategy, problem #, runtime, memory allocate"
-                            "d, node count, ave. time per node\n");
+  fprintf(benchmark_stream, "File name, DP method, branching strategy, dual bou"
+                            "nd strategy, problem #, runtime, memory allocated,"
+                            " node count, ave. time per node, true ave. time pe"
+                            "r node\n");
 
   /* Filetype enumeration begin */
   /* For each DP method */
@@ -379,18 +407,26 @@ void benchmark(int memory_allocation_limit, int timeout, char *DP_set,
           {
             if(strncmp(&coefficient_set[l],"0", 1)==0)
               continue;
-
-            /* For each problem instance */
-            for(int m = 1; m <= problem_subset; m++)
+            /* For each dual bounding method */
+            for(int dualbounding_method = APRIORI_DUAL;
+                dualbounding_method <= APOSTERIORI_DUAL_ROUNDUP;
+                dualbounding_method++)
             {
-              snprintf(file_name_holder, 30, "knapPI_%s_%s_%s.csv", 
-                       instance_types_1[j], n_types[k], coefficient_types[l]);
-            
-              /* Run the benchmark */
-              printf("Running on %s...\n", file_name_holder);
-              benchmark_instance(file_name_holder, m, timeout, DP_method,
-                                memory_allocation_limit, benchmark_stream,
-                                branching_strategy);
+              if(strncmp(&dualbound_types_set[dualbounding_method], "0", 1) ==0)
+                continue;
+
+              /* For each problem instance */
+              for(int m = 1; m <= problem_subset; m++)
+              {
+                snprintf(file_name_holder, 30, "knapPI_%s_%s_%s.csv", 
+                         instance_types_1[j], n_types[k], coefficient_types[l]);
+              
+                /* Run the benchmark */
+                printf("Running on %s...\n", file_name_holder);
+                benchmark_instance(file_name_holder, m, timeout, DP_method,
+                                  memory_allocation_limit, benchmark_stream,
+                                  branching_strategy, dualbounding_method);
+              }
             }
           }
         }
@@ -406,17 +442,25 @@ void benchmark(int memory_allocation_limit, int timeout, char *DP_set,
         {
           if(strncmp(&hard_n_set[k],"0", 1)==0)
             continue;
-          /* For each problem instance */
-          for(int m = 1; m <= problem_subset; m++)
+          /* For each dual bounding method */
+          for(int dualbounding_method = APRIORI_DUAL;
+              dualbounding_method <= APOSTERIORI_DUAL_ROUNDUP;
+              dualbounding_method++)
           {
-            snprintf(file_name_holder, 30, "knapPI_%s_%s_1000.csv", 
-                     instance_types_2[j], n_types_2[k]);
+            if(strncmp(&dualbound_types_set[dualbounding_method], "0", 1) ==0)
+              continue;
+            /* For each problem instance */
+            for(int m = 1; m <= problem_subset; m++)
+            {
+              snprintf(file_name_holder, 30, "knapPI_%s_%s_1000.csv", 
+                       instance_types_2[j], n_types_2[k]);
 
-            /* Run the benchmark */
-            printf("%s\n", file_name_holder);
-            benchmark_instance(file_name_holder, m, timeout, DP_method,
-                              memory_allocation_limit, benchmark_stream,
-                              branching_strategy);
+              /* Run the benchmark */
+              printf("%s\n", file_name_holder);
+              benchmark_instance(file_name_holder, m, timeout, DP_method,
+                                memory_allocation_limit, benchmark_stream,
+                                branching_strategy, dualbounding_method);
+            }
           }
         }
       }
@@ -426,7 +470,8 @@ void benchmark(int memory_allocation_limit, int timeout, char *DP_set,
 
 void benchmark_instance(char *file_name_holder, int problem_no, int timeout, 
                         int DP_method, int memory_allocation_limit,
-                        FILE *benchmark_stream, int branching_strategy)
+                        FILE *benchmark_stream, int branching_strategy, 
+                        int dualbounding_method)
 {
   /* Problem variables */
   double epsilon = 0.0;
@@ -442,6 +487,9 @@ void benchmark_instance(char *file_name_holder, int problem_no, int timeout,
   int z_out = 0;
   int number_of_nodes = 1;
 
+  /* Initialise dynamic array */
+  initialise_dynamic_array(&times_per_node, 1000);
+
   pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, file_name_holder,
                   problem_no);
   int sol_out[n];
@@ -451,7 +499,8 @@ void benchmark_instance(char *file_name_holder, int problem_no, int timeout,
                                 branching_strategy, seed, DP_method, 
                                 logging_rule, logging_stream, epsilon,
                                 &number_of_nodes, 
-                                memory_allocation_limit, &t, timeout);
+                                memory_allocation_limit, &t, timeout,
+                                dualbounding_method);
 
   char stringified_time[30];
   double average_time_per_node;
@@ -474,6 +523,9 @@ void benchmark_instance(char *file_name_holder, int problem_no, int timeout,
     true_average_time_per_node += times_per_node->array[i];
   true_average_time_per_node /= times_per_node->used;
 
+  free_dynamic_array(times_per_node);
+  free(times_per_node);
+
   char stringified_memory[30];
   if(bytes_allocated == -1)
     strcpy(stringified_memory, "MEMORY LIMITED EXCEEDED");
@@ -482,10 +534,15 @@ void benchmark_instance(char *file_name_holder, int problem_no, int timeout,
 
   char *DP_str_arr[] = {"Vazirani", "Williamson Shmoy"}; 
   char *branching_strats[] = {"Linear Enum", "Random", "Truncation"};
+  char *dualbound_methods_array[] = {"Basic a priori", "+nK", "+nK-ω", 
+                                     "Profits roundup"};
 
-  fprintf(benchmark_stream, "%s, %s, %s, %d, %s, %s, %d, %lf, %lf\n", file_name_holder,
-         DP_str_arr[DP_method], branching_strats[branching_strategy], problem_no, stringified_time, 
-         stringified_memory, number_of_nodes, average_time_per_node, true_average_time_per_node);
+  fprintf(benchmark_stream, "%s, %s, %s, %s, %d, %s, %s, %d, %lf, %lf\n", 
+         file_name_holder, DP_str_arr[DP_method], 
+         branching_strats[branching_strategy], 
+         dualbound_methods_array[dualbounding_method], problem_no,
+         stringified_time, stringified_memory, number_of_nodes, 
+         average_time_per_node, true_average_time_per_node);
   printf("Performance logged.\n");
 }
 
@@ -494,7 +551,7 @@ void command_line_validation(const char argv1[], const char argv2[],
                              const char argv5[], const char argv6[],
                              const char argv7[], const char argv8[],
                              const char argv9[], const char argv10[],
-                             const char argv11[])
+                             const char argv11[], const char argv12[])
 {
   /* Check argv[1]: memory limit */
   int memory_limit = atoi(argv1);
@@ -609,6 +666,24 @@ void command_line_validation(const char argv1[], const char argv2[],
     printf("n set (argv[11]) should be of length 9! Exiting...\n");
     exit(-1);
   }
+
+  /* Check argv[12]: dual bounding methods */
+  n = strlen(argv12);
+  if(n != 4)
+  {
+    printf("Dual bounding methods (argv[12]) should be of length 4! Exiting..."
+           "\n");
+    exit(-1);
+  }
+  for(int i = 0; i < n; i++)
+  {
+    if(argv12[i] != '0' && argv12[i] != '1')
+    {
+      printf("Branching strategies string (argv[12]) should only contain 1's an"
+             "d 0's! Exiting..\n");
+      exit(-1);
+    }
+  } 
 }
 
 int file_test(const char file_name[])
@@ -624,3 +699,6 @@ int file_test(const char file_name[])
   }
   return 1;
 }
+
+
+

@@ -11,12 +11,12 @@
 #include <limits.h>
 #include <math.h>
 #include "branch_and_bound.h"
+#include "branch_and_bound_benchmark.h"
+#include "fptas.h"
 #include "bench_extern.h"
 #include "pisinger_reader.h"
-#include "fptas.h"
 
 int bytes_allocated;
-Dynamic_Array *times_per_node;
 
 /* Branch and bound methods */
 /* Branch and bound algorithm */
@@ -28,7 +28,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                                    FILE *logging_stream, double eps, 
                                    int *number_of_nodes,
                                    int memory_allocation_limit, clock_t *start_time, 
-                                   int timeout)
+                                   int timeout, const int dualbound_type) 
 { 
   /* Branch and bound algorithm for 0,1 Knapsack!
    *  profits: array of profits
@@ -54,8 +54,6 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
   
   /* Initialise externals */
   bytes_allocated = 0;
-  initialise_dynamic_array(&times_per_node, 1000);
-     //TODO find a better number than 1000
   
   /* Logging functionality */
   time_t t = time(NULL);
@@ -100,7 +98,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
       current_node->ID = count;
       global_lower_bound = find_heuristic_initial_GLB(profits, weights, x, z, 
                                                   n, capacity, problem_file,
-                                                  DP_method);
+                                                  DP_method, dualbound_type);
       current_node->lower_bound = global_lower_bound;
       first_iteration = FALSE;
       if(logging_rule != NO_LOGGING)
@@ -115,8 +113,8 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
       /* Derive the LB and UB for node N with the FPTAS */
       find_bounds(current_node, profits, weights, x, capacity, n, z,
                   &current_node->lower_bound, &current_node->upper_bound,
-                  problem_file, DP_method, logging_rule, logging_stream, eps);
-
+                  problem_file, DP_method, logging_rule, logging_stream, eps,
+                  dualbound_type);
       if(logging_rule != NO_LOGGING)
         fprintf(logging_stream, "\tNode %d (parent: %d) - bounds established: "
                                 "lower: %d, upper: %d (GLB: %d)\n", 
@@ -143,6 +141,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
     /* If LB > GLB, we set GLB = LB */
     if (current_node->lower_bound > global_lower_bound)
     {
+      /* TODO 13-06-2018 Current bug: Current_node->lower_bound is garbage for first child node*/
       global_lower_bound = current_node->lower_bound;
 
       if(logging_rule != NO_LOGGING)
@@ -193,7 +192,6 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
 
       /* Free current node */
       free(current_node->variable_statuses);
-      free(current_node);
       current_node = NULL;
 
       /* Check if node overflow has occurred */
@@ -255,13 +253,12 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
     current_node = NULL;
   }
   free(node_queue);
-  free_dynamic_array(times_per_node);
-  free(times_per_node);
 }
 
 /* Initial global lower bound heuristic */
 int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z, 
-                               int n, int capacity, char *problem_file, int DP_method)
+                               int n, int capacity, char *problem_file,
+                               int DP_method, const int dualbound_type)
 {
   /* Run the FPTAS on the original problem with high epsilon */
   double eps = 0.002;
@@ -273,7 +270,7 @@ int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z,
   for (int i = 0; i < n; i++) node_statuses[i] = VARIABLE_UNCONSTRAINED;
   FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z,
         BINARY_SOL, SIMPLE_SUM, problem_file, &K, profits_prime, 
-        DP_method, node_statuses);
+        DP_method, node_statuses, dualbound_type);
 
   int fptas_profit = 0;
   for (int i = 0; i < n; i++)
@@ -437,7 +434,8 @@ Problem_Instance *select_and_dequeue_node(LL_Problem_Queue *node_queue)
 void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
                  int x[], int capacity, int n, int z, int *lower_bound_ptr, 
                  int *upper_bound_ptr, char *problem_file, int DP_method, 
-                 int logging_rule, FILE *logging_stream, double eps)
+                 int logging_rule, FILE *logging_stream, double eps, 
+                 const int dualbound_type)
 { 
   /* lower_bound_ptr and upper_bound_ptr are both output parameters */
   /* Solve the FPTAS with current node */
@@ -462,23 +460,64 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
 
     FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z,
           BINARY_SOL, SIMPLE_SUM, problem_file, &K, profits_prime, 
-          DP_method, current_node->variable_statuses);
+          DP_method, current_node->variable_statuses, dualbound_type);
   }
 
-  /* Then, from the solution sets returned from the FPTAS, derive bounds */
   int fptas_lower_bound = 0;
   double fptas_upper_bound = 0;
-  for (int i = 0; i < n; i++)
-    if (sol_prime[i] == 1)
-    {
-      fptas_lower_bound += profits[i];
-      if (K > 1)  
-        fptas_upper_bound += K * profits_prime[i];
-      else
-        fptas_upper_bound += profits[i];
-    }
-  fptas_upper_bound += n*K; 
 
+  /* Then, from the solution sets returned from the FPTAS, derive bounds */
+  switch(dualbound_type) {
+    case APRIORI_DUAL :
+      for (int i = 0; i < n; i++)
+        if (sol_prime[i] == 1)
+        {
+          fptas_lower_bound += profits[i];
+          if (K > 1)  
+            fptas_upper_bound += K * profits_prime[i];
+          else
+            fptas_upper_bound += profits[i];
+        }
+      fptas_upper_bound /= (1-eps); 
+      break;
+    case APOSTERIORI_DUAL_PLUS_NK :
+      for (int i = 0; i < n; i++)
+        if (sol_prime[i] == 1)
+        {
+          fptas_lower_bound += profits[i];
+          if (K > 1)  
+            fptas_upper_bound += K * profits_prime[i];
+          else
+            fptas_upper_bound += profits[i];
+        }
+      fptas_upper_bound += n*K; 
+      break;
+    case APOSTERIORI_DUAL_NK_MINUS_OMEGA : ;
+      int amount_truncated = 0;
+      for (int i = 0; i < n; i++)
+        if (sol_prime[i] == 1)
+        {
+          fptas_lower_bound += profits[i];
+          if (K > 1)  
+          {
+            fptas_upper_bound += K * profits_prime[i];
+            amount_truncated += profits[i] - profits_prime[i];
+          }
+          else
+            fptas_upper_bound += profits[i];
+        }
+      fptas_upper_bound += n*K - amount_truncated; 
+      break;
+    case APOSTERIORI_DUAL_ROUNDUP :
+      for (int i = 0; i < n; i++)
+        if (sol_prime[i] == 1)
+        {
+          fptas_lower_bound += profits[i];
+          fptas_upper_bound += K * profits_prime[i];
+        }
+      break;
+
+  }
   *lower_bound_ptr = fptas_lower_bound;
   *upper_bound_ptr = (int) fptas_upper_bound;
 
@@ -646,32 +685,4 @@ Problem_Instance *LL_dequeue(LL_Problem_Queue *queue)
   return dequeued_problem;
 }
 
-/* Dynamic Array method: Initialise */
-void initialise_dynamic_array(Dynamic_Array **dynamic_array, size_t initial_size)
-{
-  Dynamic_Array *tmp = *dynamic_array = (Dynamic_Array*)malloc(sizeof(Dynamic_Array));
-  tmp->array = (double *)malloc(initial_size * sizeof(double));
-  tmp->used = 0;
-  tmp->size = initial_size;
-}
-
-/* Dynamic Array method: Append */
-void append_to_dynamic_array(Dynamic_Array *dynamic_array, double element)
-{
-  if (dynamic_array->used == dynamic_array->size)
-  {
-    dynamic_array->size *= 2;
-    dynamic_array->array = (double *)realloc(dynamic_array->array, 
-                                         dynamic_array->size * sizeof(double));
-  }
-  dynamic_array->array[dynamic_array->used++] = element; 
-}
-
-/* Dynamic Array method: Free */
-void free_dynamic_array(Dynamic_Array *dynamic_array)
-{
-  free(dynamic_array->array);
-  dynamic_array->array = NULL;
-  dynamic_array->used = dynamic_array->size = 0;
-}
 

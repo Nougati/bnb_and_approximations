@@ -1,4 +1,4 @@
----
+
  title: Implicit enumeration with dual bounds from approximation algorithms
  author: Nelson Frew
  header-includes:

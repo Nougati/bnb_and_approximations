@@ -1,3 +1,6 @@
+#ifndef BRANCH_AND_BOUND_H
+#define BRANCH_AND_BOUND_H
+#include <stdio.h>
 /* Preprocessor definitions */
 #define SIMPLE_SUM 2
 #define BINARY_SOL 1
@@ -65,11 +68,12 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                                    FILE *logging_stream, double epsilon, 
                                    int *number_of_nodes, 
                                    int memory_allocation_limit, clock_t *start_time, 
-                                   int timeout);
+                                   int timeout, const int dualbound_type);
+
 
 int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z, 
                                int n, int capacity, char *problem_file,
-                               int DP_method);
+                               int DP_method, const int dualbound_type);
 
 int find_branching_variable(int n, int z, int *read_only_variables, 
                             int branching_strategy, int *profits);
@@ -85,7 +89,8 @@ Problem_Instance *select_and_dequeue_node(LL_Problem_Queue *node_queue);
 void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
                  int x[], int capacity, int n, int z, int *lower_bound_ptr, 
                  int *upper_bound_ptr, char *problem_file, int DP_method,
-                 int logging_rule, FILE *logging_stream, double eps);
+                 int logging_rule, FILE *logging_stream, double eps,
+                 const int dualbound_type);
 
 void post_order_tree_clean(Problem_Instance *root_node);
 
@@ -116,16 +121,4 @@ void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem,
 
 Problem_Instance *LL_dequeue(LL_Problem_Queue *queue);
 
-
-/* Dynamic Array Declarations  */
-typedef struct {
-  double *array;
-  size_t used;
-  size_t size;
-} Dynamic_Array;
-
-void initialise_dynamic_array(Dynamic_Array **dynamic_array, size_t initial_size);
-
-void append_to_dynamic_array(Dynamic_Array *dynamic_array, double element);
-
-void free_dynamic_array(Dynamic_Array *dynamic_array);
+#endif
