@@ -3,6 +3,7 @@
  * Implements the B&B with the normal a posteriori bound                      *
  * TODO:                                                                      *
  *  - There is a memory leak somewhere in this with 5_50_1000 instances       *
+ *  - Update memory allocation limit to be a long int                         *
  ******************************************************************************/
 
 #include <stdio.h>

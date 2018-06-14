@@ -2,7 +2,6 @@
 #define BRANCH_AND_BOUND_BENCHMARK_H
 #include <stdio.h>
 
-#define BENCHMARKING
 #define BRANCH_STRAT_NO_OF_OPTIONS 3
 #define NELEMS(x) (sizeof(x) / sizeof((x)[0]))
 

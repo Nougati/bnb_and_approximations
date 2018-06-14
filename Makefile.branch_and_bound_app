@@ -7,14 +7,17 @@ CC_LIBRARIES=-lm
 ALL: branch_and_bound_app branch_and_bound_benchmark
 .PHONY: ALL
 
-branch_and_bound_app : branch_and_bound_app.o branch_and_bound.o fptas.o pisinger_reader.o 
+branch_and_bound_app : standard_branch_and_bound_app.o standard_branch_and_bound.o standard_fptas.o standard_pisinger_reader.o 
 	$(CC) $(CC_FLAGS) $^ -o $@ $(CC_LIBRARIES)
 
-branch_and_bound_benchmark : branch_and_bound.o branch_and_bound_benchmark.o fptas.o pisinger_reader.o
+branch_and_bound_benchmark : benchmark_branch_and_bound_benchmark.o benchmark_branch_and_bound.o benchmark_fptas.o benchmark_pisinger_reader.o
 	$(CC) $(CC_FLAGS) $^ -o $@ $(CC_LIBRARIES)
 
-%.o : %.c
+standard_%.o : %.c
 	$(CC) $(CC_FLAGS) $< -c -o $@ $(CC_LIBRARIES)
+
+benchmark_%.o : %.c
+	$(CC) $(CC_FLAGS) $< -DBENCHMARKING -c -o $@ $(CC_LIBRARIES)
 
 clean :
 	rm branch_and_bound_app branch_and_bound_benchmark *.o 

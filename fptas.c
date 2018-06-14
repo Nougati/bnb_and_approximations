@@ -123,6 +123,8 @@ void FPTAS(double eps, int *profits, int *weights, int *x, int *sol_prime,
       int result = williamson_shmoys_DP(items_prime, capacity, n, sol_prime);
 
       #ifdef BENCHMARKING
+      printf("Yo!\n");
+      fflush(stdout);
       clock_t elapsed = clock() - start_time;
       double time_taken = ((double)elapsed)/CLOCKS_PER_SEC;
       append_to_dynamic_array(times_per_node, time_taken);
