@@ -4,6 +4,7 @@
  * TODO:                                                                      *
  *  - There is a memory leak somewhere in this with 5_50_1000 instances       *
  *  - Update memory allocation limit to be a long int                         *
+ *  - IT'S BROKEN AGAIN                                                       *
  ******************************************************************************/
 
 #include <stdio.h>
@@ -99,7 +100,20 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
       current_node->ID = count;
       global_lower_bound = find_heuristic_initial_GLB(profits, weights, x, z, 
                                                   n, capacity, problem_file,
-                                                  DP_method, dualbound_type);
+                                                  DP_method, dualbound_type, 
+                                                  memory_allocation_limit,
+                                                  timeout, start_time);
+
+      if (bytes_allocated == -1 || *start_time == -1)//TODO make sure I was setting bytes allocated to -1 not memory_allocation limit
+      {
+        /* Total clean up */
+        free(current_node->variable_statuses);
+        free(current_node);
+        while (!LL_dequeue(node_queue))
+          ; 
+        free(node_queue);
+        return;
+      }
       current_node->lower_bound = global_lower_bound;
       first_iteration = FALSE;
       if(logging_rule != NO_LOGGING)
@@ -115,7 +129,19 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
       find_bounds(current_node, profits, weights, x, capacity, n, z,
                   &current_node->lower_bound, &current_node->upper_bound,
                   problem_file, DP_method, logging_rule, logging_stream, eps,
-                  dualbound_type);
+                  dualbound_type, memory_allocation_limit, timeout, 
+                  start_time);
+      if (bytes_allocated == -1 || *start_time == -1)
+      {
+        /* Total clean up */
+        free(current_node->variable_statuses);
+        free(current_node);
+        while (!LL_dequeue(node_queue))
+          ; 
+        free(node_queue);
+        return;
+      }
+
       if(logging_rule != NO_LOGGING)
         fprintf(logging_stream, "\tNode %d (parent: %d) - bounds established: "
                                 "lower: %d, upper: %d (GLB: %d)\n", 
@@ -142,7 +168,6 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
     /* If LB > GLB, we set GLB = LB */
     if (current_node->lower_bound > global_lower_bound)
     {
-      /* TODO 13-06-2018 Current bug: Current_node->lower_bound is garbage for first child node*/
       global_lower_bound = current_node->lower_bound;
 
       if(logging_rule != NO_LOGGING)
@@ -193,6 +218,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
 
       /* Free current node */
       free(current_node->variable_statuses);
+      free(current_node);//TODO I wasn't doing this originally... any reason why?
       current_node = NULL;
 
       /* Check if node overflow has occurred */
@@ -259,7 +285,9 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
 /* Initial global lower bound heuristic */
 int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z, 
                                int n, int capacity, char *problem_file,
-                               int DP_method, const int dualbound_type)
+                               int DP_method, const int dualbound_type, 
+                               const int memory_allocation_limit, const int timeout, 
+                               clock_t *start_time)
 {
   /* Run the FPTAS on the original problem with high epsilon */
   double eps = 0.002;
@@ -271,13 +299,17 @@ int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z,
   for (int i = 0; i < n; i++) node_statuses[i] = VARIABLE_UNCONSTRAINED;
   FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z,
         BINARY_SOL, SIMPLE_SUM, problem_file, &K, profits_prime, 
-        DP_method, node_statuses, dualbound_type);
-
-  int fptas_profit = 0;
-  for (int i = 0; i < n; i++)
-    if (sol_prime[i] == 1)
-      fptas_profit += profits[i];
+        DP_method, node_statuses, dualbound_type, memory_allocation_limit, 
+        timeout, start_time);
   
+  int fptas_profit = 0;
+  if (bytes_allocated != -1)
+  {
+    for (int i = 0; i < n; i++)
+      if (sol_prime[i] == 1)
+        fptas_profit += profits[i];
+  }  
+
   free(profits_prime);
 
   return fptas_profit;
@@ -436,7 +468,8 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
                  int x[], int capacity, int n, int z, int *lower_bound_ptr, 
                  int *upper_bound_ptr, char *problem_file, int DP_method, 
                  int logging_rule, FILE *logging_stream, double eps, 
-                 const int dualbound_type)
+                 const int dualbound_type, const int memory_allocation_limit,
+                 const int timeout, clock_t *start_time)
 { 
   /* lower_bound_ptr and upper_bound_ptr are both output parameters */
   /* Solve the FPTAS with current node */
@@ -458,10 +491,18 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
       fprintf(logging_stream, "\t\tCalling FPTAS for bounds (epsilon: %f, meth"
               "od: %s\n", eps, DP_method==VASIRANI ? "Vasirani" : "Williamson "
               "& Shmoys)");
-
+    
     FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z,
           BINARY_SOL, SIMPLE_SUM, problem_file, &K, profits_prime, 
-          DP_method, current_node->variable_statuses, dualbound_type);
+          DP_method, current_node->variable_statuses, dualbound_type, 
+          memory_allocation_limit, timeout, start_time);
+
+    /* Bail out if overallocation happened */
+    if (bytes_allocated == -1) //TODO do this if timeout occurred too
+    {
+      free(profits_prime);
+      return;
+    }
   }
 
   int fptas_lower_bound = 0;

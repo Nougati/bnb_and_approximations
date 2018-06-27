@@ -36,6 +36,10 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
 
 
 Dynamic_Array *times_per_node;
+// This needs to allocate with regards to memory_allocation limit
+// So we just need to pass FPTAS the upper bound on allocation
+// The compare it with regards to extern variable bytes_allocated
+// if benchmarking, that is?
 
 /* FPTAS Functions */
 /* FPTAS core function */
@@ -43,7 +47,9 @@ void FPTAS(double eps, int *profits, int *weights, int *x, int *sol_prime,
            const int n, int capacity, const int z, const int sol_flag,
            const int bounding_method, const char *problem_file, double *K,
            int *profits_prime, const int DP_method,
-           const int *variable_statuses, const int dualbound_type){
+           const int *variable_statuses, const int dualbound_type, 
+           int memory_allocation_limit, const int timeout, 
+           clock_t *start_time){
   /* Description
    *  Recreates the FPTAS for the 0,1 KP as described by V. Vasirani in his
    *   chapter on Knapsack in Approximation Algorithms.
@@ -93,16 +99,20 @@ void FPTAS(double eps, int *profits, int *weights, int *x, int *sol_prime,
     if (DP_method == VASIRANI)
     {
       #ifdef BENCHMARKING
-      clock_t start_time = clock();
+      clock_t DP_node_start_time = clock();
       #endif
 
       DP(symbolic_profits_prime, weights, x, sol_prime, n, capacity, z, 
-         sol_flag, bounding_method, problem_file);
-
+         sol_flag, bounding_method, problem_file, memory_allocation_limit, 
+         timeout, start_time);
+      
       #ifdef BENCHMARKING
-      clock_t elapsed = clock() - start_time;
-      double time_taken = ((double)elapsed)/CLOCKS_PER_SEC;
-      append_to_dynamic_array(times_per_node, time_taken);
+      clock_t DP_node_elapsed = clock() - DP_node_start_time;
+      double DP_node_time_taken = ((double)DP_node_elapsed)/CLOCKS_PER_SEC;
+      append_to_dynamic_array(times_per_node, DP_node_time_taken);
+      /* If we timed out we'll look at it in B&B */
+      if (bytes_allocated == -1 || *start_time == -1)
+        return;
       #endif
     }
 
@@ -117,17 +127,20 @@ void FPTAS(double eps, int *profits, int *weights, int *x, int *sol_prime,
         items_prime[i].profit = symbolic_profits_prime[i];
       }
       #ifdef BENCHMARKING
-      clock_t start_time = clock();
+      clock_t DP_node_start_time = clock();
       #endif
 
-      int result = williamson_shmoys_DP(items_prime, capacity, n, sol_prime);
+      int result = williamson_shmoys_DP(items_prime, capacity, n, sol_prime, 
+                                        memory_allocation_limit, timeout, 
+                                        start_time);
 
       #ifdef BENCHMARKING
-      printf("Yo!\n");
       fflush(stdout);
-      clock_t elapsed = clock() - start_time;
-      double time_taken = ((double)elapsed)/CLOCKS_PER_SEC;
-      append_to_dynamic_array(times_per_node, time_taken);
+      clock_t DP_node_elapsed = clock() - DP_node_start_time;
+      double DP_node_time_taken = ((double)DP_node_elapsed)/CLOCKS_PER_SEC;
+      append_to_dynamic_array(times_per_node, DP_node_time_taken);
+      if (bytes_allocated == -1 || *start_time == -1)
+        return;
       #endif
     }
 
@@ -312,7 +325,10 @@ void DP(const int problem_profits[], // profit primes?
         const int z,
         const int sol_flag,
         const int bounding_method,
-        const char *problem_file){
+        const char *problem_file, //TODO check if I can remove this
+        const int memory_allocation_limit,
+        const int timeout, clock_t *start_time)
+{
   /*
     Description:
       Carries out DP to compute the optimal solution for knapsack,
@@ -328,49 +344,94 @@ void DP(const int problem_profits[], // profit primes?
       Indexing for this will be confuuusing
   */
 
-  // Find max profit item
-  int max_profit = DP_max_profit(problem_profits,
-                                 n);
-
-  // Find upper bound on p for DP
-  int p_upper_bound = DP_p_upper_bound(problem_profits,
-                                       n,
-                                       max_profit,
+  /* Find the max profit item and derive the profit upper bound based on it */
+  int max_profit = DP_max_profit(problem_profits, n);
+  int p_upper_bound = DP_p_upper_bound(problem_profits, n, max_profit,
                                        bounding_method);
-  // Define DP table (n+1)*(nP)
+
+  /* Try to do first allocation */
   int **DP_table = (int **) malloc(sizeof(int *) * (n+1));
+  if(DP_table == NULL)
+  {
+    /* malloc failed! */
+    bytes_allocated = -1;
+    return;
+  }
+
+  /* Add the amount allocated */
+  bytes_allocated += (n+1)*sizeof(int *);
+  if (bytes_allocated > memory_allocation_limit)
+  {
+    bytes_allocated = -1;
+    return;
+  }
+
+  /* Try to do second allocation */
   DP_table[0] = (int *)malloc(sizeof(int) * p_upper_bound * (n+1));
+  if(DP_table[0] == NULL)
+  {
+    bytes_allocated = -1;
+    return;
+  }
+
+  /* Check that we're allowed to allocate that much */
+  bytes_allocated += (n+1)*sizeof(int *);
+  if (bytes_allocated > memory_allocation_limit)
+  {
+    bytes_allocated = -1;
+    return;
+  }
+
   for(int i = 0; i < (n+1); i++)
     DP_table[i] = (*DP_table + p_upper_bound * i);
 
-  // Compute base cases
-  DP_fill_in_base_cases(p_upper_bound,
-                        n+1,
-                        DP_table,
-                        problem_profits,
+  /* Check if we've timed out, and if so, clean up and bail out*/
+  if (did_timeout_occur(timeout, *start_time))
+  {
+    free(DP_table[0]);
+    free(DP_table);
+    *start_time = -1;
+    return;
+  }
+
+  /* Compute base cases */
+  DP_fill_in_base_cases(p_upper_bound, n+1, DP_table, problem_profits, 
                         problem_weights);
 
-  // Compute general cases
-  DP_fill_in_general_cases(p_upper_bound,
-                           n+1,
-                           DP_table,
-                           problem_profits,
+  /* Check if we've timed out, and if so, clean up and bail out*/
+  if (did_timeout_occur(timeout, *start_time))
+  {
+    free(DP_table[0]);
+    free(DP_table);
+    *start_time = -1;
+    return;
+  }
+
+  /* Compute general cases */
+  DP_fill_in_general_cases(p_upper_bound, n+1, DP_table, problem_profits,
                            problem_weights);
+
+  /* Check if we've timed out, and if so, clean up and bail out*/
+  if (did_timeout_occur(timeout, *start_time))
+  {
+    free(DP_table[0]);
+    free(DP_table);
+    *start_time = -1;
+    return;
+  }
+
+  /* Set my custom "positive infinity", find max profit, and derive the 
+     solution set */
   int my_pinf = derive_pinf(problem_weights, n);
-
-  int p = DP_find_best_solution(p_upper_bound,
-                                n+1,
-                                DP_table,
-                                capacity,
+  int p = DP_find_best_solution(p_upper_bound, n+1, DP_table, capacity,
                                 my_pinf);
-
-  int n_solutions = DP_derive_solution_set(n+1,
-                                           p_upper_bound,
-                                           DP_table,
-                                           problem_profits,
-                                           sol,
-                                           p,
+  int n_solutions = DP_derive_solution_set(n+1, p_upper_bound, DP_table,
+                                           problem_profits, sol, p,
                                            sol_flag);
+
+  /* Clean up */
+  bytes_allocated -= sizeof(DP_table[0]);
+  bytes_allocated -= sizeof(DP_table);
   free(DP_table[0]);
   free(DP_table);
 }
@@ -626,7 +687,8 @@ int DP_derive_solution_set(int n,
 /* W&S DP Functions */
 /* W&S DP Core Algorithm */
 int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
-                         int *solution_array)
+                         int *solution_array, const int memory_allocation_limit,
+                         const int timeout, clock_t *start_time)
 {
  /***william_shmoys_DP********************************************************
   *  Description: Implements the dynamic programming algorithm for the       *
@@ -642,20 +704,44 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
   *    int w                                                                 *
   *      the max weight of a tuple in the list at the end of the algorithm   *
   *  Notes:                                                                  *
-  *                                                                          *
+  *    TODO make sure we set bytes_allocated to 0 on some condition in here  *
   ****************************************************************************/
 
   /* Base case */
   struct solution_pair* head = NULL;
   struct solution_pair* current = NULL; 
-  push(&head, 0, 0, n);
-
+  push(&head, 0, 0, n, memory_allocation_limit);
+  if(bytes_allocated == -1)
+  {
+    /* Clean up*/
+    current = head;
+    while (current != NULL)
+    {
+      current = current->next;
+      free(head);
+      head = current;
+    }
+    return -1;
+  }
 
   /* WIP Section */
   int first_index = 0;
   while ((first_index < n) && items[first_index++].weight >= capacity)
     ;
-  push(&head, items[first_index-1].weight, items[first_index-1].profit, n);
+  push(&head, items[first_index-1].weight, items[first_index-1].profit, n, 
+       memory_allocation_limit);
+  if(bytes_allocated == -1)
+  {
+    /* Clean up*/
+    current = head;
+    while (current != NULL)
+    {
+      current = current->next;
+      free(head);
+      head = current;
+    }
+    return -1;
+  }
   head->solution_array[first_index-1] = 1;
 
   /* General case */
@@ -669,7 +755,21 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
       if (possible_weight <= capacity)
       {
         /* Put new partial solution on the head */
-        push(&head, possible_weight, current->profit + items[j].profit, n);
+        push(&head, possible_weight, current->profit + items[j].profit, n, 
+             memory_allocation_limit);
+        /* Just make sure we were allowed to do that */
+        if(bytes_allocated == -1)
+        {
+          /* Clean up*/
+          current = head;
+          while (current != NULL)
+          {
+            current = current->next;
+            free(head);
+            head = current;
+          }
+          return -1;
+        }
         /* Copy the partial solution array  */
         for (int i=0; i <= j; i++)
           head->solution_array[i] = current->solution_array[i];
@@ -678,25 +778,37 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
       }
       current = current->next;
     }
+    /* Check for timeout */
+    if (did_timeout_occur(timeout, *start_time))
+    {
+      *start_time = -1;
+      break;
+    }
     remove_dominated_pairs(&head);
   }
 
-  /* return max ((t,w) in A max) w*/
-  current = head;
-  struct solution_pair* best_pair;
   int max_profit = -1;
-  while (current != NULL)
+  /* Only do this block if there wasn't a timeout */
+  if (*start_time != -1)
   {
-    if (current->profit > max_profit)
-      max_profit = current->profit;
-      best_pair = current;
-    current = current->next;  
-  }
-
-  /* Assuming solution_array has been malloc'd already */
-  for(int i=0; i < n; i++)
-  {
-    solution_array[i] = best_pair->solution_array[i];
+    /* return max ((t,w) in A max) w*/
+    current = head;
+    struct solution_pair* best_pair;
+    while (current != NULL)
+    {
+      if (current->profit > max_profit)
+      {
+        max_profit = current->profit;
+        best_pair = current;
+      }
+      current = current->next;  
+    }
+  
+    /* Assuming solution_array has been malloc'd already */
+    for(int i=0; i < n; i++)
+    {
+      solution_array[i] = best_pair->solution_array[i];
+    }
   }
 
   /* Clean up */
@@ -704,17 +816,18 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
   while (current != NULL)
   {
     current = current->next;
+    bytes_allocated -= sizeof(head);
     free(head);
     head = current;
   }
-  /* TODO Find out if we need to clena up individual struct arrays */
+  /* TODO Find out if != -1 we need to clena up individual struct arrays */
 
   return max_profit;
 }
 
 /* W&S DP: Linked list push function */
 void push(struct solution_pair** head_ref, int new_weight, int new_profit,
-          int n)
+          int n, int memory_allocation_limit)
 {
  /***push*********************************************************************
   *  Description:                                                            *
@@ -736,6 +849,11 @@ void push(struct solution_pair** head_ref, int new_weight, int new_profit,
   /*Start temp white-out*/
   struct solution_pair* new_solution_pair =
      (struct solution_pair*)calloc(sizeof(struct solution_pair) + n, sizeof(int));
+  
+  bytes_allocated += sizeof(struct solution_pair) + n*sizeof(int);
+  if (bytes_allocated > memory_allocation_limit)
+    bytes_allocated = -1;
+
   /*End*/
 
 
@@ -956,5 +1074,13 @@ void free_dynamic_array(Dynamic_Array *dynamic_array)
   dynamic_array->used = dynamic_array->size = 0;
 }
 
-
+int did_timeout_occur(const int timeout, const clock_t start_time)
+{
+  clock_t elapsed = clock() - start_time;
+  double elapsed_secs = ((double) elapsed) / CLOCKS_PER_SEC;
+  if (elapsed_secs > timeout)
+    return TRUE;
+  else
+    return FALSE;
+}
 

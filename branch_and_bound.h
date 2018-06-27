@@ -70,10 +70,11 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                                    int memory_allocation_limit, clock_t *start_time, 
                                    int timeout, const int dualbound_type);
 
-
 int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z, 
                                int n, int capacity, char *problem_file,
-                               int DP_method, const int dualbound_type);
+                               int DP_method, const int dualbound_type,
+                               const int memory_allocation_limit, const int timeout,
+                               clock_t *start_time);
 
 int find_branching_variable(int n, int z, int *read_only_variables, 
                             int branching_strategy, int *profits);
@@ -90,7 +91,8 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
                  int x[], int capacity, int n, int z, int *lower_bound_ptr, 
                  int *upper_bound_ptr, char *problem_file, int DP_method,
                  int logging_rule, FILE *logging_stream, double eps,
-                 const int dualbound_type);
+                 const int dualbound_type, const int memory_allocation_limit, 
+                 const int timeout, clock_t *start_time);
 
 void post_order_tree_clean(Problem_Instance *root_node);
 

@@ -1,0 +1,93 @@
+\begin{thebibliography}{10}
+
+\bibitem{Land}
+A.G.~Doig A.~H~Land.
+\newblock An automatic method of solving discrete programming problems.
+\newblock 1960.
+
+\bibitem{Dakin}
+R.~J. Dakin.
+\newblock A tree search algorithm for mixed integer programming problems.
+\newblock 1965.
+
+\bibitem{Dantzig}
+George Dantzig.
+\newblock Maximization of a linear function of variables subject to linear
+  inequalities: in t.c koopmans (ed.).
+\newblock 1947.
+
+\bibitem{Morrison}
+Jason J. Sauppe Edward C.~Sewell David R.~Morrison, Sheldon H.~Jacobson.
+\newblock Branch-and-bound algorithms: A survey of recent advances in
+  searching, branching, and pruning.
+\newblock 2016.
+
+\bibitem{DantzigFulkersonJohnson}
+S.~Johnson. G.~Dantzig, R.~Fulkerson.
+\newblock Solution of a larg-scale traveling-salesman problem.
+\newblock 1954.
+
+\bibitem{Geoffrion}
+A.M. Geoffrion.
+\newblock Lagrangean relaxation for integer programming.
+\newblock 1974.
+
+\bibitem{Gomory}
+R.E Gomory.
+\newblock Outline of an algorithm for integer solutions to linear programs.
+\newblock 1958.
+
+\bibitem{Lovasz}
+A.~Schrijver L.~Lovasz.
+\newblock Cones of matrices and set-function and 0-1 optimisation.
+\newblock 1991.
+
+\bibitem{Benichou}
+P.~Girodet G. Hentges G. Ribiere O.~Vincent M.~Benichou, J.M.~Gauthier.
+\newblock Experiments in mixed-integer linear programming.
+\newblock 1971.
+
+\bibitem{PadbergRinaldi1}
+G.~Rinaldi M.~W.~Padberg.
+\newblock Optimization of a 532-city symmetric travelling salesman problem by
+  branch and cut.
+\newblock 1987.
+
+\bibitem{PadbergRinaldi2}
+G.~Rinaldi M.~W.~Padberg.
+\newblock A branch-and-cut algorithm for the resolution of large-scale
+  symmetric traveling salesman problems.
+\newblock 1991.
+
+\bibitem{Conforti}
+Giacomo~Zambelli Michele~Conforti, Gerard~Cornuejols.
+\newblock {\em Integer Programming}.
+\newblock Springer International Publishing Switzerland, 2014.
+
+\bibitem{Mitra}
+G.~Mitra.
+\newblock Investigation of some brancha nd bound strategies for the solution of
+  mixed integer linear programs.
+\newblock 1973.
+
+\bibitem{Achterberg}
+A.~Martin T.~Achterberg, T.~Koch.
+\newblock Branching rules revisited.
+\newblock 2005.
+
+\bibitem{Ralphs}
+Menal~Guzelsoy Ted~Ralphs.
+\newblock Duality and warm starting in integer programming.
+\newblock 2006.
+
+\bibitem{Tomlin}
+J.~A. Tomlin.
+\newblock Branch and bound methods for integer and non-convex programming.
+\newblock 1970.
+
+\bibitem{Vazirani}
+Vijay Vazirani.
+\newblock {\em Approximation Algorithms}.
+\newblock Springer-Verlag Berlin, Heidelberg, 2001.
+
+\end{thebibliography}

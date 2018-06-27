@@ -1,0 +1,30 @@
+\begin{thebibliography}{1}
+
+\bibitem{Alizadeh}
+Farid Alizadeh.
+\newblock Interior point methods in semidefinite programming with applications
+  to combinatorial optimization.
+\newblock 1993.
+
+\bibitem{Lovasz}
+A.~Schrijver L.~Lovasz.
+\newblock Cones of matrices and set-functions and 0-1 optimisation.
+\newblock 1991.
+
+\bibitem{Vandenberghe}
+Stephen~Boyd Lieven~Vandenberghe.
+\newblock Semidefinite programming.
+\newblock 1996.
+
+\bibitem{Conforti}
+Giacomo Michele~Conforti, Gerard~Cornuejols.
+
+\bibitem{Dakin}
+J.~Dakin R.
+
+\bibitem{Wolsey}
+Lawrence Wolsey.
+\newblock Heuristic analysis, linear programming and bound and bound.
+\newblock 1980.
+
+\end{thebibliography}

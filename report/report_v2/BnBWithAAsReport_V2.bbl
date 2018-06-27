@@ -1,0 +1,39 @@
+\begin{thebibliography}{1}
+
+\bibitem{Cook}
+Stephen~A. Cook.
+\newblock The complexity of theorem-proving procedures.
+\newblock 1971.
+
+\bibitem{Dantzig}
+George~B. Dantzig.
+\newblock Maximization of a linear functino of variables subject to linear
+  inequalities: in t.c koopmans (ed.).
+\newblock 1947.
+
+\bibitem{WilliamsonShmoy}
+David B.~Shmoys David P.~Williamson.
+\newblock {\em The Design of Approximation Algorithms}.
+\newblock Cambridge University Press New York, NY, USA 2011, 2011.
+
+\bibitem{Conforti}
+Giacomo~Zambelli Michele~Conforti, Gerard~Cornuejols.
+\newblock {\em Integer Programming}.
+\newblock Springer Publishing Company, Incorporated, 2014.
+
+\bibitem{Vazirani}
+Vijay Vazirani.
+\newblock {\em Approximation Algorithms}.
+\newblock Springer-Verlag New York, Inc., 2001.
+
+\bibitem{Wolsey}
+Laurence~A. Wolsey.
+\newblock Heuristic analysis, linear programming and branch and bound.
+\newblock 1980.
+
+\bibitem{WolseyMIP}
+Laurence~A. Wolsey.
+\newblock Mixed-integer programming.
+\newblock 2008.
+
+\end{thebibliography}
