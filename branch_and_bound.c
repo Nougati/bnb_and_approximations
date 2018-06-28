@@ -1,10 +1,8 @@
 /******************************************************************************
- * Branch_and_bound version 1.0                                               *
+ * Branch_and_bound version                                                   *
  * Implements the B&B with the normal a posteriori bound                      *
  * TODO:                                                                      *
  *  - There is a memory leak somewhere in this with 5_50_1000 instances       *
- *  - Update memory allocation limit to be a long int                         *
- *  - IT'S BROKEN AGAIN                                                       *
  ******************************************************************************/
 
 #include <stdio.h>
@@ -18,7 +16,7 @@
 #include "bench_extern.h"
 #include "pisinger_reader.h"
 
-int bytes_allocated;
+long long int bytes_allocated;
 
 /* Branch and bound methods */
 /* Branch and bound algorithm */
@@ -29,7 +27,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                                    int DP_method, int logging_rule, 
                                    FILE *logging_stream, double eps, 
                                    int *number_of_nodes,
-                                   int memory_allocation_limit, clock_t *start_time, 
+                                   long long int memory_allocation_limit, clock_t *start_time, 
                                    int timeout, const int dualbound_type) 
 { 
   /* Branch and bound algorithm for 0,1 Knapsack!
@@ -109,7 +107,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
         /* Total clean up */
         free(current_node->variable_statuses);
         free(current_node);
-        while (!LL_dequeue(node_queue))
+        while (LL_dequeue(node_queue))//TODO I removed a negation from LL_dequeue in this
           ; 
         free(node_queue);
         return;
@@ -136,7 +134,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
         /* Total clean up */
         free(current_node->variable_statuses);
         free(current_node);
-        while (!LL_dequeue(node_queue))
+        while (LL_dequeue(node_queue))//TODO I removed a negation from LL_dequeue in this
           ; 
         free(node_queue);
         return;
@@ -228,7 +226,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
         *z_out = global_lower_bound;
 
         /* Total clean up */
-        while (!LL_dequeue(node_queue))
+        while (LL_dequeue(node_queue))//TODO I removed a negation on this
           ; 
         free(node_queue);
         return;
@@ -244,7 +242,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
           bytes_allocated = -1;
           *z_out = global_lower_bound;
           /* Total clean up */
-          while (!LL_dequeue(node_queue))
+          while (LL_dequeue(node_queue))// TODO I removed a negation on this
             ; 
           free(node_queue);
           return;
@@ -253,7 +251,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
         {
           *start_time = -1;
           /* Total clean up */
-          while (!LL_dequeue(node_queue))
+          while (LL_dequeue(node_queue))//TODO I removed a negation on this
             ; 
           free(node_queue);
           return;
@@ -286,7 +284,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
 int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z, 
                                int n, int capacity, char *problem_file,
                                int DP_method, const int dualbound_type, 
-                               const int memory_allocation_limit, const int timeout, 
+                               const long long int memory_allocation_limit, const int timeout, 
                                clock_t *start_time)
 {
   /* Run the FPTAS on the original problem with high epsilon */
@@ -296,7 +294,7 @@ int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z,
   int *profits_prime = (int *) malloc(n * sizeof(*profits_prime));
   bytes_allocated += n * sizeof(*profits_prime);
   int node_statuses[n];
-  for (int i = 0; i < n; i++) node_statuses[i] = VARIABLE_UNCONSTRAINED;
+  for (int i = 0; i < n; i++) node_statuses[i] = VARIABLE_UNCONSTRAINED;;
   FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z,
         BINARY_SOL, SIMPLE_SUM, problem_file, &K, profits_prime, 
         DP_method, node_statuses, dualbound_type, memory_allocation_limit, 
@@ -468,7 +466,7 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
                  int x[], int capacity, int n, int z, int *lower_bound_ptr, 
                  int *upper_bound_ptr, char *problem_file, int DP_method, 
                  int logging_rule, FILE *logging_stream, double eps, 
-                 const int dualbound_type, const int memory_allocation_limit,
+                 const int dualbound_type, const long long int memory_allocation_limit,
                  const int timeout, clock_t *start_time)
 { 
   /* lower_bound_ptr and upper_bound_ptr are both output parameters */

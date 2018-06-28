@@ -36,10 +36,6 @@ long long int: "long long int", unsigned long long int: "unsigned long long int"
 
 
 Dynamic_Array *times_per_node;
-// This needs to allocate with regards to memory_allocation limit
-// So we just need to pass FPTAS the upper bound on allocation
-// The compare it with regards to extern variable bytes_allocated
-// if benchmarking, that is?
 
 /* FPTAS Functions */
 /* FPTAS core function */
@@ -354,13 +350,15 @@ void DP(const int problem_profits[], // profit primes?
   if(DP_table == NULL)
   {
     /* malloc failed! */
+    printf("Failed malloc on DP_table!\n");
     bytes_allocated = -1;
     return;
   }
 
   /* Add the amount allocated */
   bytes_allocated += (n+1)*sizeof(int *);
-  if (bytes_allocated > memory_allocation_limit)
+  if (memory_allocation_limit != -1 &&
+      bytes_allocated > memory_allocation_limit)
   {
     bytes_allocated = -1;
     return;
@@ -370,13 +368,15 @@ void DP(const int problem_profits[], // profit primes?
   DP_table[0] = (int *)malloc(sizeof(int) * p_upper_bound * (n+1));
   if(DP_table[0] == NULL)
   {
+    printf("Failed malloc on DP_table[0]!\n");
     bytes_allocated = -1;
     return;
   }
 
   /* Check that we're allowed to allocate that much */
-  bytes_allocated += (n+1)*sizeof(int *);
-  if (bytes_allocated > memory_allocation_limit)
+  bytes_allocated += sizeof(int)*p_upper_bound *(n+1);
+  if (memory_allocation_limit != -1 &&
+      bytes_allocated > memory_allocation_limit)
   {
     bytes_allocated = -1;
     return;
@@ -851,7 +851,8 @@ void push(struct solution_pair** head_ref, int new_weight, int new_profit,
      (struct solution_pair*)calloc(sizeof(struct solution_pair) + n, sizeof(int));
   
   bytes_allocated += sizeof(struct solution_pair) + n*sizeof(int);
-  if (bytes_allocated > memory_allocation_limit)
+  if (memory_allocation_limit != -1 &&
+      bytes_allocated > memory_allocation_limit)
     bytes_allocated = -1;
 
   /*End*/
@@ -1057,7 +1058,7 @@ void initialise_dynamic_array(Dynamic_Array **dynamic_array, size_t initial_size
 /* Dynamic Array method: Append */
 void append_to_dynamic_array(Dynamic_Array *dynamic_array, double element)
 {
-  if (dynamic_array->used == dynamic_array->size)
+ if (dynamic_array->used == dynamic_array->size)
   {
     dynamic_array->size *= 2;
     dynamic_array->array = (double *)realloc(dynamic_array->array, 
@@ -1076,6 +1077,8 @@ void free_dynamic_array(Dynamic_Array *dynamic_array)
 
 int did_timeout_occur(const int timeout, const clock_t start_time)
 {
+  if (timeout == -1) return FALSE;
+
   clock_t elapsed = clock() - start_time;
   double elapsed_secs = ((double) elapsed) / CLOCKS_PER_SEC;
   if (elapsed_secs > timeout)

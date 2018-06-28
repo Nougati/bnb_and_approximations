@@ -6,15 +6,15 @@
 #define NELEMS(x) (sizeof(x) / sizeof((x)[0]))
 
 void benchmark_instance(char *file_name_holder, int problem_no, int timeout, 
-                       int DP_method, unsigned long allocation_limit, 
+                       int DP_method, long long int allocation_limit, 
                        FILE *benchmark_stream, int branching_strategy,
                        int dualbounding_method);
 
 void benchmark_dp(char *file_name_holder, int problem_no, int timeout,
-                  int DP_method, unsigned long allocation_limit,
+                  int DP_method, long long int allocation_limit,
                   FILE *benchmark_stream);
 
-void benchmark(unsigned long memory_allocation_limit, int timeout, char *DP_set, 
+void benchmark(long long int memory_allocation_limit, int timeout, char *DP_set, 
                char *n_set, char *coefficient_set, char *instance_set,
                char *branching_strategies, FILE *benchmark_stream, 
                int problem_set, char *hard_instance_set, char *hard_n_set,

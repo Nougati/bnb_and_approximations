@@ -92,8 +92,8 @@ int main(int argc, char *argv[])
       printf("Wizard!\n");
 
       printf("Please enter the limit on memory allocation (bytes):\n");
-      unsigned long memory_allocation_limit;
-      scanf("%lu", &memory_allocation_limit);
+      long long int memory_allocation_limit;
+      scanf("%lld", &memory_allocation_limit);
 
       printf("Please enter the limit on run-time (seconds):\n");
       int timeout;
@@ -285,7 +285,7 @@ int main(int argc, char *argv[])
 
       
       printf("\nYour benchmark parameters are:\n"
-             "Memory allocation limit: \t%lu\n"
+             "Memory allocation limit: \t%lld\n"
              "Timeout: \t\t\t%d\n"
              "DP_Set: \t\t\t%s\n"
              "Branching set: \t\t\t%s\n"
@@ -303,7 +303,7 @@ int main(int argc, char *argv[])
 
       FILE *benchmark_stream = fopen(input_str,"a"); 
       fprintf(benchmark_stream, "ass\n");      
-      printf("Your seed is:\n%s %lu %d %s %s %s %s %s %s %d %s %s %s %s\n", argv[0], 
+      printf("Your seed is:\n%s %lld %d %s %s %s %s %s %s %d %s %s %s %s\n", argv[0], 
             memory_allocation_limit, timeout, input_str, DP_types, 
             branch_strats, instance_set, n_set, coefficient_set, problem_subset, 
             hard_instance_set, hard_n_set, dualbound_types_set, dp_benchmarking_set);
@@ -338,7 +338,7 @@ int main(int argc, char *argv[])
                           argv[6], argv[7], argv[8], argv[9], argv[10], 
                           argv[11], argv[12], argv[13]);
   
-  int memory_allocation_limit = atoi(argv[1]);
+  long long int memory_allocation_limit = atoi(argv[1]);
   int timeout = atoi(argv[2]);
   FILE *file_out = fopen(argv[3],"a");
 
@@ -368,7 +368,7 @@ int main(int argc, char *argv[])
 }
 #endif
 
-void benchmark(unsigned long memory_allocation_limit, int timeout, char *DP_set, 
+void benchmark(long long int memory_allocation_limit, int timeout, char *DP_set, 
                char *n_set, char *coefficient_set, char *instance_set, 
                char *branching_strategies, FILE *benchmark_stream, 
                int problem_subset, char *hard_instance_set, char *hard_n_set,
@@ -386,10 +386,18 @@ void benchmark(unsigned long memory_allocation_limit, int timeout, char *DP_set,
   const char *n_types_2[] = {"20", "50", "100", "200", "500", "1000", "2000",
                              "5000", "10000"}; 
 
+  /* Parameterisation names */
+  const char *DP_method_names[] = {"Vazirani", "Williamson & Shmoys"};
+  const char *branching_strat_names[] = {"Linear Enumeration branching",
+                                         "Random Branching",
+                                         "Truncation branching"};
+  const char *dualbound_type_names[] = {"A priori", "+nK", "+nK - ω", "roundup"};
+
   fprintf(benchmark_stream, "File name, DP method, branching strategy, dual bou"
                             "nd strategy, problem #, runtime, memory allocated,"
                             " node count, ave. time per node, true ave. time pe"
                             "r node\n");
+
 
   /* Filetype enumeration begin */
   /* For each DP method */
@@ -441,8 +449,10 @@ void benchmark(unsigned long memory_allocation_limit, int timeout, char *DP_set,
                 time_t t = time(NULL);
                 struct tm tm = *localtime(&t);
                 /* Run the benchmark */
-                printf("%d:%d:%d - Running on %s...\n", tm.tm_hour, tm.tm_min, 
-                       tm.tm_sec, file_name_holder);
+                printf("%d:%d:%d - Running on %s with %s, %s, %s... \n", tm.tm_hour, tm.tm_min, 
+                       tm.tm_sec, file_name_holder, DP_method_names[DP_method], 
+                       branching_strat_names[branching_strategy],
+                       dualbound_type_names[dualbounding_method]);
                 benchmark_instance(file_name_holder, m, timeout, DP_method,
                                   memory_allocation_limit, benchmark_stream,
                                   branching_strategy, dualbounding_method);
@@ -478,8 +488,10 @@ void benchmark(unsigned long memory_allocation_limit, int timeout, char *DP_set,
 
               time_t t = time(NULL);
               struct tm tm = *localtime(&t);
-              printf("%d:%d:%d - Running on %s...\n", tm.tm_hour, tm.tm_min, 
-                     tm.tm_sec, file_name_holder);
+              printf("%d:%d:%d - Running on %s with %s, %s, %s... \n", tm.tm_hour, tm.tm_min, 
+                     tm.tm_sec, file_name_holder, DP_method_names[DP_method], 
+                     branching_strat_names[branching_strategy],
+                     dualbound_type_names[dualbounding_method]);
 
               /* Run the benchmark */
               benchmark_instance(file_name_holder, m, timeout, DP_method,
@@ -524,7 +536,7 @@ void benchmark(unsigned long memory_allocation_limit, int timeout, char *DP_set,
                      instance_types_1[j], n_types[k], coefficient_types[l]);
             time_t t = time(NULL);
             struct tm tm = *localtime(&t);
-            printf("%d:%d:%d - Running on %s...\n", tm.tm_hour, tm.tm_min, 
+            printf("%d:%d:%d - Running on %s... (Pure DP)\n", tm.tm_hour, tm.tm_min, 
                    tm.tm_sec, file_name_holder);
             benchmark_dp(file_name_holder, m, timeout, pure_DP, memory_allocation_limit,
                          benchmark_stream);
@@ -560,7 +572,7 @@ void benchmark(unsigned long memory_allocation_limit, int timeout, char *DP_set,
           /* Run the benchmark */
           time_t t = time(NULL);
           struct tm tm = *localtime(&t);
-          printf("%d:%d:%d - Running on %s...\n", tm.tm_hour, tm.tm_min, 
+          printf("%d:%d:%d - Running on %s... (Pure DP)\n", tm.tm_hour, tm.tm_min, 
                  tm.tm_sec, file_name_holder);
           benchmark_dp(file_name_holder, m, timeout, pure_DP, memory_allocation_limit,
                        benchmark_stream);
@@ -572,7 +584,7 @@ void benchmark(unsigned long memory_allocation_limit, int timeout, char *DP_set,
 
 
 void benchmark_instance(char *file_name_holder, int problem_no, int timeout, 
-                        int DP_method, unsigned long memory_allocation_limit,
+                        int DP_method, long long int memory_allocation_limit,
                         FILE *benchmark_stream, int branching_strategy, 
                         int dualbounding_method)
 {
@@ -631,9 +643,9 @@ void benchmark_instance(char *file_name_holder, int problem_no, int timeout,
 
   char stringified_memory[30];
   if(bytes_allocated == -1)
-    strcpy(stringified_memory, "MEMORY LIMITED EXCEED");
+    strcpy(stringified_memory, "MEMORY LIMIT EXCEEDED");
   else
-    sprintf(stringified_memory, "%d", bytes_allocated);
+    sprintf(stringified_memory, "%lld", bytes_allocated);
 
   char *DP_str_arr[] = {"Vazirani", "Williamson Shmoy"}; 
   char *branching_strats[] = {"Linear Enum", "Random", "Truncation"};
@@ -658,7 +670,7 @@ void command_line_validation(const char argv1[], const char argv2[],
                              const char argv13[])
 {
   /* Check argv[1]: memory limit */
-  int memory_limit = atoi(argv1);
+  long int memory_limit = atoi(argv1);
   if (memory_limit < 1)
   {
     printf("Memory limit (argv[1]) makes no sense! Exiting...\n");
@@ -824,7 +836,7 @@ int file_test(const char file_name[])
 
 /* Important! I need to adapt the DPs to allow for timeout and overallocation */
 void benchmark_dp(char *file_name_holder, int problem_no, int timeout,
-                  int DP_method, unsigned long allocation_limit,
+                  int DP_method, long long int allocation_limit,
                   FILE *benchmark_stream)
 {
   /* Read in file */
@@ -877,7 +889,7 @@ void benchmark_dp(char *file_name_holder, int problem_no, int timeout,
   if(bytes_allocated == -1)
     strcpy(stringified_memory, "MEMORY LIMIT EXCEEDED");
   else
-    sprintf(stringified_memory, "%d", bytes_allocated);
+    sprintf(stringified_memory, "%lld", bytes_allocated);
 
   char *DP_str_array[] = {"Vazirani (DP only)", "Williamson Shmoy (DP only)"};
 
