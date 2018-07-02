@@ -586,8 +586,8 @@ void post_order_tree_clean(Problem_Instance *node)
 int is_boundary_exceeded(int memory_limit, clock_t start_time, int timeout)
 {
   /* First check if full memory limit has been exceed (5gb)*/
-  if (bytes_allocated > GLOBAL_MEMORY_LIMIT)
-    return MEMORY_EXCEEDED;
+  //if (bytes_allocated > GLOBAL_MEMORY_LIMIT)
+  //  return MEMORY_EXCEEDED;
 
   /* Then check if user memory limit has been exceeded */
   if (memory_limit != -1 && bytes_allocated > memory_limit)

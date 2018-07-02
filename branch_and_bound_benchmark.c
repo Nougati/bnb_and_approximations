@@ -658,7 +658,14 @@ void benchmark_instance(char *file_name_holder, int problem_no, int timeout,
           dualbound_methods_array[dualbounding_method], problem_no,
           stringified_time, stringified_memory, number_of_nodes, 
           average_time_per_node, true_average_time_per_node);
-  printf("%s problem #%d: Performance logged.\n", file_name_holder, problem_no);
+  printf("%s problem #%d: Performance logged.(Result: %d/%d - %s)\n", file_name_holder, problem_no, z_out, z, z_out==z ? "Pass!" : "Failure-- WAIT SHIT SHIT!\n"
+                    "   ______ _____  _____   ____  _____   \n"
+                    "  |  ____|  __ \\|  __ \\ / __ \\|  __ \\  \n"
+                    "  | |__  | |__) | |__) | |  | | |__) | \n"
+                    "  |  __| |  _  /|  _  /| |  | |  _  /  \n"
+                    "  | |____| | \\ \\| | \\ \\| |__| | | \\ \\  \n"
+                    "  |______|_|  \\_\\_|  \\_\\____/|_|  \\_\\ \n"
+                    "                                       \n");
 }
 
 void command_line_validation(const char argv1[], const char argv2[], 

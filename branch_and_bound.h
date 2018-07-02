@@ -19,7 +19,7 @@
 #define MEMORY_EXCEEDED 1
 #define TIMEOUT 2
 #define NODE_OVERFLOW 1500000
-#define GLOBAL_MEMORY_LIMIT 5368709120
+//#define GLOBAL_MEMORY_LIMIT 5368709120
 
 /* Structure Declarations */
 typedef struct p_instance
