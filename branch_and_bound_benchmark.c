@@ -403,7 +403,7 @@ void benchmark(long long int memory_allocation_limit, int timeout, char *DP_set,
                             "nd strategy, problem #, runtime, memory allocated,"
                             " node count, ave. time per node, true ave. time pe"
                             "r node\n");
-
+  
 
   /* Filetype enumeration begin */
   /* For each DP method */
@@ -503,10 +503,6 @@ void benchmark(long long int memory_allocation_limit, int timeout, char *DP_set,
               benchmark_instance(file_name_holder, m, timeout, DP_method,
                                 memory_allocation_limit, benchmark_stream,
                                 branching_strategy, dualbounding_method);
-                /* DEBUG BLOCK */
-
-                fclose(benchmark_stream);
-                exit(-1);
             }
           }
         }
