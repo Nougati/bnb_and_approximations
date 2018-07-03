@@ -44,7 +44,7 @@ void FPTAS(double eps, int *profits, int *weights, int *x, int *sol_prime,
            const int bounding_method, const char *problem_file, double *K,
            int *profits_prime, const int DP_method,
            const int *variable_statuses, const int dualbound_type, 
-           int memory_allocation_limit, const int timeout, 
+           const long long int memory_allocation_limit, const int timeout, 
            clock_t *start_time){
   /* Description
    *  Recreates the FPTAS for the 0,1 KP as described by V. Vasirani in his
@@ -322,7 +322,7 @@ void DP(const int problem_profits[], // profit primes?
         const int sol_flag,
         const int bounding_method,
         const char *problem_file, //TODO check if I can remove this
-        const int memory_allocation_limit,
+        const long long int memory_allocation_limit,
         const int timeout, clock_t *start_time)
 {
   /*
@@ -687,7 +687,7 @@ int DP_derive_solution_set(int n,
 /* W&S DP Functions */
 /* W&S DP Core Algorithm */
 int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
-                         int *solution_array, const int memory_allocation_limit,
+                         int *solution_array, const long long int memory_allocation_limit,
                          const int timeout, clock_t *start_time)
 {
  /***william_shmoys_DP********************************************************
@@ -827,7 +827,7 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
 
 /* W&S DP: Linked list push function */
 void push(struct solution_pair** head_ref, int new_weight, int new_profit,
-          int n, int memory_allocation_limit)
+          int n, const long long int memory_allocation_limit)
 {
  /***push*********************************************************************
   *  Description:                                                            *

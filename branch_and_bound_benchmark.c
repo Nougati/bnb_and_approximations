@@ -314,6 +314,7 @@ int main(int argc, char *argv[])
                 dp_benchmarking_set);
 
       fclose(benchmark_stream);
+      fflush(benchmark_stream);
 
       return 0;
     }
@@ -338,10 +339,13 @@ int main(int argc, char *argv[])
                           argv[6], argv[7], argv[8], argv[9], argv[10], 
                           argv[11], argv[12], argv[13]);
   
-  long long int memory_allocation_limit = atoi(argv[1]);
+  char *eptr;
+  long long int memory_allocation_limit = strtoll(argv[1], &eptr, 10);
   int timeout = atoi(argv[2]);
   FILE *file_out = fopen(argv[3],"a");
+  fprintf(file_out, "ass\n");      
 
+    
   int problem_subset = atoi(argv[9]);  
 
   printf("Memory allocation limit: %s\n"
@@ -359,10 +363,12 @@ int main(int argc, char *argv[])
          argv[1], argv[2], argv[4], argv[5], argv[6],
          argv[7], argv[8], argv[9], argv[10], argv[11], argv[12], argv[13]);
 
+
   benchmark(memory_allocation_limit, timeout, argv[4], argv[7], argv[8], 
             argv[6], argv[5], file_out, problem_subset,
             argv[10], argv[11], argv[12], argv[13]);
   fclose(file_out);
+  fflush(file_out);
 
   return 0;
 }
@@ -497,6 +503,10 @@ void benchmark(long long int memory_allocation_limit, int timeout, char *DP_set,
               benchmark_instance(file_name_holder, m, timeout, DP_method,
                                 memory_allocation_limit, benchmark_stream,
                                 branching_strategy, dualbounding_method);
+                /* DEBUG BLOCK */
+
+                fclose(benchmark_stream);
+                exit(-1);
             }
           }
         }
@@ -664,7 +674,7 @@ void benchmark_instance(char *file_name_holder, int problem_no, int timeout,
                     "  | |__  | |__) | |__) | |  | | |__) | \n"
                     "  |  __| |  _  /|  _  /| |  | |  _  /  \n"
                     "  | |____| | \\ \\| | \\ \\| |__| | | \\ \\  \n"
-                    "  |______|_|  \\_\\_|  \\_\\____/|_|  \\_\\ \n"
+                    "  |______|_|  \\_\\_|  \\_\\_____/|_|  \\_\\ \n"
                     "                                       \n");
 }
 
@@ -677,10 +687,12 @@ void command_line_validation(const char argv1[], const char argv2[],
                              const char argv13[])
 {
   /* Check argv[1]: memory limit */
-  long int memory_limit = atoi(argv1);
+  char *eptr;
+  long long int memory_limit = strtoll(argv1, &eptr, 10);
   if (memory_limit < 1)
   {
     printf("Memory limit (argv[1]) makes no sense! Exiting...\n");
+    printf("%s vs %lld\n",argv1, memory_limit);
     exit(-1);
   }
   /* Check argv[2]: timeout */

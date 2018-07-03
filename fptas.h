@@ -35,10 +35,10 @@ struct solution_pair
 
 /* FTPAS Function Declarations */
 int williamson_shmoys_DP(struct problem_item items[], int capacity, int n, 
-                         int *solution_array, const int memory_allocation_limit,
+                         int *solution_array, const long long int memory_allocation_limit,
                          const int timeout, clock_t *start_time);
 void push(struct solution_pair** head_ref, int new_weight, int new_profit, 
-          int n, int memory_allocation_limit);
+          int n, const long long int memory_allocation_limit);
 void remove_dominated_pairs(struct solution_pair** head_ref);
 void merge_sort(struct solution_pair** head_ref);
 struct solution_pair* sorted_merge(struct solution_pair* a, 
@@ -51,7 +51,7 @@ void print_list(struct solution_pair* node);
 void DP(const int problem_profits[], const int problem_weights[], const int x[],
         int sol[], const int n, const int capacity, const int z,
         const int sol_flag, const int bounding_method, const char *problem_file,
-        const int memory_allocation_limit, const int timeout, 
+        const long long int memory_allocation_limit, const int timeout, 
         clock_t *start_time);
 
 int DP_p_upper_bound(const int problem_profits[],
@@ -64,7 +64,7 @@ void FPTAS(double eps, int *profits, int *weights, int *x, int *sol_prime,
            const int bounding_method, const char *problem_file, double *K,
            int *profits_prime, const int DP_method,
            const int *variable_statuses, const int dualbound_type, 
-           const int memory_allocation_limit, const int timeout, 
+           const long long int memory_allocation_limit, const int timeout, 
            clock_t *start_time);
 
 int DP_max_profit(const int problem_profits[],

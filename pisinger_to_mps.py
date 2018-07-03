@@ -65,7 +65,7 @@ def pisinger_to_mps(a_file_path, problem_no):
   f.close() 
 
   # Write the mps file
-  out_filename = "./problems_mps_2/"+expected_problem_format+".mps"
+  out_filename = "./problems_mps/"+expected_problem_format+".mps"
   file_out = open(out_filename, "w")
   file_out.write("NAME          "+filename+"\n")
   file_out.write("OBJSENSE\n    MAX\n")
@@ -86,7 +86,7 @@ def pisinger_to_mps(a_file_path, problem_no):
   # TODO Get rid of this after first use
   test_list = "alot_of_mps_instances.test"
   test_sols = "alot_of_mps_instances.solu"
-  path_to_problems = "/home/nelson/Documents/branch_and_bound/knapsack_dp/problems_mps_2/"
+  path_to_problems = "/home/nelsonfrew/branch_and_bound/problems_mps/"
   with open(test_list, "a") as f:
     f.write(path_to_problems + expected_problem_format + ".mps\n")
   with open(test_sols, "a") as f:
@@ -101,7 +101,7 @@ def main():
   instance_types_hard = ["11", "12", "13", "14", "15", "16"]
   n_types_hard = ["20", "50", "100", "200", "500", "1000", "2000", "5000",
                   "10000"]
-  for i in range(1, 10):
+  for i in range(1, 3):
     # Easy instances
     for j in range(len(instance_types_easy)):
       for k in range(len(n_types_easy)):
