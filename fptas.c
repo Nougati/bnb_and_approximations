@@ -364,6 +364,8 @@ void DP(const int problem_profits[], // profit primes?
   if (memory_allocation_limit != -1 &&
       bytes_allocated > memory_allocation_limit)
   {
+    printf("  Overallocation detected in Vazirani DP allocated! Bytes got to"
+           " %lld.\n", bytes_allocated);
     bytes_allocated = -1;
     return;
   }
@@ -374,7 +376,8 @@ void DP(const int problem_profits[], // profit primes?
   if(DP_table == NULL)
   {
     /* malloc failed! */
-    printf("Failed malloc on DP_table!\n");
+    unsigned long long int bytes_requested = sizeof(int *) *(n+1);
+    printf("  Failed malloc on DP_table! (%llu requested)\n", bytes_requested);
     bytes_allocated = -1;
     return;
   }
@@ -384,6 +387,8 @@ void DP(const int problem_profits[], // profit primes?
   if (memory_allocation_limit != -1 &&
       bytes_allocated > memory_allocation_limit)
   {
+    printf("  Overallocation detected in Vazirani DP allocated! Bytes got to"
+           " %lld.\n", bytes_allocated);
     bytes_allocated = -1;
     free(DP_table);
     return;
@@ -393,7 +398,8 @@ void DP(const int problem_profits[], // profit primes?
   DP_table[0] = (int *)malloc(sizeof(int) * p_upper_bound * (n+1));
   if(DP_table[0] == NULL)
   {
-    printf("Failed malloc on DP_table[0]!\n");
+    unsigned long long int bytes_requested = sizeof(int *) * p_upper_bound *(n+1);
+    printf("  Failed malloc on DP_table[0]! (%llu requested)\n", bytes_requested);
     bytes_allocated = -1;
     return;
   }
@@ -879,22 +885,18 @@ void push(struct solution_pair** head_ref, int new_weight, int new_profit,
   *    This needs n in order to dynamically allocate enough space for the    *
   *    struct member solution_array                                          * 
   ****************************************************************************/
-  /* Allocate memory for the new solution pair 
-  struct solution_pair* new_solution_pair = 
-    (struct solution_pair*) malloc(sizeof(struct solution_pair) + n * sizeof(int));
-  */
-  /*Tentative start*/
-  /*Start temp white-out*/
   struct solution_pair* new_solution_pair =
-     (struct solution_pair*)calloc(sizeof(struct solution_pair) + n, sizeof(int));
+     (struct solution_pair*)calloc(sizeof(struct solution_pair) + n,
+      sizeof(int));
   
   bytes_allocated += sizeof(struct solution_pair) + n*sizeof(int);
   if (memory_allocation_limit != -1 &&
       bytes_allocated > memory_allocation_limit)
+  {
+    printf("  Overallocation detected in Williamson Shmoys LL push! Bytes got to"
+           " %lld.\n", bytes_allocated);
     bytes_allocated = -1;
-
-  /*End*/
-
+  }
 
   if (new_solution_pair)
   {
@@ -904,8 +906,6 @@ void push(struct solution_pair** head_ref, int new_weight, int new_profit,
     
   }
 
-  /*Tentative end*/
-
   /* Define new pair's data */
   new_solution_pair->weight = new_weight;
   new_solution_pair->profit = new_profit;
@@ -913,8 +913,7 @@ void push(struct solution_pair** head_ref, int new_weight, int new_profit,
   /* Connect pair to the head of the list */
   new_solution_pair->next = (*head_ref);
 
-  
-  /* TENTATIVE Initialise the array to 0's*/
+  /* Initialise the array to 0's*/
   for(int i = 0; i < n; i++)
     *(new_solution_pair->solution_array+i) = 0;
  

@@ -102,14 +102,16 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                                                   memory_allocation_limit,
                                                   timeout, start_time);
 
-      if (bytes_allocated == -1 || *start_time == -1)//TODO make sure I was setting bytes allocated to -1 not memory_allocation limit
+      if (bytes_allocated == -1 || *start_time == -1)
       {
         /* Total clean up */
         free(current_node->variable_statuses);
         free(current_node);
-        while (LL_dequeue(node_queue))//TODO I removed a negation from LL_dequeue in this
+        while (LL_dequeue(node_queue))
           ; 
         free(node_queue);
+        printf("  %s detected in branch_and_bound.c at node %d\n", bytes_allocated == -1 ?
+               "Overallocation" : "Timeout", count);
         return;
       }
       current_node->lower_bound = global_lower_bound;
@@ -137,6 +139,8 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
         while (LL_dequeue(node_queue))//TODO I removed a negation from LL_dequeue in this
           ; 
         free(node_queue);
+        printf("%s detected in branch_and_bound.c at node %d\n", bytes_allocated == -1 ?
+               "Overallocation" : "Timeout", current_node->ID);
         return;
       }
 
@@ -496,9 +500,11 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
           memory_allocation_limit, timeout, start_time);
 
     /* Bail out if overallocation happened */
-    if (bytes_allocated == -1) //TODO do this if timeout occurred too
+      if (bytes_allocated == -1 || *start_time == -1)
     {
       free(profits_prime);
+      printf("  %s detected in branch_and_bound.c\n", bytes_allocated == -1 ?
+             "Overallocation" : "Timeout");
       return;
     }
   }

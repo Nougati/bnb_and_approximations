@@ -756,7 +756,7 @@ void benchmark_instance(char *file_name_holder, int problem_no, int timeout,
   }
     
 
-  printf("%s problem #%d: Performance logged.(Result: %d/%d - %s)\n", file_name_holder, problem_no, z_out, z, problem_status);
+  printf("%s problem #%d: Performance logged.(Result: %d/%d - %s)\n\n", file_name_holder, problem_no, z_out, z, problem_status);
 }
 
 void command_line_validation(const char argv1[], const char argv2[], 
