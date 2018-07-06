@@ -353,8 +353,8 @@ int find_branching_variable(int n, int z, int *variable_statuses,
 
     /* For now, we can try a linear pass every time (maybe later we can try a
      *  presort) */
-    double max_truncation = 0;
-    double this_truncation;
+    double max_truncation = -1;
+    double this_truncation = -1;
     double epsilon = 0.8;
     double K = epsilon * max_profit / n;
     int best_variable = -1;
@@ -363,7 +363,7 @@ int find_branching_variable(int n, int z, int *variable_statuses,
     {
       if(variable_statuses[i] == VARIABLE_UNCONSTRAINED)
       {
-        this_truncation = profits[i] - K*floor(profits[i] / K);
+        this_truncation = (double) profits[i] - K*floor((double)profits[i] / K);
         if(this_truncation > max_truncation)
         {
           max_truncation = this_truncation;
@@ -583,7 +583,7 @@ void post_order_tree_clean(Problem_Instance *node)
 }
 
 /* Bechmarking auzax: Boundary checking method */
-int is_boundary_exceeded(int memory_limit, clock_t start_time, int timeout)
+int is_boundary_exceeded(long long int memory_limit, clock_t start_time, int timeout)
 {
   /* First check if full memory limit has been exceed (5gb)*/
   //if (bytes_allocated > GLOBAL_MEMORY_LIMIT)

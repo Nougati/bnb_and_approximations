@@ -88,7 +88,7 @@ void FPTAS(double eps, int *profits, int *weights, int *x, int *sol_prime,
   for (int i = 0; i < n; i++) sol_prime[i] = 0;
 
   /* Feasibility check */
-  if (capacity >= 0)
+  if (capacity > 0)
   {
     /* Now with amended profits list "profit_primes," solve the DP */
     /*... With Vazirani's DP */
@@ -145,6 +145,20 @@ void FPTAS(double eps, int *profits, int *weights, int *x, int *sol_prime,
       if(variable_statuses[i] == VARIABLE_ON)
         sol_prime[i] = 1;
     /* Solution should be in sol_prime */
+  }
+  /* Make it infeasible */
+  else if(capacity == 0)
+  {
+    for(int i = 0; i < n; i++) 
+      if (variable_statuses[i] == VARIABLE_ON)
+        sol_prime[i] = 1;
+      else
+        sol_prime[i] = 0;
+  }
+  else if(capacity < 0)
+  {
+    for(int i = 0; i < n; i++) 
+      sol_prime[i] = 0;
   }
 }
 
@@ -345,16 +359,6 @@ void DP(const int problem_profits[], // profit primes?
   int p_upper_bound = DP_p_upper_bound(problem_profits, n, max_profit,
                                        bounding_method);
 
-  /* Try to do first allocation */
-  int **DP_table = (int **) malloc(sizeof(int *) * (n+1));
-  if(DP_table == NULL)
-  {
-    /* malloc failed! */
-    printf("Failed malloc on DP_table!\n");
-    bytes_allocated = -1;
-    return;
-  }
-
   /* Add the amount allocated */
   bytes_allocated += (n+1)*sizeof(int *);
   if (memory_allocation_limit != -1 &&
@@ -364,20 +368,32 @@ void DP(const int problem_profits[], // profit primes?
     return;
   }
 
+  /* Try to do first allocation */
+  int **DP_table = (int **) malloc(sizeof(int *) * (n+1));
+
+  if(DP_table == NULL)
+  {
+    /* malloc failed! */
+    printf("Failed malloc on DP_table!\n");
+    bytes_allocated = -1;
+    return;
+  }
+
+  /* Check that we're allowed to allocate the second one */
+  bytes_allocated += sizeof(int)*p_upper_bound *(n+1);
+  if (memory_allocation_limit != -1 &&
+      bytes_allocated > memory_allocation_limit)
+  {
+    bytes_allocated = -1;
+    free(DP_table);
+    return;
+  }
+
   /* Try to do second allocation */
   DP_table[0] = (int *)malloc(sizeof(int) * p_upper_bound * (n+1));
   if(DP_table[0] == NULL)
   {
     printf("Failed malloc on DP_table[0]!\n");
-    bytes_allocated = -1;
-    return;
-  }
-
-  /* Check that we're allowed to allocate that much */
-  bytes_allocated += sizeof(int)*p_upper_bound *(n+1);
-  if (memory_allocation_limit != -1 &&
-      bytes_allocated > memory_allocation_limit)
-  {
     bytes_allocated = -1;
     return;
   }
@@ -571,7 +587,6 @@ void DP_fill_in_general_cases(const int width,
       if (problem_profits[i-1] <= p){
         a = DP_table[i-1][p];
         b = problem_weights[i-1] + DP_table[i-1][(p-problem_profits[i-1])];
-        //DP_table[i][p] = min(a,b);
         DP_table[i][p] = ((a < b) ? a : b);
       }else DP_table[i][p] = DP_table[i-1][p];
     }
@@ -687,7 +702,7 @@ int DP_derive_solution_set(int n,
 /* W&S DP Functions */
 /* W&S DP Core Algorithm */
 int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
-                         int *solution_array, const long long int memory_allocation_limit,
+                        int *solution_array, const long long int memory_allocation_limit,
                          const int timeout, clock_t *start_time)
 {
  /***william_shmoys_DP********************************************************
@@ -724,13 +739,12 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
     return -1;
   }
 
-  /* WIP Section */
+  /* Go to the first index we can fit */
   int first_index = 0;
-  while ((first_index < n) && items[first_index++].weight >= capacity)
+  while ((first_index < n) && items[first_index++].weight > capacity)
     ;
-  push(&head, items[first_index-1].weight, items[first_index-1].profit, n, 
-       memory_allocation_limit);
-  if(bytes_allocated == -1)
+  /* If none of the elements will fit, we need to leave */
+  if(first_index == n)
   {
     /* Clean up*/
     current = head;
@@ -740,89 +754,113 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
       free(head);
       head = current;
     }
-    return -1;
-  }
-  head->solution_array[first_index-1] = 1;
-
-  /* General case */
-  for(int j=first_index; j < n; j++)
-  {
-    current = head;
-    while(current != NULL)
-    {
-      /* Only add if we can feasibly add it */
-      int possible_weight = current->weight + items[j].weight;
-      if (possible_weight <= capacity)
-      {
-        /* Put new partial solution on the head */
-        push(&head, possible_weight, current->profit + items[j].profit, n, 
-             memory_allocation_limit);
-        /* Just make sure we were allowed to do that */
-        if(bytes_allocated == -1)
-        {
-          /* Clean up*/
-          current = head;
-          while (current != NULL)
-          {
-            current = current->next;
-            free(head);
-            head = current;
-          }
-          return -1;
-        }
-        /* Copy the partial solution array  */
-        for (int i=0; i <= j; i++)
-          head->solution_array[i] = current->solution_array[i];
-        /* Distinguish it from the others */
-        head->solution_array[j] = 1;
-      }
-      current = current->next;
-    }
-    /* Check for timeout */
-    if (did_timeout_occur(timeout, *start_time))
-    {
-      *start_time = -1;
-      break;
-    }
-    remove_dominated_pairs(&head);
-  }
-
-  int max_profit = -1;
-  /* Only do this block if there wasn't a timeout */
-  if (*start_time != -1)
-  {
-    /* return max ((t,w) in A max) w*/
-    current = head;
-    struct solution_pair* best_pair;
-    while (current != NULL)
-    {
-      if (current->profit > max_profit)
-      {
-        max_profit = current->profit;
-        best_pair = current;
-      }
-      current = current->next;  
-    }
-  
     /* Assuming solution_array has been malloc'd already */
     for(int i=0; i < n; i++)
     {
-      solution_array[i] = best_pair->solution_array[i];
+      solution_array[i] = 0;
     }
-  }
 
-  /* Clean up */
-  current = head;
-  while (current != NULL)
+    /* Max profit is 0 */
+    return 0;
+  }
+  /* We can play */
+  else
   {
-    current = current->next;
-    bytes_allocated -= sizeof(head);
-    free(head);
-    head = current;
-  }
-  /* TODO Find out if != -1 we need to clena up individual struct arrays */
+    push(&head, items[first_index-1].weight, items[first_index-1].profit, n, 
+         memory_allocation_limit);
+    if(bytes_allocated == -1)
+    {
+      /* Clean up*/
+      current = head;
+      while (current != NULL)
+      {
+        current = current->next;
+        free(head);
+        head = current;
+      }
+      return -1;
+    }
+    head->solution_array[first_index-1] = 1;
 
-  return max_profit;
+    /* General case */
+    for(int j=first_index; j < n; j++)
+    {
+      current = head;
+      while(current != NULL)
+      {
+        /* Only add if we can feasibly add it */
+        int possible_weight = current->weight + items[j].weight;
+        if (possible_weight <= capacity)
+        {
+          /* Put new partial solution on the head */
+          push(&head, possible_weight, current->profit + items[j].profit, n, 
+               memory_allocation_limit);
+          /* Just make sure we were allowed to do that */
+          if(bytes_allocated == -1)
+          {
+            /* Clean up*/
+            current = head;
+            while (current != NULL)
+            {
+              current = current->next;
+              free(head);
+              head = current;
+            }
+            return -1;
+          }
+          /* Copy the partial solution array  */
+          for (int i=0; i <= j; i++)
+            head->solution_array[i] = current->solution_array[i];
+          /* Distinguish it from the others */
+          head->solution_array[j] = 1;
+        }
+        current = current->next;
+      }
+      /* Check for timeout */
+      if (did_timeout_occur(timeout, *start_time))
+      {
+        *start_time = -1;
+        break;
+      }
+      remove_dominated_pairs(&head);
+    }
+
+    int max_profit = -1;
+    /* Only do this block if there wasn't a timeout */
+    if (*start_time != -1)
+    {
+      /* return max ((t,w) in A max) w*/
+      current = head;
+      struct solution_pair* best_pair;
+      while (current != NULL)
+      {
+        if (current->profit > max_profit)
+        {
+          max_profit = current->profit;
+          best_pair = current;
+        }
+        current = current->next;  
+      }
+    
+      /* Assuming solution_array has been malloc'd already */
+      for(int i=0; i < n; i++)
+      {
+        solution_array[i] = best_pair->solution_array[i];
+      }
+    }
+
+    /* Clean up */
+    current = head;
+    while (current != NULL)
+    {
+      current = current->next;
+      bytes_allocated -= sizeof(head);
+      free(head);
+      head = current;
+    }
+
+    return max_profit;
+  }
 }
 
 /* W&S DP: Linked list push function */

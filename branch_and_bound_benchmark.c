@@ -382,9 +382,10 @@ void benchmark(long long int memory_allocation_limit, int timeout, char *DP_set,
 {
   /* Parameterisations to enumerate through */
   char file_name_holder[30];
-  const char *instance_types_1[] = { "1", "2", "3", "4", "5", "6", "9" };
+  const char *instance_types_1[] = {"1", "2", "3", "4", "5", "6",  "9"};
   const char *coefficient_types[] = {"1000", "10000", "100000", "1000000", 
                                      "10000000"};
+  const char *coefficient_types_instance_9[] = {"1000", "100000", "1000000"};
   const char *n_types[] = {"50", "100", "200", "500", "1000", "2000", "5000",
                            "10000"};
   /* Second instance types */
@@ -420,25 +421,25 @@ void benchmark(long long int memory_allocation_limit, int timeout, char *DP_set,
       if(strncmp(&branching_strategies[branching_strategy],"0", 1)==0)
         continue;  
 
-      /* For each instance type*/
-      for(int j = 0; j < 7; j++)
+      /* Easy instances: For instances 1, 2, 3, 4, 5, 6 */
+      for(int j = 0; j < 6; j++)
       {
         if(strncmp(&instance_set[j],"0", 1)==0)
           continue;
 
-        /* For each n (easy instances) */
+        /* Easy instances: For each n (easy instances) */
         for(int k = 0; k < 8; k++)
         {
           if(strncmp(&n_set[k],"0", 1)==0)
             continue;
 
-          /* For each coefficient type */
+          /* Easy instances: For each coefficient type */
           for(int l = 0; l < 5; l++)
           {
             if(strncmp(&coefficient_set[l],"0", 1)==0)
               continue;
 
-            /* For each dual bounding method */
+            /* Easy instances: For each dual bounding method */
             for(int dualbounding_method = APRIORI_DUAL;
                 dualbounding_method <= APOSTERIORI_DUAL_ROUNDUP;
                 dualbounding_method++)
@@ -446,7 +447,7 @@ void benchmark(long long int memory_allocation_limit, int timeout, char *DP_set,
               if(strncmp(&dualbound_types_set[dualbounding_method], "0", 1) ==0)
                 continue;
 
-              /* For each problem instance */
+              /* Easy instances: For each problem instance */
               for(int m = 1; m <= problem_subset; m++)
               {
                 snprintf(file_name_holder, 30, "knapPI_%s_%s_%s.csv", 
@@ -454,7 +455,8 @@ void benchmark(long long int memory_allocation_limit, int timeout, char *DP_set,
               
                 time_t t = time(NULL);
                 struct tm tm = *localtime(&t);
-                /* Run the benchmark */
+
+                /* Easy instances: Run the benchmark */
                 printf("%d:%d:%d - Running on %s with %s, %s, %s... \n", tm.tm_hour, tm.tm_min, 
                        tm.tm_sec, file_name_holder, DP_method_names[DP_method], 
                        branching_strat_names[branching_strategy],
@@ -468,25 +470,73 @@ void benchmark(long long int memory_allocation_limit, int timeout, char *DP_set,
           }
         }
       }
-      /* For each instance type (hard)*/
+      /* If instance type 9 is turned on */
+      if(strncmp(&instance_set[6],"1", 1)==0)
+      {
+        /* Instance 9: For each n (easy instances) */
+        for(int k = 0; k < 8; k++)
+        {
+          if(strncmp(&n_set[k],"0", 1)==0)
+            continue;
+
+          /* Instance 9: For each coefficient type */
+          for(int l = 0; l < 4; l++)
+          {
+            if(l == 1)
+              continue;
+
+            if(strncmp(&coefficient_set[l],"0", 1)==0)
+              continue;
+
+            /* Instance 9: For each dual bounding method */
+            for(int dualbounding_method = APRIORI_DUAL;
+                dualbounding_method <= APOSTERIORI_DUAL_ROUNDUP;
+                dualbounding_method++)
+            {
+              if(strncmp(&dualbound_types_set[dualbounding_method], "0", 1) ==0)
+                continue;
+
+              /* Instance 9: For each problem instance */
+              for(int m = 1; m <= problem_subset; m++)
+              {
+                snprintf(file_name_holder, 30, "knapPI_%s_%s_%s.csv", 
+                         instance_types_1[6], n_types[k], coefficient_types[l]);
+              
+                time_t t = time(NULL);
+                struct tm tm = *localtime(&t);
+                /* Instance 9: Run the benchmark */
+                printf("%d:%d:%d - Running on %s with %s, %s, %s... \n", tm.tm_hour, tm.tm_min, 
+                       tm.tm_sec, file_name_holder, DP_method_names[DP_method], 
+                       branching_strat_names[branching_strategy],
+                       dualbound_type_names[dualbounding_method]);
+                benchmark_instance(file_name_holder, m, timeout, DP_method,
+                                  memory_allocation_limit, benchmark_stream,
+                                  branching_strategy, dualbounding_method);
+                
+              }
+            }
+          }
+        }
+      }
+      /* Hard instances: For each instance type */
       for(int j = 0; j < 6; j++)
       {
         if(strncmp(&hard_instance_set[j],"0", 1)==0)
           continue;
 
-        /* For each n (hard instances) */
+        /* Hard instances: For each n (hard instances) */
         for(int k = 0; k < 9; k++)
         {
           if(strncmp(&hard_n_set[k],"0", 1)==0)
             continue;
-          /* For each dual bounding method */
+          /* Hard instances: For each dual bounding method */
           for(int dualbounding_method = APRIORI_DUAL;
               dualbounding_method <= APOSTERIORI_DUAL_ROUNDUP;
               dualbounding_method++)
           {
             if(strncmp(&dualbound_types_set[dualbounding_method], "0", 1) ==0)
               continue;
-            /* For each problem instance */
+            /* Hard instances: For each problem instance */
             for(int m = 1; m <= problem_subset; m++)
             {
               snprintf(file_name_holder, 30, "knapPI_%s_%s_1000.csv", 
@@ -499,7 +549,7 @@ void benchmark(long long int memory_allocation_limit, int timeout, char *DP_set,
                      branching_strat_names[branching_strategy],
                      dualbound_type_names[dualbounding_method]);
 
-              /* Run the benchmark */
+              /* Hard instances: Run the benchmark */
               benchmark_instance(file_name_holder, m, timeout, DP_method,
                                 memory_allocation_limit, benchmark_stream,
                                 branching_strategy, dualbounding_method);
@@ -664,14 +714,49 @@ void benchmark_instance(char *file_name_holder, int problem_no, int timeout,
           dualbound_methods_array[dualbounding_method], problem_no,
           stringified_time, stringified_memory, number_of_nodes, 
           average_time_per_node, true_average_time_per_node);
-  printf("%s problem #%d: Performance logged.(Result: %d/%d - %s)\n", file_name_holder, problem_no, z_out, z, z_out==z ? "Pass!" : "Failure-- WAIT SHIT SHIT!\n"
-                    "   ______ _____  _____   ____  _____   \n"
-                    "  |  ____|  __ \\|  __ \\ / __ \\|  __ \\  \n"
-                    "  | |__  | |__) | |__) | |  | | |__) | \n"
-                    "  |  __| |  _  /|  _  /| |  | |  _  /  \n"
-                    "  | |____| | \\ \\| | \\ \\| |__| | | \\ \\  \n"
-                    "  |______|_|  \\_\\_|  \\_\\_____/|_|  \\_\\ \n"
-                    "                                       \n");
+
+  char problem_status[1000];
+
+  if(z_out == z)
+  {
+    if (t == -1)
+    {
+      strcpy(problem_status, "Pass! (Timed out though!)");
+    }
+    else if (bytes_allocated == -1)
+    {
+      strcpy(problem_status, "Pass! (Memory limit exceeded though!)");
+    }
+    else
+    {
+      strcpy(problem_status, "Pass!");
+    }
+  }
+  else
+  {
+    if (t == -1)
+    {
+      strcpy(problem_status, "Failure! (Timed out!)");
+    }
+    else if (bytes_allocated == -1)
+    {
+      strcpy(problem_status, "Failure! (Memory limit exceeded!)");
+    }
+    else
+    {
+      strcpy(problem_status, "Failure--) wait what?! OH SHIT!\n"
+                              "   ______ _____  _____   ____  _____   \n"
+                              "  |  ____|  __ \\|  __ \\ / __ \\|  __ \\  \n"
+                              "  | |__  | |__) | |__) | |  | | |__) | \n"
+                              "  |  __| |  _  /|  _  /| |  | |  _  /  \n"
+                              "  | |____| | \\ \\| | \\ \\| |__| | | \\ \\  \n"
+                              "  |______|_|  \\_\\_|  \\_\\_____/|_|  \\_\\ \n"
+                              "                                       \n");
+    }
+  }
+    
+
+  printf("%s problem #%d: Performance logged.(Result: %d/%d - %s)\n", file_name_holder, problem_no, z_out, z, problem_status);
 }
 
 void command_line_validation(const char argv1[], const char argv2[], 

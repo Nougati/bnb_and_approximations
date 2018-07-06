@@ -96,7 +96,7 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
 
 void post_order_tree_clean(Problem_Instance *root_node);
 
-int is_boundary_exceeded(int memory_limit, clock_t start_time, int timeout);
+int is_boundary_exceeded(long long int memory_limit, clock_t start_time, int timeout);
 
 
 /* Queue Declarations */
