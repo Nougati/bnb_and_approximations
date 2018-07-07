@@ -67,6 +67,7 @@ void FPTAS(double eps, int *profits, int *weights, int *x, int *sol_prime,
    *  problem_file - just the string of the problem file
    *  K - the husk where we store the K value determined by this algo.
    */
+  // TODO adapt this for just symbolic profits
   int P = DP_max_profit(profits, n);
 
   /* Define K */

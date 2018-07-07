@@ -457,8 +457,8 @@ void benchmark(long long int memory_allocation_limit, int timeout, char *DP_set,
                 struct tm tm = *localtime(&t);
 
                 /* Easy instances: Run the benchmark */
-                printf("%d:%d:%d - Running on %s with %s, %s, %s... \n", tm.tm_hour, tm.tm_min, 
-                       tm.tm_sec, file_name_holder, DP_method_names[DP_method], 
+                printf("%d:%d:%d - Running on %s problem #%d with %s, %s, %s... \n", tm.tm_hour, tm.tm_min, 
+                       tm.tm_sec, file_name_holder, m, DP_method_names[DP_method], 
                        branching_strat_names[branching_strategy],
                        dualbound_type_names[dualbounding_method]);
                 benchmark_instance(file_name_holder, m, timeout, DP_method,
@@ -505,8 +505,8 @@ void benchmark(long long int memory_allocation_limit, int timeout, char *DP_set,
                 time_t t = time(NULL);
                 struct tm tm = *localtime(&t);
                 /* Instance 9: Run the benchmark */
-                printf("%d:%d:%d - Running on %s with %s, %s, %s... \n", tm.tm_hour, tm.tm_min, 
-                       tm.tm_sec, file_name_holder, DP_method_names[DP_method], 
+                printf("%d:%d:%d - Running on %s problem #%d with %s, %s, %s... \n", tm.tm_hour, tm.tm_min, 
+                       tm.tm_sec, file_name_holder, m, DP_method_names[DP_method], 
                        branching_strat_names[branching_strategy],
                        dualbound_type_names[dualbounding_method]);
                 benchmark_instance(file_name_holder, m, timeout, DP_method,
@@ -544,8 +544,8 @@ void benchmark(long long int memory_allocation_limit, int timeout, char *DP_set,
 
               time_t t = time(NULL);
               struct tm tm = *localtime(&t);
-              printf("%d:%d:%d - Running on %s with %s, %s, %s... \n", tm.tm_hour, tm.tm_min, 
-                     tm.tm_sec, file_name_holder, DP_method_names[DP_method], 
+              printf("%d:%d:%d - Running on %s problem #%d with %s, %s, %s... \n", tm.tm_hour, tm.tm_min, 
+                     tm.tm_sec, file_name_holder, m, DP_method_names[DP_method], 
                      branching_strat_names[branching_strategy],
                      dualbound_type_names[dualbounding_method]);
 
@@ -592,8 +592,8 @@ void benchmark(long long int memory_allocation_limit, int timeout, char *DP_set,
                      instance_types_1[j], n_types[k], coefficient_types[l]);
             time_t t = time(NULL);
             struct tm tm = *localtime(&t);
-            printf("%d:%d:%d - Running on %s... (Pure DP)\n", tm.tm_hour, tm.tm_min, 
-                   tm.tm_sec, file_name_holder);
+            printf("%d:%d:%d - Running on %s #%d... (Pure DP)\n", tm.tm_hour, tm.tm_min, 
+                   tm.tm_sec, file_name_holder, m);
             benchmark_dp(file_name_holder, m, timeout, pure_DP, memory_allocation_limit,
                          benchmark_stream);
           }
@@ -628,8 +628,8 @@ void benchmark(long long int memory_allocation_limit, int timeout, char *DP_set,
           /* Run the benchmark */
           time_t t = time(NULL);
           struct tm tm = *localtime(&t);
-          printf("%d:%d:%d - Running on %s... (Pure DP)\n", tm.tm_hour, tm.tm_min, 
-                 tm.tm_sec, file_name_holder);
+          printf("%d:%d:%d - Running on %s problem #%d... (Pure DP)\n", tm.tm_hour, tm.tm_min, 
+                 tm.tm_sec, file_name_holder, m);
           benchmark_dp(file_name_holder, m, timeout, pure_DP, memory_allocation_limit,
                        benchmark_stream);
         }
