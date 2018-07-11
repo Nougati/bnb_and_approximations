@@ -61,7 +61,7 @@ typedef struct linked_list_p_queue
 Problem_Instance *define_root_node(int n);
 
 void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
-                                   int capacity, int z, int *z_out, 
+                                   int capacity, const long z, long *z_out, 
                                    int sol_out[], int n, char *problem_file, 
                                    int branching_strategy, time_t seed,
                                    int DP_method, int logging_rule, 
@@ -70,13 +70,13 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                                    long long int memory_allocation_limit, clock_t *start_time, 
                                    int timeout, const int dualbound_type);
 
-int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z, 
+int find_heuristic_initial_GLB(int profits[], int weights[], int x[], const long z, 
                                int n, int capacity, char *problem_file,
                                int DP_method, const int dualbound_type,
                                const long long int memory_allocation_limit, const int timeout,
                                clock_t *start_time);
 
-int find_branching_variable(int n, int z, int *read_only_variables, 
+int find_branching_variable(int n, const long z, int *read_only_variables, 
                             int branching_strategy, int *profits);
 
 void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
@@ -88,7 +88,7 @@ void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
 Problem_Instance *select_and_dequeue_node(LL_Problem_Queue *node_queue);
 
 void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
-                 int x[], int capacity, int n, int z, int *lower_bound_ptr, 
+                 int x[], int capacity, int n, const long z, int *lower_bound_ptr, 
                  int *upper_bound_ptr, char *problem_file, int DP_method,
                  int logging_rule, FILE *logging_stream, double eps,
                  const int dualbound_type, const long long int memory_allocation_limit, 

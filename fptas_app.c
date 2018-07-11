@@ -36,7 +36,8 @@ int main(int argc, char *argv[]){
   char problem_file[100];
   char output_file[100];
   int *profits, *weights, *x, *profit_primes, *turned_on_variables;
-  int n, capacity, z, sol_flag, bounding_method, DP_method;
+  int n, capacity, sol_flag, bounding_method, DP_method;
+  long z;
   int all_instances = 0;
   int output_flag = 0;
   FILE *fp_out;
@@ -111,19 +112,24 @@ int main(int argc, char *argv[]){
     /*Timer Segment End*/
 
     /* Choose DP method and run the FPTAS */
+    /* TODO Add 
+              - const int Dualbound type = 0
+              - memory_allocation limit = -1
+              - timeout = -1
+              - start time = t*/
     if(strcmp(argv[2],"-v") == 0)
     {
       DP_method = VASIRANI;
       FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
             bounding_method, problem_file, &K, profit_primes, DP_method, 
-            active_nodes); 
+            active_nodes, 0, -1, -1, &t); 
     }
     else if (strcmp(argv[2],"-ws")==0)
     {
       DP_method = WILLIAMSON_SHMOY;
       FPTAS(eps, profits, weights, x, sol_prime, n, capacity, z, sol_flag,
             bounding_method, problem_file, &K, profit_primes, DP_method,
-            active_nodes); 
+            active_nodes, 0, -1, -1, &t); 
     }
     else
     {
@@ -159,14 +165,14 @@ int main(int argc, char *argv[]){
     /* Output results */
     if(output_flag == TRUE)
     {
-      fprintf(fp_out, "%f, %s, %d, %f, %d, %d, %f%s\n", eps, problem_file, i, 
+      fprintf(fp_out, "%f, %s, %d, %f, %d, %ld, %f%s\n", eps, problem_file, i, 
               time_taken, profitSprime, z, 
               (1-((float)profitSprime/(float)z))*100, "%");
       fclose(fp_out);
     }
     else
     {
-      printf("%d/%d, epsilon: %f\ttime_taken:  %f\tdeviation: %s%f\n",
+      printf("%d/%ld, epsilon: %f\ttime_taken:  %f\tdeviation: %s%f\n",
              profitSprime, z, eps, time_taken, "%",
              (1-((float)profitSprime/(float)z))*100);
     }

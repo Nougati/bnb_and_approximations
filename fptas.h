@@ -17,6 +17,8 @@
 #define APOSTERIORI_DUAL_PLUS_NK 1
 #define APOSTERIORI_DUAL_NK_MINUS_OMEGA 2
 #define APOSTERIORI_DUAL_ROUNDUP 3
+#define SYSTEM_MEMORY_LIMIT 2100000000000 // home computer
+#define SYSTEM_STACK_LIMIT 6000000000
 
 /* Structure definitions */
 struct problem_item
@@ -39,17 +41,17 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
                          const int timeout, clock_t *start_time);
 void push(struct solution_pair** head_ref, int new_weight, int new_profit, 
           int n, const long long int memory_allocation_limit);
-void remove_dominated_pairs(struct solution_pair** head_ref);
-void merge_sort(struct solution_pair** head_ref);
+void remove_dominated_pairs(struct solution_pair** head_ref, const long long int memory_allocation_limit, clock_t *start_time, const int timeout);
+void merge_sort(struct solution_pair** head_ref, long long int merge_sort_memory, clock_t *start_time, const int timeout);
 struct solution_pair* sorted_merge(struct solution_pair* a, 
-                                   struct solution_pair* b);
+                                   struct solution_pair* b, clock_t *start_time, const int timeout);
 void front_back_split(struct solution_pair* source, 
                       struct solution_pair** front_ref, 
                       struct solution_pair** back_ref);
 void print_list(struct solution_pair* node);
 
 void DP(const int problem_profits[], const int problem_weights[], const int x[],
-        int sol[], const int n, const int capacity, const int z,
+        int sol[], const int n, const int capacity, const long z,
         const int sol_flag, const int bounding_method, const char *problem_file,
         const long long int memory_allocation_limit, const int timeout, 
         clock_t *start_time);
@@ -60,7 +62,7 @@ int DP_p_upper_bound(const int problem_profits[],
                      const int bounding_method);
 
 void FPTAS(double eps, int *profits, int *weights, int *x, int *sol_prime,
-           const int n, int capacity, const int z, const int sol_flag,
+           const int n, int capacity, const long z, const int sol_flag,
            const int bounding_method, const char *problem_file, double *K,
            int *profits_prime, const int DP_method,
            const int *variable_statuses, const int dualbound_type, 

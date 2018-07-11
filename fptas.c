@@ -40,7 +40,7 @@ Dynamic_Array *times_per_node;
 /* FPTAS Functions */
 /* FPTAS core function */
 void FPTAS(double eps, int *profits, int *weights, int *x, int *sol_prime,
-           const int n, int capacity, const int z, const int sol_flag,
+           const int n, int capacity, const long z, const int sol_flag,
            const int bounding_method, const char *problem_file, double *K,
            int *profits_prime, const int DP_method,
            const int *variable_statuses, const int dualbound_type, 
@@ -196,6 +196,8 @@ void make_profit_primes(int profits[], int profits_prime[], double K, int n,
   * Notes:
   *  As eps increases, K increases, and so the profit' of each item will get scaled further
   *   and further downwards. Since P is the max, it will be scaled to 1 for eps = 1 
+  *  We need dualbound_type because the dual bound we derive is in terms of S'',
+  *   (i.e. the solution set to rounded up profits), rather than S'.
   */
 {
   switch(dualbound_type)
@@ -333,7 +335,7 @@ void DP(const int problem_profits[], // profit primes?
         int sol[],
         const int n,
         const int capacity,
-        const int z,
+        const long z,
         const int sol_flag,
         const int bounding_method,
         const char *problem_file, //TODO check if I can remove this
@@ -396,7 +398,7 @@ void DP(const int problem_profits[], // profit primes?
   }
 
   /* Try to do second allocation */
-  DP_table[0] = (int *)malloc(sizeof(int) * p_upper_bound * (n+1));
+  DP_table[0] = (int *) malloc(sizeof(int) * p_upper_bound * (n+1));
   if(DP_table[0] == NULL)
   {
     unsigned long long int bytes_requested = sizeof(int *) * p_upper_bound *(n+1);
@@ -733,6 +735,8 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
   struct solution_pair* head = NULL;
   struct solution_pair* current = NULL; 
   push(&head, 0, 0, n, memory_allocation_limit);
+
+  /* Were we allowed to do that? */
   if(bytes_allocated == -1)
   {
     /* Clean up*/
@@ -758,6 +762,7 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
     while (current != NULL)
     {
       current = current->next;
+      bytes_allocated -= sizeof(head);
       free(head);
       head = current;
     }
@@ -829,7 +834,20 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
         *start_time = -1;
         break;
       }
-      remove_dominated_pairs(&head);
+      remove_dominated_pairs(&head, memory_allocation_limit, start_time, timeout);
+      /* Contingency exit lane */
+      if(bytes_allocated == -1)
+      {
+        /* Clean up*/
+        current = head;
+        while (current != NULL)
+        {
+          current = current->next;
+          free(head);
+          head = current;
+        }
+        return -1;
+      }
     }
 
     int max_profit = -1;
@@ -923,7 +941,7 @@ void push(struct solution_pair** head_ref, int new_weight, int new_profit,
 }
 
 /* W&S DP: Remove Dominated Pairs */
-void remove_dominated_pairs(struct solution_pair** head_ref)
+void remove_dominated_pairs(struct solution_pair** head_ref, const long long int memory_allocation_limit, clock_t *start_time, const int timeout)
 {
  /***remove_dominated_pairs documentation*************************************
   *  Description:                                                            *
@@ -947,7 +965,10 @@ void remove_dominated_pairs(struct solution_pair** head_ref)
   ****************************************************************************/
 
   /* Merge sort the list by weight */
-  merge_sort(head_ref);
+  merge_sort(head_ref, 0, start_time, timeout);
+  
+  if (bytes_allocated == -1 || *start_time == -1)
+    return;
 
   struct solution_pair* current = (*head_ref)->next;
   struct solution_pair* previous = *head_ref;
@@ -958,6 +979,7 @@ void remove_dominated_pairs(struct solution_pair** head_ref)
     if (previous->profit >= current->profit)
     {
       current = current->next;
+      bytes_allocated -= sizeof(previous->next);
       free(previous->next);
       previous->next = current;
     }
@@ -970,15 +992,39 @@ void remove_dominated_pairs(struct solution_pair** head_ref)
 }
 
 /* Merge sort */
-void merge_sort(struct solution_pair** head_ref)
+void merge_sort(struct solution_pair** head_ref, long long int merge_sort_memory, clock_t *start_time, const int timeout)
 {
  /* merge_sort: my adapation for solution pairs as originally described by    *
   *             geeks for geeks.                                              *
   *             This is strictly designed for linked lists                    *
   *             This algorithm is said to have complexity O(nlogn)            */
+  
+  //if ((memory_allocation_limit != -1 &&
+  //    bytes_allocated >= memory_allocation_limit)||
+  //    bytes_allocated >= SYSTEM_MEMORY_LIMIT)
+
+  /* Check for timeout */
+  clock_t elapsed = clock() - *start_time;
+  double time_taken = ((double)elapsed)/CLOCKS_PER_SEC;
+  if (timeout != -1 && time_taken > timeout)
+  {
+    *start_time = -1;
+    return;
+  }
+  
+
+  if(merge_sort_memory >= SYSTEM_STACK_LIMIT)
+  {
+    printf("merge_sort_memory: %lld\n", merge_sort_memory);
+    bytes_allocated = -1;
+    return;
+  }
+
   struct solution_pair* head = *head_ref;
   struct solution_pair* a;
   struct solution_pair* b;
+
+  merge_sort_memory += sizeof(struct solution_pair *)*3;
 
   /* Bases: length 0 or 1 */
   if ((head == NULL) || (head->next == NULL))
@@ -988,19 +1034,35 @@ void merge_sort(struct solution_pair** head_ref)
   front_back_split(head, &a, &b);
 
   /* Recursively sort the sublists */
-  merge_sort(&a);
-  merge_sort(&b);
+  merge_sort(&a, merge_sort_memory, start_time, timeout);
+
+  if(bytes_allocated == -1)
+    return;
+  
+  merge_sort(&b, merge_sort_memory, start_time, timeout);
+
+  if(bytes_allocated == -1)
+    return;
 
   /* Merge the two lists of this scope together */
-  *head_ref = sorted_merge(a, b);
+  *head_ref = sorted_merge(a, b, start_time, timeout);
 }
 
 /* Merge sort aux: sorted merge function */
 struct solution_pair* sorted_merge(struct solution_pair* a, 
-                                   struct solution_pair* b)
+                                   struct solution_pair* b, clock_t *start_time, const int timeout)
 {
+  /* Check for timeout */
+  clock_t elapsed = clock() - *start_time;
+  double time_taken = ((double)elapsed)/CLOCKS_PER_SEC;
+  if (timeout != -1 && time_taken > timeout)
+  {
+    *start_time = -1;
+    return (struct solution_pair*)-1;
+  }
+
   struct solution_pair* result = NULL;
-  
+
   /* Base cases */
   if (a == NULL) return (b);
   else if (b == NULL) return (a);
@@ -1016,26 +1078,25 @@ struct solution_pair* sorted_merge(struct solution_pair* a,
       if (a->profit > b->profit) 
       {
         result = a;
-        result->next = sorted_merge(a->next, b);
+        result->next = sorted_merge(a->next, b, start_time, timeout);
       }
       else 
       {
         result = b;
-        result->next = sorted_merge(a, b->next);
+        result->next = sorted_merge(a, b->next, start_time, timeout);
       }
     }
     /* Otherwise just merge as normal */
     else
     {
       result = a;
-      result->next = sorted_merge(a->next, b);
+      result->next = sorted_merge(a->next, b, start_time, timeout);
     }
   }
   else
   {
     result = b;
-    result->next = sorted_merge(a, b->next);
-  }
+    result->next = sorted_merge(a, b->next, start_time, timeout); }
   return(result);
 }
 

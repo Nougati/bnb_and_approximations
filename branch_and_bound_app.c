@@ -13,7 +13,8 @@
 #define MAIN
 int main(int argc, char *argv[]) {
   /* Dynamic Input variable support */
-  int n, capacity, z;
+  int n, capacity;
+  long z;
   int *profits, *weights, *x;
   char problem_file[100];
 
@@ -134,7 +135,7 @@ int main(int argc, char *argv[]) {
                   problem_no);
 
   /* Output variables */
-  int z_out = 0;
+  long z_out = 0;
   int number_of_nodes = -1;
   int sol_out[n];
 
@@ -195,7 +196,7 @@ int main(int argc, char *argv[]) {
 
   /* Print results */
   if(branching_strategy == RANDOM_BRANCHING) printf("Seed: %ld\n", seed);
-  printf("Results:\n\t%d/%d (%s)\n\ttime taken: %lf\n\tBytes allocated: %lld\n" , z_out,
+  printf("Results:\n\t%ld/%ld (%s)\n\ttime taken: %lf\n\tBytes allocated: %lld\n" , z_out,
          z, z_out == z ? "Pass!" : "Failure!", time_taken, bytes_allocated);
   printf("\tNo of nodes: %d\n", number_of_nodes);
 

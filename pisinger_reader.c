@@ -5,7 +5,7 @@
 #include <math.h>
 
 /* Pisinger reader */
-void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x, 
+void pisinger_reader(int *n, int *c, long *z, int **p, int **w, int **x, 
                      char *problem_file, int problem_number)
 { 
   /* 
@@ -25,7 +25,7 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
   }
   FILE *fp;
   char str[256];
-  char *pch;
+  char *pch, *eptr;
   char problem_number_str[100];
 
   /* Get data about the instance itself
@@ -114,7 +114,8 @@ void pisinger_reader(int *n, int *c, int *z, int **p, int **w, int **x,
     }else if (str[0] == 'z'){
         pch = strtok(str, " ");   
         pch = strtok(NULL, " ");
-        *z = atoi(pch);
+        //*z = atoi(pch);//TODO change to strtolong
+        *z = strtol(pch, &eptr, 10);
     }else if (!((str[0] == 'n')
               ||(str[0] == 'z')
               ||(str[0] == 'k')

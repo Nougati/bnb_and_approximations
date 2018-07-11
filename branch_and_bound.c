@@ -3,6 +3,12 @@
  * Implements the B&B with the normal a posteriori bound                      *
  * TODO:                                                                      *
  *  - There is a memory leak somewhere in this with 5_50_1000 instances       *
+ * Notes                                                                      *
+ *  - On instances where the WS FPTAS needs to dig deep in recursion to get   *
+ *     an answer, stack space needs to be set to unlimited with the bash      *
+ *     command:                                                               *
+ *       ulimit -s unlimited                                                  *
+ *    One such instance is knapPI_3_500_100000 #1 with WS's DP                *
  ******************************************************************************/
 
 #include <stdio.h>
@@ -21,7 +27,7 @@ long long int bytes_allocated;
 /* Branch and bound methods */
 /* Branch and bound algorithm */
 void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
-                                   int capacity, int z, int *z_out, 
+                                   int capacity, const long z, long *z_out, 
                                    int sol_out[], int n, char *problem_file, 
                                    int branching_strategy, time_t seed, 
                                    int DP_method, int logging_rule, 
@@ -156,8 +162,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
     /* TODO Does this second 'if' condition make sense? */
     if ((current_node->ID != 0) && 
         ((current_node->upper_bound <= global_lower_bound) || 
-         (current_node->upper_bound > current_node->parent_upper_bound)))  
-    {
+         (current_node->upper_bound > current_node->parent_upper_bound)))  {
       if(logging_rule != NO_LOGGING)
         fprintf(logging_stream, "\tUpper bound is lower that GLB! Pruning node b"
                 "ranch.\n");
@@ -218,10 +223,6 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
         fprintf(logging_stream, "\t Node %d branched on variable %d\n",
                 current_node->ID, branching_variable);
 
-      /* Free current node */
-      free(current_node->variable_statuses);
-      free(current_node);//TODO I wasn't doing this originally... any reason why?
-      current_node = NULL;
 
       /* Check if node overflow has occurred */
       if(node_limit_flag)
@@ -263,13 +264,17 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
       }
       /* Else, loop again */
     }
+    /* Free current node */
+    free(current_node->variable_statuses);
+    free(current_node);//TODO I wasn't doing this originally... any reason why?
+    current_node = NULL;
   }
   *z_out = global_lower_bound;
   *number_of_nodes = count;
 
   /* Logging stuff*/
   if(logging_rule != NO_LOGGING)
-    fprintf(logging_stream, "\nAlgorithm finished! Result: %d / %d, %d nodes g"
+    fprintf(logging_stream, "\nAlgorithm finished! Result: %ld / %ld, %d nodes g"
                             "enerated.\n▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄"
                             "▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n\n", *z_out, 
             z, count);
@@ -285,14 +290,14 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
 }
 
 /* Initial global lower bound heuristic */
-int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z, 
+int find_heuristic_initial_GLB(int profits[], int weights[], int x[], const long z, 
                                int n, int capacity, char *problem_file,
                                int DP_method, const int dualbound_type, 
                                const long long int memory_allocation_limit, const int timeout, 
                                clock_t *start_time)
 {
   /* Run the FPTAS on the original problem with high epsilon */
-  double eps = 0.002;
+  double eps = 0.1;
   double K;
   int sol_prime[n]; 
   int *profits_prime = (int *) malloc(n * sizeof(*profits_prime));
@@ -318,7 +323,7 @@ int find_heuristic_initial_GLB(int profits[], int weights[], int x[], int z,
 }
 
 /* Branching algorithm */
-int find_branching_variable(int n, int z, int *variable_statuses, 
+int find_branching_variable(int n, const long z, int *variable_statuses, 
                             int branching_strategy, int *profits)
 {
   /* Random node enumeration algorithm */
@@ -467,7 +472,7 @@ Problem_Instance *select_and_dequeue_node(LL_Problem_Queue *node_queue)
 
 /* General case node bounds derivation algorithm */
 void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
-                 int x[], int capacity, int n, int z, int *lower_bound_ptr, 
+                 int x[], int capacity, int n, const long z, int *lower_bound_ptr, 
                  int *upper_bound_ptr, char *problem_file, int DP_method, 
                  int logging_rule, FILE *logging_stream, double eps, 
                  const int dualbound_type, const long long int memory_allocation_limit,
@@ -500,7 +505,7 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
           memory_allocation_limit, timeout, start_time);
 
     /* Bail out if overallocation happened */
-      if (bytes_allocated == -1 || *start_time == -1)
+    if (bytes_allocated == -1 || *start_time == -1)
     {
       free(profits_prime);
       printf("  %s detected in branch_and_bound.c\n", bytes_allocated == -1 ?
@@ -546,8 +551,9 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
           fptas_lower_bound += profits[i];
           if (K > 1)  
           {
-            fptas_upper_bound += K * profits_prime[i];
-            amount_truncated += profits[i] - profits_prime[i];
+            // was: fptas_upper_bound += K * profits_prime[i];
+            fptas_upper_bound += profits[i];
+            amount_truncated += profits[i] - K*profits_prime[i];
           }
           else
             fptas_upper_bound += profits[i];
@@ -559,13 +565,24 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
         if (sol_prime[i] == 1)
         {
           fptas_lower_bound += profits[i];
-          fptas_upper_bound += K * profits_prime[i];
+          if (K > 1)
+            fptas_upper_bound += K * profits_prime[i];
+          else /* K <= 1 */
+            fptas_upper_bound += profits_prime[i];
         }
       break;
 
   }
   *lower_bound_ptr = fptas_lower_bound;
   *upper_bound_ptr = (int) fptas_upper_bound;
+
+  /* Sanity check */
+  if(fptas_lower_bound > fptas_upper_bound)
+  {
+    printf("Fptas lower bound (%d) is greater than fptas upper bound (%d)!\n", fptas_lower_bound, (int)fptas_upper_bound);
+    printf("That can't be right! Let's get outta here!\n");
+    exit(-1);
+  }
 
   free(profits_prime);
 }

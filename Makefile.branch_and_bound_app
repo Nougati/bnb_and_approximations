@@ -1,16 +1,19 @@
 CC=gcc
 #CC_FLAGS= -g -Wall -Wextra -fsanitize=address -fsanitize=undefined
 CC_FLAGS= -g 
-#CC_FLAGS= -O3
+CC_FLAGS= -O3
 CC_LIBRARIES=-lm
 
-ALL: branch_and_bound_app branch_and_bound_benchmark
+ALL: branch_and_bound_app branch_and_bound_benchmark fptas_app
 .PHONY: ALL
 
 branch_and_bound_app : standard_branch_and_bound_app.o standard_branch_and_bound.o standard_fptas.o standard_pisinger_reader.o 
 	$(CC) $(CC_FLAGS) $^ -o $@ $(CC_LIBRARIES)
 
 branch_and_bound_benchmark : benchmark_branch_and_bound_benchmark.o benchmark_branch_and_bound.o benchmark_fptas.o benchmark_pisinger_reader.o
+	$(CC) $(CC_FLAGS) $^ -o $@ $(CC_LIBRARIES)
+  
+fptas_app : fptas_app.o fptas.o branch_and_bound.o pisinger_reader.o
 	$(CC) $(CC_FLAGS) $^ -o $@ $(CC_LIBRARIES)
 
 standard_%.o : %.c

@@ -32,8 +32,8 @@
 #include "bench_extern.h"
 #include "pisinger_reader.h"
 
-/* If memory has been exceeded, bytes_allocated will be -1 (so we write "memory
-     exceeeded to log" */
+/* If memory has been exceeded, bytes_allocated (defined in branch_and_bound.c
+   will be -1 (so we write "memory exceeeded to log" */
 /* If time has been exceeded, start_time will be -1 */
 
 
@@ -653,9 +653,10 @@ void benchmark_instance(char *file_name_holder, int problem_no, int timeout,
   {
     seed = time(NULL);
   }
-  int n, capacity, z;
+  int n, capacity;
+  long z;
   int *profits, *weights, *x;
-  int z_out = 0;
+  long z_out = 0;
   int number_of_nodes = 1;
 
   /* Initialise dynamic array */
@@ -756,7 +757,7 @@ void benchmark_instance(char *file_name_holder, int problem_no, int timeout,
   }
     
 
-  printf("%s problem #%d: Performance logged.(Result: %d/%d - %s)\n\n", file_name_holder, problem_no, z_out, z, problem_status);
+  printf("%s problem #%d: Performance logged.(Result: %ld/%ld - %s)\n\n", file_name_holder, problem_no, z_out, z, problem_status);
 }
 
 void command_line_validation(const char argv1[], const char argv2[], 
@@ -940,12 +941,13 @@ void benchmark_dp(char *file_name_holder, int problem_no, int timeout,
                   FILE *benchmark_stream)
 {
   /* Read in file */
-  int n, capacity, z;
+  int n, capacity;
+  long z;
   int *profits, *weights, *x;
   char problem_file[100];
   pisinger_reader(&n, &capacity, &z, &profits, &weights, &x, file_name_holder,
                   problem_no);
-  int z_out = 0;
+  long z_out = 0;
   int number_of_nodes = -1;
   int sol_out[n];
   for (int i = 0; i < n; i++) sol_out[i] = 0;
