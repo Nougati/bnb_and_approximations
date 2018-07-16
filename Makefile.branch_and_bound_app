@@ -1,7 +1,7 @@
 CC=gcc
 #CC_FLAGS= -g -Wall -Wextra -fsanitize=address -fsanitize=undefined
 CC_FLAGS= -g 
-CC_FLAGS= -O3
+#CC_FLAGS= -O3
 CC_LIBRARIES=-lm
 
 ALL: branch_and_bound_app branch_and_bound_benchmark fptas_app

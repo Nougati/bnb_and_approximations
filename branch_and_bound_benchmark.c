@@ -314,7 +314,7 @@ int main(int argc, char *argv[])
                 dp_benchmarking_set);
 
       fclose(benchmark_stream);
-      fflush(benchmark_stream);
+      //fflush(benchmark_stream);
 
       return 0;
     }
@@ -368,7 +368,7 @@ int main(int argc, char *argv[])
             argv[6], argv[5], file_out, problem_subset,
             argv[10], argv[11], argv[12], argv[13]);
   fclose(file_out);
-  fflush(file_out);
+  //fflush(file_out);
 
   return 0;
 }
@@ -758,6 +758,9 @@ void benchmark_instance(char *file_name_holder, int problem_no, int timeout,
     
 
   printf("%s problem #%d: Performance logged.(Result: %ld/%ld - %s)\n\n", file_name_holder, problem_no, z_out, z, problem_status);
+  free(profits);
+  free(weights);
+  free(x);
 }
 
 void command_line_validation(const char argv1[], const char argv2[], 

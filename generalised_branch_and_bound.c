@@ -4,7 +4,7 @@
  *  Does not work yet                                                         *
  *                                                                            *
  *  First edit: 12/06/2018                                                    *
- *   Last edit: 12/06/2018                                                    *
+ *   Last edit: 12/07/2018                                                    *
  *  Notes:                                                                    *
  *                                                                            *
  *                                                                            *
@@ -34,7 +34,11 @@
    TODO Next step:
      Start trying to design those data structures
 */
-void generalised_branch_and_bound(void)
+void generalised_branch_and_bound(int (*problem_reader)(char *filename, 
+                                  void *problem_spec_struct))
 {
-  printf("I do nothing!\n");
+  printf("Very nice!\n");
+  // TODO run the arbitrary problem reader
+  // TODO having run the arbitrary problem reader, run another arbitrary function which :wq
+
 }

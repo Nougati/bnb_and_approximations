@@ -24,7 +24,6 @@
 
 long long int bytes_allocated;
 
-/* Branch and bound methods */
 /* Branch and bound algorithm */
 void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                                    int capacity, const long z, long *z_out, 
@@ -46,7 +45,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
    *  sol_out: computed optimal solution (output parameter)
    *  n: number of items for the instance
    *  problem_file: string of the problem file reading from (I think this is 
-   *                only here because of the badly designed VV DP
+   *                only here because of the badly designed VV DP)
    *  branching_strategy:
    *    -tb, -rb, or -le
    *  seed: only relevant for -rb 
@@ -111,13 +110,13 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
       if (bytes_allocated == -1 || *start_time == -1)
       {
         /* Total clean up */
+        printf("  %s detected in branch_and_bound.c at node %d\n", bytes_allocated == -1 ?
+               "Overallocation" : "Timeout", count);
         free(current_node->variable_statuses);
         free(current_node);
         while (LL_dequeue(node_queue))
           ; 
         free(node_queue);
-        printf("  %s detected in branch_and_bound.c at node %d\n", bytes_allocated == -1 ?
-               "Overallocation" : "Timeout", count);
         return;
       }
       current_node->lower_bound = global_lower_bound;
@@ -140,13 +139,15 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
       if (bytes_allocated == -1 || *start_time == -1)
       {
         /* Total clean up */
+        /* TODO We get node leaks exiting here */
+        printf("%s detected in branch_and_bound.c at node %d\n", 
+               bytes_allocated == -1 ? "Overallocation" : "Timeout", 
+               current_node->ID);
         free(current_node->variable_statuses);
         free(current_node);
-        while (LL_dequeue(node_queue))//TODO I removed a negation from LL_dequeue in this
+        while (LL_dequeue(node_queue) != NULL)
           ; 
         free(node_queue);
-        printf("%s detected in branch_and_bound.c at node %d\n", bytes_allocated == -1 ?
-               "Overallocation" : "Timeout", current_node->ID);
         return;
       }
 
@@ -159,10 +160,9 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
     }
 
     /* If UB <= GLB, we safely prune this branch and continue to loop */
-    /* TODO Does this second 'if' condition make sense? */
     if ((current_node->ID != 0) && 
-        ((current_node->upper_bound <= global_lower_bound) || 
-         (current_node->upper_bound > current_node->parent_upper_bound)))  {
+        (current_node->upper_bound <= global_lower_bound)){
+         //(current_node->upper_bound > current_node->parent_upper_bound)))  {
       if(logging_rule != NO_LOGGING)
         fprintf(logging_stream, "\tUpper bound is lower that GLB! Pruning node b"
                 "ranch.\n");
@@ -204,12 +204,16 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
       branching_variable = find_branching_variable(n, z, 
                                               current_node->variable_statuses,
                                               branching_strategy, profits);
-      /* Logging stuff */
+
+      /* If we can't constrain anymore variables */
       if (branching_variable == -1) 
       {
         if(logging_rule != NO_LOGGING)
           fprintf(logging_stream, "\tNo variables left to constrain. Continuin"
                   "g...\n");
+        free(current_node->variable_statuses);
+        free(current_node);
+        current_node = NULL;
         continue;
       }
       int node_limit_flag = 0;
@@ -231,7 +235,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
         *z_out = global_lower_bound;
 
         /* Total clean up */
-        while (LL_dequeue(node_queue))//TODO I removed a negation on this
+        while (LL_dequeue(node_queue))
           ; 
         free(node_queue);
         return;
@@ -247,7 +251,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
           bytes_allocated = -1;
           *z_out = global_lower_bound;
           /* Total clean up */
-          while (LL_dequeue(node_queue))// TODO I removed a negation on this
+          while (LL_dequeue(node_queue))
             ; 
           free(node_queue);
           return;
@@ -256,17 +260,17 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
         {
           *start_time = -1;
           /* Total clean up */
-          while (LL_dequeue(node_queue))//TODO I removed a negation on this
+          while (LL_dequeue(node_queue))
             ; 
           free(node_queue);
           return;
         }
       }
-      /* Else, loop again */
+    /* Else, loop again */
     }
     /* Free current node */
     free(current_node->variable_statuses);
-    free(current_node);//TODO I wasn't doing this originally... any reason why?
+    free(current_node);
     current_node = NULL;
   }
   *z_out = global_lower_bound;
