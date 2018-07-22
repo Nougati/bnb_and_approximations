@@ -17,6 +17,13 @@
 #include "pisinger_reader.h"
 #include "branch_and_bound.h"
 
+/* Iterative merge sort start */
+int min(int x, int y);
+void iterative_merge_sort(struct solution_pair** head_ref, int list_length, int n);
+void merge(struct solution_pair** head_ref, int left_index, int mid_index, 
+           int right_index, int n, int list_length);
+
+int min(int x, int y) { return (x<y) ? x : y; }
 
 /* Preprocessor definitions */
 
@@ -67,7 +74,6 @@ void FPTAS(double eps, int *profits, int *weights, int *x, int *sol_prime,
    *  problem_file - just the string of the problem file
    *  K - the husk where we store the K value determined by this algo.
    */
-  // TODO adapt this for just symbolic profits
   int P = DP_max_profit(profits, n);
 
   /* Define K */
@@ -728,7 +734,7 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
   *    int w                                                                 *
   *      the max weight of a tuple in the list at the end of the algorithm   *
   *  Notes:                                                                  *
-  *    TODO make sure we set bytes_allocated to 0 on some condition in here  *
+  *                                                                          *
   ****************************************************************************/
 
   /* Base case */
@@ -834,19 +840,24 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
         *start_time = -1;
         break;
       }
-      remove_dominated_pairs(&head, memory_allocation_limit, start_time, timeout);
+      remove_dominated_pairs(&head, memory_allocation_limit, start_time, 
+                             timeout, n);
+
       /* Contingency exit lane */
-      if(bytes_allocated == -1)
+      if(bytes_allocated == -1 || *start_time == -1)
       {
-        /* Clean up*/
+        /* Clean up 
         current = head;
         while (current != NULL)
         {
           current = current->next;
-          free(head);
+          free(head); 
           head = current;
         }
-        return -1;
+        */
+        //return -1;
+        head = NULL;
+        break;
       }
     }
 
@@ -941,7 +952,9 @@ void push(struct solution_pair** head_ref, int new_weight, int new_profit,
 }
 
 /* W&S DP: Remove Dominated Pairs */
-void remove_dominated_pairs(struct solution_pair** head_ref, const long long int memory_allocation_limit, clock_t *start_time, const int timeout)
+void remove_dominated_pairs(struct solution_pair** head_ref, 
+                            const long long int memory_allocation_limit, 
+                            clock_t *start_time, const int timeout, int n)
 {
  /***remove_dominated_pairs documentation*************************************
   *  Description:                                                            *
@@ -965,8 +978,17 @@ void remove_dominated_pairs(struct solution_pair** head_ref, const long long int
   ****************************************************************************/
 
   /* Merge sort the list by weight */
-  merge_sort(head_ref, 0, start_time, timeout);
+  //merge_sort(head_ref, 0, start_time, timeout);
   
+  struct solution_pair* lets_count = *head_ref;
+  int list_length = 0;
+  for(lets_count = *head_ref; lets_count != NULL; lets_count = lets_count->next)
+    list_length++;
+  
+  iterative_merge_sort(head_ref, list_length, n);
+ 
+
+  /* Exit chute */
   if (bytes_allocated == -1 || *start_time == -1)
     return;
 
@@ -997,11 +1019,9 @@ void merge_sort(struct solution_pair** head_ref, long long int merge_sort_memory
  /* merge_sort: my adapation for solution pairs as originally described by    *
   *             geeks for geeks.                                              *
   *             This is strictly designed for linked lists                    *
-  *             This algorithm is said to have complexity O(nlogn)            */
-  
-  //if ((memory_allocation_limit != -1 &&
-  //    bytes_allocated >= memory_allocation_limit)||
-  //    bytes_allocated >= SYSTEM_MEMORY_LIMIT)
+  *             This algorithm is said to have complexity O(nlogn)            *
+  *                                                                           *
+  *                                                                           */
 
   /* Check for timeout */
   clock_t elapsed = clock() - *start_time;
@@ -1012,7 +1032,6 @@ void merge_sort(struct solution_pair** head_ref, long long int merge_sort_memory
     return;
   }
   
-
   if(merge_sort_memory >= SYSTEM_STACK_LIMIT)
   {
     printf("merge_sort_memory: %lld\n", merge_sort_memory);
@@ -1036,21 +1055,68 @@ void merge_sort(struct solution_pair** head_ref, long long int merge_sort_memory
   /* Recursively sort the sublists */
   merge_sort(&a, merge_sort_memory, start_time, timeout);
 
-  if(bytes_allocated == -1)
+  if(bytes_allocated == -1 || *start_time == -1)
+  { 
+    struct solution_pair* next_one;
+    struct solution_pair* temp_one;
+    while(a != NULL)
+    {
+      next_one = a->next;
+      free(a);
+      a = next_one;
+    }
+    while(b != NULL)
+    {
+      next_one = b->next;
+      free(b);
+      b = next_one;
+    }
+    /* Implicitly, this nullified head_ref */
+    *head_ref = NULL;
     return;
+  }
   
   merge_sort(&b, merge_sort_memory, start_time, timeout);
 
-  if(bytes_allocated == -1)
+  if(bytes_allocated == -1 || *start_time == -1)
+  { 
+    struct solution_pair* next_one;
+    while(a != NULL)
+    {
+      next_one = a->next;
+      free(a);
+      a = next_one;
+    }
+    while(b != NULL)
+    {
+      next_one = b->next;
+      free(b);
+      b = next_one;
+    }
+    /* Implicitly, this nullified head_ref */
+    *head_ref = NULL;
     return;
+  }
 
   /* Merge the two lists of this scope together */
   *head_ref = sorted_merge(a, b, start_time, timeout);
+  if(bytes_allocated == -1 || *start_time == -1)
+  { 
+    struct solution_pair* next_one;
+    while(*head_ref != NULL)
+    {
+      next_one = (*head_ref)->next;
+      free(*head_ref);
+      *head_ref = next_one;
+    }
+    return;
+  }
 }
 
 /* Merge sort aux: sorted merge function */
 struct solution_pair* sorted_merge(struct solution_pair* a, 
-                                   struct solution_pair* b, clock_t *start_time, const int timeout)
+                                   struct solution_pair* b, clock_t *start_time,
+                                   const int timeout)
 {
   /* Check for timeout */
   clock_t elapsed = clock() - *start_time;
@@ -1058,7 +1124,7 @@ struct solution_pair* sorted_merge(struct solution_pair* a,
   if (timeout != -1 && time_taken > timeout)
   {
     *start_time = -1;
-    return (struct solution_pair*)-1;
+    /* Complete the merge though because it's easier lol */
   }
 
   struct solution_pair* result = NULL;
@@ -1096,7 +1162,8 @@ struct solution_pair* sorted_merge(struct solution_pair* a,
   else
   {
     result = b;
-    result->next = sorted_merge(a, b->next, start_time, timeout); }
+    result->next = sorted_merge(a, b->next, start_time, timeout); 
+  }
   return(result);
 }
 
@@ -1184,5 +1251,202 @@ int did_timeout_occur(const int timeout, const clock_t start_time)
     return TRUE;
   else
     return FALSE;
+}
+
+
+/* Actual merge sort function */
+void iterative_merge_sort(struct solution_pair** head_ref, int list_length, int n)
+/******************************************************************************
+ * iterative_merge_sort:                                                      *
+ *  Implements sorted_merge iteratively across the list of items, first with  *
+ *   sublists of length 2, then 4, ... until the whole list has had a sorted  *
+ *   merge done on it.                                                        *
+ * TODO This breaks on knapPI_1_100_1000.csv                                  *
+ ******************************************************************************/
+{
+  for(int current_size = 1; current_size <= list_length-1; current_size *= 2)
+    for(int left_start = 0; left_start < list_length-1; 
+        left_start += 2*current_size)
+    {
+      int mid = left_start + current_size - 1;
+      int right_end = min(left_start + 2*current_size - 1, list_length-1);
+      merge(head_ref, left_start, mid, right_end, n, list_length);
+    }
+}
+
+/* Sorted merge function */
+void merge(struct solution_pair** head_ref, int left_index, int mid_index, 
+           int right_index, int n, int list_length)
+{
+  /* Merges symbolic sublists arr[left_index ... mid_index] and 
+      arr[mid_index+1 ... right_index] */
+  int n1 = mid_index - left_index + 1;
+  int n2 = right_index - mid_index;
+  if (n2 < 0) n2 = 0;
+  struct solution_pair* current, * left_current, * right_current;
+
+  /* Make empty linked list of length n1 */
+  struct solution_pair* left_head =  
+       (struct solution_pair*)calloc(sizeof(struct solution_pair) + n,
+        sizeof(int));
+  current = left_head;
+  for (int i = 0; i < n1-1 && left_index+i < list_length-1; i++)
+  {
+    struct solution_pair* new_solution_pair =
+       (struct solution_pair*)calloc(sizeof(struct solution_pair) + n,
+        sizeof(int));
+    current->next = new_solution_pair;
+    current = new_solution_pair;
+  }
+  current->next = NULL;
+  
+  /* Make empty linked list of length n2 */
+  struct solution_pair *right_head;
+  if (n2 > 0)
+  {
+    right_head =  
+         (struct solution_pair*)calloc(sizeof(struct solution_pair) + n,
+          sizeof(int));
+    current = right_head;
+    for (int i = 0; i < n2-1; i++)
+    {
+      struct solution_pair* new_solution_pair =
+         (struct solution_pair*)calloc(sizeof(struct solution_pair) + n,
+          sizeof(int));
+      current->next = new_solution_pair;
+      current = new_solution_pair;
+    }
+    current->next = NULL;
+  }
+  else
+  {
+    right_head = NULL;
+  }  
+
+  
+  /* Copy data into temp arrays */
+  current = *head_ref;
+  for (int i = 0; i < left_index; i++)
+    current = current->next; //TODO make sure this is shifting to the right node
+
+  left_current = left_head;
+  while(left_current != NULL)
+  {
+    left_current->weight = current->weight;
+    left_current->profit = current->profit;
+    for (int j = 0; j < n; j++)
+      left_current->solution_array[j] = current->solution_array[j];
+    left_current = left_current->next;
+    current = current->next;
+  }
+
+  /* current is at the start of the left_index, so shift it until it hits the 
+     right index */
+  //current = current->next;
+  //for(int i = left_index; i < mid_index; i++)
+  //  current = current->next; //TODO make sure this is shifting to the right node
+
+  /* current should be the right_index'th element */
+  right_current = right_head;
+  while(right_current != NULL)
+  {
+    right_current->weight = current->weight;
+    right_current->profit = current->profit;
+    for (int j = 0; j < n; j++)
+      right_current->solution_array[j] = current->solution_array[j];
+    right_current = right_current->next;
+    current = current->next;
+  }
+
+  /* Move current back to left_index */
+  current = *head_ref;
+  for(int i = 0; i < left_index; i++)
+  {
+    current = current->next;
+  }
+
+  /* Merge them until we hit the end of one of the lists */
+  left_current = left_head;
+  right_current = right_head;
+  while(left_current != NULL && right_current != NULL)
+  {
+    /* Pick the one with lower weight */
+    if (left_current->weight <= right_current->weight)
+    {
+      /* If they have the same weight, pick the one with higher profit */
+      if(left_current->weight == right_current->weight)
+      {
+        if(left_current->profit >= right_current->profit)
+        {
+          current->weight = left_current->weight;
+          current->profit = left_current->profit;
+          for (int j = 0; j < n; j++)
+            current->solution_array[j] = left_current->solution_array[j];
+          left_current = left_current->next;
+        }
+        else
+        {
+          current->weight = right_current->weight;
+          current->profit = right_current->profit;
+          for (int j = 0; j < n; j++)
+            current->solution_array[j] = right_current->solution_array[j];
+          right_current = right_current->next;
+        }
+      }
+      /* Left had the lower weight */
+      else
+      {
+        current->weight = left_current->weight;
+        current->profit = left_current->profit;
+        for (int j = 0; j < n; j++)
+          current->solution_array[j] = left_current->solution_array[j];
+        left_current = left_current->next;
+      }
+    }
+    /* Right had the lower weight */
+    else
+    {
+      current->weight = right_current->weight;
+      current->profit = right_current->profit;
+      for (int j = 0; j < n; j++)
+        current->solution_array[j] = right_current->solution_array[j];
+      right_current = right_current->next;
+    }
+    current = current->next;
+  }
+  
+  /* Empty any of the remaining elements out of the lists */
+  while (left_current != NULL)
+  {
+    current->weight = left_current->weight;
+    current->profit = left_current->profit;
+    for (int j = 0; j < n; j++)
+      current->solution_array[j] = left_current->solution_array[j];
+    left_current = left_current->next;
+    current = current->next;
+  }
+  while (right_current != NULL)
+  {
+    current->weight = right_current->weight;
+    current->profit = right_current->profit;
+    for (int j = 0; j < n; j++)
+      current->solution_array[j] = right_current->solution_array[j];
+    right_current = right_current->next;
+    current = current->next;
+  }
+
+  /* Free the lists */
+  while(left_head != NULL)
+  {
+    left_current = left_head->next;
+    free(left_head);
+    left_head = left_current;
+  }
+  while(right_head != NULL)
+  {
+    right_current = right_head->next;
+    free(right_head);
+    right_head = right_current;
+  }
 }
 

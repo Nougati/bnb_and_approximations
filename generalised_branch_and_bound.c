@@ -34,11 +34,11 @@
    TODO Next step:
      Start trying to design those data structures
 */
-void generalised_branch_and_bound(int (*problem_reader)(char *filename, 
+void generalised_branch_and_bound(int (*problem_reader)(const char *filename, 
                                   void *problem_spec_struct))
 {
   printf("Very nice!\n");
   // TODO run the arbitrary problem reader
-  // TODO having run the arbitrary problem reader, run another arbitrary function which :wq
+  // TODO having run the arbitrary problem reader, run another arbitrary function which
 
 }
