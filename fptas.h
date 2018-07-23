@@ -32,6 +32,7 @@ struct solution_pair
   int weight;
   int profit;
   struct solution_pair *next;
+  struct solution_pair *prev;
   int solution_array[];
 };
 
@@ -42,8 +43,9 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
 void push(struct solution_pair** head_ref, int new_weight, int new_profit, 
           int n, const long long int memory_allocation_limit);
 void remove_dominated_pairs(struct solution_pair** head_ref, 
-                          const long long int memory_allocation_limit, 
-                          clock_t *start_time, const int timeout, const int n);
+                            const long long int memory_allocation_limit, 
+                            clock_t *start_time, const int timeout, const int n, 
+                            int *first_iteration_flag);
 void merge_sort(struct solution_pair** head_ref, long long int merge_sort_memory, clock_t *start_time, const int timeout);
 struct solution_pair* sorted_merge(struct solution_pair* a, 
                                    struct solution_pair* b, clock_t *start_time, const int timeout);

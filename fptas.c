@@ -22,8 +22,8 @@ int min(int x, int y);
 void iterative_merge_sort(struct solution_pair** head_ref, int list_length, int n);
 void merge(struct solution_pair** head_ref, int left_index, int mid_index, 
            int right_index, int n, int list_length);
-
 int min(int x, int y) { return (x<y) ? x : y; }
+void linked_list_insertion_sort(struct solution_pair **head_ref);
 
 /* Preprocessor definitions */
 
@@ -761,6 +761,7 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
   while ((first_index < n) && items[first_index++].weight > capacity)
     ;
   /* If none of the elements will fit, we need to leave */
+  int first_iteration_flag = TRUE;
   if(first_index == n)
   {
     /* Clean up*/
@@ -841,8 +842,8 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
         break;
       }
       remove_dominated_pairs(&head, memory_allocation_limit, start_time, 
-                             timeout, n);
-
+                             timeout, n, &first_iteration_flag);
+  
       /* Contingency exit lane */
       if(bytes_allocated == -1 || *start_time == -1)
       {
@@ -954,7 +955,8 @@ void push(struct solution_pair** head_ref, int new_weight, int new_profit,
 /* W&S DP: Remove Dominated Pairs */
 void remove_dominated_pairs(struct solution_pair** head_ref, 
                             const long long int memory_allocation_limit, 
-                            clock_t *start_time, const int timeout, int n)
+                            clock_t *start_time, const int timeout, int n,
+                            int *first_iteration_flag)
 {
  /***remove_dominated_pairs documentation*************************************
   *  Description:                                                            *
@@ -976,17 +978,26 @@ void remove_dominated_pairs(struct solution_pair** head_ref,
   *    addressed. The algorithm seems resilient enough to cover length=1     *
   *    with its general case.                                                *
   ****************************************************************************/
-
-  /* Merge sort the list by weight */
   //merge_sort(head_ref, 0, start_time, timeout);
   
-  struct solution_pair* lets_count = *head_ref;
-  int list_length = 0;
-  for(lets_count = *head_ref; lets_count != NULL; lets_count = lets_count->next)
-    list_length++;
-  
-  iterative_merge_sort(head_ref, list_length, n);
- 
+  /* Merge sort the list on first iteration, by weight */
+  if (*first_iteration_flag)
+  {
+    printf("Merge sorting\n");
+    struct solution_pair* lets_count = *head_ref;
+    int list_length = 0;
+    for(lets_count = *head_ref; lets_count != NULL; lets_count = lets_count->next)
+      list_length++;
+    iterative_merge_sort(head_ref, list_length, n);
+    *first_iteration_flag = 0;
+  }  
+  /* Insertion sort the list on other iterations, by weight */
+  else
+  {
+    printf("Insertion sorting\n");
+    linked_list_insertion_sort(head_ref);
+  }
+
 
   /* Exit chute */
   if (bytes_allocated == -1 || *start_time == -1)
@@ -1261,7 +1272,7 @@ void iterative_merge_sort(struct solution_pair** head_ref, int list_length, int 
  *  Implements sorted_merge iteratively across the list of items, first with  *
  *   sublists of length 2, then 4, ... until the whole list has had a sorted  *
  *   merge done on it.                                                        *
- * TODO This breaks on knapPI_1_100_1000.csv                                  *
+ *  Sorts in ascending order by weight                                        *
  ******************************************************************************/
 {
   for(int current_size = 1; current_size <= list_length-1; current_size *= 2)
@@ -1323,11 +1334,10 @@ void merge(struct solution_pair** head_ref, int left_index, int mid_index,
     right_head = NULL;
   }  
 
-  
   /* Copy data into temp arrays */
   current = *head_ref;
   for (int i = 0; i < left_index; i++)
-    current = current->next; //TODO make sure this is shifting to the right node
+    current = current->next; 
 
   left_current = left_head;
   while(left_current != NULL)
@@ -1339,12 +1349,6 @@ void merge(struct solution_pair** head_ref, int left_index, int mid_index,
     left_current = left_current->next;
     current = current->next;
   }
-
-  /* current is at the start of the left_index, so shift it until it hits the 
-     right index */
-  //current = current->next;
-  //for(int i = left_index; i < mid_index; i++)
-  //  current = current->next; //TODO make sure this is shifting to the right node
 
   /* current should be the right_index'th element */
   right_current = right_head;
@@ -1447,6 +1451,54 @@ void merge(struct solution_pair** head_ref, int left_index, int mid_index,
     right_current = right_head->next;
     free(right_head);
     right_head = right_current;
+  }
+}
+
+void linked_list_insertion_sort(struct solution_pair **head_ref)
+/******************************************************************************
+ *  linked_list_insertion_sort                                                *
+ *    implements insertion sort for solution_pair structures                  *
+ *    TODO THIS DOESN'Y WORK :(                                               *
+ ******************************************************************************/  
+{
+  struct solution_pair *sorted_head, *current, *to_be_slotted;
+  /* Make doubly linked */
+  (*head_ref)->prev = NULL;
+  for(current = *head_ref; current->next != NULL; current = current->next)
+    current->next->prev = current;
+
+  for(sorted_head = *head_ref; sorted_head->next != NULL; sorted_head = sorted_head->next)
+  {
+    current = sorted_head;
+    to_be_slotted = current->next;
+
+    /* Move current to item that is greater than or equal to it */
+    while(current != NULL && to_be_slotted->weight < current->weight)
+    {
+      current = current->prev;
+    }
+
+    /* Insertion midlist (insert after current) */
+    if (current != NULL)
+    {
+      /* If is not already in order (if it is already in order, move on)*/
+      if(current->next != to_be_slotted)
+      {
+        to_be_slotted->prev->next = to_be_slotted->next;
+        to_be_slotted->next = current->next;
+        current->next = to_be_slotted;
+        //to_be_slotted->next = current->next;//TODO this is 
+        //current->next = to_be_slotted->next;//TODO loop is created here
+      }
+    }
+    /* Insertion at start of list (current backpedalled to NULL) */
+    else
+    {
+      (*head_ref)->next = (*head_ref)->next->next;
+      to_be_slotted->next = *head_ref;
+      *head_ref = to_be_slotted;
+    }
+    if(sorted_head->next == NULL) break;
   }
 }
 
