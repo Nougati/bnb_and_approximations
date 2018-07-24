@@ -94,13 +94,19 @@ def pisinger_to_mps(a_file_path, problem_no):
 
 
 def main():
-  instance_types_easy = ["1", "2", "3", "4", "5", "6"]
-  n_types_easy = ["50", "100", "200", "500", "1000", "2000", "5000", "10000"]
-  coefficient_types = ["1000", "10000", "100000", "1000000", "10000000"] 
-  coefficient_types_nine = ["1000", "100000", "1000000"] 
-  instance_types_hard = ["11", "12", "13", "14", "15", "16"]
-  n_types_hard = ["20", "50", "100", "200", "500", "1000", "2000", "5000",
-                  "10000"]
+  #instance_types_easy = ["1", "2", "3", "4", "5", "6"]
+  instance_types_easy = ["1"]
+  #n_types_easy = ["50", "100", "200", "500", "1000", "2000", "5000", "10000"]
+  n_types_easy = ["50"]
+  #coefficient_types = ["1000", "10000", "100000", "1000000", "10000000"] 
+  coefficient_types = ["1000"]
+  #coefficient_types_nine = ["1000", "100000", "1000000"] 
+  coefficient_types_nine = ["1000"]
+  #instance_types_hard = ["11", "12", "13", "14", "15", "16"]
+  instance_types_hard = ["11"]
+  #n_types_hard = ["20", "50", "100", "200", "500", "1000", "2000", "5000",
+  #                "10000"]
+  n_types_hard = ["200"]
   for i in range(1, 101):
     # Easy instances
     for j in range(len(instance_types_easy)):
