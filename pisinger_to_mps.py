@@ -101,7 +101,7 @@ def main():
   instance_types_hard = ["11", "12", "13", "14", "15", "16"]
   n_types_hard = ["20", "50", "100", "200", "500", "1000", "2000", "5000",
                   "10000"]
-  for i in range(1, 3):
+  for i in range(1, 101):
     # Easy instances
     for j in range(len(instance_types_easy)):
       for k in range(len(n_types_easy)):

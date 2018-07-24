@@ -19,7 +19,8 @@
 
 /* Iterative merge sort start */
 int min(int x, int y);
-void iterative_merge_sort(struct solution_pair** head_ref, int list_length, int n);
+void iterative_merge_sort(struct solution_pair** head_ref, int list_length, 
+                          int n);
 void merge(struct solution_pair** head_ref, int left_index, int mid_index, 
            int right_index, int n, int list_length);
 int min(int x, int y) { return (x<y) ? x : y; }
@@ -983,7 +984,6 @@ void remove_dominated_pairs(struct solution_pair** head_ref,
   /* Merge sort the list on first iteration, by weight */
   if (*first_iteration_flag)
   {
-    printf("Merge sorting\n");
     struct solution_pair* lets_count = *head_ref;
     int list_length = 0;
     for(lets_count = *head_ref; lets_count != NULL; lets_count = lets_count->next)
@@ -994,7 +994,6 @@ void remove_dominated_pairs(struct solution_pair** head_ref,
   /* Insertion sort the list on other iterations, by weight */
   else
   {
-    printf("Insertion sorting\n");
     linked_list_insertion_sort(head_ref);
   }
 
@@ -1467,12 +1466,14 @@ void linked_list_insertion_sort(struct solution_pair **head_ref)
   for(current = *head_ref; current->next != NULL; current = current->next)
     current->next->prev = current;
 
-  for(sorted_head = *head_ref; sorted_head->next != NULL; sorted_head = sorted_head->next)
+  sorted_head = *head_ref;
+  //while(sorted_head->next != NULL)
+  while(sorted_head != NULL && sorted_head->next != NULL)
   {
     current = sorted_head;
     to_be_slotted = current->next;
 
-    /* Move current to item that is greater than or equal to it */
+    /* Move current to item that is greater than or equal to to_be_slotted */
     while(current != NULL && to_be_slotted->weight < current->weight)
     {
       current = current->prev;
@@ -1482,23 +1483,42 @@ void linked_list_insertion_sort(struct solution_pair **head_ref)
     if (current != NULL)
     {
       /* If is not already in order (if it is already in order, move on)*/
-      if(current->next != to_be_slotted)
+      //if(current->next != to_be_slotted)
+      if(sorted_head != current)
       {
-        to_be_slotted->prev->next = to_be_slotted->next;
+        /* Moving to_be_slotted behind sorted_head */
+        sorted_head->next = to_be_slotted->next;
+        if(to_be_slotted->next != NULL)
+          to_be_slotted->next->prev = sorted_head;
         to_be_slotted->next = current->next;
+        current->next->prev = to_be_slotted;
         current->next = to_be_slotted;
-        //to_be_slotted->next = current->next;//TODO this is 
-        //current->next = to_be_slotted->next;//TODO loop is created here
+        to_be_slotted->prev = current;
+      }
+      else
+      {
+        sorted_head = sorted_head->next;
       }
     }
     /* Insertion at start of list (current backpedalled to NULL) */
     else
     {
-      (*head_ref)->next = (*head_ref)->next->next;
+      if (to_be_slotted->next != NULL)
+        to_be_slotted->next->prev = to_be_slotted->prev;
+      to_be_slotted->prev->next = to_be_slotted->next;
+      to_be_slotted->prev = NULL;
       to_be_slotted->next = *head_ref;
+      (*head_ref)->prev = to_be_slotted;
       *head_ref = to_be_slotted;
     }
-    if(sorted_head->next == NULL) break;
+  }
+  
+  /*Make sure it is sorted*/
+  current = *head_ref;
+  while (current->next != NULL)
+  {
+    assert(current->weight <= current->next->weight);
+    current = current->next;
   }
 }
 
