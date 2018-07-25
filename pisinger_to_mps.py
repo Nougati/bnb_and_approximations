@@ -84,8 +84,8 @@ def pisinger_to_mps(a_file_path, problem_no):
   file_out.close()
 
   # TODO Get rid of this after first use
-  test_list = "alot_of_mps_instances.test"
-  test_sols = "alot_of_mps_instances.solu"
+  test_list = "all_4_500_10000.test"
+  test_sols = "all_4_500_10000.solu"
   path_to_problems = "/home/nelsonfrew/branch_and_bound/problems_mps/"
   with open(test_list, "a") as f:
     f.write(path_to_problems + expected_problem_format + ".mps\n")
@@ -95,11 +95,11 @@ def pisinger_to_mps(a_file_path, problem_no):
 
 def main():
   #instance_types_easy = ["1", "2", "3", "4", "5", "6"]
-  instance_types_easy = ["1"]
+  instance_types_easy = ["4"]
   #n_types_easy = ["50", "100", "200", "500", "1000", "2000", "5000", "10000"]
-  n_types_easy = ["50"]
+  n_types_easy = ["500"]
   #coefficient_types = ["1000", "10000", "100000", "1000000", "10000000"] 
-  coefficient_types = ["1000"]
+  coefficient_types = ["10000"]
   #coefficient_types_nine = ["1000", "100000", "1000000"] 
   coefficient_types_nine = ["1000"]
   #instance_types_hard = ["11", "12", "13", "14", "15", "16"]
@@ -117,18 +117,18 @@ def main():
           pisinger_to_mps(csv_in, i)
 
     # Instance type 9
-    for k in range(len(n_types_easy)):
-      for l in range(len(coefficient_types_nine)):
-        csv_in = "knapPI_9_"+n_types_easy[k]+"_" \
-                 + coefficient_types_nine[l]+".csv"
-        pisinger_to_mps(csv_in, i)
+    #for k in range(len(n_types_easy)):
+    #  for l in range(len(coefficient_types_nine)):
+    #    csv_in = "knapPI_9_"+n_types_easy[k]+"_" \
+    #             + coefficient_types_nine[l]+".csv"
+    #    pisinger_to_mps(csv_in, i)
 
     # Hard instances
-    for j in range(len(instance_types_hard)):
-      for k in range(len(n_types_hard)):
-        csv_in = "knapPI_"+instance_types_hard[j]+"_"+n_types_hard[k]+"_10"\
-                 +"00.csv"
-        pisinger_to_mps(csv_in, i)
+    #for j in range(len(instance_types_hard)):
+    #  for k in range(len(n_types_hard)):
+    #    csv_in = "knapPI_"+instance_types_hard[j]+"_"+n_types_hard[k]+"_10"\
+    #             +"00.csv"
+    #    pisinger_to_mps(csv_in, i)
 
 if __name__ == "__main__":
   main()
