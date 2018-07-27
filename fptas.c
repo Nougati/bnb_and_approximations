@@ -736,6 +736,8 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
   *      the max weight of a tuple in the list at the end of the algorithm   *
   *  Notes:                                                                  *
   *                                                                          *
+  *                                                                          *
+  
   ****************************************************************************/
 
   /* Base case */
@@ -900,6 +902,34 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
     return max_profit;
   }
 }
+
+/* Pseudocode Section for new williamsonshmoys
+    TODO
+    Given A(j) a list of nondominated apirs:
+    for each (t,w) in A(j)
+      we're checking if item J+1 will fit
+      we have a last sorted by weight (ascending)
+      find the place where t+t_{j+1} would be in the list
+      if there's a pair there with the same weight, compare profits to deduce domination, 
+      then check above if tyo see if it dominates those above it
+        (do we need to check below it?)
+
+  
+  Pseudocode:
+  for j=2 to n
+    for each solution_pair in A(j)
+    if t + s_j <= B
+      position = the last node that isn't > solution_pair
+      if position->weight == current->weight && position->profit >= current->profit
+        current is dominated by solution with equal weight
+      above = position->prev
+      if current->weight <= above->weight && current->profit >= above->profit
+        current dominates above, so remove above and insert current
+      else if above->weight <= current->weight && above->profit >= current->profit
+        above dominates current so don't insert
+
+*/
+
 
 /* W&S DP: Linked list push function */
 void push(struct solution_pair** head_ref, int new_weight, int new_profit,
