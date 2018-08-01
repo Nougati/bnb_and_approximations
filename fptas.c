@@ -1005,7 +1005,9 @@ int williamson_shmoys_DP_amended(struct problem_item items[], int capacity, int 
     for(int j = first_index; j < n; j++)
     {
       /* Create a copy of the linked list, representing A(j-1) */
-      /* TODO this reeeally doesn't work; check gdb to see for yourself */
+      /* TODO This is almost working. There's something minutely wrong with 
+          this. Check the solutoin set derivations. I don't know that I was 
+          especially diligent in saving solution sets. */
       copy_linked_list(head, &copied_list_head, n, memory_allocation_limit);
       current = copied_list_head;
       while(current != NULL)
@@ -1021,13 +1023,18 @@ int williamson_shmoys_DP_amended(struct problem_item items[], int capacity, int 
               where this partial solution would be, according to its weight. 
               So, we first find the last node that is <= current */
           struct solution_pair *list_crawler = head;
-          while(list_crawler->next != NULL && list_crawler->next->weight <= possible_weight)
+          while(list_crawler->next != NULL 
+                && list_crawler->next->weight <= possible_weight)
             list_crawler = list_crawler->next;
           
           /* Check if current is dominated by solution with equal weight */
           if (list_crawler->profit >= possible_profit)
-            /* Then the hypothetical solution is dominated by equal weight item */
+          {
+            /* Then the hypothetical solution is dominated by 
+               equal weight item */
+            current = current->next;
             continue; 
+          }
             
           /* Hypothetical solution is not dominated so insert after 
              list_crawler, cementing it as a partial solution */
@@ -1810,14 +1817,15 @@ void remove_linked_list(struct solution_pair** head_reference)
  *   Goes from head to tail of a linked list, freeing the whole thing.        *
  *                                                                            *
  ******************************************************************************/  
-  struct solution_pair* current = *head_reference;
-  struct solution_pair* previous = NULL;
-  while(current != NULL)
+  //struct solution_pair* current = *head_reference;
+  struct solution_pair* next = *head_reference;
+  while(*head_reference != NULL)
   {
-    previous = current;
-    current = current->next;
-    bytes_allocated -= sizeof(previous);
-    free(previous);
+    next = next->next;
+    bytes_allocated -= sizeof(*head_reference);
+    free(*head_reference);
+    *head_reference = next;
+    //free(previous->solution_array);//TODO Invalid free?
   }
 }
 
@@ -1834,21 +1842,22 @@ void copy_linked_list(struct solution_pair* old_head,
    *   new_head is expected to be nothing yet.                                *
    ****************************************************************************/
   struct solution_pair* current_old = old_head;
-  struct solution_pair* current_new = *new_head;
+  struct solution_pair* current_new;
   struct solution_pair* previous_new = NULL;
 
   if (old_head != NULL)
   {
     /* Make new LL head */
-    current_new = 
+    *new_head = 
        (struct solution_pair*)calloc(sizeof(struct solution_pair) + n,
         sizeof(int));
+    current_new = *new_head;
     bytes_allocated += sizeof(struct solution_pair) + n*sizeof(int);
     if (memory_allocation_limit != -1 &&
         bytes_allocated > memory_allocation_limit)
     {
-      printf("  Overallocation detected in Williamson Shmoys LL copy_linked_list! Byt"
-             "es got to %lld.\n", bytes_allocated);
+      printf("  Overallocation detected in Williamson Shmoys LL copy_linked_lis"
+             "t! Bytes got to %lld.\n", bytes_allocated);
       bytes_allocated = -1;
     }
 
@@ -1859,7 +1868,7 @@ void copy_linked_list(struct solution_pair* old_head,
   else *new_head = NULL;
 
   while(current_old != NULL && bytes_allocated != -1)
-  {
+  { 	
     /* Allocate for current_new */
     current_new = 
        (struct solution_pair*)calloc(sizeof(struct solution_pair) + n,
@@ -1868,8 +1877,8 @@ void copy_linked_list(struct solution_pair* old_head,
     if (memory_allocation_limit != -1 &&
         bytes_allocated > memory_allocation_limit)
     {
-      printf("  Overallocation detected in Williamson Shmoys LL copy_linked_list! Byt"
-             "es got to %lld.\n", bytes_allocated);
+      printf("  Overallocation detected in Williamson Shmoys LL copy_linked_lis"
+             "t! Bytes got to %lld.\n", bytes_allocated);
       bytes_allocated = -1;
     }
 
@@ -1883,6 +1892,12 @@ void copy_linked_list(struct solution_pair* old_head,
     /* Set previous to current and progress current_old by one */
     previous_new = previous_new->next;
     current_old = current_old->next;
+  }
+  
+  /* Length of list >= 1 */
+  if(previous_new != NULL)
+  {
+    previous_new->next = NULL;
   }
 }
 
