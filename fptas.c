@@ -18,6 +18,20 @@
 #include "branch_and_bound.h"
 
 /* Iterative merge sort start */
+void remove_linked_list(struct solution_pair** head_reference);
+void copy_linked_list(struct solution_pair* old_head, 
+                      struct solution_pair** new_head,
+                      const int n, 
+                      const long long int memory_allocation_limit);
+void copy_solution_pair(struct solution_pair* old_pair,
+                        struct solution_pair* new_pair, const int n);
+int williamson_shmoys_DP_amended(struct problem_item items[], int capacity, int n,
+                                int *solution_array, const long long int memory_allocation_limit,
+                                const int timeout, clock_t *start_time);
+void remove_from_linked_list(struct solution_pair* to_be_removed);
+int dominates(struct solution_pair* A, struct solution_pair* B);
+void insert_after(struct solution_pair* reference_pair, int new_weight, int new_profit,
+                  int n, const long long int memory_allocation_limit);
 int min(int x, int y);
 void iterative_merge_sort(struct solution_pair** head_ref, int list_length, 
                           int n);
@@ -134,9 +148,12 @@ void FPTAS(double eps, int *profits, int *weights, int *x, int *sol_prime,
       clock_t DP_node_start_time = clock();
       #endif
 
-      int result = williamson_shmoys_DP(items_prime, capacity, n, sol_prime, 
-                                        memory_allocation_limit, timeout, 
-                                        start_time);
+      //int result = williamson_shmoys_DP(items_prime, capacity, n, sol_prime, 
+      //                                 memory_allocation_limit, timeout, 
+      //                                  start_time);
+        int result = williamson_shmoys_DP_amended(items_prime, capacity, n,
+                                  sol_prime, memory_allocation_limit,
+                                  timeout, start_time);
 
       #ifdef BENCHMARKING
       fflush(stdout);
@@ -903,32 +920,177 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
   }
 }
 
-/* Pseudocode Section for new williamsonshmoys
-    TODO
-    Given A(j) a list of nondominated apirs:
-    for each (t,w) in A(j)
-      we're checking if item J+1 will fit
-      we have a last sorted by weight (ascending)
-      find the place where t+t_{j+1} would be in the list
-      if there's a pair there with the same weight, compare profits to deduce domination, 
-      then check above if tyo see if it dominates those above it
-        (do we need to check below it?)
 
+
+
+
+int williamson_shmoys_DP_amended(struct problem_item items[], int capacity, int n,
+                                int *solution_array, const long long int memory_allocation_limit,
+                                const int timeout, clock_t *start_time)
+/*TODO debug this!*/
+{
+  /* Base case */
+  struct solution_pair* head = NULL;
+  struct solution_pair* current = NULL; 
+  push(&head, 0, 0, n, memory_allocation_limit);
+
+  /* Were we allowed to do that? */
+  if(bytes_allocated == -1)
+  {
+    /* Clean up*/
+    current = head;
+    while (current != NULL)
+    {
+      current = current->next;
+      free(head);
+      head = current;
+    }
+    return -1;
+  }
+
+  /* Go to the index of the first item we can fit */
+  int first_index = 0;
+  while ((first_index < n) && items[first_index++].weight > capacity)
+    ;
+
+  /* If none of the elements will fit, we need to leave */
+  int first_iteration_flag = TRUE;
+  if(first_index == n)
+  {
+    /* Clean up*/
+    current = head;
+    while (current != NULL)
+    {
+      current = current->next;
+      bytes_allocated -= sizeof(head);
+      free(head);
+      head = current;
+    }
+    /* Assuming solution_array has been malloc'd already */
+    for(int i=0; i < n; i++)
+    {
+      solution_array[i] = 0;
+    }
+
+    /* Max profit is 0 */
+    return 0;
+  }
+
+  /* We can play */
+  else
+  {
+    /* We insert after head because we know that this new solution pair will be
+       at least (0,0) */
+    insert_after(head, items[first_index-1].weight, 
+                 items[first_index-1].profit, n, memory_allocation_limit);
+
+    if(bytes_allocated == -1)
+    {
+      /* Clean up*/
+      current = head;
+      while (current != NULL)
+      {
+        current = current->next;
+        free(head);
+        head = current;
+      }
+      return -1;
+    }
+    head->solution_array[first_index-1] = 1;
   
-  Pseudocode:
-  for j=2 to n
-    for each solution_pair in A(j)
-    if t + s_j <= B
-      position = the last node that isn't > solution_pair
-      if position->weight == current->weight && position->profit >= current->profit
-        current is dominated by solution with equal weight
-      above = position->prev
-      if current->weight <= above->weight && current->profit >= above->profit
-        current dominates above, so remove above and insert current
-      else if above->weight <= current->weight && above->profit >= current->profit
-        above dominates current so don't insert
+    /* Linked list has just (0,0) and first item that can fit 
+       For each solution_pair in A(j): */
+    
+    struct solution_pair* copied_list_head;
+    for(int j = first_index; j < n; j++)
+    {
+      /* Create a copy of the linked list, representing A(j-1) */
+      /* TODO this reeeally doesn't work; check gdb to see for yourself */
+      copy_linked_list(head, &copied_list_head, n, memory_allocation_limit);
+      current = copied_list_head;
+      while(current != NULL)
+      {
+        int possible_weight = current->weight + items[j].weight;
+        int possible_profit = current->profit + items[j].profit;
 
-*/
+        /* If we could, hypothetically, have such a solution */
+        if (possible_weight <= capacity)
+        {
+          /* We know the list is currently nondominated and sorted (base case 
+              should have (0,0) and first item), so we navigate to the point 
+              where this partial solution would be, according to its weight. 
+              So, we first find the last node that is <= current */
+          struct solution_pair *list_crawler = head;
+          while(list_crawler->next != NULL && list_crawler->next->weight <= possible_weight)
+            list_crawler = list_crawler->next;
+          
+          /* Check if current is dominated by solution with equal weight */
+          if (list_crawler->profit >= possible_profit)
+            /* Then the hypothetical solution is dominated by equal weight item */
+            continue; 
+            
+          /* Hypothetical solution is not dominated so insert after 
+             list_crawler, cementing it as a partial solution */
+          insert_after(list_crawler, possible_weight, possible_profit, n, 
+                       memory_allocation_limit);
+          struct solution_pair* new_partial_solution = list_crawler->next;
+    
+          /* Copy the partial solution array */
+          for (int i = 0; i <= j; i++)
+            new_partial_solution->solution_array[i] = current->solution_array[i];
+          head->solution_array[j] = 1;
+
+          /* Remove local dominations before new partial solution */
+          while(dominates(new_partial_solution, new_partial_solution->prev))
+            remove_from_linked_list(new_partial_solution->prev);
+
+          /* Remove local dominations after new partial solution */
+          while(new_partial_solution->next != NULL 
+                && dominates(new_partial_solution, new_partial_solution->next))
+            remove_from_linked_list(new_partial_solution->next);
+        }
+      current = current->next;
+      }
+      remove_linked_list(&copied_list_head);
+    }
+    int max_profit = -1;
+    /* Only do this block if there wasn't a timeout */
+    if (*start_time != -1)
+    {
+      /* return max ((t,w) in A max) w*/
+      current = head;
+      struct solution_pair* best_pair;
+      while (current != NULL)
+      {
+        if (current->profit > max_profit)
+        {
+          max_profit = current->profit;
+          best_pair = current;
+        }
+        current = current->next;  
+      }
+    
+      /* Assuming solution_array has been malloc'd already */
+      for(int i=0; i < n; i++)
+      {
+        solution_array[i] = best_pair->solution_array[i];
+      }
+    }
+
+    /* Clean up */
+    current = head;
+    while (current != NULL)
+    {
+      current = current->next;
+      bytes_allocated -= sizeof(head);
+      free(head);
+      head = current;
+    }
+
+    return max_profit;
+
+  }
+}
 
 
 /* W&S DP: Linked list push function */
@@ -974,14 +1136,72 @@ void push(struct solution_pair** head_ref, int new_weight, int new_profit,
 
   /* Connect pair to the head of the list */
   new_solution_pair->next = (*head_ref);
+  new_solution_pair->prev = NULL;
 
   /* Initialise the array to 0's*/
   for(int i = 0; i < n; i++)
     *(new_solution_pair->solution_array+i) = 0;
  
   /* Set the new node to be the new head of the list */
+  if ((*head_ref) != NULL)
+    (*head_ref)->prev = new_solution_pair;
   (*head_ref) = new_solution_pair;
 }
+
+void insert_after(struct solution_pair* reference_pair, int new_weight, int new_profit,
+                  int n, const long long int memory_allocation_limit)
+{
+ /***insert_after*************************************************************
+  *  Description:                                                            *
+  *    Creates a solution_pair node and puts it after existing solution_pair *
+  *    called reference_pair.                                                *
+  *  Postconditions:                                                         *
+  *    New solution pair with weight new_weight and profit new_profit will   *
+  *    be inserted after reference_pair, with pointers 'next' for both being *
+  *    updated.                                                              *
+  *  Notes:                                                                  *
+  *    This doesn't update 'prev' members of the structs, cause (hopefully)  *
+  *    we won't need them!                                                   *
+  ****************************************************************************/
+  struct solution_pair* new_solution_pair = 
+     (struct solution_pair*)calloc(sizeof(struct solution_pair) + n,
+      sizeof(int));
+
+  bytes_allocated += sizeof(struct solution_pair) + n*sizeof(int);
+  if (memory_allocation_limit != -1 &&
+      bytes_allocated > memory_allocation_limit)
+  {
+    printf("  Overallocation detected in Williamson Shmoys LL insert_after! Byt"
+           "es got to %lld.\n", bytes_allocated);
+    bytes_allocated = -1;
+  }
+
+  /* If solution was allocated */
+  if (new_solution_pair)
+  {
+    struct solution_pair const temp_pair =
+      {.weight = new_weight, .profit = new_profit, .next=reference_pair->next};
+     memcpy(new_solution_pair, &temp_pair, sizeof(struct solution_pair));
+    
+  }
+
+  /* Define new pair's data (note to self: why does this need to be done like 
+     this?) */
+  new_solution_pair->weight = new_weight;
+  new_solution_pair->profit = new_profit;
+
+  /* Initialise the array to 0's*/
+  for(int i = 0; i < n; i++)
+    *(new_solution_pair->solution_array+i) = 0;
+
+  /* Insert pair into the list */
+  new_solution_pair->next = reference_pair->next;
+  new_solution_pair->prev = reference_pair;
+  if (reference_pair->next != NULL)
+    reference_pair->next->prev = new_solution_pair;
+  reference_pair->next = new_solution_pair;
+}
+
 
 /* W&S DP: Remove Dominated Pairs */
 void remove_dominated_pairs(struct solution_pair** head_ref, 
@@ -1026,7 +1246,6 @@ void remove_dominated_pairs(struct solution_pair** head_ref,
   {
     linked_list_insertion_sort(head_ref);
   }
-
 
   /* Exit chute */
   if (bytes_allocated == -1 || *start_time == -1)
@@ -1549,6 +1768,148 @@ void linked_list_insertion_sort(struct solution_pair **head_ref)
   {
     assert(current->weight <= current->next->weight);
     current = current->next;
+  }
+}
+
+int dominates(struct solution_pair* A, struct solution_pair* B)
+{
+/**dominates*******************************************************************
+ * Description                                                                *
+ *   Simple true/false function, returns TRUE (i.e. 1) if A dominates B, else *
+ *   returns FALSE (i.e. 0).                                                  *
+ *                                                                            *
+ ******************************************************************************/  
+  if(A->weight <= B->weight && A->profit >= B->profit)
+    return TRUE;
+  else
+    return FALSE;
+}
+
+void remove_from_linked_list(struct solution_pair* to_be_removed)
+{
+/**remove_from_linked_list*****************************************************
+ * Description                                                                *
+ *  removes solution_pair to_be_removed from the list which is it a part of   *
+ *                                                                            *
+ ******************************************************************************/  
+  /* Patch up pointers */
+  if(to_be_removed->prev != NULL)
+    to_be_removed->prev->next = to_be_removed->next;
+  if(to_be_removed->next != NULL)
+    to_be_removed->next->prev = to_be_removed->prev;
+
+  /* Free the memory */
+  bytes_allocated -= sizeof(to_be_removed);
+  free(to_be_removed);
+}
+
+void remove_linked_list(struct solution_pair** head_reference)
+{
+/**remove_linked_list**********************************************************
+ * Description                                                                *
+ *   Goes from head to tail of a linked list, freeing the whole thing.        *
+ *                                                                            *
+ ******************************************************************************/  
+  struct solution_pair* current = *head_reference;
+  struct solution_pair* previous = NULL;
+  while(current != NULL)
+  {
+    previous = current;
+    current = current->next;
+    bytes_allocated -= sizeof(previous);
+    free(previous);
+  }
+}
+
+void copy_linked_list(struct solution_pair* old_head, 
+                      struct solution_pair** new_head,
+                      const int n,
+                      const long long int memory_allocation_limit)
+{
+  /**copy_linked_list**********************************************************
+   * Description                                                              *
+   *   Copies the linked list starting at old_head onto a new list starting   *
+   *    at new_head.                                                          *
+   * Notes                                                                    *
+   *   new_head is expected to be nothing yet.                                *
+   ****************************************************************************/
+  struct solution_pair* current_old = old_head;
+  struct solution_pair* current_new = *new_head;
+  struct solution_pair* previous_new = NULL;
+
+  if (old_head != NULL)
+  {
+    /* Make new LL head */
+    current_new = 
+       (struct solution_pair*)calloc(sizeof(struct solution_pair) + n,
+        sizeof(int));
+    bytes_allocated += sizeof(struct solution_pair) + n*sizeof(int);
+    if (memory_allocation_limit != -1 &&
+        bytes_allocated > memory_allocation_limit)
+    {
+      printf("  Overallocation detected in Williamson Shmoys LL copy_linked_list! Byt"
+             "es got to %lld.\n", bytes_allocated);
+      bytes_allocated = -1;
+    }
+
+    copy_solution_pair(current_old, current_new, n);
+    previous_new = current_new;
+    current_old = current_old->next;
+  }
+  else *new_head = NULL;
+
+  while(current_old != NULL && bytes_allocated != -1)
+  {
+    /* Allocate for current_new */
+    current_new = 
+       (struct solution_pair*)calloc(sizeof(struct solution_pair) + n,
+        sizeof(int));
+    bytes_allocated += sizeof(struct solution_pair) + n*sizeof(int);
+    if (memory_allocation_limit != -1 &&
+        bytes_allocated > memory_allocation_limit)
+    {
+      printf("  Overallocation detected in Williamson Shmoys LL copy_linked_list! Byt"
+             "es got to %lld.\n", bytes_allocated);
+      bytes_allocated = -1;
+    }
+
+    /* Copy data from old to new */
+    copy_solution_pair(current_old, current_new, n);
+
+    /* Connect previous to current */
+    previous_new->next = current_new;
+    current_new->prev = previous_new;
+
+    /* Set previous to current and progress current_old by one */
+    previous_new = previous_new->next;
+    current_old = current_old->next;
+  }
+}
+
+void copy_solution_pair(struct solution_pair* old_pair,
+                        struct solution_pair* new_pair,
+                        const int n)
+{
+  /**copy_solution_pair********************************************************
+   * Description                                                              *
+   *   Copies the struct data from old_pair to new_pair                       *
+   * Notes                                                                    *
+   *   Assumes that new_pair has already been allocated                       *
+   *   DOES NOT copy next and prev pointers, as this is not presumed to be    *
+   *    useful in a copying scenario.                                         *
+   ****************************************************************************/
+  if(old_pair == NULL)
+  {
+    new_pair = NULL;
+  }
+  else
+  {
+    new_pair->weight = old_pair->weight;
+    new_pair->profit = old_pair->profit;
+    new_pair->next = NULL;
+    new_pair->prev = NULL;
+    for(int i = 0; i < n; i++)
+      new_pair->solution_array[i] = old_pair->solution_array[i];
   }
 }
 
