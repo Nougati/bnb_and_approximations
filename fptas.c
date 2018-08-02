@@ -927,7 +927,6 @@ int williamson_shmoys_DP(struct problem_item items[], int capacity, int n,
 int williamson_shmoys_DP_amended(struct problem_item items[], int capacity, int n,
                                 int *solution_array, const long long int memory_allocation_limit,
                                 const int timeout, clock_t *start_time)
-/*TODO debug this!*/
 {
   /* Base case */
   struct solution_pair* head = NULL;
@@ -996,7 +995,7 @@ int williamson_shmoys_DP_amended(struct problem_item items[], int capacity, int 
       }
       return -1;
     }
-    head->solution_array[first_index-1] = 1;
+    head->next->solution_array[first_index-1] = 1;
   
     /* Linked list has just (0,0) and first item that can fit 
        For each solution_pair in A(j): */
@@ -1005,9 +1004,6 @@ int williamson_shmoys_DP_amended(struct problem_item items[], int capacity, int 
     for(int j = first_index; j < n; j++)
     {
       /* Create a copy of the linked list, representing A(j-1) */
-      /* TODO This is almost working. There's something minutely wrong with 
-          this. Check the solutoin set derivations. I don't know that I was 
-          especially diligent in saving solution sets. */
       copy_linked_list(head, &copied_list_head, n, memory_allocation_limit);
       current = copied_list_head;
       while(current != NULL)
@@ -1045,7 +1041,7 @@ int williamson_shmoys_DP_amended(struct problem_item items[], int capacity, int 
           /* Copy the partial solution array */
           for (int i = 0; i <= j; i++)
             new_partial_solution->solution_array[i] = current->solution_array[i];
-          head->solution_array[j] = 1;
+          new_partial_solution->solution_array[j] = 1;
 
           /* Remove local dominations before new partial solution */
           while(dominates(new_partial_solution, new_partial_solution->prev))
