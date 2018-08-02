@@ -32,30 +32,37 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                                    int DP_method, int logging_rule, 
                                    FILE *logging_stream, double eps, 
                                    int *number_of_nodes,
-                                   long long int memory_allocation_limit, clock_t *start_time, 
-                                   int timeout, const int dualbound_type) 
+                                   long long int memory_allocation_limit, 
+                                   clock_t *start_time, int timeout, 
+                                   const int dualbound_type) 
 { 
-  /* Branch and bound algorithm for 0,1 Knapsack!
-   *  profits: array of profits
-   *  weights: array of weights
-   *  x: solution array
-   *  capacity: problem capacity
-   *  z: solution optimal
-   *  z_out: computed optimal (output parameter)
-   *  sol_out: computed optimal solution (output parameter)
-   *  n: number of items for the instance
-   *  problem_file: string of the problem file reading from (I think this is 
-   *                only here because of the badly designed VV DP)
-   *  branching_strategy:
-   *    -tb, -rb, or -le
-   *  seed: only relevant for -rb 
-   *  DP_method: -vv or -ws
-   *  logging_rule: NO_LOGGING, PARTIAL_LOGGING, FULL_LOGGING, FILE_LOGGING
-   *  logging_stream: either stdio or a file
-   *  eps: epsilon for the problem
-   *  number of nodes: how many nodes are generated through the algorithm 
-   *                  (output parameter)
-   * */
+  /**branch_and_bound_bin_knapsack*********************************************
+   * Description                                                              *
+   *  Carries out a branch and bound search on binary knapsack                *
+   * Parameters                                                               *
+   *  profits: array of profits                                               *
+   *  weights: array of weights                                               *
+   *  x: solution array                                                       *
+   *  capacity: problem capacity                                              *
+   *  z: solution optimal                                                     *
+   *  z_out: computed optimal (output parameter)                              *
+   *  sol_out: computed optimal solution (output parameter)                   *
+   *  n: number of items for the instance                                     *
+   *  problem_file: string of the problem file reading from (I think this is  *
+   *                only here because of the badly designed VV DP)            *
+   *  branching_strategy:                                                     *
+   *    -tb, -rb, or -le                                                      *
+   *  seed: only relevant for -rb                                             *
+   *  DP_method: -vv or -ws                                                   *
+   *  logging_rule: NO_LOGGING, PARTIAL_LOGGING, FULL_LOGGING, FILE_LOGGING   *
+   *  logging_stream: either stdio or a file                                  *
+   *  eps: epsilon for the problem                                            *
+   *  number of nodes: how many nodes are generated through the algorithm     *
+   *                  (output parameter)                                      *
+   * TODO                                                                     *
+   *  Implement find_lp_bounds support                                        *
+   *                                                                          *
+   ****************************************************************************/
   
   /* Initialise externals */
   bytes_allocated = 0;
@@ -79,90 +86,61 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
   int branching_variable;
   LL_Problem_Queue *node_queue = LL_create_queue(); 
   Problem_Instance *root_node = define_root_node(n);
+  LL_enqueue(node_queue, root_node, logging_stream, 
+             logging_rule, 0);
   srand(seed);
   Problem_Instance *current_node;
   int first_iteration = TRUE;
-  int global_lower_bound;
+  int global_lower_bound = 0;
   int iterations = 0;
 
   /* MAIN LOOP: While our node queue is not empty: */
-  while((first_iteration) || (node_queue->size >= 1))
+  while(node_queue->size >= 1)
   {
     iterations++;
-    /* Logging functionality */
+
+    /* Log information */
     if(logging_rule != NO_LOGGING)
       fprintf(logging_stream, "\nStarting loop iteration %d (Node queue size: %d"
               ")\n", iterations, node_queue->size);
 
-    /* Get next node and find its bounds */
-    /* TODO separate this from the loop */
-    if(first_iteration)
-    {
-      current_node = root_node;
-      current_node->upper_bound = INT_MAX;
-      current_node->ID = count;
-      global_lower_bound = find_heuristic_initial_GLB(profits, weights, x, z, 
-                                                  n, capacity, problem_file,
-                                                  DP_method, dualbound_type, 
-                                                  memory_allocation_limit,
-                                                  timeout, start_time);
+    /* Take node N off queue by some node selection scheme */
+    current_node = select_and_dequeue_node(node_queue);
+    
+    /* Derive the LB and UB for node N with the FPTAS */
+    find_bounds(current_node, profits, weights, x, capacity, n, z,
+                &current_node->lower_bound, &current_node->upper_bound,
+                problem_file, DP_method, logging_rule, logging_stream, eps,
+                dualbound_type, memory_allocation_limit, timeout, 
+                start_time);
 
-      if (bytes_allocated == -1 || *start_time == -1)
-      {
-        /* Total clean up */
-        printf("  %s detected in branch_and_bound.c at node %d\n", bytes_allocated == -1 ?
-               "Overallocation" : "Timeout", count);
-        free(current_node->variable_statuses);
-        free(current_node);
-        while (LL_dequeue(node_queue))
-          ; 
-        free(node_queue);
-        return;
-      }
-      current_node->lower_bound = global_lower_bound;
-      first_iteration = FALSE;
-      if(logging_rule != NO_LOGGING)
-        fprintf(logging_stream, "\tRoot node bounds established. GLB: %d", 
-                global_lower_bound);
-    }
-    else
+    /* Overflow check */
+    if (bytes_allocated == -1 || *start_time == -1)
     {
-      /* Take node N off queue by some node selection scheme */
-      current_node = select_and_dequeue_node(node_queue);
-      
-      /* Derive the LB and UB for node N with the FPTAS */
-      find_bounds(current_node, profits, weights, x, capacity, n, z,
-                  &current_node->lower_bound, &current_node->upper_bound,
-                  problem_file, DP_method, logging_rule, logging_stream, eps,
-                  dualbound_type, memory_allocation_limit, timeout, 
-                  start_time);
-      if (bytes_allocated == -1 || *start_time == -1)
-      {
-        /* Total clean up */
-        /* TODO We get node leaks exiting here */
-        printf("%s detected in branch_and_bound.c at node %d\n", 
-               bytes_allocated == -1 ? "Overallocation" : "Timeout", 
-               current_node->ID);
-        free(current_node->variable_statuses);
-        free(current_node);
-        while (LL_dequeue(node_queue) != NULL)
-          ; 
-        free(node_queue);
-        return;
-      }
-
-      if(logging_rule != NO_LOGGING)
-        fprintf(logging_stream, "\tNode %d (parent: %d) - bounds established: "
-                                "lower: %d, upper: %d (GLB: %d)\n", 
-                current_node->ID, current_node->parent_ID, 
-                current_node->lower_bound, current_node->upper_bound,
-                global_lower_bound);
+      /* Total clean up */
+      printf("%s detected in branch_and_bound.c at node %d\n", 
+             bytes_allocated == -1 ? "Overallocation" : "Timeout", 
+             current_node->ID);
+      free(current_node->variable_statuses);
+      free(current_node);
+      while (LL_dequeue(node_queue) != NULL)
+        ; 
+      free(node_queue);
+      return;
     }
+
+    /* Log information */
+    if(logging_rule != NO_LOGGING)
+      fprintf(logging_stream, "\tNode %d (parent: %d) - bounds established: "
+                              "lower: %d, upper: %d (GLB: %d)\n", 
+              current_node->ID, current_node->parent_ID, 
+              current_node->lower_bound, current_node->upper_bound,
+              global_lower_bound);
 
     /* If UB <= GLB, we safely prune this branch and continue to loop */
     if ((current_node->ID != 0) && 
-        (current_node->upper_bound <= global_lower_bound)){
-         //(current_node->upper_bound > current_node->parent_upper_bound)))  {
+        (current_node->upper_bound <= global_lower_bound))
+    {
       if(logging_rule != NO_LOGGING)
         fprintf(logging_stream, "\tUpper bound is lower that GLB! Pruning node b"
                 "ranch.\n");
@@ -205,7 +183,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                                               current_node->variable_statuses,
                                               branching_strategy, profits);
 
-      /* If we can't constrain anymore variables */
+      /* If we can't constrain anymore variables, move on */
       if (branching_variable == -1) 
       {
         if(logging_rule != NO_LOGGING)
@@ -218,17 +196,17 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
       }
       int node_limit_flag = 0;
 
-      /* Generate children */
+      /* Else, generate children */
       generate_and_enqueue_nodes(current_node, n, branching_variable, 
                                  node_queue, &count, logging_stream, logging_rule,
                                  &node_limit_flag);
 
+      /* Log information */
       if(logging_rule != NO_LOGGING)
         fprintf(logging_stream, "\t Node %d branched on variable %d\n",
                 current_node->ID, branching_variable);
 
-
-      /* Check if node overflow has occurred */
+      /* Node overflow check */
       if(node_limit_flag)
       { 
         printf("Node overflow! More than %d\n", NODE_OVERFLOW);
@@ -241,7 +219,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
         return;
       } 
 
-      /* Check for overallocation */
+      /* Overallocation check */
       int overallocation = is_boundary_exceeded(memory_allocation_limit, *start_time, timeout);
       if(overallocation)
       {
@@ -266,6 +244,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
           return;
         }
       }
+
     /* Else, loop again */
     }
     /* Free current node */
@@ -273,19 +252,21 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
     free(current_node);
     current_node = NULL;
   }
+  /* Prepare output parameters */
   *z_out = global_lower_bound;
   *number_of_nodes = count;
 
   /* Logging stuff*/
   if(logging_rule != NO_LOGGING)
-    fprintf(logging_stream, "\nAlgorithm finished! Result: %ld / %ld, %d nodes g"
+    fprintf(logging_stream, "\nAlgorithm finished! Result: %ld / %ld, %d node%s g"
                             "enerated.\n▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄"
                             "▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄▀▄\n\n", *z_out, 
-            z, count);
+            z, count+1, (count == 0) ? "" : "s");
 
   /* Total clean up */
   if(current_node != NULL)
   {
+    /* Clean up */
     free(current_node->variable_statuses);
     free(current_node);
     current_node = NULL;

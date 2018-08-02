@@ -15,10 +15,6 @@
  *  argv[9] : problem subset                                                 *
  *  argv[10] : hard instance set                                             *
  *  argv[11] : hard n set                                                    *
- *                                                                           *
- *  TODO                                                                     *
- *    The sanitiser is picking up a memory leak in this!                     *
- *                                                                           *
  *****************************************************************************/
 
 #include <stdio.h>
