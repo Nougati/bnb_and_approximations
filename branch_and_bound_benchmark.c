@@ -243,9 +243,9 @@ int main(int argc, char *argv[])
         printf("hard_n_set: %s\n", hard_n_set);
       }while(strncmp(input_str, "0", 1) != 0);
 
-      char dualbound_types_set[] = "0000";
+      char dualbound_types_set[] = "00000";
       printf("Enter the dual bound strategies you want to toggle (apriori, +nK,"
-             "+nK-omega, roundup).\n");
+             "+nK-omega, roundup, LP).\n");
       do{
         scanf("%s", input_str);
         if(strcmp(input_str,"apriori")==0) dualbound_types_set[0] = 
@@ -256,6 +256,8 @@ int main(int argc, char *argv[])
                                 ( dualbound_types_set[2] == '0' ? '1' : '0' );
         else if(strcmp(input_str,"roundup")==0) dualbound_types_set[3] = 
                                 ( dualbound_types_set[3] == '0' ? '1' : '0' );
+        else if(strcmp(input_str,"LP")==0) dualbound_types_set[4] = 
+                                ( dualbound_types_set[4] == '0' ? '1' : '0' );
         printf("dualbound_types_set: %s\n", dualbound_types_set);
       }while(strncmp(input_str, "0", 1) != 0);
 
@@ -310,7 +312,6 @@ int main(int argc, char *argv[])
                 dp_benchmarking_set);
 
       fclose(benchmark_stream);
-      //fflush(benchmark_stream);
 
       return 0;
     }
@@ -394,7 +395,8 @@ void benchmark(long long int memory_allocation_limit, int timeout, char *DP_set,
   const char *branching_strat_names[] = {"Linear Enumeration branching",
                                          "Random Branching",
                                          "Truncation branching"};
-  const char *dualbound_type_names[] = {"A priori", "+nK", "+nK - ω", "roundup"};
+  const char *dualbound_type_names[] = {"A priori", "+nK", "+nK - ω", "roundup",
+                                        "LP"};
 
   fprintf(benchmark_stream, "File name, DP method, branching strategy, dual bou"
                             "nd strategy, problem #, runtime, memory allocated,"
@@ -437,7 +439,7 @@ void benchmark(long long int memory_allocation_limit, int timeout, char *DP_set,
 
             /* Easy instances: For each dual bounding method */
             for(int dualbounding_method = APRIORI_DUAL;
-                dualbounding_method <= APOSTERIORI_DUAL_ROUNDUP;
+                dualbounding_method <= LINEAR_PROG_DUAL;
                 dualbounding_method++)
             {
               if(strncmp(&dualbound_types_set[dualbounding_method], "0", 1) ==0)
@@ -486,7 +488,7 @@ void benchmark(long long int memory_allocation_limit, int timeout, char *DP_set,
 
             /* Instance 9: For each dual bounding method */
             for(int dualbounding_method = APRIORI_DUAL;
-                dualbounding_method <= APOSTERIORI_DUAL_ROUNDUP;
+                dualbounding_method <= LINEAR_PROG_DUAL;
                 dualbounding_method++)
             {
               if(strncmp(&dualbound_types_set[dualbounding_method], "0", 1) ==0)
@@ -703,7 +705,7 @@ void benchmark_instance(char *file_name_holder, int problem_no, int timeout,
   char *DP_str_arr[] = {"Vazirani", "Williamson Shmoy"}; 
   char *branching_strats[] = {"Linear Enum", "Random", "Truncation"};
   char *dualbound_methods_array[] = {"Basic a priori", "+nK", "+nK-ω", 
-                                     "Profits roundup"};
+                                     "Profits roundup", "LP Dual Bound"};
 
   fprintf(benchmark_stream, "%s, %s, %s, %s, %d, %s, %s, %d, %lf, %lf\n", 
           file_name_holder, DP_str_arr[DP_method], 
@@ -885,9 +887,9 @@ void command_line_validation(const char argv1[], const char argv2[],
 
   /* Check argv[12]: dual bounding methods */
   n = strlen(argv12);
-  if(n != 4)
+  if(n != 5)
   {
-    printf("Dual bounding methods (argv[12]) should be of length 4! Exiting..."
+    printf("Dual bounding methods (argv[12]) should be of length 5! Exiting..."
            "\n");
     exit(-1);
   }

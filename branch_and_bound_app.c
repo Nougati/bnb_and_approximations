@@ -90,7 +90,7 @@ int main(int argc, char *argv[]) {
 
   /* Dual bound type */
   int dualbound_type = atoi(argv[6]);
-  if(dualbound_type < APRIORI_DUAL || dualbound_type > APOSTERIORI_DUAL_ROUNDUP)
+  if(dualbound_type < APRIORI_DUAL || dualbound_type > LINEAR_PROG_DUAL)
   {
     printf("Unrecognised dual bound code specified! Exiting...\n");
     exit(-1);
@@ -165,6 +165,8 @@ int main(int argc, char *argv[]) {
     strcpy(str_dualbound_type, "Plus nK - ω dual bound");
   else if(dualbound_type==APOSTERIORI_DUAL_ROUNDUP)
     strcpy(str_dualbound_type, "Rounded up profits dual bound");
+  else if(dualbound_type==LINEAR_PROG_DUAL)
+    strcpy(str_dualbound_type, "Linear programming dual bound");
   if(branching_strategy == LINEAR_ENUM_BRANCHING)
     strcpy(str_branching_strategy, "Linear search enumeration branching");
   else if(branching_strategy == RANDOM_BRANCHING)

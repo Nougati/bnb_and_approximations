@@ -22,6 +22,12 @@
 #include "bench_extern.h"
 #include "pisinger_reader.h"
 
+void linear_programming_dual(int *profits, int *weights, int n, int capacity,
+                             int *lower_bound, double *upper_bound);
+void swap ( double* a, double* b );
+int partition (double arr1[], double arr2[], int l, int h);
+void quick_sort_parallel_lists(double *list1, double *list2, int lo, int hi);
+
 long long int bytes_allocated;
 
 /* Branch and bound algorithm */
@@ -376,6 +382,7 @@ Problem_Instance *define_root_node(int n)
                            (Problem_Instance*) malloc(sizeof(Problem_Instance));
   bytes_allocated += sizeof(Problem_Instance);
   root_instance->parent_ID = 0;
+  root_instance->ID = 1;
   root_instance->parent_upper_bound = INT_MAX;
   root_instance->variable_statuses = (int *) malloc(n * sizeof(int));
   bytes_allocated += n*sizeof(int);
@@ -477,7 +484,7 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
     printf("SMART DYNAMIC PROGRAAAAAAAAAAAMMING\n");
     exit(-1);
   }
-  else
+  else if (dualbound_type < LINEAR_PROG_DUAL)
   {
     if(logging_rule == FULL_LOGGING)
       fprintf(logging_stream, "\t\tCalling FPTAS for bounds (epsilon: %f, meth"
@@ -536,7 +543,6 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
           fptas_lower_bound += profits[i];
           if (K > 1)  
           {
-            // was: fptas_upper_bound += K * profits_prime[i];
             fptas_upper_bound += profits[i];
             amount_truncated += profits[i] - K*profits_prime[i];
           }
@@ -556,7 +562,48 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
             fptas_upper_bound += profits_prime[i];
         }
       break;
+    case LINEAR_PROG_DUAL : ;
+      /* Create symbolic profits: if variables are constrained off/on, set to
+          zero */
+      int symbolic_profits[n];
+      int symbolic_weights[n];
+      for(int i = 0; i < n; i++)
+      {
+        if(current_node->variable_statuses[i] == VARIABLE_UNCONSTRAINED)
+        {
+          symbolic_profits[i] = profits[i]; 
+          symbolic_weights[i] = weights[i];
+        }
+        else
+        {
+          symbolic_profits[i] = 0;
+          symbolic_weights[i] = 0;
+        }
+      }
 
+      /* Calculate dual with remaining capacity */
+      int adjusted_capacity = capacity;
+      for(int i = 0; i < n; i++)
+        if (current_node->variable_statuses[i] == VARIABLE_ON)
+          adjusted_capacity -= weights[i];
+
+      linear_programming_dual(symbolic_profits, symbolic_weights, n, 
+                              adjusted_capacity, &fptas_lower_bound,
+                              &fptas_upper_bound);
+
+      /* Add profits of items constrained on to upper/lower bounds */ 
+      if(adjusted_capacity >= 0)
+      {
+        for(int i = 0; i < n; i++)
+          if (current_node->variable_statuses[i] == VARIABLE_ON)
+          {
+            fptas_upper_bound += profits[i];
+            fptas_lower_bound += profits[i];
+          }  
+        if(fptas_lower_bound > fptas_upper_bound)
+          printf("Gotcha!\n");
+      }
+      break;
   }
   *lower_bound_ptr = fptas_lower_bound;
   *upper_bound_ptr = (int) fptas_upper_bound;
@@ -564,7 +611,7 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
   /* Sanity check */
   if(fptas_lower_bound > fptas_upper_bound)
   {
-    printf("Fptas lower bound (%d) is greater than fptas upper bound (%d)!\n", fptas_lower_bound, (int)fptas_upper_bound);
+    printf("Lower bound (%d) is greater than upper bound (%d)!\n", fptas_lower_bound, (int)fptas_upper_bound);
     printf("That can't be right! Let's get outta here!\n");
     exit(-1);
   }
@@ -733,4 +780,141 @@ Problem_Instance *LL_dequeue(LL_Problem_Queue *queue)
   return dequeued_problem;
 }
 
+void linear_programming_dual(int *profits, int *weights, int n, int capacity,
+                             int *lower_bound, double *upper_bound)
+{
+  /**linear_programming_dual***************************************************
+   * Description                                                              *
+   *   Given parallel lists of profits and weights, calculate the basic       *
+   *   linear programming dual and primal bounds for knapsack.                *
+   * Notes                                                                    *
+   *   lower_bound and upper_bound are output parameters.                     *
+   ****************************************************************************/ 
+  
+  if(capacity <= 0)
+    return;
+
+  /* Order by non-increasing profit/weight ratio */
+  double ratios[n];
+  double indices[n];
+  for(int i = 0; i < n; i++) indices[i] = 0;
+  for(int i = 0; i < n; i++)
+  {
+    if (weights[i] != 0)
+      ratios[i] = (double) profits[i]/weights[i];
+    else
+      ratios[i] = 0;
+    indices[i] = (double) i;
+  }
+
+  quick_sort_parallel_lists(ratios, indices, 0, n-1);
+
+  /* Pick items in that order, one by one until picking an item would 
+      overfill the knapsack */
+  int current_weight = 0;
+  int current_profit = 0;
+  int i = 0;
+  for(i = 0; i < n && weights[(int)indices[i]]+current_weight <= capacity; i++)
+  {
+    current_weight += weights[(int)indices[i]];
+    current_profit += profits[(int)indices[i]];
+  }
+
+  /* Then pick the fractional component of that item that you can fit to get
+      the dual bound */
+  double scale = 0;
+  if(i < n)
+  {
+    scale = (double)(capacity - current_weight) / weights[(int)indices[i]];
+    *upper_bound = current_profit + scale * profits[(int)indices[i]];
+  }
+  else *upper_bound = current_profit;
+  
+  /* Continue traversing the list until you find the next item that you can
+      fit to get the primal bound */
+
+  while (i < n && weights[(int)indices[i]]+current_weight > capacity)
+    i++;
+  if(i < n)
+    *lower_bound = profits[(int)indices[i]]+current_profit;
+  else
+    *lower_bound = current_profit;
+
+}
+
+void quick_sort_parallel_lists(double *list1, double *list2, int lo, int hi)
+{
+  /**quick_sort_parallel_lists*************************************************
+   * Description                                                              *
+   *  Sort according to the first list, but also reflect changes in second    *
+   *  list in parallel.                                                       *
+   *                                                                          *
+   ****************************************************************************/
+
+    // Create an auxiliary stack
+    double stack[ hi - lo + 1 ];
+ 
+    // initialize top of stack
+    int top = -1;
+ 
+    // push initial values of l and h to stack
+    stack[ ++top ] = lo;
+    stack[ ++top ] = hi;
+ 
+    // Keep popping from stack while is not empty
+    while ( top >= 0 )
+    {
+        // Pop h and l
+        hi = stack[ top-- ];
+        lo = stack[ top-- ];
+ 
+        // Set pivot element at its correct position
+        // in sorted array
+        int p = partition( list1, list2, lo, hi );
+ 
+        // If there are elements on left side of pivot,
+        // then push left side to stack
+        if ( p-1 > lo )
+        {
+            stack[ ++top ] = lo;
+            stack[ ++top ] = p - 1;
+        }
+ 
+        // If there are elements on right side of pivot,
+        // then push right side to stack
+        if ( p+1 < hi )
+        {
+            stack[ ++top ] = p + 1;
+            stack[ ++top ] = hi;
+        }
+    }
+}
+
+/* swap function from geeksforgeeks.org/iterative-quick-sort/ */
+void swap ( double* a, double* b )
+{
+    double t = *a;
+    *a = *b;
+    *b = t;
+}
+
+/*  partition function from geeksforgeeks.org/iterative-quick-sort/ */
+int partition (double arr1[], double arr2[], int l, int h)
+{
+    double x = arr1[h];
+    int i = (l - 1);
+ 
+    for (int j = l; j <= h- 1; j++)
+    {
+        if (arr1[j] >= x)
+        {
+            i++;
+            swap (&arr1[i], &arr1[j]);
+            swap (&arr2[i], &arr2[j]);
+        }
+    }
+    swap (&arr1[i + 1], &arr1[h]);
+    swap (&arr2[i + 1], &arr2[h]);
+    return (i + 1);
+}
 
