@@ -34,11 +34,22 @@
    TODO Next step:
      Start trying to design those data structures
 */
+
+/**/
+struct poo_struct{
+  int x;
+};
+
+
 void generalised_branch_and_bound(int (*problem_reader)(const char *filename, 
-                                  void *problem_spec_struct))
+                                  void *problem_spec_struct), void *a_structure)
 {
   printf("Very nice!\n");
-  // TODO run the arbitrary problem reader
-  // TODO having run the arbitrary problem reader, run another arbitrary function which
+  //struct poo_struct* in_house = (struct poo_struct*) a_structure;
+  //printf("poo_struct->x : %d\n", in_house->x);
+  // run the arbitrary problem reader
+  (*problem_reader)("Ass", a_structure);
+  // TODO having run the arbitrary problem reader, run another arbitrary function which uses values from a_structure
+
 
 }
