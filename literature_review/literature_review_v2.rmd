@@ -5,7 +5,6 @@
   - \usepackage[linesnumbered,ruled]{algorithm2e}
   - \usepackage{accents}
   - \newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
-  - \input{functions}
  output: pdf_document
  bibliography: literaturereviewv2.bib
 ---
