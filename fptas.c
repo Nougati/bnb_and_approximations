@@ -88,6 +88,8 @@ void FPTAS(double eps, int *profits, int *weights, int *x, int *sol_prime,
    *  bounding_method - a flag which should always be 2 (simple sum)
    *  problem_file - just the string of the problem file
    *  K - the husk where we store the K value determined by this algo.
+   *
+   *
    */
   int P = DP_max_profit(profits, n);
 
@@ -928,6 +930,22 @@ int williamson_shmoys_DP_amended(struct problem_item items[], int capacity, int 
                                 int *solution_array, const long long int memory_allocation_limit,
                                 const int timeout, clock_t *start_time)
 {
+  /*
+   *  PROPOSED IMPROVEMENTS (POSTPONED FOR NOW)
+   *   1. We make an array B of length n, where n is the number of items in the
+   *       problem, with associated profits array p. Let A[j-1] be a 
+   *       non-dominating array of solutions that have considered the first j-1
+   *       items, in ascending order of profits. Also let LB be the lower bound
+   *       on the KP instance.
+   *   2, We let B[n] = p[n], B[n-1] = p[n]+p[n-1], ... , and so on until 
+   *      B[0] = p[0]+p[1]+...+p[n].
+   *   3. At the beginning of iteration j, we do: For every partial solution 
+   *       with profit p_i and weight w_i stored as (p_i, w_i) at A[j-1][i], 
+   *       compute the LP (upper) bound UB_ji on the remaining n-j items with 
+   *       capacity W-w_i (you sort the items once at the beginning, and then 
+   *       only check which are available by index)
+   *   4. If p_i + UB_ij < LB, then the partial solution i cannot possibly lead
+   *        to an optimal solution, so we remove solution i from A[j-1]. */
   /* Base case */
   struct solution_pair* head = NULL;
   struct solution_pair* current = NULL; 
