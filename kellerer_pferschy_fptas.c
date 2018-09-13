@@ -351,7 +351,9 @@ void reduce_profits_to_mimimal(int *profits, int *intervals, int *subintervals,
   //    Set them to the value iz^l*e
 }
 
-void prune_excess_weight_items(void)
+void prune_excess_weight_items(int *profits, int *weights, int *intervals, 
+                               int *subintervals, int current_interval, 
+                               int current_subinterval, double epsilon)
 {
  /**prune_excess_weight_items**************************************************
   * USED BY SCALING REDUCTION ALGORITHM                                       *
@@ -363,9 +365,14 @@ void prune_excess_weight_items(void)
   *   Generate test cases for this                                            *
   *                                                                           *
   *****************************************************************************/
-  // sort subinterval by weight (they all have the same profit by this point)
-  // maintain an array of length 1/iepsilon where each index is the last
-  // considered weight
+  // REMEMBER this is only going to prune FOR A GIVEN SUBINTERVAL
+  // So it needs to take a parameter "interval of interest" and "subinterval of
+  //  interest" 
+  // Then create an array of the subinterval
+  //  sort subinterval by weight (they all have the same profit by this point)
+  //  maintain an array of length 1/iepsilon where each index is the last
+  //  considered weight
+  // THEN COPY THE SUBINTERVAL INFORMATION BACK TO THE ORIGINAL ARRAYS
 }
 
 void redefine_large_set(void)

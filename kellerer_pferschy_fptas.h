@@ -1,3 +1,10 @@
+/*******************************************************************************
+ *  keller_pferschy_fptas.h                                                    *
+ *  Description                                                                * 
+ *    The header file for the Kellerer/Pferschy FPTAS implementation.          * 
+ *                                                                             * 
+ *******************************************************************************/   
+
 void kellerer_pferschy_fptas(void);
 void scaling_reduction(double epsilon);
 void get_knapsack_lowerbound(int *profits, int *weights, int n, int capacity, 
@@ -7,10 +14,13 @@ void small_large_split(int *profits, int *weights, int n, int capacity,
                        double epsilon, int lower_bound, int *small, int *large);
 void partition_large_set(int *profits, int *weights, int n, double epsilon, 
                          int lower_bound, int *indices_out);
-void partition_interval(int *profits, int n3, double epsilon, int lowerbound, int *intervals, int *indices_out);
+void partition_interval(int *profits, int n3, double epsilon, int lowerbound, 
+                        int *intervals, int *indices_out);
 void reduce_profits_to_mimimal(int *profits, int *intervals, int *subintervals,
                                double epsilon, int lowerbound, int n);
-void prune_excess_weight_items(void);
+void prune_excess_weight_items(int *profits, int *weights, int *intervals, 
+                              int *subintervals, int current_interval, 
+                              int current_subinterval, double epsilon);
 void redefine_large_set(void);
 void binary_search(void);
 void interval_dynamic_programming(void);

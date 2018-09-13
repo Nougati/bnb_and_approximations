@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
   //test_partition_large_set();
   //test_partition_interval();
   //test_reduce_profits_to_minimal();
-  //test_prune_excess_weight_items(); TODO
+  //test_prune_excess_weight_items(); 
   //test_redefine_large_set(); TODO
   
   /* Everything for interval dynamic programming */
@@ -1167,4 +1167,55 @@ void test_reduce_profits_to_minimal(void)
         printf("\n\t");
     }
   }
+}
+
+
+void test_prune_excess_weight_items(void);
+void test_prune_excess_weight_items(void)
+{
+  /* Given a set of profits in subintervals with each profit reduced to minimal
+`     profit, symbolically prune everything after the first ceil(2/e*epsilon)
+      items with minimal weight */
+  /* The weights won't necessarily be in any sorted order (we only sorted by
+      profits), so prune_excess_weight-items will be expected to sort and set
+      the items to profit and weight 0 */
+  /*
+    lower_bound = 984, (modified) epsilon = 0.2
+    Interval #1: (196, 393]
+      Subinterval #1: (196, 236]
+      Subinterval #2: (236, 275]
+      Subinterval #3: (275, 314]
+      Subinterval #4: (314, 354]
+      Subinterval #5: (354, 393]
+    Interval #2: (393, 590]
+      Subinterval #1: (393, 472]
+      Subinterval #2: (472, 551]
+      Subinterval #3: (551, 590]
+    Interval #3: (590, 787]
+      Subinterval #1: (590, 708]
+      Subinterval #2: (708, 787]
+    Interval #4: (787, 984]
+      Subinterval #1: (787, 944]
+      Subinterval #2: (944, 984]
+  */
+  /* Test 1: only clearing those in the first subinterval */
+  /* ceil(2/i*eps) = ceil(2/1*0.2) = 10 */
+  int profits1[] = {196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196,
+                     275, 314, 551, 551};
+  int weights1[] = {12, 46, 81, 32, 15, 84, 52, 64, 21, 32, 16, 80, 101, 101,
+                     101, 101 };
+  int intervals1[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2 };
+  int subintervals1[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 5, 1};
+  int current_i1 = 1;
+  int current_k1 = 1;
+  double epsilon1 = 0.2;
+
+  prune_excess_weight_items(profits1, weights1, intervals1, subintervals1,
+                            current_i1, current_k1, epsilon1);
+
+  int expected_profits1[] = {196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 
+                             0, 0, 275, 314, 551, 551};
+  int expected_weights1[] = {12, 15, 16, 21, 32, 32, 46, 52, 64, 80, 0, 0,
+                             101, 101, 101, 101}; 
+
 }
