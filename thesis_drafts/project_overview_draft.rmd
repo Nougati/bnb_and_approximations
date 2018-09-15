@@ -19,27 +19,40 @@
 
 The field of discrete optimisation (CITE) studies problems that model discrete
  decision making. 
-Mixed-Intger Programming refers to a set of modelling techniques for
- discrete problems (CITE), where one aims to maximise/minimise an objective
- function $z=cx$, where $c$ is our problem data, and $x$ is the set of variables
- we can change to affect $z$'s value. 
+Mixed-Intger Programming refers to a set of modelling and solving techniques for
+ such discrete problems (CITE) by formulating them as Mixed-Integer Programs
+ (MIPs). 
+To do this, we formulate a given problem as follows:
+
+\begin{equation*}
+\begin{array}{ll@{}ll}
+\text{maximse}  & \displaystyle cx+hy &\\
+\text{subject to}  & \displaystyle Ax + Gy \leq b \\
+                   &x \geq 0 \text{ integral}\\
+                   &y \geq 0
+\end{array}
+\end{equation*}
+
 Generally, constraints on how we can optimise the objective function are linear,
  and variables can be specified to be integer or continuous. 
 
 Optimisation problems with linear-constraints with continuous variables are
  known as Linear Programs (LPs), which are solvable in polynomial time (CITE). 
-Mixed-Integer Programs (MIPs) are characterised by having one more more variables
- constrained to be integer, resulting in an NP-Hard problem. 
+MIPs, on the other hand, are characterised by having one more more variables
+ constrained to be integer, generally resulting in an NP-Hard problem. 
+In this report, we consider maximisation problems whose constraints are all
+ linear.
 
-The state-of-the-art method for solving mixed-integer programs is the Branch and
+The state-of-the-art method for solving MIPs is the Branch and
  Bound approach, which uses LP relaxations to achieve *implicit enumeration* of
  the search space. 
 Finding the LP relaxation of a MIP simply involves removing the integer
  constraints on our variables, and solving the resulting LP. 
+
 Because the feasible region of continuous solutions naturally subsumes the set
- of feasible solutions for integers, the LP relaxation optimal value will be,
- for a maximisation problem, *at least* the value of the optimal value for the
- original MIP. 
+ of feasible solutions for integers, we know, for optimal value for the LP
+ relaxation $z_{LP}$ and true optimal value $z$, that $z \leq z_{LP}$.
+
 This provides an upper bound in our case, which we refer to as the *dual bound*.
 Given our solved relaxtion, we contrain variables to "tighten" the continuous
  feasible region closer to the maximum integer solution. 
@@ -51,25 +64,84 @@ Otherwise, if this subproblem has a dual bound above our best known value, we
  continue constraining and solving the relaxation until a new feasible solution
  is found, or a further constrained subproblem of this is pruned.
 
-While the Branch and Bound is at worst case exponential-time, there exists
- Approximation Algorithms (AAs) which can provide feasible in polynomial-time. 
-Further, AAs provide a guarantee on the quality of the solution. 
+This constitutes the core of the Branch and Bound approach, which we describe
+ below: let $(x^i, y^i)$ be the optimal solution to linear program $LP_i$,
+ $(x^*, y^*)$ denote an optimal solution, $\ubar z$ denote the lower bound on
+ the optimal value and $z^*$ the optimal solution of the MIP, and let
+ $\mathcal{L}$ denote the list of nodes yet to be solve (i.e. not pruned nor
+ branched on)\;
+
+\begin{algorithm}[H]
+  \SetAlgoLined
+  \KwData{A Mixed-Integer Program.}
+  \KwResult{The optimal solution value}
+  Set $\mathcal{L}:={N_0}$, set $\ubar z := -\infty$, set  $(x*, y*):=\emptyset$\;
+  \While{$\mathcal{L}$ is not empty}
+  {
+  Choose a node $N_i$ from $\mathcal{L}$, and delete it from $\mathcal{L}$\;
+  Solve $LP_i$\;
+  \If{$LP_i$ is infeasible}
+  {
+  Go to step 3\;
+  }
+  \Else
+  {
+  Let $(x^i, y^i)$ be an optimal solution of $LP_i$ and $z_i$ be its objective value\:
+  }
+  \eIf{$z_i \leq \ubar z $}
+  {
+  Go to step 3\;
+  }
+  {
+  \If{$(x^i, y^i)$ is feasible to the MIP}
+  {
+  Set $\ubar z$ $:=$ $z_i$\;
+  Set $(x^*, y^*)$ $:=$ $(x^i , y^i)$\;
+  Go to step 3\;
+  }
+  }
+  \Else
+  {
+  From $LP_i$ construct $k \geq 2$ linear programs $K_{i1}, \dots, LP_{ik}$ with smaller feasible regions whose union does not contain $(x^i, y^i)$, but contains all the solutions of $LP_i$ with $x \in \mathbb{Z}$\;
+  Add the corresponding new nodse $N_{i1},\dots, N_{ik}$ to $\mathcal{L}$ and go to step 3.
+  }
+  
+  Return $\ubar z$\;
+  }
+\caption{Branch and Bound algorithm for Mixed-Integer Programming}
+\end{algorithm}
+
+
+While finding optimal solutions with Branch and Bound is at worst case
+ exponential-time, there exist Approximation Algorithms (AAs) which can provide
+ feasible solutions in polynomial-time, by sacrificing guaranteed optimality.
+Instead, AAs provide a guarantee on the *quality* of the solution, within some
+ factor. 
+
+
 An $\alpha$-approximation is an AA that guarantees that the solution value will
- always be within a constant factor $\alpha$ of the optimal solution.
+ always be within a constant factor $\alpha$ of the optimal solution; i.e. for
+ an approximate solution value $z_{A}$, it must be that
+ $\alpha z \leq z_{A} \leq z$.
 As a result, for a maximisation problem, we can analytically derive an upper
  bound on the optimal value from the lower bound guarantee on the optimal
  solution. 
 In this way, we can use AAs in lieu of a LP relaxation to obtain valid dual
- bounds on our optimal solution. 
+ bounds *a priori* on our optimal solution.
+Further, if we use information from a found approximate solution, we can derive
+ improved dual bounds *a posteriori* on our optimal solution.
 Because we are leveraging guarantees on the optimal value, the dual bounds we
  obtain are also guaranteed to be within a level of accuracy, relative to the
  optimal value. 
 This is distinct from LP relaxations, which can provide arbitrarily poor dual
  bounds.
 
+" I would add what sort of interesting problems arise when plugging AAs into BB."- Pierre
+
 In this project, we investigate methods of effectively using dual bounds
  provided by AAs for the 0,1 Knapsack. 
-To do this, we investigate known approximation schemes, and methods to construct
+To do this, we investigate known approximation schemes and methods to construct
  high quality dual bounds from them, as well as devising branching strategies
  within its Branch and Bound. 
+
 

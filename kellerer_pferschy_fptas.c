@@ -353,7 +353,7 @@ void reduce_profits_to_mimimal(int *profits, int *intervals, int *subintervals,
 
 void prune_excess_weight_items(int *profits, int *weights, int *intervals, 
                                int *subintervals, int current_interval, 
-                               int current_subinterval, double epsilon)
+                               int current_subinterval, double epsilon, int n)
 {
  /**prune_excess_weight_items**************************************************
   * USED BY SCALING REDUCTION ALGORITHM                                       *

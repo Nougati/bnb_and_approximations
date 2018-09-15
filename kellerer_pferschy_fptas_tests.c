@@ -1042,6 +1042,7 @@ void test_reduce_profits_to_minimal(void)
 {
   /* Given a set of profits, their interval indices, and their subinterval
       indices, set all the profits to their respective subinterval lowerbound */ 
+  printf("Running test_reduce_profits_to_minimal\n");
   int suite_status = SUCCESS;
   int status = SUCCESS;
   double epsilon1 = 0.2;
@@ -1179,43 +1180,139 @@ void test_prune_excess_weight_items(void)
   /* The weights won't necessarily be in any sorted order (we only sorted by
       profits), so prune_excess_weight-items will be expected to sort and set
       the items to profit and weight 0 */
-  /*
-    lower_bound = 984, (modified) epsilon = 0.2
-    Interval #1: (196, 393]
-      Subinterval #1: (196, 236]
-      Subinterval #2: (236, 275]
-      Subinterval #3: (275, 314]
-      Subinterval #4: (314, 354]
-      Subinterval #5: (354, 393]
-    Interval #2: (393, 590]
-      Subinterval #1: (393, 472]
-      Subinterval #2: (472, 551]
-      Subinterval #3: (551, 590]
-    Interval #3: (590, 787]
-      Subinterval #1: (590, 708]
-      Subinterval #2: (708, 787]
-    Interval #4: (787, 984]
-      Subinterval #1: (787, 944]
-      Subinterval #2: (944, 984]
-  */
+  printf("Running test_small_large_split...\n");
+  int suite_status = SUCCESS;
+  int status;
+
   /* Test 1: only clearing those in the first subinterval */
-  /* ceil(2/i*eps) = ceil(2/1*0.2) = 10 */
+  /* Everything after ceil(2/i*eps) = ceil(2/1*0.2) = 10 is not considered */
+  status = SUCCESS;
   int profits1[] = {196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196,
                      275, 314, 551, 551};
   int weights1[] = {12, 46, 81, 32, 15, 84, 52, 64, 21, 32, 16, 80, 101, 101,
                      101, 101 };
   int intervals1[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2 };
   int subintervals1[] = {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 5, 1};
+  int n1 = 16;
   int current_i1 = 1;
   int current_k1 = 1;
   double epsilon1 = 0.2;
 
+  
   prune_excess_weight_items(profits1, weights1, intervals1, subintervals1,
-                            current_i1, current_k1, epsilon1);
+                            current_i1, current_k1, epsilon1, n1);
 
   int expected_profits1[] = {196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 
                              0, 0, 275, 314, 551, 551};
   int expected_weights1[] = {12, 15, 16, 21, 32, 32, 46, 52, 64, 80, 0, 0,
                              101, 101, 101, 101}; 
 
+  /* Check expected outputs */  
+  for(int i = 0; i < n1; i++)
+  {
+    if(profits1[i] != expected_profits1[i] || weights1[i] = expected_weights1[i])
+    {
+      suite_status = FAILURE;
+      status = FAILURE;
+    }
+  }
+
+  /* Log errors */
+  if(status == FAILURE)
+  {
+    printf("\tTest 1 failed! Expected\n\t[");
+    for(int i = 0; i < n1; i++)
+      printf("%d%s", expected_profits1[i], i < n1-1 ? "]\n" : ", ");
+    printf("\tBut we got\n\t["
+    for(int i = 0; i < n1; i++)
+      printf("%d%s", profits1[i], i < n1-1 ? "]\n" : ", ");
+  }
+
+  /* Test 2: Some intermediary subinterval is considered */
+  /* Everything after ceil(2/i*eps) = is not considered */
+  status = SUCCESS;
+  int profits2[] = {};
+  int weights2[] = {};
+  int intervals2[] = {};
+  int subintervals2[] = {};
+  int n2;
+  int current_i2 ;
+  int current_k2 ;
+  double epsilon2 ;
+
+  prune_excess_weight_items(profits2, weights2, intervals2, subintervals2,
+                            current_i2, current_k2, epsilon2, n2);
+
+  int expected_profits2[] = {};
+  int expected_weights2[] = {};
+
+  /* Check expected outputs */  
+  for(int i = 0; i < n2; i++)
+  {
+    if(profits2[i] != expected_profits2[i] || weights2[i] = expected_weights2[i])
+    {
+      suite_status = FAILURE;
+      status = FAILURE;
+    }
+  }
+
+  /* Log errors */
+  if(status == FAILURE)
+  {
+    printf("\tTest 2 failed! Expected\n\t[");
+    for(int i = 0; i < n2; i++)
+      printf("%d%s", expected_profits2[i], i < n2-1 ? "]\n" : ", ");
+    printf("\tBut we got\n\t["
+    for(int i = 0; i < n2; i++)
+      printf("%d%s", profits2[i], i < n2-1 ? "]\n" : ", ");
+  }
+
+  /* Test 3:*/
+  /* Everything after ceil(3/i*eps) = is not considered */
+  status = SUCCESS;
+  int profits3[] = {};
+  int weights3[] = {};
+  int intervals3[] = {};
+  int subintervals3[] = {};
+  int n3;
+  int current_i3 ;
+  int current_k3 ;
+  double epsilon3 ;
+
+  prune_excess_weight_items(profits3, weights3, intervals3, subintervals3,
+                            current_i3, current_k3, epsilon3, n3);
+
+  int expected_profits3[] = {};
+  int expected_weights3[] = {};
+
+  /* Check expected outputs */  
+  for(int i = 0; i < n3; i++)
+  {
+    if(profits3[i] != expected_profits3[i] || weights3[i] = expected_weights3[i])
+    {
+      suite_status = FAILURE;
+      status = FAILURE;
+    }
+  }
+
+  /* Log errors */
+  if(status == FAILURE)
+  {
+    printf("\tTest 3 failed! Expected\n\t[");
+    for(int i = 0; i < n3; i++)
+      printf("%d%s", expected_profits3[i], i < n3-1 ? "]\n" : ", ");
+    printf("\tBut we got\n\t["
+    for(int i = 0; i < n3; i++)
+      printf("%d%s", profits3[i], i < n3-1 ? "]\n" : ", ");
+  }
 }
+
+void test_redefine_large_set(void);
+void test_redefine_large_set(void)
+{
+  /* Check that the pointers that originally pointed to an array of profits and
+     weights with 0 profit and 0 weight items have been updated to ones without
+     such cases */
+  
+}
+
