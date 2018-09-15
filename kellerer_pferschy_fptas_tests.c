@@ -13,6 +13,7 @@ int is_in(int value, int arr[], int arr_len);
 void test_partition_large_set(void);
 void test_partition_interval(void);
 void test_reduce_profits_to_minimal(void);
+void test_prune_excess_weight_items(void);
 
 int main(int argc, char *argv[])
 {
@@ -1171,7 +1172,6 @@ void test_reduce_profits_to_minimal(void)
 }
 
 
-void test_prune_excess_weight_items(void);
 void test_prune_excess_weight_items(void)
 {
   /* Given a set of profits in subintervals with each profit reduced to minimal
@@ -1185,7 +1185,8 @@ void test_prune_excess_weight_items(void)
   int status;
 
   /* Test 1: only clearing those in the first subinterval */
-  /* Everything after ceil(2/i*eps) = ceil(2/1*0.2) = 10 is not considered */
+  /* Everything after ceil(2/i*eps) = ceil(2/1*0.2) = 10 is not considered, 
+     just incase, lower_bound was 984 */
   status = SUCCESS;
   int profits1[] = {196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196, 196,
                      275, 314, 551, 551};
@@ -1210,7 +1211,7 @@ void test_prune_excess_weight_items(void)
   /* Check expected outputs */  
   for(int i = 0; i < n1; i++)
   {
-    if(profits1[i] != expected_profits1[i] || weights1[i] = expected_weights1[i])
+    if(profits1[i] != expected_profits1[i] || weights1[i] == expected_weights1[i])
     {
       suite_status = FAILURE;
       status = FAILURE;
@@ -1222,34 +1223,68 @@ void test_prune_excess_weight_items(void)
   {
     printf("\tTest 1 failed! Expected\n\t[");
     for(int i = 0; i < n1; i++)
-      printf("%d%s", expected_profits1[i], i < n1-1 ? "]\n" : ", ");
-    printf("\tBut we got\n\t["
+      printf("%d%s", expected_profits1[i], i < n1-1 ? ", " : "]\n" );
+    printf("\tBut we got\n\t[");
     for(int i = 0; i < n1; i++)
-      printf("%d%s", profits1[i], i < n1-1 ? "]\n" : ", ");
+      printf("%d%s", profits1[i], i < n1-1 ? ", " : "]\n" );
+    printf("\tand weights;\n\t[");
+    for(int i = 0; i < n1; i++)
+      printf("%d%s", expected_weights1[i], i < n1-1 ? ", " : "]\n");
+    printf("\tBut we got\n\t[");
+    for(int i = 0; i < n1; i++)
+      printf("%d%s", weights1[i], i < n1-1 ? ", " : "]\n");
   }
 
   /* Test 2: Some intermediary subinterval is considered */
-  /* Everything after ceil(2/i*eps) = is not considered */
+  /* Everything after ceil(2/i*eps) = ceil(2/(3*(1/6) = 4 is not considered */
+  /*
+    lower_bound = 81543, (modified) epsilon = 0.166667
+    Interval #1: (13590, 27181]
+      Subinterval #1: (13590, 15855]
+      Subinterval #2: (15855, 18120]
+      Subinterval #3: (18120, 20385]
+      Subinterval #4: (20385, 22650]
+      Subinterval #5: (22650, 24915]
+      Subinterval #6: (24915, 27181]
+    Interval #2: (27181, 40771]
+      Subinterval #1: (27181, 31711]
+      Subinterval #2: (31711, 36241]
+      Subinterval #3: (36241, 40771]
+    Interval #3: (40771, 54362]**
+      Subinterval #1: (40771, 47566]
+      Subinterval #2: (47566, 54362]
+    Interval #4: (54362, 67952]
+      Subinterval #1: (54362, 63422]
+      Subinterval #2: (63422, 67952]
+    Interval #5: (67952, 81543]
+      Subinterval #1: (67952, 79277]
+      Subinterval #2: (79277, 81543]
+  */
   status = SUCCESS;
-  int profits2[] = {};
-  int weights2[] = {};
-  int intervals2[] = {};
-  int subintervals2[] = {};
-  int n2;
-  int current_i2 ;
-  int current_k2 ;
-  double epsilon2 ;
+  int profits2[] = {15855, 15855, 20385, 20385, 20385, 24915, 31711, 31711,
+                    31711, 31711, 31711, 31711, 0, 0, 47566, 47566, 47566, 
+                    47566, 67952, 79277};
+  int weights2[] = {1, 1, 2, 2, 2, 3, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 7};
+  int intervals2[] = {1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2 };
+  int subintervals2[] = {2, 2, 4, 4, 4, 6, 2, 2, 2, 2, 2, 2, 2, 2};
+  int n2 = 20;
+  int current_i2 = 3;
+  int current_k2 = 2;
+  double epsilon2 = 1.0/6.0;
 
   prune_excess_weight_items(profits2, weights2, intervals2, subintervals2,
                             current_i2, current_k2, epsilon2, n2);
 
-  int expected_profits2[] = {};
-  int expected_weights2[] = {};
+  int expected_profits2[] = {15855, 15855, 20385, 20385, 20385, 24915, 31711, 
+                            31711, 31711, 31711, 31711, 31711, 0, 0, 47566, 
+                            47566, 47566, 0, 67952, 79277};
+  int expected_weights2[] = {1, 1, 2, 2, 2, 3, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 0,
+                             6, 7};
 
   /* Check expected outputs */  
   for(int i = 0; i < n2; i++)
   {
-    if(profits2[i] != expected_profits2[i] || weights2[i] = expected_weights2[i])
+    if(profits2[i] != expected_profits2[i] || weights2[i] == expected_weights2[i])
     {
       suite_status = FAILURE;
       status = FAILURE;
@@ -1261,34 +1296,50 @@ void test_prune_excess_weight_items(void)
   {
     printf("\tTest 2 failed! Expected\n\t[");
     for(int i = 0; i < n2; i++)
-      printf("%d%s", expected_profits2[i], i < n2-1 ? "]\n" : ", ");
-    printf("\tBut we got\n\t["
+      printf("%d%s", expected_profits2[i], i < n2-1 ? ", " : "]\n");
+    printf("\tBut we got\n\t[");
     for(int i = 0; i < n2; i++)
-      printf("%d%s", profits2[i], i < n2-1 ? "]\n" : ", ");
+      printf("%d%s", profits2[i], i < n2-1 ? ", " : "]\n" );
+    printf("\tand weights;\n\t[");
+    for(int i = 0; i < n2; i++)
+      printf("%d%s", expected_weights2[i], i < n2-1 ? ", " : "]\n" );
+    printf("\tBut we got\n\t[");
+    for(int i = 0; i < n2; i++)
+      printf("%d%s", weights2[i], i < n2-1 ? ", " : "]\n" );
   }
 
-  /* Test 3:*/
-  /* Everything after ceil(3/i*eps) = is not considered */
+  /* Test 3: */
+  /* Everything after ceil(2/i*eps) = 3 is not considered */
+  /*
+  Interval #1: (104, 209]
+    Subinterval #1: (104, 139]
+    Subinterval #2: (139, 174]
+    Subinterval #3: (174, 209]
+  Interval #2: (209, 314]
+    Subinterval #1: (209, 279]
+    Subinterval #2: (279, 314]
+  */
   status = SUCCESS;
-  int profits3[] = {};
-  int weights3[] = {};
-  int intervals3[] = {};
-  int subintervals3[] = {};
-  int n3;
-  int current_i3 ;
-  int current_k3 ;
-  double epsilon3 ;
+  int profits3[] = {104, 104, 104, 0, 0, 0, 174, 174, 279, 279, 279, 279, 279};
+  int weights3[] = {1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 3, 3, 3};
+  int intervals3[] = {1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2};
+  int subintervals3[] = {1, 1, 1, 1, 1, 1, 3, 3, 2, 2, 2, 2, 2};
+  int n3 = 13;
+  int current_i3 = 2;
+  int current_k3 = 2;
+  double epsilon3 = 1.0/3.0;
 
   prune_excess_weight_items(profits3, weights3, intervals3, subintervals3,
                             current_i3, current_k3, epsilon3, n3);
 
-  int expected_profits3[] = {};
-  int expected_weights3[] = {};
+  int expected_profits3[] = {104, 104, 104, 0, 0, 0, 174, 174, 279, 279, 279, 0,
+                             0};
+  int expected_weights3[] = {1, 1, 1, 1, 1, 1, 2, 2, 3, 3, 3, 0, 0};
 
   /* Check expected outputs */  
   for(int i = 0; i < n3; i++)
   {
-    if(profits3[i] != expected_profits3[i] || weights3[i] = expected_weights3[i])
+    if(profits3[i] != expected_profits3[i] || weights3[i] == expected_weights3[i])
     {
       suite_status = FAILURE;
       status = FAILURE;
@@ -1300,11 +1351,21 @@ void test_prune_excess_weight_items(void)
   {
     printf("\tTest 3 failed! Expected\n\t[");
     for(int i = 0; i < n3; i++)
-      printf("%d%s", expected_profits3[i], i < n3-1 ? "]\n" : ", ");
-    printf("\tBut we got\n\t["
+      printf("%d%s", expected_profits3[i], i < n3-1 ? ", " : "]\n" );
+    printf("\tBut we got\n\t[");
     for(int i = 0; i < n3; i++)
-      printf("%d%s", profits3[i], i < n3-1 ? "]\n" : ", ");
+      printf("%d%s", profits3[i], i < n3-1 ? ", " : "]\n" );
+    printf("\tand weights;\n\t[");
+    for(int i = 0; i < n3; i++)
+      printf("%d%s", expected_weights3[i], i < n3-1 ? ", " : "]\n");
+    printf("\tBut we got\n\t[");
+    for(int i = 0; i < n3; i++)
+      printf("%d%s", weights3[i], i < n3-1 ? ", " :  "]\n");
   }
+
+  if(suite_status == SUCCESS)
+    printf("\tAll passed!\n");
+
 }
 
 void test_redefine_large_set(void);
