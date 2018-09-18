@@ -22,7 +22,7 @@ The field of discrete optimisation (CITE) studies problems that model discrete
 Mixed-Intger Programming refers to a set of modelling and solving techniques for
  such discrete problems (CITE) by formulating them as Mixed-Integer Programs
  (MIPs). 
-To do this, we formulate a given problem as follows:
+The standard MIP formulation, for maximisation, is as follows:
 
 \begin{equation*}
 \begin{array}{ll@{}ll}
@@ -36,7 +36,7 @@ To do this, we formulate a given problem as follows:
 Generally, constraints on how we can optimise the objective function are linear,
  and variables can be specified to be integer or continuous. 
 
-Optimisation problems with linear-constraints with continuous variables are
+Optimisation problems with linear constraints with continuous variables are
  known as Linear Programs (LPs), which are solvable in polynomial time (CITE). 
 MIPs, on the other hand, are characterised by having one more more variables
  constrained to be integer, generally resulting in an NP-Hard problem. 
@@ -68,8 +68,8 @@ This constitutes the core of the Branch and Bound approach, which we describe
  below: let $(x^i, y^i)$ be the optimal solution to linear program $LP_i$,
  $(x^*, y^*)$ denote an optimal solution, $\ubar z$ denote the lower bound on
  the optimal value and $z^*$ the optimal solution of the MIP, and let
- $\mathcal{L}$ denote the list of nodes yet to be solve (i.e. not pruned nor
- branched on)\;
+ $\mathcal{L}$ denote the list of nodes yet to be solved (i.e. not pruned nor
+ branched on).
 
 \begin{algorithm}[H]
   \SetAlgoLined
@@ -82,7 +82,7 @@ This constitutes the core of the Branch and Bound approach, which we describe
   Solve $LP_i$\;
   \If{$LP_i$ is infeasible}
   {
-  Go to step 3\;
+  Go to step 2\;
   }
   \Else
   {
@@ -90,20 +90,20 @@ This constitutes the core of the Branch and Bound approach, which we describe
   }
   \eIf{$z_i \leq \ubar z $}
   {
-  Go to step 3\;
+  Go to step 2\;
   }
   {
   \If{$(x^i, y^i)$ is feasible to the MIP}
   {
   Set $\ubar z$ $:=$ $z_i$\;
   Set $(x^*, y^*)$ $:=$ $(x^i , y^i)$\;
-  Go to step 3\;
+  Go to step 2\;
   }
   }
   \Else
   {
   From $LP_i$ construct $k \geq 2$ linear programs $K_{i1}, \dots, LP_{ik}$ with smaller feasible regions whose union does not contain $(x^i, y^i)$, but contains all the solutions of $LP_i$ with $x \in \mathbb{Z}$\;
-  Add the corresponding new nodse $N_{i1},\dots, N_{ik}$ to $\mathcal{L}$ and go to step 3.
+  Add the corresponding new nodse $N_{i1},\dots, N_{ik}$ to $\mathcal{L}$ and go to step 2.
   }
   
   Return $\ubar z$\;
@@ -126,18 +126,20 @@ An $\alpha$-approximation is an AA that guarantees that the solution value will
 As a result, for a maximisation problem, we can analytically derive an upper
  bound on the optimal value from the lower bound guarantee on the optimal
  solution. 
-In this way, we can use AAs in lieu of a LP relaxation to obtain valid dual
+In this way, we can use AAs in lieu of an LP relaxation to obtain valid dual
  bounds *a priori* on our optimal solution.
 Further, if we use information from a found approximate solution, we can derive
  improved dual bounds *a posteriori* on our optimal solution.
 Because we are leveraging guarantees on the optimal value, the dual bounds we
- obtain are also guaranteed to be within a level of accuracy, relative to the
- optimal value. 
+ obtain are also guaranteed to be within a level of accuracy. 
 This is distinct from LP relaxations, which can provide arbitrarily poor dual
- bounds.
+ bounds. 
 
-" I would add what sort of interesting problems arise when plugging AAs into BB."- Pierre
-
+When conducting a Branch and Bound with AAs, an important observation is that
+ the general strategies which have contributed to the success of the
+ standard Branch and Bound with LPs must be addressed. 
+In particular, methods of branching and warm-starting solutions do not have a
+ clear translation with respect to AAs. 
 In this project, we investigate methods of effectively using dual bounds
  provided by AAs for the 0,1 Knapsack. 
 To do this, we investigate known approximation schemes and methods to construct

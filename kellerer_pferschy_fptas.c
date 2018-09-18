@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <limits.h>
 #include "kellerer_pferschy_fptas.h"
 
 /******************************************************************************
@@ -313,7 +314,7 @@ void partition_large_set(int *profits, int *weights, int n, double epsilon,
 
 }
 
-void partition_interval(int *profits, int n3, double epsilon, int lowerbound, 
+void partition_interval(int *profits, int n, double epsilon, int lowerbound, 
                         int *intervals, int *indices_out)
 {
  /**partition_interval*********************************************************
@@ -327,6 +328,7 @@ void partition_interval(int *profits, int n3, double epsilon, int lowerbound,
   *                                                                           *
   *****************************************************************************/
 
+  //happily assume indices_out is of length n
   // Because profits are sorted now, we can do the same thing as we did for the
   // first one and just have an array where each index i has a list of indices 
   // of the start indices for each subinterval in profits
@@ -375,7 +377,8 @@ void prune_excess_weight_items(int *profits, int *weights, int *intervals,
   // THEN COPY THE SUBINTERVAL INFORMATION BACK TO THE ORIGINAL ARRAYS
 }
 
-void redefine_large_set(void)
+void redefine_large_set(int *profits, int *weights, int *intervals, 
+                        int *subintervals, int n, int *new_n)
 {
  /**redefine_large_set*********************************************************
   * USED BY SCALING REDUCTION ALGORITHM                                       *
@@ -418,7 +421,7 @@ void interval_dynamic_programming(void)
         // y((k-1)p_t+r) = C(k)
 }
 
-void vector_merge_interval(void)
+void vector_merge_interval(int *A, int *B, int *C, int n)
 {
  /**vector_merge_interval******************************************************
   * USED BY INTERVAL DYNAMIC PROGRAMMING                                      *
@@ -455,6 +458,55 @@ void vector_merge_interval(void)
 
   
 
+}
+
+void vector_merge_naive(int *A, int *B, int *C, int n)
+{
+  /* This is a quadratic naive version of vector merge. 
+     It shouldn't be used outside of testing. */
+  int sum_array[n+1];
+
+  /* For each entry of C */
+  for(int j = 0; j <= n; j++)
+  {
+    for(int i = 0; i <= n; i++)
+      sum_array[i] = -1;
+    populate(sum_array, A, B, j);
+    C[j] = min_val_of(sum_array, n);
+  }
+}
+
+void populate(int *sum_array, int *A, int *B, int j)
+{
+  /* Auxiliary function to vector merge naive */
+  /* Find sums */
+  for(int i = 1; i <= j; i++)
+    sum_array[i] = get_associated_sum(A, B, j, i);
+}
+
+int get_associated_sum(int *A, int *B, int j, int i)
+{
+  /* Auxiliary function to vector merge naive */
+  int sum = A[i];
+  for(int k = 0; k <= j-i; k++)
+    sum += B[k];
+  return sum;
+}
+
+int min_val_of(int *array, int n)
+{
+  /* Auxiliary function to vector merge naive */
+  int min = INT_MAX;
+
+  /* General case */
+  for(int i = 1; i <= n; i++)
+    if(array[i] != -1 && array[i] < min)
+      min =  array[i];
+
+  if (min == INT_MAX)
+    return 0;
+  else 
+    return min;
 }
 
 void binary_search(void)
