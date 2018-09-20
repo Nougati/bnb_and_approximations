@@ -17,6 +17,7 @@
  *    redefine_large_set                                                      *
  *    prune_excess_weight_items                                               *
  *    reduce_profits_to_minimal                                               *
+
  *    partition_interval                                                      *
  *    partition_large_set                                                     *
  *    small_large_split                                                       *
@@ -581,4 +582,5 @@ void recursion(void)
   *                                                                           *
   *****************************************************************************/
 }
+
 
