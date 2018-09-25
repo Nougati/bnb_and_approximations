@@ -17,7 +17,6 @@
  *    redefine_large_set                                                      *
  *    prune_excess_weight_items                                               *
  *    reduce_profits_to_minimal                                               *
-
  *    partition_interval                                                      *
  *    partition_large_set                                                     *
  *    small_large_split                                                       *
@@ -30,11 +29,11 @@
 /*
 int main(int argc, char *argv[])
 {
-/* This main function will be removed when this all works  
-  return 0;
-}*/
+}
+*/
 
-void kellerer_pferschy_fptas(void)
+void kellerer_pferschy_fptas(int *profits, int *weights, int n, int capacity,
+                             double epsilon)
 {
  /**keller_pferschy_fptas******************************************************
   * Description                                                               *
@@ -45,8 +44,17 @@ void kellerer_pferschy_fptas(void)
   *                                                                           *
   *****************************************************************************/
  
-  // Perform scaling reduction
+  /* We use our own epsilon derived from the input */
+  double new_epsilon = epsilon;
+
+  /* Perform scaling reduction */
+  int large_profits[n], large_weights[n], small_profits[n], small_weights[n];
+  int new_n;
+  scaling_reduction(profits, weights, n, capacity, &new_epsilon, large_profits, 
+                    large_weights, small_profits, small_weights, &new_n);
+
   // Initialisation
+  
   // Perform Interval-Dynamic-Programming(L, 2z^l) returning (y, r) 
   // Sort S in decreasing order of efficiencies
   // Greedily add smalls
@@ -57,31 +65,70 @@ void kellerer_pferschy_fptas(void)
 
 }
 
-void scaling_reduction(double epsilon)
+void scaling_reduction(int *profits, int *weights, int n, int capacity,
+                       double *epsilon, int *large_profits, int *large_weights, 
+                       int *small_profits, int *small_weights, int *new_n)
 {
  /**scaling_reduction**********************************************************
   * USED BY CORE KELLERER AND PFERSCHY FPTAS                                  *
   * Description                                                               *
   *  Given ε, a set of items with associated weights and profits, create a    *
   *   set of items with adjusted profits and reduced size.                    *
-  * TODO                                                                      *
-  *   Generate test cases for this                                            *
-  *                                                                           *
   *                                                                           *
   *****************************************************************************/
   
   /* Compute z^l and modify e */
-  // get_knapsack_lowerbound(item set);
-  modify_epsilon(&epsilon);
+  int lower_bound;
+  double upper_bound;
+  get_knapsack_lowerbound(profits, weights, n, capacity, &lower_bound,
+                          &upper_bound);
+  modify_epsilon(epsilon);
+  printf("Lower_bound: %d\n", lower_bound);
 
   /* Derive small and large sets */
-  // small_large_split(items);
+  int n_large;
+  small_large_split(profits, weights, n, capacity, *epsilon, lower_bound, 
+                    small_profits, large_profits, small_weights, large_weights,
+                    &n_large);
 
   /* Partition large set into 1/ε - 1 intervals */
-  // partition_large_set(large_set);
+  int intervals[n], subintervals[n];
+  for(int i = 0; i < n; i++) intervals[i] = subintervals[i] = -1;
+  partition_large_set(large_profits, large_weights, n, *epsilon, lower_bound, 
+                      intervals);
+
+  /* Derive all the subintervals for derived intervals, for the large set */
+  partition_interval(large_profits, n, *epsilon, lower_bound, intervals,  
+                     subintervals);
+
+  /* Given derived intervals and subintervals, set every item to the lower bound
+      of its respective subinterval */
+  reduce_profits_to_minimal(large_profits, intervals, subintervals, *epsilon,
+                            lower_bound, n);
+
+  /* For each interval, and each subinterval, keep only some of the minimum
+      weight items */
+  int interval_upper_bound = (1 / *epsilon) - 1;
+  int subinterval_upper_bound;
+  for(int current_interval = 1; current_interval <= interval_upper_bound; 
+      current_interval++)
+  {
+    subinterval_upper_bound = ceil(1/(current_interval * *epsilon));
+    for(int current_subinterval = 1; current_subinterval <= subinterval_upper_bound;
+        current_subinterval++)
+    {
+      prune_excess_weight_items(large_profits, large_weights, intervals,
+                                subintervals, current_interval,
+                                current_subinterval, *epsilon, n);
+    }
+  }
+
+  /* Finally, redefine the large set of profits and weights in light of the
+      pruning that has occurred */
+  redefine_large_set(large_profits, large_weights, intervals, subintervals, n,
+                     new_n);
 
   //for(i=1, i <= 1/ε-1; i++)
-
     /* Partition intervals  */
     //partition_interval(L[i])
 
@@ -134,7 +181,7 @@ void get_knapsack_lowerbound(int *profits, int *weights, int n, int capacity,
   }
 
   /* Sort ratios in descending order */
-  quick_sort_parallel_lists(ratios, indices, 0, n-1);
+  quick_sort_parallel_lists_desc_double(ratios, indices, 0, n-1);
 
   /* Pick items in that order, one by one until picking an item would 
       overfill the knapsack */
@@ -169,7 +216,7 @@ void get_knapsack_lowerbound(int *profits, int *weights, int n, int capacity,
 
 }
 
-void quick_sort_parallel_lists(double *list1, double *list2, int lo, int hi)
+void quick_sort_parallel_lists_desc_double(double *list1, double *list2, int lo, int hi)
 {
   /**quick_sort_parallel_lists*************************************************
    * Description                                                              *
@@ -198,7 +245,7 @@ void quick_sort_parallel_lists(double *list1, double *list2, int lo, int hi)
  
         // Set pivot element at its correct position
         // in sorted array
-        int p = partition( list1, list2, lo, hi );
+        int p = partition_desc_double( list1, list2, lo, hi );
  
         // If there are elements on left side of pivot,
         // then push left side to stack
@@ -218,8 +265,57 @@ void quick_sort_parallel_lists(double *list1, double *list2, int lo, int hi)
     }
 }
 
+void quick_sort_parallel_lists_asc_double(double *list1, double *list2, int lo,
+                                           int hi)
+{
+  /**quick_sort_parallel_lists_asc*********************************************
+   * Description                                                              *
+   *  Sort according to the first list, but also reflect changes in second    *
+   *  list in parallel.                                                       *
+   *  Sorts in ascending order.                                               *
+   *                                                                          *
+   ****************************************************************************/
+
+    // Create an auxiliary stack
+    double stack[ hi - lo + 1 ];
+ 
+    // initialize top of stack
+    int top = -1;
+ 
+    // push initial values of l and h to stack
+    stack[ ++top ] = lo;
+    stack[ ++top ] = hi;
+ 
+    // Keep popping from stack while is not empty
+    while ( top >= 0 )
+    {
+        // Pop h and l
+        hi = stack[ top-- ];
+        lo = stack[ top-- ];
+ 
+        // Set pivot element at its correct position
+        // in sorted array
+        int p = partition_asc_double(list1, list2, lo, hi);
+ 
+        // If there are elements on left side of pivot,
+        // then push left side to stack
+        if ( p-1 > lo )
+        {
+            stack[ ++top ] = lo;
+            stack[ ++top ] = p - 1;
+        }
+ 
+        // If there are elements on right side of pivot,
+        // then push right side to stack
+        if ( p+1 < hi )
+        {
+            stack[ ++top ] = p + 1;
+            stack[ ++top ] = hi;
+        }
+    }
+}
 /* swap function from geeksforgeeks.org/iterative-quick-sort/ */
-void swap ( double* a, double* b )
+void swap_double( double* a, double* b )
 {
     double t = *a;
     *a = *b;
@@ -227,8 +323,9 @@ void swap ( double* a, double* b )
 }
 
 /*  partition function from geeksforgeeks.org/iterative-quick-sort/ */
-int partition (double arr1[], double arr2[], int l, int h)
+int partition_desc_double(double arr1[], double arr2[], int l, int h)
 {
+  /* Used by quick_sort_parallel_lists_desc */
     double x = arr1[h];
     int i = (l - 1);
  
@@ -237,17 +334,134 @@ int partition (double arr1[], double arr2[], int l, int h)
         if (arr1[j] >= x)
         {
             i++;
-            swap (&arr1[i], &arr1[j]);
-            swap (&arr2[i], &arr2[j]);
+            swap_double(&arr1[i], &arr1[j]);
+            swap_double(&arr2[i], &arr2[j]);
         }
     }
-    swap (&arr1[i + 1], &arr1[h]);
-    swap (&arr2[i + 1], &arr2[h]);
+    swap_double(&arr1[i + 1], &arr1[h]);
+    swap_double(&arr2[i + 1], &arr2[h]);
     return (i + 1);
 }
 
+/*  partition function from geeksforgeeks.org/iterative-uick-sort/ */
+int partition_asc_double(double arr1[], double arr2[], int l, int h)
+{
+  /* Used by quick_sort_parallel_lists_asc */
+    double x = arr1[h];
+    int i = (l - 1);
+ 
+    for (int j = l; j <= h- 1; j++)
+    {
+        if (arr1[j] <= x)
+        {
+            i++;
+            swap_double(&arr1[i], &arr1[j]);
+            swap_double(&arr2[i], &arr2[j]);
+        }
+    }
+    swap_double(&arr1[i + 1], &arr1[h]);
+    swap_double(&arr2[i + 1], &arr2[h]);
+    return (i + 1);
+}
   
+void quick_sort_parallel_lists_asc_int(int *list1, int *list2, int lo,
+                                           int hi)
+{
+  /**quick_sort_parallel_lists_asc*********************************************
+   * Description                                                              *
+   *  Sort according to the first list, but also reflect changes in second    *
+   *  list in parallel.                                                       *
+   *  Sorts in ascending order.                                               *
+   *                                                                          *
+   ****************************************************************************/
 
+    // Create an auxiliary stack
+    int stack[ hi - lo + 1 ];
+ 
+    // initialize top of stack
+    int top = -1;
+ 
+    // push initial values of l and h to stack
+    stack[ ++top ] = lo;
+    stack[ ++top ] = hi;
+ 
+    // Keep popping from stack while is not empty
+    while ( top >= 0 )
+    {
+        // Pop h and l
+        hi = stack[ top-- ];
+        lo = stack[ top-- ];
+ 
+        // Set pivot element at its correct position
+        // in sorted array
+        int p = partition_asc_int(list1, list2, lo, hi);
+ 
+        // If there are elements on left side of pivot,
+        // then push left side to stack
+        if ( p-1 > lo )
+        {
+            stack[ ++top ] = lo;
+            stack[ ++top ] = p - 1;
+        }
+ 
+        // If there are elements on right side of pivot,
+        // then push right side to stack
+        if ( p+1 < hi )
+        {
+            stack[ ++top ] = p + 1;
+            stack[ ++top ] = hi;
+        }
+    }
+}
+/* swap function from geeksforgeeks.org/iterative-quick-sort/ */
+void swap_int( int* a, int* b )
+{
+    int t = *a;
+    *a = *b;
+    *b = t;
+}
+
+/*  partition function from geeksforgeeks.org/iterative-quick-sort/ */
+int partition_desc_int(int arr1[], int arr2[], int l, int h)
+{
+  /* Used by quick_sort_parallel_lists_desc */
+    int x = arr1[h];
+    int i = (l - 1);
+ 
+    for (int j = l; j <= h- 1; j++)
+    {
+        if (arr1[j] >= x)
+        {
+            i++;
+            swap_int(&arr1[i], &arr1[j]);
+            swap_int(&arr2[i], &arr2[j]);
+        }
+    }
+    swap_int(&arr1[i + 1], &arr1[h]);
+    swap_int(&arr2[i + 1], &arr2[h]);
+    return (i + 1);
+}
+
+/*  partition function from geeksforgeeks.org/iterative-uick-sort/ */
+int partition_asc_int(int arr1[], int arr2[], int l, int h)
+{
+  /* Used by quick_sort_parallel_lists_asc */
+    int x = arr1[h];
+    int i = (l - 1);
+ 
+    for (int j = l; j <= h- 1; j++)
+    {
+        if (arr1[j] <= x)
+        {
+            i++;
+            swap_int(&arr1[i], &arr1[j]);
+            swap_int(&arr2[i], &arr2[j]);
+        }
+    }
+    swap_int(&arr1[i + 1], &arr1[h]);
+    swap_int(&arr2[i + 1], &arr2[h]);
+    return (i + 1);
+}
 
 
 void modify_epsilon(double *epsilon)
@@ -267,7 +481,9 @@ void modify_epsilon(double *epsilon)
 }
 
 void small_large_split(int *profits, int *weights, int n, int capacity, 
-                       double epsilon, int lower_bound, int *small, int *large)
+                       double epsilon, int lower_bound, int *small_profits,
+                       int *large_profits, int *small_weights, int *large_weights,
+                       int *n_large)
 {
  /**small_large_split*********************************************************a
   * USED BY SCALING REDUCTION ALGORITHM                                       *
@@ -275,8 +491,6 @@ void small_large_split(int *profits, int *weights, int n, int capacity,
   * Description                                                               *
   *  Partitions a given set of items into two sets, based on the product of   *
   *   the solution's lower bound and the modified epsilon.                    *
-  * TODO                                                                      *
-  *   Generate test cases for this                                            *
   *                                                                           *
   *                                                                           *
   *****************************************************************************/
@@ -285,7 +499,49 @@ void small_large_split(int *profits, int *weights, int n, int capacity,
 
   /* For each item, those less than the boundary go into the small set, and 
       all else go to the large set */  
+  int small_counter = 0;
+  int large_counter = 0;
+ 
+  for(int i = 0; i < n; i++)
+  {
+    if (profits[i] <= boundary)
+    {
+      small_profits[small_counter] = profits[i];
+      small_weights[small_counter++] = weights[i];
+    }
+    else
+    {
+      large_profits[large_counter] = profits[i];
+      large_weights[large_counter++] = weights[i];
+    }
+  } 
+  
+  /* Flag the last space with a -1 */
+  if(small_counter < n)
+  {
+    small_profits[small_counter] = -1;
+    small_weights[small_counter] = -1;
+  }
 
+  if(large_counter < n)
+  {
+    large_profits[large_counter] = -1;
+    large_weights[large_counter] = -1;
+  }
+  *n_large = large_counter;
+  large_counter++;
+  small_counter++;
+
+  while(large_counter < n)
+  {
+    large_profits[large_counter] = 0;
+    large_weights[large_counter++] = 0;
+  }
+  while(small_counter < n)
+  {
+    small_profits[small_counter] = 0;
+    small_weights[small_counter++] = 0;
+  }
 }
 
 void partition_large_set(int *profits, int *weights, int n, double epsilon, 
@@ -297,22 +553,27 @@ void partition_large_set(int *profits, int *weights, int n, double epsilon,
   * Description                                                               *
   *  Given a set of items partitioned and categorised as "large," partition   *
   *   these further into 1/epsilon -1 intervals.                              *
-  * TODO                                                                      *
-  *   Generate test cases for this                                            *
-  *                                                                           *
+  * TODO make sure this doesn't go above 1/epsilon - 1 intervals              *
   *****************************************************************************/
   
-  // Sort item by profits, changing weights array as necessary 
-  //  (using iterative quick sort?)
-  // Then make an array where each index i has the index of the first profit in
-  //   i*z^l*eps
-  // Should be in linear time?
-  
-  // Just sort
-  // Then set each profit's interval to be floor(profit[i]/z^l*eps)
-  // if profit[i] / z^l * eps = floor(profit[i] / z^l * eps)
-  //    then interval -= 1
+  /* Just sort */
+  quick_sort_parallel_lists_asc_int(profits, weights, 0, n-1);
 
+  /* Then set each profit's interval to be floor(profit[i]/z^l*eps) */
+  for(int i = 0; i < n; i++)
+  {
+    indices_out[i] = 
+      (int) floor((double)profits[i] / ((double)lower_bound * epsilon));
+
+    /* If it is sitting at the boundary of the interval below it */
+    if((profits[i]/((double) lower_bound * epsilon)) ==
+         floor((profits[i]/((double) lower_bound * epsilon)))
+        && indices_out[i] != 0)
+    {
+      /* Take it down one interval */
+      indices_out[i] -= 1;
+    }
+  }  
 }
 
 void partition_interval(int *profits, int n, double epsilon, int lowerbound, 
@@ -322,21 +583,24 @@ void partition_interval(int *profits, int n, double epsilon, int lowerbound,
   * USED BY SCALING REDUCTION ALGORITHM                                       *
   *   FROM CORE KELLERER AND PFERSCHY FPTAS                                   *
   * Description                                                               *
-  *  Given an interval of the large set, derive ceil(1/iepsilon) subintervals *
-  * TODO                                                                      *
-  *   Generate test cases for this                                            *
+  *   Given an array of profits, and a parallel array with each profit's      *
+  *    respective interval, derive the subintervals array.                    *
   *                                                                           *
   *                                                                           *
   *****************************************************************************/
 
-  //happily assume indices_out is of length n
-  // Because profits are sorted now, we can do the same thing as we did for the
-  // first one and just have an array where each index i has a list of indices 
-  // of the start indices for each subinterval in profits
-
+  int i, k_stop, this_subinterval;
+  double zeps = lowerbound*epsilon;
+  double epsilon_squared = epsilon * epsilon;
+    for(int p = 0; p < n; p++)
+    {
+      i = intervals[p];
+      this_subinterval = ceil((profits[p] - i*zeps)/(i*lowerbound*epsilon_squared));
+      indices_out[p] = this_subinterval;
+    }
 }
 
-void reduce_profits_to_mimimal(int *profits, int *intervals, int *subintervals,
+void reduce_profits_to_minimal(int *profits, int *intervals, int *subintervals,
                                double epsilon, int lowerbound, int n)
 {
  /**reduce_profits_to_minimal**************************************************
@@ -345,13 +609,11 @@ void reduce_profits_to_mimimal(int *profits, int *intervals, int *subintervals,
   * Description                                                               *
   *  Given a subinterval of the large set reduce all profits to its lower     *
   *   bound.                                                                  *
-  * TODO                                                                      *
-  *   Generate test cases for this                                            *
   *                                                                           *
   *****************************************************************************/
 
-  // For i = start_index of subinterval... end index
-  //    Set them to the value iz^l*e
+  for(int p = 0; p < n; p++)
+    profits[p] = intervals[p]*lowerbound*epsilon*(1+(subintervals[p]-1)*epsilon);
 }
 
 void prune_excess_weight_items(int *profits, int *weights, int *intervals, 
@@ -364,8 +626,6 @@ void prune_excess_weight_items(int *profits, int *weights, int *intervals,
   * Description                                                               *
   *  Given a subinterval of items with profits reduced to the same weights,   *
   *   reduce the set to only the first ceil(2/iepsilon) with minimal weight   *
-  * TODO                                                                      *
-  *   Generate test cases for this                                            *
   *                                                                           *
   *****************************************************************************/
   // REMEMBER this is only going to prune FOR A GIVEN SUBINTERVAL
@@ -376,6 +636,60 @@ void prune_excess_weight_items(int *profits, int *weights, int *intervals,
   //  maintain an array of length 1/iepsilon where each index is the last
   //  considered weight
   // THEN COPY THE SUBINTERVAL INFORMATION BACK TO THE ORIGINAL ARRAYS
+  
+  /* We could sort the subinterval by weights, (they'll all have the same profit) */
+
+  /* Find the start of the subinterval and save this index */
+  int i;
+  for(i = 0; i < n; i++)
+  {
+    if(intervals[i] == current_interval 
+       && subintervals[i] == current_subinterval)
+      break;
+    if(i == n-1)
+      return; //Interval + subinterval combo doesn't exist
+  }
+  int start_index = i;
+
+  /* Let m be the number of items within this subinterval */
+  int m = 1;
+  while(subintervals[++i] == current_subinterval)
+    m++;
+
+  /* Make temporary arrays of size m */
+  int temp_profits[m];  
+  int temp_weights[m];
+
+  int temp_i = 0;
+  //Copy everything in subinterval this
+  for(i = start_index; i < (start_index+m); i++)
+  {
+    temp_profits[temp_i] = profits[i];
+    temp_weights[temp_i++] = weights[i];
+  }
+
+  /* Sort these */
+  quick_sort_parallel_lists_asc_int(temp_weights, temp_profits, 0, m-1);  
+
+  /* Copy em back */
+  temp_i = 0;
+  for(i = start_index; i < (start_index+m); i++)
+  {
+    profits[i] = temp_profits[temp_i];
+    weights[i] = temp_weights[temp_i++];
+  }
+  
+  /* Set everything after the ceil(2/i*epsilon)'th to 0 */
+  int cutoff = ceil(2/(current_interval*epsilon));
+  i = start_index;
+  while(subintervals[i++] == current_subinterval)
+  {
+    if(i-start_index >= cutoff)
+    {
+      profits[i] = 0;
+      weights[i] = 0;
+    }
+  }
 }
 
 void redefine_large_set(int *profits, int *weights, int *intervals, 
@@ -387,12 +701,60 @@ void redefine_large_set(int *profits, int *weights, int *intervals,
   * Description                                                               *
   *  Not sure if this is necessary; just a definition change within their     *
   *   pseudocode.                                                             *
-  * TODO                                                                      *
-  *   Generate test cases for this                                            *
   *                                                                           *
   *****************************************************************************/
   // basically interate over each subinterval up to the weight index boundary
   // defined, then skip to next subinterval start. This should happen in O(n)
+  // Update all arrays to have no gaps with 0 in them. For simplicity, we're not
+  // redefining the pointer to the array.
+  int temp_profits[n];
+  int temp_weights[n];
+  int temp_intervals[n];
+  int temp_subintervals[n];
+  int i = 0;
+  int j = 0;
+
+  /* Create new compressed version of the arrays */
+  while(i < n && j < n && profits[i] != -1)
+  {
+    /* If the item hasn't been removed */
+    if(profits[i] != 0)
+    {
+      temp_profits[j] = profits[i];
+      temp_weights[j] = weights[i];
+      temp_intervals[j] = intervals[i];
+      temp_subintervals[j++] = subintervals[i++];
+    }
+    else
+      i++;
+  }
+  
+  /* Copy the changes over */
+  *new_n = j;
+  for(i = 0; i < *new_n; i++)
+  {
+    profits[i] = temp_profits[i];
+    weights[i] = temp_weights[i];
+    intervals[i] = temp_intervals[i];
+    subintervals[i] = temp_subintervals[i];
+  }
+
+  if(i < n)
+  {
+    profits[i] = -1;
+    weights[i] = -1;
+    intervals[i] = -1;
+    subintervals[i++] = -1;
+  }
+
+  /* Make the rest of each of the arrays 0 */
+  while(i < n)
+  {
+    profits[i] = -1;
+    weights[i] = -1;
+    intervals[i] = -1;
+    subintervals[i++] = -1;
+  }
 }
 
 void interval_dynamic_programming(void)
