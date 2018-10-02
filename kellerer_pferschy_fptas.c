@@ -1,5 +1,7 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
+#include <assert.h>
 #include <limits.h>
 #include "kellerer_pferschy_fptas.h"
 
@@ -12,16 +14,10 @@
  *     I don't know how to represent sets and partitions                      *
  *   Interval Dynamic Programming                                             *
  *     I need to understand y more                                            *
- * TODO                                                                       *
- *  Scaling reduction                                                         *
- *    redefine_large_set                                                      *
- *    prune_excess_weight_items                                               *
- *    reduce_profits_to_minimal                                               *
- *    partition_interval                                                      *
- *    partition_large_set                                                     *
- *    small_large_split                                                       *
- *    modify_epsilon                                                          *
- *    get_knapsack_lowerbound                                                 *
+ * TODO, in order of execution                                                *
+ *   Finish interval dynamic programming                                      *
+ *     Which involves VM                                                      *
+ *   Plan recursion and backtracking                                          *
  *                                                                            *
  *                                                                            *
  ******************************************************************************/
@@ -49,12 +45,13 @@ void kellerer_pferschy_fptas(int *profits, int *weights, int n, int capacity,
 
   /* Perform scaling reduction */
   int large_profits[n], large_weights[n], small_profits[n], small_weights[n];
+  int intervals[n], subintervals[n];
   int new_n;
   scaling_reduction(profits, weights, n, capacity, &new_epsilon, large_profits, 
-                    large_weights, small_profits, small_weights, &new_n);
+                    large_weights, small_profits, small_weights, intervals, 
+                    subintervals, &new_n);
 
   // Initialisation
-  
   // Perform Interval-Dynamic-Programming(L, 2z^l) returning (y, r) 
   // Sort S in decreasing order of efficiencies
   // Greedily add smalls
@@ -62,12 +59,12 @@ void kellerer_pferschy_fptas(int *profits, int *weights, int n, int capacity,
   // z_N = backtracking(y, r, z_L);
   // recursion(L, z_L - z_N);
   // merge_solutions(x_A, x_L, x_S); 
-
 }
 
 void scaling_reduction(int *profits, int *weights, int n, int capacity,
                        double *epsilon, int *large_profits, int *large_weights, 
-                       int *small_profits, int *small_weights, int *new_n)
+                       int *small_profits, int *small_weights, int *intervals,
+                       int *subintervals, int *new_n)
 {
  /**scaling_reduction**********************************************************
   * USED BY CORE KELLERER AND PFERSCHY FPTAS                                  *
@@ -83,7 +80,6 @@ void scaling_reduction(int *profits, int *weights, int n, int capacity,
   get_knapsack_lowerbound(profits, weights, n, capacity, &lower_bound,
                           &upper_bound);
   modify_epsilon(epsilon);
-  printf("Lower_bound: %d\n", lower_bound);
 
   /* Derive small and large sets */
   int n_large;
@@ -92,7 +88,6 @@ void scaling_reduction(int *profits, int *weights, int n, int capacity,
                     &n_large);
 
   /* Partition large set into 1/ε - 1 intervals */
-  int intervals[n], subintervals[n];
   for(int i = 0; i < n; i++) intervals[i] = subintervals[i] = -1;
   partition_large_set(large_profits, large_weights, n, *epsilon, lower_bound, 
                       intervals);
@@ -589,7 +584,7 @@ void partition_interval(int *profits, int n, double epsilon, int lowerbound,
   *                                                                           *
   *****************************************************************************/
 
-  int i, k_stop, this_subinterval;
+  int i, this_subinterval;
   double zeps = lowerbound*epsilon;
   double epsilon_squared = epsilon * epsilon;
     for(int p = 0; p < n; p++)
@@ -626,7 +621,7 @@ void prune_excess_weight_items(int *profits, int *weights, int *intervals,
   * Description                                                               *
   *  Given a subinterval of items with profits reduced to the same weights,   *
   *   reduce the set to only the first ceil(2/iepsilon) with minimal weight   *
-  *                                                                           *
+  *   We do this symbolically by setting them all to 0 weight and 0 profit.   *
   *****************************************************************************/
   // REMEMBER this is only going to prune FOR A GIVEN SUBINTERVAL
   // So it needs to take a parameter "interval of interest" and "subinterval of
@@ -653,8 +648,13 @@ void prune_excess_weight_items(int *profits, int *weights, int *intervals,
 
   /* Let m be the number of items within this subinterval */
   int m = 1;
-  while(subintervals[++i] == current_subinterval)
+
+  i++;
+  while(i < n && subintervals[i] == current_subinterval)
+  {
     m++;
+    i++;
+  }
 
   /* Make temporary arrays of size m */
   int temp_profits[m];  
@@ -682,7 +682,8 @@ void prune_excess_weight_items(int *profits, int *weights, int *intervals,
   /* Set everything after the ceil(2/i*epsilon)'th to 0 */
   int cutoff = ceil(2/(current_interval*epsilon));
   i = start_index;
-  while(subintervals[i++] == current_subinterval)
+
+  while(i < n && subintervals[i++] == current_subinterval)
   {
     if(i-start_index >= cutoff)
     {
@@ -757,7 +758,11 @@ void redefine_large_set(int *profits, int *weights, int *intervals,
   }
 }
 
-void interval_dynamic_programming(void)
+void interval_dynamic_programming(int *large_profits_prime, 
+                                  int *large_weights_prime, int *intervals,
+                                  int *subintervals, int n, int capacity,
+                                  int lower_bound, double epsilon,
+                                  int profits_upper_bound)
 {
  /**interval_dynamic_programming***********************************************
   * USED BY CORE KELLERER AND PFERSCHY FPTAS                                  *
@@ -766,22 +771,121 @@ void interval_dynamic_programming(void)
   *   on a series of items.                                                   *
   * TODO                                                                      *
   *   Generate test cases for this                                            *
-  *                                                                           *
+  *   make sure this works with the data structures we have                   *
   *****************************************************************************/
-  /* y is of length q, the upper bound on profit */
-  /* Initialisation of y, every multiple of z^l*eps is c+1 */
-  /* y(0):= 0 */
   
-  // for all different profit values (i.e. for every subinterval with at least one item)
-    // for every residual value
-      // k=1, ... floor(q/p_t) + 1 TODO what does this represent?
-        // A(k) := y((k-1)p_t + r)
-        // if k<=m then B(k) = weight[k] of distinct profit t
-        // else B(k) is infinity
-      // B(0) = 0
-      // vector_merge_interval(A, B, C)
-      // for k = 1, .. floor(q/p_t)+1
-        // y((k-1)p_t+r) = C(k)
+  /* y is of length q, the upper bound on profit */
+  int y[profits_upper_bound];
+  double epsilon_squared = epsilon * epsilon;
+  double lower_bound_by_epsilon_squared = lower_bound * epsilon_squared;
+  int scaled_profit_upper_bound = 
+                    floor(profits_upper_bound / lower_bound_by_epsilon_squared);
+  
+  /* Initialisation of y, every multiple of z^l*eps is c+1 */
+  int index;
+  for(int k = 0; k < scaled_profit_upper_bound; k++)
+  {
+    index = floor(k*lower_bound_by_epsilon_squared);
+    y[index] = capacity + 1;
+  }
+  y[0] = 0;
+
+  /* Initalisation of A, B and C */
+  int A[profits_upper_bound], B[profits_upper_bound], C[profits_upper_bound];
+  
+  /* Find number of subintervals */
+  int no_subintervals = 0; 
+  int no_intervals = 1/epsilon - 1; 
+  int val; 
+  for(int i = 1; i <= no_intervals; i++) 
+  {
+    val = ceil(1/(i*epsilon));
+    no_subintervals += val; 
+  }
+
+  int some_infinity = sum_of_all(large_weights_prime, n) + 1;
+
+  /* Begin the interesting part */  
+  int p_t, k_cap, no_weights;
+  for(int i = 1; i <= no_subintervals; i++)
+  {
+    /* Get index of the i'th subinterval; 
+        For each distinct profit value (i.e. each subinterval
+        with positive items) */
+    index = get_ith_subinterval(i, intervals, subintervals, n);
+    p_t = large_profits_prime[index];
+    no_weights = 
+         get_number_of_weights(index, large_profits_prime, n);
+
+    /* For each residual value */
+    for(int r = 0; r < p_t; r++)
+    {
+      /* For each profit value we can get from p_t */
+      k_cap = floor(profits_upper_bound/p_t)+1;
+      for(int k = 1; k <= k_cap; k++)
+      {
+        A[k] = y[(k-1)*p_t + r];
+        if (k <= no_weights) B[k] = large_weights_prime[index+k-1];
+        else B[k] = some_infinity;
+      }
+      B[0] = 0;
+      //vector_merge_interval(A, B, C, profits_upper_bound);//TODO is this all good?
+      for(int k = 1; k < k_cap; k++)
+        y[(k-1)*p_t + r] = C[k];
+    }
+  }
+}
+
+int get_ith_subinterval(int i, int *intervals, int *subintervals, 
+                        int n)
+{
+  /* Given an i, return the index of the i'th subinterval */
+  /* This is meant to be a way to grab the i'th distinct profit value, i.e.
+      "for all different profit values p_t in L' ..." from the pseudocode */
+  /* IMPORTANT! Since subintervals start at 1, the subinterval starting at
+      0 is the first subinterval. This should not be confused with the index, 
+      which will be returned. That is, while i may be 1, it will be at 
+      index 0 */
+  assert(i > 0 && i <= n);
+
+  int interval_number = 1;
+  for(int j = 1; j < n; j++)
+  {
+    /* Either a subinterval changes within an interval, or an interval changes
+        to another subinterval which was the same as the previous */
+    if( !(subintervals[j] == subintervals[j-1]
+       &&    intervals[j] == intervals[j-1]))
+    {
+      interval_number++;
+    }
+    if (interval_number == i)
+      return j; 
+  }
+  
+  /* There is no i'th subinterval */
+  return -1;
+}
+
+int get_number_of_weights(int start_index, int *profits, int n)
+{
+  /* Assumes that profits[start_index] points to the profit value 
+      of interest.
+     Returns the number of distinct weight values associated to a single
+      profit value */
+  int m = 1;
+  for(int i = start_index+1; profits[i] == profits[i-1] && m < n; i++, m++)
+   ;
+  return m;
+}
+
+
+int sum_of_all(int *arr, int n)
+{
+  /* Sums all the items of an array and returns the value */
+  int sum = 0;
+  for(int i = 0; i < n; i++)
+    sum += arr[i];
+  return sum;
 }
 
 void vector_merge_interval(int *A, int *B, int *C, int n)
@@ -946,3 +1050,41 @@ void recursion(void)
 }
 
 
+void quicksort_and_print(int *list1, int *list2, int n, const char *name1, 
+                         const char *name2)
+{
+ /**quicksort_and_print********************************************************
+  * Description                                                               *
+  *   Given two lists, and the length of each (they're the same size), sort   *
+  *    them by the indices of the first list and then print them both.        *
+  *                                                                           *
+  *****************************************************************************/
+
+  quick_sort_parallel_lists_asc_int(list1, list2, 0, n-1);
+
+  for(int i = 0; i < n; i++) printf("%s%s%s%d%s",
+      i == 0 ? "  int " : "", i==0 ? name1 : "", i == 0 ? "[] = {" : "", 
+      list1[i], i == n-1 ? "};\n" : ", ");
+  for(int i = 0; i < n; i++) printf("%s%s%s%d%s",
+      i == 0 ? "  int " : "", i==0 ? name2 : "", i == 0 ? "[] = {" : "", 
+      list2[i], i == n-1 ? "};\n" : ", ");
+}
+
+int get_no_subintervals(int no_intervals, double epsilon)
+{
+ /**get_no_subintervals********************************************************
+  * Description                                                               *
+  *   Given a number of intervals and a value epsilon, returns the number of  *
+  *    subintervals in total across the entire set.                           *
+  *                                                                           *
+  *****************************************************************************/
+
+  int val;
+  int no_subintervals = 0;
+  for(int i = 1; i <= no_intervals; i++)
+  {
+    val = ceil(1/(i*epsilon));
+    no_subintervals += val;
+  }
+
+}
