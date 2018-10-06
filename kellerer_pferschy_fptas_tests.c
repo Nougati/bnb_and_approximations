@@ -2732,31 +2732,57 @@ void test_get_number_of_weights(void)
 
   /*******************************************/
   /*  Test 3: profit at the end              */
-  /*  TODO                                   */
+  /*                                         */
   /*******************************************/
   status = SUCCESS;
 
-  int weights3 [] = {485, 15094, 56326, 24506, 79248, 94416, 45421, 40992, 
-                     80322, 66649, 15795, 49237, 58043, 96457, 42845, 67815, 
-                     24955, 19446, 49252, 63422, 61009, 88791, 25901, 49359, 
-                     81122, 45667, 81094, 31598, 38738, 82007, 88574, 20544, 
-                     65715, 85334, 78882, 82766, 31367, 93994, 59984, 59893, 
-                     73299, 62633, 49433, 87131, 15682, 5428, 90072, 76700, 
-                     97874, 30617}; 
+  int capacity3  = 99748;
+  int n3 = 50;
+  int weights3[] = {485, 15094, 56326, 24506, 79248, 94416, 45421, 40992, 
+                    80322, 66649, 15795, 49237, 58043, 96457, 42845, 67815, 
+                    24955, 19446, 49252, 63422, 61009, 88791, 25901, 49359, 
+                    81122, 45667, 81094, 31598, 38738, 82007, 88574, 20544, 
+                    65715, 85334, 78882, 82766, 31367, 93994, 59984, 59893, 
+                    73299, 62633, 49433, 87131, 15682, 5428, 90072, 76700, 
+                    97874, 30617}; 
 
-  int profits[] = {10485, 25094, 66326, 34506, 89248, 104416, 55421, 50992, 
-                   90322, 76649, 25795, 59237, 68043, 106457, 52845, 77815, 
-                   34955, 29446, 59252, 73422, 71009, 98791, 35901, 59359, 
-                   91122, 55667, 91094, 41598, 48738, 92007, 98574, 30544, 
-                   75715, 95334, 88882, 92766, 41367, 103994, 69984, 69893, 
-                   83299, 72633, 59433, 97131, 25682, 15428, 100072, 86700, 
-                   107874, 40617};
-  /*
+  int profits3[] = {10485, 25094, 66326, 34506, 89248, 104416, 55421, 50992, 
+                    90322, 76649, 25795, 59237, 68043, 106457, 52845, 77815, 
+                    34955, 29446, 59252, 73422, 71009, 98791, 35901, 59359, 
+                    91122, 55667, 91094, 41598, 48738, 92007, 98574, 30544, 
+                    75715, 95334, 88882, 92766, 41367, 103994, 69984, 69893, 
+                    83299, 72633, 59433, 97131, 25682, 15428, 100072, 86700, 
+                    107874, 40617};
+
+  double epsilon3 = 0.2;
+  int large_profits3[n3], large_weights3[n3], small_profits3[n3],
+       small_weights3[n3];
+  int intervals3[n3], subintervals3[n3];
+  int new_n3;
+
+  scaling_reduction(profits3, weights3, n3, capacity3, &epsilon3, 
+                    large_profits3, large_weights3, small_profits3,
+                    small_weights3, intervals3, subintervals3, &new_n3);
+
+  
+  int index_of_interest3 = 35;
+  expected_number_of_weights = 3;
+  number_of_weights = get_number_of_weights(index_of_interest3, large_profits3,
+                                            new_n3); 
+
+  if(expected_number_of_weights != number_of_weights)
+  {
+    status = FAILURE;
+    suite_status = FAILURE;
+    printf("\tTest 3 failed! Expected %d but got %d!\n",
+           expected_number_of_weights, number_of_weights);
+  }
+  
   print_list(large_profits3, n3, "large_profits3");
   print_list(large_weights3, n3, "large_weights3");
   print_list(intervals3, n3, "intervals3");
   print_list(subintervals3, n3, "subintervals3");
-  */
+  
   
   if(suite_status == SUCCESS)
     printf("\tAll passed!\n");
