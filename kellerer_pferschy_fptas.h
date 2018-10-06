@@ -35,7 +35,7 @@ void interval_dynamic_programming(int *large_profits_prime,
                                   int *subintervals, int n, int capacity,
                                   int lower_bound, double epsilon,
                                   int profits_upper_bound);
-void vector_merge_interval(int *A, int *B, int *C, int n);
+void vector_merge_interval(int *A, int *B, int *C, int n, int q);
 void quick_sort_parallel_lists_desc_double(double *list1, double *list2, int lo,
                                            int hi);
 void quick_sort_parallel_lists_asc_double(double *list1, double *list2, int lo,
@@ -62,3 +62,4 @@ void quicksort_and_print(int *list1, int *list2, int n,
                          const char *name1, const char *name2); 
 int get_no_subintervals(int no_intervals, double epsilon);
 void print_list(int *list, int length, const char *name);
+int get_no_subintervals_used(int *intervals, int *subintervals, int n);

@@ -26,6 +26,7 @@ void test_vector_merge_naive(void);
 void test_interval_dynamic_programming(void);
 void test_get_ith_interval(void);
 void test_get_number_of_weights(void);
+void test_get_no_subintervals_used(void);
 
 int main(int argc, char *argv[])
 {
@@ -47,7 +48,8 @@ int main(int argc, char *argv[])
   //test_vector_merge_interval();
   //test_interval_dynamic_programming();
   //test_get_ith_interval();
-  test_get_number_of_weights();
+  //test_get_number_of_weights();
+  test_get_no_subintervals_used();
 
   /* TODO Everything for greedily add smalls */
   
@@ -2679,6 +2681,11 @@ void test_get_number_of_weights(void)
            expected_number_of_weights, number_of_weights);
   }
 
+  /*
+  print_list(intervals1, n1, "intervals1");
+  print_list(subintervals1, n1, "subintervals1");
+  printf("%d\n", new_n1);
+  */
 
   /*******************************************/
   /*  Test 2: Mid range profit               */
@@ -2730,6 +2737,12 @@ void test_get_number_of_weights(void)
            expected_number_of_weights, number_of_weights);
   }
 
+  /*
+  print_list(intervals2, n2, "intervals2");
+  print_list(subintervals2, n2, "subintervals2");
+  printf("%d\n", new_n2);
+  */
+
   /*******************************************/
   /*  Test 3: profit at the end              */
   /*                                         */
@@ -2778,21 +2791,117 @@ void test_get_number_of_weights(void)
            expected_number_of_weights, number_of_weights);
   }
   
+  /*
   print_list(large_profits3, n3, "large_profits3");
   print_list(large_weights3, n3, "large_weights3");
   print_list(intervals3, n3, "intervals3");
   print_list(subintervals3, n3, "subintervals3");
-  
+  printf("%d\n", new_n3);
+  */
   
   if(suite_status == SUCCESS)
     printf("\tAll passed!\n");
+}
+
+void test_get_no_subintervals_used(void)
+{
+  printf("Testing get_no_subintervals_used...\n");
+  int suite_status = SUCCESS;
+  int status;
+
+  /*******************************************/
+  /*  Test 1:                                */
+  /*                                         */
+  /*******************************************/
+  int intervals1[] = 
+    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 
+     2, 2, 2, 2, 2, 2, 2, 2, 2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+     -1, -1, -1, -1};
+  int subintervals1[] = 
+    {1, 1, 2, 2, 3, 4, 4, 5, 5, 5, 5, 5, 6, 6, 6, 7, 8, 8, 8, 9, 10, 10, 10, 10,
+     1, 1, 1, 1, 1, 1, 2, 2, 2, 2, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+     -1, -1, -1, -1, -1};
+  int new_n1 = 34;
+
+  int subintervals_used1 = get_no_subintervals_used(intervals1, subintervals1, 
+                                                    new_n1);
+  int expected_subintervals_used1 = 12;
+
+  int poo = get_ith_subinterval(13, intervals1, subintervals1, new_n1);
+  printf("poo: %d\n", poo);
+
+  if(subintervals_used1 != expected_subintervals_used1)
+  {
+    status = FAILURE;
+    suite_status = FAILURE;
+    printf("\tTest 1 failed! Expected %d but got %d!\n",
+           expected_subintervals_used1, subintervals_used1);
+  }
+  
+
+  /*******************************************/
+  /*  Test 2:                                */
+  /*                                         */
+  /*******************************************/
+  int intervals2[] = 
+    {1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 
+    4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 6, 6, 6, 7, 7, 7, -1, -1, -1, -1, -1, -1, -1,
+     -1, -1};
+  int subintervals2[] = 
+    {8, 10, 10, 1, 1, 1, 1, 3, 3, 3, 3, 3, 3, 5, 5, 5, 1, 2, 3, 3, 4, 1, 1, 1,
+     1, 2, 2, 3, 3, 1, 1, 1, 2, 2, 2, 1, 1, 2, 1, 1, 1, -1, -1, -1, -1, -1, -1,
+     -1, -1, -1};
+  int new_n2 = 41;
+
+  int subintervals_used2 = get_no_subintervals_used(intervals2, subintervals2, 
+                                                    new_n2);
+  int expected_subintervals_used2 = 17;
+
+  if(subintervals_used2 != expected_subintervals_used2)
+  {
+    status = FAILURE;
+    suite_status = FAILURE;
+    printf("\tTest 2 failed! Expected %d but got %d!\n",
+           expected_subintervals_used2, subintervals_used2);
+  }
+
+  /*******************************************/
+  /*  Test 3:                                */
+  /*                                         */
+  /*******************************************/
+
+  int intervals3[] = 
+    {1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4,
+     4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 6, 6, 6, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+     -1, -1, -1};
+  int subintervals3[] = 
+    {6, 6, 6, 9, 9, 1, 1, 2, 3, 3, 3, 5, 1, 1, 2, 2, 3, 3, 3, 3, 1, 1, 1, 1, 1,
+     2, 2, 2, 2, 1, 1, 1, 2, 2, 2, 1, 1, 1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+     -1, -1, -1};
+  int new_n3 = 38;
+
+  int subintervals_used3 = get_no_subintervals_used(intervals3, subintervals3, 
+                                                    new_n3);
+  int expected_subintervals_used3 = 14;
+
+  if(subintervals_used3 != expected_subintervals_used3)
+  {
+    status = FAILURE;
+    suite_status = FAILURE;
+    printf("\tTest 3 failed! Expected %d but got %d!\n",
+           expected_subintervals_used3, subintervals_used3);
+  }
+
+  if(suite_status == SUCCESS)
+    printf("\tAll passed!\n");
+  
 }
 
 void print_list(int *list, int length, const char *name)
 {
   for(int i = 0; i < length; i++)
     printf("%s%s%s%d%s%s", i == 0 ? "int " : "", i == 0 ? name : "", 
-           i == 0 ? "[] = \n\t{" : "", list[i], i == length-1 ? "]\n" : ", ", 
+           i == 0 ? "[] = \n\t{" : "", list[i], i == length-1 ? "};\n" : ", ", 
            i % 6 == 0 && i > 0 && i < length-1? "\n\t" : "");
 }
 

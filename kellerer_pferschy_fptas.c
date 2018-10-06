@@ -769,21 +769,24 @@ void interval_dynamic_programming(int *large_profits_prime,
   * Description                                                               *
   *  Performs dynamic programming with auxiliary vector merging procedure     *
   *   on a series of items.                                                   *
+  * Notes                                                                     *
+  *   This will have n == new_n, because we'll have scaled and reduced the    *
+  *    item item by this point.                                               *
   * TODO                                                                      *
-  *   Generate test cases for this                                            *
   *   make sure this works with the data structures we have                   *
+  *                                                                           *
   *****************************************************************************/
   
   /* y is of length q, the upper bound on profit */
   int y[profits_upper_bound];
   double epsilon_squared = epsilon * epsilon;
   double lower_bound_by_epsilon_squared = lower_bound * epsilon_squared;
-  int scaled_profit_upper_bound = 
+  int scaled_profit_upper_bound = //TODO come up with a better name
                     floor(profits_upper_bound / lower_bound_by_epsilon_squared);
   
   /* Initialisation of y, every multiple of z^l*eps is c+1 */
   int index;
-  for(int k = 0; k < scaled_profit_upper_bound; k++)
+  for(int k = 1; k <= scaled_profit_upper_bound; k++)
   {
     index = floor(k*lower_bound_by_epsilon_squared);
     y[index] = capacity + 1;
@@ -797,11 +800,8 @@ void interval_dynamic_programming(int *large_profits_prime,
   int no_subintervals = 0; 
   int no_intervals = 1/epsilon - 1; 
   int val; 
-  for(int i = 1; i <= no_intervals; i++) 
-  {
-    val = ceil(1/(i*epsilon));
-    no_subintervals += val; 
-  }
+
+  no_subintervals = get_no_subintervals_used(intervals, subintervals, n);
 
   int some_infinity = sum_of_all(large_weights_prime, n) + 1;
 
@@ -813,6 +813,16 @@ void interval_dynamic_programming(int *large_profits_prime,
         For each distinct profit value (i.e. each subinterval
         with positive items) */
     index = get_ith_subinterval(i, intervals, subintervals, n);
+    
+    /* This should never happen */
+    if(index == -1) 
+    {
+      printf("What? We tried to get the %dth subinterval out of %d?\n",
+             i, no_subintervals);
+      break;
+    }
+
+    /* Get the relevant profit value */
     p_t = large_profits_prime[index];
     no_weights = 
          get_number_of_weights(index, large_profits_prime, n);
@@ -829,7 +839,9 @@ void interval_dynamic_programming(int *large_profits_prime,
         else B[k] = some_infinity;
       }
       B[0] = 0;
-      //vector_merge_interval(A, B, C, profits_upper_bound);//TODO is this all good?
+      vector_merge_interval(A, B, C, profits_upper_bound);
+
+      /* Put the result of vector merge into this array */
       for(int k = 1; k < k_cap; k++)
         y[(k-1)*p_t + r] = C[k];
     }
@@ -888,20 +900,34 @@ int sum_of_all(int *arr, int n)
   return sum;
 }
 
-void vector_merge_interval(int *A, int *B, int *C, int n)
+void vector_merge_interval(int *A, int *B, int *C, int n, int q)
 {
  /**vector_merge_interval******************************************************
   * USED BY INTERVAL DYNAMIC PROGRAMMING                                      *
   *   FROM CORE KELLERER AND PFERSCHY FPTAS                                   *
   * Description                                                               *
   *  Solves the vector merging problem in O(nlogn) time                       *
+  * Inputs                                                                    *
+  *  A, B and C are all of length q                                           *
+  *  q is the upper bound on profit                                           *
+  *  n is the number of items in the scaled and reduced set                   *
   * TODO                                                                      *
   *   Generate test cases for this                                            *
+  * NOTE TO SELF: BE VERY CAREFUL WHEN IMPLEMENTING THIS!                     *
   *                                                                           *
   *****************************************************************************/
+  int a[q], b[q], pred[q];
+
   // Initialise C
+  /* TODO: are we certain that A[1] is defined? 
+      To answer this question, I have to carefully analyse line 837 to make 
+      sure that A[1] = y[p_t+r] will return a value. I think the best way to 
+      do this is with GDB */
+  for(int j = 1; j <= n; j++)
+    C[j] = A[1] + sum_of(B, 0, j-1);
 
   // Define a(1), b(1), and pred(1)
+  
   
   // last = 1:
   // for i=2 to n
@@ -1086,5 +1112,24 @@ int get_no_subintervals(int no_intervals, double epsilon)
     val = ceil(1/(i*epsilon));
     no_subintervals += val;
   }
+}
 
+int get_no_subintervals_used(int *intervals, int *subintervals, int n)
+{
+ /**get_no_subintervals_used***************************************************
+  * Description                                                               *
+  *  Instead of determining the theoretical max number of intervals (as is    *
+  *   done in get_no_subintervals), we simply count how many distinct         *
+  *   subintervals are used in the given context.                             *
+  *  Essentially, the loop just decides that a new subinterval has started    *
+  *   if either of the intervals or subintervals has changed.                 *
+  *                                                                           *
+  *****************************************************************************/
+  int subintervals_used = 1;
+
+  for(int i = 1; i < n; i++)
+    if (!(intervals[i-1] == intervals[i] && subintervals[i-1] == subintervals[i]))
+      subintervals_used++;
+
+  return subintervals_used;
 }
