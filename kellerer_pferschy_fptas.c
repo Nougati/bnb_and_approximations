@@ -22,12 +22,6 @@
  *                                                                            *
  ******************************************************************************/
 
-/*
-int main(int argc, char *argv[])
-{
-}
-*/
-
 void kellerer_pferschy_fptas(int *profits, int *weights, int n, int capacity,
                              double epsilon)
 {
@@ -43,13 +37,22 @@ void kellerer_pferschy_fptas(int *profits, int *weights, int n, int capacity,
   /* We use our own epsilon derived from the input */
   double new_epsilon = epsilon;
 
+  int new_n, lower_bound;
+
+  /* Do array business */
+  int *large_profits, *large_weights, *small_profits, *small_weights, 
+      *intervals, *subintervals;
+  large_profits = malloc(n * sizeof(int));
+  large_weights = malloc(n * sizeof(int));
+  small_profits = malloc(n * sizeof(int));
+  small_weights = malloc(n * sizeof(int));
+  intervals = malloc(n * sizeof(int));
+  subintervals = malloc(n * sizeof(int));
+
   /* Perform scaling reduction */
-  int large_profits[n], large_weights[n], small_profits[n], small_weights[n];
-  int intervals[n], subintervals[n];
-  int new_n;
   scaling_reduction(profits, weights, n, capacity, &new_epsilon, large_profits, 
                     large_weights, small_profits, small_weights, intervals, 
-                    subintervals, &new_n);
+                    subintervals, &new_n, &lower_bound);
 
   // Initialisation
   // Perform Interval-Dynamic-Programming(L, 2z^l) returning (y, r) 
@@ -59,12 +62,19 @@ void kellerer_pferschy_fptas(int *profits, int *weights, int n, int capacity,
   // z_N = backtracking(y, r, z_L);
   // recursion(L, z_L - z_N);
   // merge_solutions(x_A, x_L, x_S); 
+
+  free(large_profits);
+  free(large_weights);
+  free(small_profits);
+  free(small_weights);
+  free(intervals);
+  free(subintervals);
 }
 
 void scaling_reduction(int *profits, int *weights, int n, int capacity,
                        double *epsilon, int *large_profits, int *large_weights, 
                        int *small_profits, int *small_weights, int *intervals,
-                       int *subintervals, int *new_n)
+                       int *subintervals, int *new_n, int *lower_bound)
 {
  /**scaling_reduction**********************************************************
   * USED BY CORE KELLERER AND PFERSCHY FPTAS                                  *
@@ -75,31 +85,30 @@ void scaling_reduction(int *profits, int *weights, int n, int capacity,
   *****************************************************************************/
   
   /* Compute z^l and modify e */
-  int lower_bound;
   double upper_bound;
-  get_knapsack_lowerbound(profits, weights, n, capacity, &lower_bound,
+  get_knapsack_lowerbound(profits, weights, n, capacity, lower_bound,
                           &upper_bound);
   modify_epsilon(epsilon);
 
   /* Derive small and large sets */
   int n_large;
-  small_large_split(profits, weights, n, capacity, *epsilon, lower_bound, 
+  small_large_split(profits, weights, n, capacity, *epsilon, *lower_bound, 
                     small_profits, large_profits, small_weights, large_weights,
                     &n_large);
 
   /* Partition large set into 1/ε - 1 intervals */
   for(int i = 0; i < n; i++) intervals[i] = subintervals[i] = -1;
-  partition_large_set(large_profits, large_weights, n, *epsilon, lower_bound, 
+  partition_large_set(large_profits, large_weights, n, *epsilon, *lower_bound, 
                       intervals);
 
   /* Derive all the subintervals for derived intervals, for the large set */
-  partition_interval(large_profits, n, *epsilon, lower_bound, intervals,  
+  partition_interval(large_profits, n, *epsilon, *lower_bound, intervals,  
                      subintervals);
 
   /* Given derived intervals and subintervals, set every item to the lower bound
       of its respective subinterval */
   reduce_profits_to_minimal(large_profits, intervals, subintervals, *epsilon,
-                            lower_bound, n);
+                            *lower_bound, n);
 
   /* For each interval, and each subinterval, keep only some of the minimum
       weight items */
@@ -778,7 +787,10 @@ void interval_dynamic_programming(int *large_profits_prime,
   *****************************************************************************/
   
   /* y is of length q, the upper bound on profit */
-  int y[profits_upper_bound];
+  int *y;
+  //y = malloc(profits_upper_bound * sizeof(int));
+  y = calloc(profits_upper_bound, sizeof(int));
+
   double epsilon_squared = epsilon * epsilon;
   double lower_bound_by_epsilon_squared = lower_bound * epsilon_squared;
   int scaled_profit_upper_bound = //TODO come up with a better name
@@ -794,7 +806,11 @@ void interval_dynamic_programming(int *large_profits_prime,
   y[0] = 0;
 
   /* Initalisation of A, B and C */
-  int A[profits_upper_bound], B[profits_upper_bound], C[profits_upper_bound];
+  int *A, *B, *C;
+  A = malloc(profits_upper_bound * sizeof(int));
+  B = malloc(profits_upper_bound * sizeof(int));
+  C = malloc(profits_upper_bound * sizeof(int));
+  
   
   /* Find number of subintervals */
   int no_subintervals = 0; 
@@ -834,6 +850,7 @@ void interval_dynamic_programming(int *large_profits_prime,
       k_cap = floor(profits_upper_bound/p_t)+1;
       for(int k = 1; k <= k_cap; k++)
       {
+        int indexo = (k-1)*p_t + r;
         A[k] = y[(k-1)*p_t + r];
         if (k <= no_weights) B[k] = large_weights_prime[index+k-1];
         else B[k] = some_infinity;
@@ -846,6 +863,12 @@ void interval_dynamic_programming(int *large_profits_prime,
         y[(k-1)*p_t + r] = C[k];
     }
   }
+
+  /* Housekeeping */
+  free(A);
+  free(B);
+  free(C);
+  free(y);
 }
 
 int get_ith_subinterval(int i, int *intervals, int *subintervals, 
@@ -900,7 +923,7 @@ int sum_of_all(int *arr, int n)
   return sum;
 }
 
-void vector_merge_interval(int *A, int *B, int *C, int n, int q)
+void vector_merge_interval(int *A, int *B, int *C, int n)
 {
  /**vector_merge_interval******************************************************
   * USED BY INTERVAL DYNAMIC PROGRAMMING                                      *
@@ -909,48 +932,85 @@ void vector_merge_interval(int *A, int *B, int *C, int n, int q)
   *  Solves the vector merging problem in O(nlogn) time                       *
   * Inputs                                                                    *
   *  A, B and C are all of length q                                           *
-  *  q is the upper bound on profit                                           *
-  *  n is the number of items in the scaled and reduced set                   *
+  *  n is the length of the arrays A, B and C. Recall that this is by default *
+  *   the value profit_upper_bound = 2*lower_bound.                           *
   * TODO                                                                      *
   *   Generate test cases for this                                            *
   * NOTE TO SELF: BE VERY CAREFUL WHEN IMPLEMENTING THIS!                     *
   *                                                                           *
   *****************************************************************************/
-  int a[q], b[q], pred[q];
 
-  // Initialise C
-  /* TODO: are we certain that A[1] is defined? 
-      To answer this question, I have to carefully analyse line 837 to make 
-      sure that A[1] = y[p_t+r] will return a value. I think the best way to 
-      do this is with GDB */
+  /* Initialise C */
   for(int j = 1; j <= n; j++)
     C[j] = A[1] + sum_of(B, 0, j-1);
 
   // Define a(1), b(1), and pred(1)
+  int *a = calloc(n, sizeof(int));
+  int *b = calloc(n, sizeof(int));
+  int *pred = calloc(n, sizeof(int));
+
+  /* TODO Sanity check these base cases (in particular their indices) */
+  a[1] = 1;
+  b[1] = n;
+  pred[1] = 0;
+
+  /* Last is the index of the most recent non-empty interval. At the start,
+      the most recent non-empty interval is clearly the first...? */
+  int last = 1;
   
-  
-  // last = 1:
   // for i=2 to n
+  for(int i = 2; i <= n; i++)
+  {
     // if C(n) > A(i) + sumof(B, 0, n-i) 
+    if(C[n] > A[i] + sum_of(B, 0, n-i))
+    {
       // b(i) = n
+      b[i] = n;
       // j = a(last)
+      int j = a[last];
       // while C(j) > A(i) + sumof(B, 0, j-i) AND j>=i
+      while(C[j] > A[i] + sum_of(B, 0, j-i) && j >= i) 
+      {
         // C(j) = A(i) + sumof(B, 0, j-i)
+        C[j] = A[i] + sum_of(B, 0, j-i);
         // a(last) = infinity
+        a[last] = n+1;
         // b(last) = infinity
+        b[last] = n+1;
         // last = pred(last)
+        last = pred[last];
         // j = a(last)
+        j = a[last];
+      }
       // if j >= i
-        // TODO intuit this part!
+      if(j >= i)
+      {
+        // perform binary search to find the largest value j in interval a[last] .. b[last] with C[j] <= A[i] + sum_of(B,0, j-i)
+        int threshold = A[i] + sum_of(B, 0, j-i);
+        j = binary_search_max_value(a[last], b[last], threshold, C);
+        // b[last] = j; a[i] = j+1;
+        b[last] = j; a[i] = j+1;
+      }
       // else
+      else
+      {
         //b(last) = i-1; a(i) = i;
+        b[last] = i-1;
+         a[i] = i;
+      }
       // pred(i) = last
+      pred[i] = last;
       //last = i
+      last = i;
+    }
     // else
+    else
+    {
       // a(i) = infinity; b(i) = infinity
-
-  
-
+      a[i] = n+1; 
+      b[i] = n+1;
+    }
+  }
 }
 
 void vector_merge_naive(int *A, int *B, int *C, int n)
@@ -1009,7 +1069,7 @@ void binary_search(void)
   *   FROM INTERVAL DYNAMIC PROGRAMMING                                       *
   *     FROM CORE KELLERER AND PFERSCHY FPTAS                                 *
   * Description                                                               *
-  *  An auxiliary method for vector_merge_interval                            *
+  *  An auxiliary method for .ector_merge_interval                            *
   * TODO                                                                      *
   *   Generate test cases for this                                            *
   *                                                                           *
@@ -1133,3 +1193,44 @@ int get_no_subintervals_used(int *intervals, int *subintervals, int n)
 
   return subintervals_used;
 }
+
+int sum_of(int *array, int start, int end)
+{
+ /**sum_of*********************************************************************
+  * Description                                                               *
+  *  Returns the sum of the elements of array:                                *
+  *   array[start] + array[start+1] + ... + array[end]                        *
+  *                                                                           *
+  *****************************************************************************/
+  int sum = 0;
+  for(int i = start; i < end; i++)
+    sum += array[i];
+  return sum;
+}
+
+int binary_search_max_value(int left, int right, int threshold, int *arr)
+{ 
+ /**binary_search_max_value****************************************************
+  * Description                                                               *
+  *   Returns the maximum values less than or equal to threshold.             *
+  *****************************************************************************/
+  int best_index = -1;
+  while(left <= right)
+  {
+    int mid = left + (right - left) / 2;
+    if (arr[mid] == threshold)
+      return mid;
+
+    if (arr[mid] > threshold)
+      right = mid - 1;
+
+    else
+    {
+      if (arr[mid] > best_index)
+        best_index = mid;
+      left = mid + 1;
+    }
+  }
+  return best_index;
+}
+

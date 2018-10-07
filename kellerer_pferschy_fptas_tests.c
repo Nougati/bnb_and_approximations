@@ -27,6 +27,7 @@ void test_interval_dynamic_programming(void);
 void test_get_ith_interval(void);
 void test_get_number_of_weights(void);
 void test_get_no_subintervals_used(void);
+void test_binary_search_max_value(void);
 
 int main(int argc, char *argv[])
 {
@@ -40,7 +41,7 @@ int main(int argc, char *argv[])
   //test_prune_excess_weight_items(); 
   //test_redefine_large_set();
   //test_scaling_reduction();
-  //test_interval_dynamic_programming();
+  test_interval_dynamic_programming();
 
 
   /* Everything for interval dynamic programming */
@@ -49,10 +50,10 @@ int main(int argc, char *argv[])
   //test_interval_dynamic_programming();
   //test_get_ith_interval();
   //test_get_number_of_weights();
-  test_get_no_subintervals_used();
+  //test_get_no_subintervals_used();
+  test_binary_search_max_value();
 
   /* TODO Everything for greedily add smalls */
-  
 
   /* TODO Everything for backtracking */
 
@@ -1985,10 +1986,12 @@ void test_vector_merge_interval(void)
   int B1[] = {2, 4, 8, 16, 0};
   int C1[]  = {0, 0, 0, 0, 0};
   int quadratic_vmerge_C1[]  = {0, 0, 0, 0, 0};
+  int q1 = 0;
+  //TODO get q
 
   vector_merge_naive(A1, B1, quadratic_vmerge_C1, n1);
 
-  vector_merge_interval(A1, B1, C1, n1);
+  vector_merge_interval(A1, B1, C1, q1);
 
   for(int i = 0; i <= n1; i++)
   {
@@ -2026,10 +2029,11 @@ void test_vector_merge_interval(void)
   int B2[] = {15, 18, 12, 16, 17, 14, 0};
   int C2[]   = {0, 0, 0, 0, 0, 0, 0} ;
   int quadratic_vmerge_C2[]   = {0, 0, 0, 0, 0, 0, 0} ;
+  int q2 = 0;
 
   vector_merge_naive(A2, B2, quadratic_vmerge_C2, n2);
 
-  vector_merge_interval(A2, B2, C2, n2);
+  vector_merge_interval(A2, B2, C2, q2);
 
   for(int i = 0; i <= n2; i++)
   {
@@ -2319,8 +2323,9 @@ void test_vector_merge_interval(void)
     0, 0, 0, 0, 0, 0};
     
   vector_merge_naive(A3, B3, quadratic_vmerge_C3, n3);
+  int q3 = 0;
 
-  vector_merge_interval(A3, B3, C3, n3);
+  vector_merge_interval(A3, B3, C3, q3);
 
   for(int i = 0; i <= n3; i++)
   {
@@ -2373,11 +2378,26 @@ void test_interval_dynamic_programming(void)
       small_weights: [485, 326, 248, 322, 795, 43  , 845, 955, 252, -1]
         new epsilon: 0.250000
   */
-      int profits[] = {94, 506, 416, 992, 649, 237, 457, 815, 446, 422};
-      int weights[] = {485, 326, 248, 421, 322, 795, 43, 845, 955, 252};
-      int capacity = 1850;
-      int n = 10;
-      double epsilon = 0.3;
+  /*
+  int profits1[] = {94, 506, 416, 992, 649, 237, 457, 815, 446, 422};
+  int weights1[] = {485, 326, 248, 421, 322, 795, 43, 845, 955, 252};
+  int capacity1 = 1850;
+  int n1 = 10;
+  double epsilon1 = 0.3;
+
+  double new_epsilon1 = epsilon1;
+  int large_profits1[n], large_weights1[n], small_profits1[n], 
+      small_weights1[n], intervals1[n], subintervals1[n];
+  int new_n1, lower_bound1;
+  scaling_reduction(profits1, weights1, n1, capacity1, &new_epsilon1, large_profits1,
+                    large_weights1, small_profits1, small_weights1, intervals1,
+                    subintervals1, &new_n1, &lower_bound1);
+
+  interval_dynamic_programming(large_profits1, large_weights1, intervals1, 
+                               subintervals1, new_n1, capacity1, lower_bound1, 
+                               epsilon1, 2*lower_bound1);
+  printf("%lf\n", new_epsilon1);
+  */
 
   /* Instance 3
     double epsilon = 0.1; int capacity = 99785; int n=50;
@@ -2431,32 +2451,42 @@ void test_interval_dynamic_programming(void)
                       0, 0, 0, 0, 0, 0, 0, 0]
   */
 
+    double epsilon2 = 0.1;
+    int capacity2 = 99785;
+    int n2 = 50;
+    int profits2[] = {15094, 24506, 94416, 40992, 66649, 49237,
+                      96457, 67815, 19446, 63422, 88791, 49359,
+                      45667, 31598, 82007, 20544, 85334, 82766,
+                      93994, 59893, 62633, 87131, 5428, 76700,
+                      30617, 15874, 77720, 74419, 69794, 28196,
+                      95997, 83116, 15908, 55539, 45707, 38569,
+                      25537, 90931, 55726, 75487, 59772, 67513,
+                      52081, 29943, 88058, 84303, 13764, 6536,
+                      90724, 63789};
 
-  double new_epsilon = epsilon;
-  int large_profits[n], large_weights[n], small_profits[n], small_weights[n];
-  int intervals[n], subintervals[n];
-  int new_n;
-  scaling_reduction(profits, weights, n, capacity, &new_epsilon, large_profits,
-                    large_weights, small_profits, small_weights, intervals,
-                    subintervals, &new_n);
+    int weights2[] = {485, 56326, 79248, 45421, 80322, 15795,
+                      58043, 42845, 24955, 49252, 61009, 25901,
+                      81122, 81094, 38738, 88574, 65715, 78882,
+                      31367, 59984, 73299, 49433, 15682, 90072,
+                      97874, 138, 53856, 87145, 37995, 91529,
+                      36199, 83277, 80097, 59719, 35242, 36107,
+                      41122, 41070, 76098, 53600, 36645, 7267,
+                      41972, 9895, 83213, 99748, 89487, 71923,
+                      17029, 2567};
 
-  for(int i = 0; i < n; i++)
-    printf("%s%d%s%s", i == 0 ? "large_profits: [" : "", large_profits[i], 
-           i == n-1 ? "]\t\n" : ", ", i % 5 == 0 && i != 0 ? "\n\t\t" : "");
+  double new_epsilon2 = epsilon2;
+  int large_profits2[n2], large_weights2[n2], small_profits2[n2], 
+      small_weights2[n2], intervals2[n2], subintervals2[n2];
+  int new_n2, lower_bound2;
+  scaling_reduction(profits2, weights2, n2, capacity2, &new_epsilon2, 
+                    large_profits2, large_weights2, small_profits2, 
+                    small_weights2, intervals2, subintervals2, &new_n2, 
+                    &lower_bound2);
 
-  for(int i = 0; i < n; i++)
-    printf("%s%d%s%s", i == 0 ? "large_weights: [" : "", large_weights[i],
-           i == n-1 ? "]\t\n" : ", ", i % 5 == 0 && i != 0 ? "\n\t\t" : "");
+  interval_dynamic_programming(large_profits2, large_weights2, intervals2, 
+                               subintervals2, new_n2, capacity2, lower_bound2, 
+                               epsilon2, 2*lower_bound2);
 
-  for(int i = 0; i < n; i++)
-    printf("%s%d%s%s", i == 0 ? "small_profits: [" : "", small_profits[i], 
-           i == n-1 ? "]\t\n" : ", ", i % 5 == 0 && i != 0 ? "\n\t\t" : "");
-
-  for(int i = 0; i < n; i++)
-    printf("%s%d%s%s", i == 0 ? "small_weights: [" : "", small_weights[i], 
-           i == n-1 ? "]\n\t" : ", ", i % 5 == 0 && i != 0 ? "\n\t\t" : "");
-
-  printf("%lf\n", new_epsilon);
 }
 
 void test_scaling_reduction(void)
@@ -2471,31 +2501,11 @@ void test_scaling_reduction(void)
   double new_epsilon = epsilon;
   int large_profits[n], large_weights[n], small_profits[n], small_weights[n];
   int subintervals[n], intervals[n];
-  int new_n;
+  int new_n, lower_bound;
   
   scaling_reduction(profits, weights, n, capacity, &new_epsilon, large_profits,
                     large_weights, small_profits, small_weights, intervals, 
-                    subintervals, &new_n);
-  /*
-  printf("************** PRINTING AFTER SCALING_REDUCTION *********************\n");
-  for(int i = 0; i < n; i++) 
-    printf("%s%d%s%s", i == 0 ? "large_profits: [" : ", ", large_profits[i], 
-           i == n-1 ? "]\t\n" : "", i % 5 == 0 && i != 0 ? "\n\t" : ""); 
-
-  for(int i = 0; i < n; i++) 
-    printf("%s%d%s%s", i == 0 ? "large_weights: [" : ", ", large_weights[i], 
-           i == n-1 ? "]\t\n" : "", i % 5 == 0 && i != 0 ? "\n\t" : ""); 
-
-  for(int i = 0; i < n; i++) 
-    printf("%s%d%s%s", i == 0 ? "small_profits: [" : ", ", small_profits[i], 
-           i == n-1 ? "]\t\n" : "", i % 5 == 0 && i != 0 ? "\n\t" : ""); 
-
-  for(int i = 0; i < n; i++) 
-    printf("%s%d%s%s", i == 0 ? "small_weights: [" : ", ", small_weights[i], 
-           i == n-1 ? "]\n\t" : "", i % 5 == 0 && i != 0 ? "\n\t" : ""); 
-
-  printf("%lf\n", new_epsilon);
-  */ 
+                    subintervals, &new_n, &lower_bound);
 }
 
 void test_get_ith_interval(void)
@@ -2661,11 +2671,12 @@ void test_get_number_of_weights(void)
   int large_profits1[n1], large_weights1[n1], small_profits1[n1],
        small_weights1[n1];
   int intervals1[n1], subintervals1[n1];
-  int new_n1;
+  int new_n1, lower_bound1;
 
   scaling_reduction(profits1, weights1, n1, capacity1, &epsilon1, 
                     large_profits1, large_weights1, small_profits1,
-                    small_weights1, intervals1, subintervals1, &new_n1);
+                    small_weights1, intervals1, subintervals1, &new_n1, 
+                    &lower_bound1);
 
   
   int index_of_interest1 = 0;
@@ -2695,7 +2706,8 @@ void test_get_number_of_weights(void)
 
   int n2 = 50;
   int capacity2 = 9909895;
-  int profits2[] = {8415090, 3280471, 5173662, 2785349, 1246577, 4464416, 5454431, 
+  int profits2[] = 
+              {8415090, 3280471, 5173662, 2785349, 1246577, 4464416, 5454431, 
                2710495, 5644168, 2612523, 5749573, 4274644, 2726423, 3912054, 
                4019779, 2408872, 7751036, 7860698, 324554, 7419182, 6835394, 
                6536095, 7120355, 3365898, 7327436, 8715849, 530827, 360957, 
@@ -2704,7 +2716,8 @@ void test_get_number_of_weights(void)
                5293424, 9339146, 9870875, 9883525, 2602897, 6378122, 5007115, 
                9489045};
 
-  int weights2[] = {9400485, 2756326, 4379248, 2845421, 1680322, 4215795, 4658043,
+  int weights2[] = 
+              {9400485, 2756326, 4379248, 2845421, 1680322, 4215795, 4658043,
                1942845, 5524955, 1949252, 5861009, 4125901, 2881122, 3581094,
                3738738, 2488574, 6865715, 8278882, 731367, 7659984, 6073299,  
                5549433, 7415682, 3890072, 6797874, 9500138, 1253856, 387145,
@@ -2716,11 +2729,12 @@ void test_get_number_of_weights(void)
   int large_profits2[n2], large_weights2[n2], small_profits2[n2],
        small_weights2[n2];
   int intervals2[n2], subintervals2[n2];
-  int new_n2;
+  int new_n2, lower_bound2;
 
   scaling_reduction(profits2, weights2, n2, capacity2, &epsilon2, 
                     large_profits2, large_weights2, small_profits2,
-                    small_weights2, intervals2, subintervals2, &new_n2);
+                    small_weights2, intervals2, subintervals2, &new_n2, 
+                    &lower_bound2);
 
 
   
@@ -2771,11 +2785,12 @@ void test_get_number_of_weights(void)
   int large_profits3[n3], large_weights3[n3], small_profits3[n3],
        small_weights3[n3];
   int intervals3[n3], subintervals3[n3];
-  int new_n3;
+  int new_n3, lower_bound3;
 
   scaling_reduction(profits3, weights3, n3, capacity3, &epsilon3, 
                     large_profits3, large_weights3, small_profits3,
-                    small_weights3, intervals3, subintervals3, &new_n3);
+                    small_weights3, intervals3, subintervals3, &new_n3, 
+                    &lower_bound3);
 
   
   int index_of_interest3 = 35;
@@ -2905,3 +2920,103 @@ void print_list(int *list, int length, const char *name)
            i % 6 == 0 && i > 0 && i < length-1? "\n\t" : "");
 }
 
+void test_binary_search_max_value(void)
+{
+  printf("Testing binary_search_max_value...\n");
+  int suite_status = SUCCESS;
+  int status;
+
+  /*******************************************/
+  /*  Test 1.1:                              */
+  /*                                         */
+  /*******************************************/
+  status = SUCCESS;
+  int arr1[] = {2, 4, 6, 8, 10, 12, 14, 18};
+  int left1 = 0;
+  int right1 = 7;
+
+  int result1 = binary_search_max_value(left1, right1, 11, arr1);
+  int expected_result1 = 4;
+  
+  if (result1 != expected_result1)
+  {
+    printf("\tTest 1.1 failed! Expected %d, but got %d!\n", expected_result1, 
+           result1);
+    suite_status = FAILURE;
+  }
+
+  /*******************************************/
+  /*  Test 1.2:                              */
+  /*                                         */
+  /*******************************************/
+  status = SUCCESS;
+  left1 = 1;
+  right1 = 6;
+
+  result1 = binary_search_max_value(left1, right1, 11, arr1);
+  expected_result1 = 4;
+  
+  if (result1 != expected_result1)
+  {
+    printf("\tTest 1.2 failed! Expected %d, but got %d!\n", expected_result1, 
+           result1);
+    suite_status = FAILURE;
+  }
+
+  /*******************************************/
+  /*  Test 1.3:                              */
+  /*                                         */
+  /*******************************************/
+  status = SUCCESS;
+  left1 = 2;
+  right1 = 5;
+
+  result1 = binary_search_max_value(left1, right1, 11, arr1);
+  expected_result1 = 4;
+  
+  if (result1 != expected_result1)
+  {
+    printf("\tTest 1.3 failed! Expected %d, but got %d!\n", expected_result1, 
+           result1);
+    suite_status = FAILURE;
+  }
+
+  /*******************************************/
+  /*  Test 1.4:                              */
+  /*                                         */
+  /*******************************************/
+  status = SUCCESS;
+  left1 = 2;
+  right1 = 4;
+
+  result1 = binary_search_max_value(left1, right1, 11, arr1);
+  expected_result1 = 4;
+  
+  if (result1 != expected_result1)
+  {
+    printf("\tTest 1.4 failed! Expected %d, but got %d!\n", expected_result1, 
+           result1);
+    suite_status = FAILURE;
+  }
+
+  /*******************************************/
+  /*  Test 1.5:                              */
+  /*                                         */
+  /*******************************************/
+  status = SUCCESS;
+  left1 = 1;
+  right1 = 3;
+
+  result1 = binary_search_max_value(left1, right1, 11, arr1);
+  expected_result1 = 3;
+  
+  if (result1 != expected_result1)
+  {
+    printf("\tTest 1.5 failed! Expected %d, but got %d!\n", expected_result1, 
+           result1);
+    suite_status = FAILURE;
+  }
+
+  if(suite_status == SUCCESS)
+    printf("\tAll passed!\n");
+}
