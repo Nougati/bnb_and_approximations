@@ -19,68 +19,79 @@
 
 The field of discrete optimisation (CITE) studies problems that model discrete
  decision making. 
-Mixed-Intger Programming refers to a set of modelling and solving techniques for
+Mixed-Integer Programming refers to a set of modelling and solving techniques for
  such discrete problems (CITE) by formulating them as Mixed-Integer Programs
  (MIPs). 
+For many problems, this approach is the most efficient known method to find a
+ solution. 
 The standard MIP formulation, for maximisation, is as follows:
 
 \begin{equation*}
 \begin{array}{ll@{}ll}
-\text{maximse}  & \displaystyle cx+hy &\\
+\text{maximise}  & \displaystyle cx+hy &\\
 \text{subject to}  & \displaystyle Ax + Gy \leq b \\
                    &x \geq 0 \text{ integral}\\
                    &y \geq 0
 \end{array}
 \end{equation*}
 
-Generally, constraints on how we can optimise the objective function are linear,
- and variables can be specified to be integer or continuous. 
+Generally, objective functions are constrained by linear inequalities, and
+ variables can be specified to be integer or continuous. 
 
-Optimisation problems with linear constraints with continuous variables are
- known as Linear Programs (LPs), which are solvable in polynomial time (CITE). 
-MIPs, on the other hand, are characterised by having one more more variables
- constrained to be integer, generally resulting in an NP-Hard problem. 
+Optimisation problems with linear constraints and continuous variables are
+ known as Linear Programs (LPs), which are both solvable in polynomial time
+ and very efficiently in practice (CITE).
 In this report, we consider maximisation problems whose constraints are all
  linear.
+MIPs, on the other hand, are characterised by having one more more variables
+ constrained to be integer, generally resulting in an NP-Hard problem (CITE). 
+By removing the integer constraints on variables in a MIP, we obtain its
+ associated LP relaxation.
 
-The state-of-the-art method for solving MIPs is the Branch and
- Bound approach, which uses LP relaxations to achieve *implicit enumeration* of
- the search space. 
-Finding the LP relaxation of a MIP simply involves removing the integer
- constraints on our variables, and solving the resulting LP. 
+The state-of-the-art method for solving MIPs leverages this relationship
+ to systematically search for what are known as primal solutions that are
+ feasible, using bounds to implicitly enumerate through these.
 
 Because the feasible region of continuous solutions naturally subsumes the set
  of feasible solutions for integers, we know, for optimal value for the LP
  relaxation $z_{LP}$ and true optimal value $z$, that $z \leq z_{LP}$.
 
-This provides an upper bound in our case, which we refer to as the *dual bound*.
-Given our solved relaxtion, we contrain variables to "tighten" the continuous
- feasible region closer to the maximum integer solution. 
+\begin{align}
+  z \leq z_{LP}
+\end{align}
+
+Since $z_{LP}$ is at least as large as our optimal value, we are provided with
+ an upper bound in our case, which we refer to as the *dual bound*.
+Given our solved relaxation, we form a subproblem by adding constraints to our
+ problem which constrain certain variables to be integer, and solve this.
 By solving LP relaxation again for this constrained subproblem, we can see if
  an optimal integer solution can exist in with these constraints: if our dual
- bound is lower than our best known value so far, we can *prune* this subproblem
+ bound is lower than our best known value so far, we can prune this subproblem
  and switch to another constrained subproblem. 
 Otherwise, if this subproblem has a dual bound above our best known value, we
  continue constraining and solving the relaxation until a new feasible solution
  is found, or a further constrained subproblem of this is pruned.
 
-This constitutes the core of the Branch and Bound approach, which we describe
- below: let $(x^i, y^i)$ be the optimal solution to linear program $LP_i$,
- $(x^*, y^*)$ denote an optimal solution, $\ubar z$ denote the lower bound on
- the optimal value and $z^*$ the optimal solution of the MIP, and let
- $\mathcal{L}$ denote the list of nodes yet to be solved (i.e. not pruned nor
- branched on).
+**Should I note that x and y are vectors of assigned values within the objective?**
+
+This constitutes the core of the Branch and Bound approach, which we formally
+ describe below: let $(x^i, y^i)$ be the optimal solution to linear program
+ $LP_i$, $(x^*, y^*)$ denote an optimal solution to the MIP; $\ubar z$ denote
+ the lower bound on the optimal value and $z^*$ the optimal solution of the MIP,
+ and let $\mathcal{L}$ denote the list of nodes of the Branch and Bound tree yet
+ to be solved (i.e. not pruned nor branched on).
 
 \begin{algorithm}[H]
   \SetAlgoLined
   \KwData{A Mixed-Integer Program.}
-  \KwResult{The optimal solution value}
-  Set $\mathcal{L}:={N_0}$, set $\ubar z := -\infty$, set  $(x*, y*):=\emptyset$\;
+  \KwResult{The optimal solution value, and the associated solution}
+  Set $\mathcal{L}:={N_0}$, set $\ubar z := -\infty$, set  $(x^*, y^*):=\emptyset$\;
   \While{$\mathcal{L}$ is not empty}
   {
-  Choose a node $N_i$ from $\mathcal{L}$, and delete it from $\mathcal{L}$\;
-  Solve $LP_i$\;
-  \If{$LP_i$ is infeasible}
+  Select a node $N_i$ from $\mathcal{L}$, by some node selection scheme, deleting
+   it from $\mathcal{L}$\;
+  Solve $LP_i$ to get solution value $z_{i}$ and $(x^i, y^i)$ if it exists\;
+  \If{$LP_i$ is infeasible, i.e. $z_i = -\infty$}
   {
   Go to step 2\;
   }
@@ -102,8 +113,8 @@ This constitutes the core of the Branch and Bound approach, which we describe
   }
   \Else
   {
-  From $LP_i$ construct $k \geq 2$ linear programs $K_{i1}, \dots, LP_{ik}$ with smaller feasible regions whose union does not contain $(x^i, y^i)$, but contains all the solutions of $LP_i$ with $x \in \mathbb{Z}$\;
-  Add the corresponding new nodse $N_{i1},\dots, N_{ik}$ to $\mathcal{L}$ and go to step 2.
+  From $LP_i$ construct 2 linear programs $LP_{i1}, LP_{ik}$ with smaller feasible regions whose union does not contain $(x^i, y^i)$, but contains all the solutions of $LP_i$ with $x \in \mathbb{Z}$\;
+  Add the corresponding new nodes $N_{i1}, N_{ik}$ to $\mathcal{L}$ and go to step 2.
   }
   
   Return $\ubar z$\;
@@ -112,22 +123,22 @@ This constitutes the core of the Branch and Bound approach, which we describe
 \end{algorithm}
 
 
-While finding optimal solutions with Branch and Bound is at worst case
- exponential-time, there exist Approximation Algorithms (AAs) which can provide
- feasible solutions in polynomial-time, by sacrificing guaranteed optimality.
-Instead, AAs provide a guarantee on the *quality* of the solution, within some
- factor. 
-
+While finding optimal solutions with Branch and Bound is in worst case
+ exponential-time, for some problems there exist Approximation Algorithms (AAs)
+ which can provide feasible solutions in as fast as polynomial-time, by
+ sacrificing guaranteed optimality.
+In such cases, AAs provide a guarantee on the *quality* of the solution, 
+ within some factor. 
 
 An $\alpha$-approximation is an AA that guarantees that the solution value will
- always be within a constant factor $\alpha$ of the optimal solution; i.e. for
+ always be within a constant factor $\alpha < 1$ of the optimal solution; i.e. for
  an approximate solution value $z_{A}$, it must be that
  $\alpha z \leq z_{A} \leq z$.
 As a result, for a maximisation problem, we can analytically derive an upper
  bound on the optimal value from the lower bound guarantee on the optimal
  solution. 
 In this way, we can use AAs in lieu of an LP relaxation to obtain valid dual
- bounds *a priori* on our optimal solution.
+ bounds on our optimal solution.
 Further, if we use information from a found approximate solution, we can derive
  improved dual bounds *a posteriori* on our optimal solution.
 Because we are leveraging guarantees on the optimal value, the dual bounds we
@@ -146,4 +157,30 @@ To do this, we investigate known approximation schemes and methods to construct
  high quality dual bounds from them, as well as devising branching strategies
  within its Branch and Bound. 
 
+(**Put warm starting in future work**)
 
+# What do I call this section? it's like the techniques related to B&B
+
+## Branching Strategies
+
+## Bounding optimal solutions
+
+## Extensions, improvements, and related techniques
+
+# Stuff about approximations
+
+Basically the stuff from the literature review.
+
+## Vazirani
+
+## Williamson Shmoys
+
+## Lawler
+
+## Anything else?
+
+# Design and Analysis
+
+# Implementation and results
+
+## What is a logical way to lay all this out?

@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <math.h>
+#include <stdlib.h>
 #include "kellerer_pferschy_fptas.h"
 #define SUCCESS 1
 #define FAILURE 0
@@ -41,17 +42,17 @@ int main(int argc, char *argv[])
   //test_prune_excess_weight_items(); 
   //test_redefine_large_set();
   //test_scaling_reduction();
-  test_interval_dynamic_programming();
+  //test_interval_dynamic_programming();
 
 
   /* Everything for interval dynamic programming */
   //test_vector_merge_naive();
-  //test_vector_merge_interval();
+  test_vector_merge_interval();
   //test_interval_dynamic_programming();
   //test_get_ith_interval();
   //test_get_number_of_weights();
   //test_get_no_subintervals_used();
-  test_binary_search_max_value();
+  //test_binary_search_max_value();
 
   /* TODO Everything for greedily add smalls */
 
@@ -1991,7 +1992,7 @@ void test_vector_merge_interval(void)
 
   vector_merge_naive(A1, B1, quadratic_vmerge_C1, n1);
 
-  vector_merge_interval(A1, B1, C1, q1);
+  vector_merge_interval(A1, B1, C1, n1);
 
   for(int i = 0; i <= n1; i++)
   {
@@ -2033,7 +2034,7 @@ void test_vector_merge_interval(void)
 
   vector_merge_naive(A2, B2, quadratic_vmerge_C2, n2);
 
-  vector_merge_interval(A2, B2, C2, q2);
+  vector_merge_interval(A2, B2, C2, n2);
 
   for(int i = 0; i <= n2; i++)
   {
@@ -2325,7 +2326,7 @@ void test_vector_merge_interval(void)
   vector_merge_naive(A3, B3, quadratic_vmerge_C3, n3);
   int q3 = 0;
 
-  vector_merge_interval(A3, B3, C3, q3);
+  vector_merge_interval(A3, B3, C3, n3);
 
   for(int i = 0; i <= n3; i++)
   {
@@ -2451,6 +2452,13 @@ void test_interval_dynamic_programming(void)
                       0, 0, 0, 0, 0, 0, 0, 0]
   */
 
+    int profits2[] = {94, 506, 416, 992, 649, 237, 457, 815, 446, 422};
+    int weights2[] = {485, 326, 248, 421, 322, 795, 43, 845, 955, 252};
+    int capacity2 = 1850;
+    int n2 = 10;
+    double epsilon2 = 0.05;
+
+    /*
     double epsilon2 = 0.1;
     int capacity2 = 99785;
     int n2 = 50;
@@ -2473,21 +2481,51 @@ void test_interval_dynamic_programming(void)
                       41122, 41070, 76098, 53600, 36645, 7267,
                       41972, 9895, 83213, 99748, 89487, 71923,
                       17029, 2567};
+  */
 
   double new_epsilon2 = epsilon2;
   int large_profits2[n2], large_weights2[n2], small_profits2[n2], 
       small_weights2[n2], intervals2[n2], subintervals2[n2];
   int new_n2, lower_bound2;
+  double upper_bound2;
   scaling_reduction(profits2, weights2, n2, capacity2, &new_epsilon2, 
                     large_profits2, large_weights2, small_profits2, 
                     small_weights2, intervals2, subintervals2, &new_n2, 
-                    &lower_bound2);
+                    &lower_bound2, &upper_bound2);
 
+  print_list(large_profits2, new_n2, "profits2");
+  print_list(large_weights2, new_n2, "weights2");
+  print_list(intervals2, new_n2, "intervals2");
+  print_list(subintervals2, new_n2, "subintervals2");
+
+  int *y, *r;
+  y = calloc(upper_bound2, sizeof(int));
+  r = calloc(upper_bound2, sizeof(int));
   interval_dynamic_programming(large_profits2, large_weights2, intervals2, 
                                subintervals2, new_n2, capacity2, lower_bound2, 
-                               epsilon2, 2*lower_bound2);
+                               epsilon2, upper_bound2, y, r);
 
+  printf("DP 1 done!\n");
+  
+  int *y2, *r2;
+  y2 = calloc(upper_bound2, sizeof(int));
+  r2 = calloc(upper_bound2, sizeof(int));
+
+  interval_dynamic_programming_for_testing(large_profits2, large_weights2, 
+                                           intervals2, subintervals2, new_n2, 
+                                           capacity2, lower_bound2, epsilon2, 
+                                           upper_bound2, y2, r2);
+  printf("DP 2 done!\n");
+
+  for(int i = 0; i < upper_bound2; i++)
+  {
+    if(y[i] != y2[i])
+    {
+      printf("Discrepancy:y[%d] = %d, y2[%d] = %d\n", i, y[i], i, y2[i]);
+    }
+  }
 }
+
 
 void test_scaling_reduction(void)
 {
@@ -2499,13 +2537,14 @@ void test_scaling_reduction(void)
   double epsilon = 0.5; 
 
   double new_epsilon = epsilon;
+  double upper_bound;
   int large_profits[n], large_weights[n], small_profits[n], small_weights[n];
   int subintervals[n], intervals[n];
   int new_n, lower_bound;
   
   scaling_reduction(profits, weights, n, capacity, &new_epsilon, large_profits,
                     large_weights, small_profits, small_weights, intervals, 
-                    subintervals, &new_n, &lower_bound);
+                    subintervals, &new_n, &lower_bound, &upper_bound);
 }
 
 void test_get_ith_interval(void)
@@ -2668,6 +2707,7 @@ void test_get_number_of_weights(void)
                     41122, 41070, 76098, 53600, 36645, 7267, 41972, 9895, 83213, 
                     99748, 89487, 71923, 17029, 2567};
   double epsilon1 = 0.2;
+  double upper_bound1;
   int large_profits1[n1], large_weights1[n1], small_profits1[n1],
        small_weights1[n1];
   int intervals1[n1], subintervals1[n1];
@@ -2676,7 +2716,7 @@ void test_get_number_of_weights(void)
   scaling_reduction(profits1, weights1, n1, capacity1, &epsilon1, 
                     large_profits1, large_weights1, small_profits1,
                     small_weights1, intervals1, subintervals1, &new_n1, 
-                    &lower_bound1);
+                    &lower_bound1, &upper_bound1);
 
   
   int index_of_interest1 = 0;
@@ -2726,6 +2766,7 @@ void test_get_number_of_weights(void)
                6141972, 9909895, 9683213, 9699748, 2689487, 6471923, 5817029, 
                9425674};
   double epsilon2 = 0.2;
+  double upper_bound2;
   int large_profits2[n2], large_weights2[n2], small_profits2[n2],
        small_weights2[n2];
   int intervals2[n2], subintervals2[n2];
@@ -2734,7 +2775,7 @@ void test_get_number_of_weights(void)
   scaling_reduction(profits2, weights2, n2, capacity2, &epsilon2, 
                     large_profits2, large_weights2, small_profits2,
                     small_weights2, intervals2, subintervals2, &new_n2, 
-                    &lower_bound2);
+                    &lower_bound2, &upper_bound2);
 
 
   
@@ -2782,6 +2823,7 @@ void test_get_number_of_weights(void)
                     107874, 40617};
 
   double epsilon3 = 0.2;
+  double upper_bound3;
   int large_profits3[n3], large_weights3[n3], small_profits3[n3],
        small_weights3[n3];
   int intervals3[n3], subintervals3[n3];
@@ -2790,7 +2832,7 @@ void test_get_number_of_weights(void)
   scaling_reduction(profits3, weights3, n3, capacity3, &epsilon3, 
                     large_profits3, large_weights3, small_profits3,
                     small_weights3, intervals3, subintervals3, &new_n3, 
-                    &lower_bound3);
+                    &lower_bound3, &upper_bound3);
 
   
   int index_of_interest3 = 35;

@@ -10,7 +10,8 @@ void kellerer_pferschy_fptas(int *profits, int *weights, int n, int capacity,
 void scaling_reduction(int *profits, int *weights, int n, int capacity,
                        double *epsilon,int *large_profits, int *large_weights,
                        int *small_profits, int *small_weights, int *intervals, 
-                       int *subintervals, int *new_n, int *lower_bound);
+                       int *subintervals, int *new_n, int *lower_bound, 
+                       double *upper_bound);
 void get_knapsack_lowerbound(int *profits, int *weights, int n, int capacity, 
                              int *lower_bound, double *upper_bound);
 void modify_epsilon(double *epsilon);
@@ -34,7 +35,12 @@ void interval_dynamic_programming(int *large_profits_prime,
                                   int *large_weights_prime, int *intervals,
                                   int *subintervals, int n, int capacity,
                                   int lower_bound, double epsilon,
-                                  int profits_upper_bound);
+                                  int profits_upper_bound, int *y, int *r);
+void interval_dynamic_programming_for_testing(int *large_profits_prime, 
+                                  int *large_weights_prime, int *intervals,
+                                  int *subintervals, int n, int capacity,
+                                  int lower_bound, double epsilon,
+                                  int profits_upper_bound, int *y, int *r);
 void vector_merge_interval(int *A, int *B, int *C, int n);
 void quick_sort_parallel_lists_desc_double(double *list1, double *list2, int lo,
                                            int hi);
@@ -65,3 +71,4 @@ void print_list(int *list, int length, const char *name);
 int get_no_subintervals_used(int *intervals, int *subintervals, int n);
 int sum_of(int *array, int start, int end);
 int binary_search_max_value(int left, int right, int threshold, int *arr);
+

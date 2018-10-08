@@ -9,12 +9,13 @@ int main(int argc, char *argv[])
   if (argc > 1)
     floor_please = TRUE;
 
-  double z_lower = 426168.0;
+  double z_lower = 3442.0;
   double epsilon = 0.05;
   double one_on_eps = 1.0/epsilon;
   double zeps = z_lower*epsilon;
   double interval, next_interval, subinterval, next_subinterval;
 
+  /*
   int n = 50;
   int capacity = 99748;
   int profits[] = {15094, 24506, 94416, 40992, 66649, 49237, 96457, 67815, 19446,
@@ -30,12 +31,11 @@ int main(int argc, char *argv[])
                   87145, 37995, 91529, 36199, 83277, 80097, 59719, 35242, 36107,
                   41122, 41070, 76098, 53600, 36645, 7267, 41972, 9895, 83213, 
                   99748, 89487, 71923, 17029, 2567};
-  /*
   */
 
 
-  //int n = 10;
-  //int profits[] = {94, 506, 416, 992, 649, 237, 457, 815, 446, 422};
+  int n = 10;
+  int profits[] = {94, 506, 416, 992, 649, 237, 457, 815, 446, 422};
 
   printf("lower_bound = %d, (modified) epsilon = %lf\n", (int)z_lower, 
          epsilon);
