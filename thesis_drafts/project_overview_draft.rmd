@@ -1,5 +1,5 @@
 ---
- title: '(DRAFT) Implicit enumeration with dual bounds'
+ title: '(DRAFT) Implicit enumeration with dual bounds obtained from approximation algorithms'
  author: Nelson Frew
  header-includes:
   - \usepackage{amsmath}
@@ -64,6 +64,7 @@ Since $z_{LP}$ is at least as large as our optimal value, we are provided with
  an upper bound in our case, which we refer to as the *dual bound*.
 Given our solved relaxation, we form a subproblem by adding constraints to our
  problem which constrain certain variables to be integer, and solve this.
+The process of choosing a given variable to constrain is known as *branching*. 
 By solving LP relaxation again for this constrained subproblem, we can see if
  an optimal integer solution can exist in with these constraints: if our dual
  bound is lower than our best known value so far, we can prune this subproblem
@@ -113,7 +114,10 @@ This constitutes the core of the Branch and Bound approach, which we formally
   }
   \Else
   {
-  From $LP_i$ construct 2 linear programs $LP_{i1}, LP_{ik}$ with smaller feasible regions whose union does not contain $(x^i, y^i)$, but contains all the solutions of $LP_i$ with $x \in \mathbb{Z}$\;
+  Branching: From $LP_i$ construct 2 linear programs $LP_{i1}, LP_{ik}$ with smaller
+   feasible regions whose union does not contain $(x^i, y^i)$, but contains
+   all the solutions of $LP_i$ with $x \in \mathbb{Z}$, by choosing a variable
+   to constrain.\;
   Add the corresponding new nodes $N_{i1}, N_{ik}$ to $\mathcal{L}$ and go to step 2.
   }
   
@@ -149,19 +153,55 @@ This is distinct from LP relaxations, which can provide arbitrarily poor dual
 When conducting a Branch and Bound with AAs, an important observation is that
  the general strategies which have contributed to the success of the
  standard Branch and Bound with LPs must be addressed. 
-In particular, methods of branching and warm-starting solutions do not have a
- clear translation with respect to AAs. 
+In particular, methods of branching and node selection do not have a clear
+ translation with respect to AAs. 
 In this project, we investigate methods of effectively using dual bounds
  provided by AAs for the 0,1 Knapsack. 
 To do this, we investigate known approximation schemes and methods to construct
  high quality dual bounds from them, as well as devising branching strategies
  within its Branch and Bound. 
 
+In the following sections, we give a brief literature review of the research
+ and improvements to the Branch and Bound approach, as well as an overview of
+ details and approaches with AAs that are central to this report.
+
 (**Put warm starting in future work**)
 
-# What do I call this section? it's like the techniques related to B&B
+# Branch and Bound improvements and strategies
+
+While our previous description of the Branch and Bound approach captured the
+ core components, there still remain many aspects which are uncertain: which
+ variables to constrain for branching, alternative methods to relax a solution,
+ and node selection schemes. 
+These problems are in fact non-trivial and represent active research areas
+ within Mixed-Integer Programming. 
+In light of this, we provide an overview of known strategies and the body of
+ research that comprises the current understanding in the field.
 
 ## Branching Strategies
+
+Deriving useful subproblems is central to the Branch and Bound approach, as it
+ provides us with the partial enumeration required to establish bounds on an
+ optimal solution value. 
+A basic strategy is to branch on the variable with the largest fractional
+ component, however \cite{achterberg2005branching} has shown this to be as bad as random selection. 
+It is possible to make inferences based on the properties of each variable's
+ fractional component, as shown by \cite{tomlin1970branch} by the proposal of "use penalties".
+This was used to inform the branching process
+ where "up penalties" and "down penalties" were calculated for each variable
+ based on their respective fractional components, after which the variable with
+ the highest penalty in any direction was chosen.
+However, \cite {mitra1973investigation} showed with computational experiments that such approaches may
+ have limited use, while approaches involving issuing "pseudocosts" as proposed
+ by \cite{benichou1971experiments} may have advantages. 
+
+In an attempt to provide a categorisation for branching methods, \cite{morrison2016branch} proposed two groupings: *binary*/*non-binary* strategies, and *wide* strategies. 
+Both problem types and tree depth provided the ideas central to these
+ classifications.
+
+A detailed survey of the literature and the current open questions in research
+ are provided by \cite{morrison2016branch}, where the reader is directed for further reading.
+
 
 ## Bounding optimal solutions
 
@@ -169,13 +209,26 @@ To do this, we investigate known approximation schemes and methods to construct
 
 # Stuff about approximations
 
-Basically the stuff from the literature review.
+All the big Knapsack approximations.
 
-## Vazirani
+Probably introduce both KP and approximations notation here. We'll probably always need:
 
-## Williamson Shmoys
 
-## Lawler
+
+ - Error parameter $\epsilon$
+ - Profits 
+
+## Sahni (1975) 
+
+## Ibarra and Kim (1975) (Williamson Shmoys + Vazirani)
+
+## Lawler (1979)
+
+## Magazine and Oguz (1981)
+
+## Kellerer and Pferschy (1999)
+
+## Kellerer and Pferschy (2001)
 
 ## Anything else?
 
@@ -184,3 +237,6 @@ Basically the stuff from the literature review.
 # Implementation and results
 
 ## What is a logical way to lay all this out?
+
+\bibliography{project_overview_draft}
+\bibliographystyle{plain}

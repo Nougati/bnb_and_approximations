@@ -1,0 +1,31 @@
+\begin{thebibliography}{1}
+
+\bibitem{achterberg2005branching}
+Tobias Achterberg, Thorsten Koch, and Alexander Martin.
+\newblock Branching rules revisited.
+\newblock {\em Operations Research Letters}, 33(1):42--54, 2005.
+
+\bibitem{benichou1971experiments}
+Michel B{\'e}nichou, Jean-Michel Gauthier, Paul Girodet, Gerard Hentges, Gerard
+  Ribi{\`e}re, and O~Vincent.
+\newblock Experiments in mixed-integer linear programming.
+\newblock {\em Mathematical Programming}, 1(1):76--94, 1971.
+
+\bibitem{mitra1973investigation}
+Gautam Mitra.
+\newblock Investigation of some branch and bound strategies for the solution of
+  mixed integer linear programs.
+\newblock {\em Mathematical Programming}, 4(1):155--170, 1973.
+
+\bibitem{morrison2016branch}
+David~R Morrison, Sheldon~H Jacobson, Jason~J Sauppe, and Edward~C Sewell.
+\newblock Branch-and-bound algorithms: A survey of recent advances in
+  searching, branching, and pruning.
+\newblock {\em Discrete Optimization}, 19:79--102, 2016.
+
+\bibitem{tomlin1970branch}
+JOHN~A Tomlin.
+\newblock Branch and bound methods for integer and non-convex programming.
+\newblock {\em Integer and nonlinear programming}, 1:437--450, 1970.
+
+\end{thebibliography}
