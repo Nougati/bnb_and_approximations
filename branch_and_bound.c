@@ -65,8 +65,6 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
    *  eps: epsilon for the problem                                            *
    *  number of nodes: how many nodes are generated through the algorithm     *
    *                  (output parameter)                                      *
-   * TODO                                                                     *
-   *  Implement find_lp_bounds support                                        *
    *                                                                          *
    ****************************************************************************/
   
@@ -90,9 +88,11 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
   /* Initialise variables */
   int count = 0;
   int branching_variable;
+  // PQ_create_queue(...) TODO
   LL_Problem_Queue *node_queue = LL_create_queue(); 
   Problem_Instance *root_node = define_root_node(n);
-  LL_enqueue(node_queue, root_node, logging_stream, 
+  //PQ_enqueue(...) TODO
+  LL_enqueue(node_queue, root_node, logging_stream,
              logging_rule, 0);
   srand(seed);
   Problem_Instance *current_node;
@@ -111,6 +111,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
               ")\n", iterations, node_queue->size);
 
     /* Take node N off queue by some node selection scheme */
+    //current_node = PQ_dequeue(...) TODO
     current_node = select_and_dequeue_node(node_queue);
     
     /* Derive the LB and UB for node N with the FPTAS */
@@ -129,6 +130,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
              current_node->ID);
       free(current_node->variable_statuses);
       free(current_node);
+      //PQ_queue(...) != NULL TODO 
       while (LL_dequeue(node_queue) != NULL)
         ; 
       free(node_queue);
@@ -444,6 +446,7 @@ void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
 
 
   /* Place into priority queue (for now just append) */
+  //PQ_enqueue(...) TODO
   LL_enqueue(problem_queue, generated_node_variable_on, logging_stream, 
              logging_rule, node_limit_flag);
   LL_enqueue(problem_queue, generated_node_variable_off, logging_stream, 

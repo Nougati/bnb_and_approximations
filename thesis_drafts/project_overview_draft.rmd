@@ -1,21 +1,26 @@
 ---
- title: '(DRAFT) Implicit enumeration with dual bounds obtained from approximation algorithms'
- author: Nelson Frew
- header-includes:
-  - \usepackage{amsmath}
-  - \usepackage{amssymb}
-  - \usepackage[linesnumbered,ruled]{algorithm2e}
-  - \usepackage{accents}
-  - \newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
- output: pdf_document
- bibliography: project_overview_draft.bib
+title: '(DRAFT) Implicit enumeration with dual bounds obtained from approximation algorithms'
+author: Nelson Frew
+header-includes:
+ - \usepackage{amsmath}
+ - \usepackage{amssymb}
+ - \usepackage{amsthm}
+ - \usepackage[linesnumbered,ruled]{algorithm2e}
+ - \usepackage{accents}
+ - \newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
+ - \newtheorem{theorem}{Theorem}
+ - \newtheorem{lemma}{Lemma}
+output:
+  pdf_document:
+    number_sections: true
+bibliography: project_overview_draft.bib
 ---
 
 \makeatletter
 \def\BState{\State\hskip-\ALG@thistlm}
 \makeatother
 
-# Introduction
+\section{Introduction}
 
 The field of discrete optimisation (CITE) studies problems that model discrete
  decision making. 
@@ -35,6 +40,8 @@ The standard MIP formulation, for maximisation, is as follows:
 \end{array}
 \end{equation*}
 
+Where $x$ and $y$ are the sets of decision variables that we assign values to
+ with the purpose of maximising the objective function $cx+hy$.
 Generally, objective functions are constrained by linear inequalities, and
  variables can be specified to be integer or continuous. 
 
@@ -43,44 +50,48 @@ Optimisation problems with linear constraints and continuous variables are
  and very efficiently in practice (CITE).
 In this report, we consider maximisation problems whose constraints are all
  linear.
-MIPs, on the other hand, are characterised by having one more more variables
+MIPs, on the other hand, are characterised by having one or more variables
  constrained to be integer, generally resulting in an NP-Hard problem (CITE). 
 By removing the integer constraints on variables in a MIP, we obtain its
- associated LP relaxation.
-
-The state-of-the-art method for solving MIPs leverages this relationship
- to systematically search for what are known as primal solutions that are
- feasible, using bounds to implicitly enumerate through these.
+ associated *LP relaxation*.
 
 Because the feasible region of continuous solutions naturally subsumes the set
  of feasible solutions for integers, we know, for optimal value for the LP
- relaxation $z_{LP}$ and true optimal value $z$, that $z \leq z_{LP}$.
+ relaxation $z_{LP}$ and optimal value to the MIP $z$, that
 
-\begin{align}
+\begin{align*}
   z \leq z_{LP}
-\end{align}
+\end{align*}
 
-Since $z_{LP}$ is at least as large as our optimal value, we are provided with
- an upper bound in our case, which we refer to as the *dual bound*.
-Given our solved relaxation, we form a subproblem by adding constraints to our
- problem which constrain certain variables to be integer, and solve this.
-The process of choosing a given variable to constrain is known as *branching*. 
-By solving LP relaxation again for this constrained subproblem, we can see if
- an optimal integer solution can exist in with these constraints: if our dual
- bound is lower than our best known value so far, we can prune this subproblem
- and switch to another constrained subproblem. 
-Otherwise, if this subproblem has a dual bound above our best known value, we
+Since $z_{LP}$ is at least as large as our optimal value, $z$ is provided with
+ an upper bound, which we refer to as the *dual bound*.
+The state-of-the-art method for solving MIPs uses this relationship to search
+ for what are known as *primal solutions* that are feasible to the MIP,
+ and employs dual bounds to implicitly enumerate through these. 
+We find primal solutions by forming *subproblems*, constrained versions of the
+ original problem, and solving the LP relaxation of these. 
+If the solved LP relaxation is feasible to the original MIP, then we have found
+ a primal solution, and so have an associated lower bound on our optimal value,
+ which we refer to as the *primal bound*.
+
+The process of choosing a variable to constrain is known as *branching*, and is
+ generally informed by information obtained from the LP relaxation's solution. 
+Branching can form a number of subproblems, which are all considered *branches*
+ of the parent problem.
+If we find that a given subproblem's dual bound is lower than the MIP's primal
+ bound, then we can safely *prune* this branch as we know further evaluation
+ and constraining of this subproblem cannot yield a better primal solution.
+Otherwise, if this subproblem has a dual bound above our primal bound, we
  continue constraining and solving the relaxation until a new feasible solution
  is found, or a further constrained subproblem of this is pruned.
 
-**Should I note that x and y are vectors of assigned values within the objective?**
-
 This constitutes the core of the Branch and Bound approach, which we formally
- describe below: let $(x^i, y^i)$ be the optimal solution to linear program
- $LP_i$, $(x^*, y^*)$ denote an optimal solution to the MIP; $\ubar z$ denote
- the lower bound on the optimal value and $z^*$ the optimal solution of the MIP,
- and let $\mathcal{L}$ denote the list of nodes of the Branch and Bound tree yet
- to be solved (i.e. not pruned nor branched on).
+ describe below: let $(x^i, y^i)$ be $x$ and $y$ values associated with the
+ optimal solution to linear program $LP_i$, $(x^*, y^*)$ denote an optimal
+ solution to the MIP; $\ubar z$ denote the lower bound on the optimal value
+ and $z^*$ the optimal solution of the MIP, and let $\mathcal{L}$ denote the
+ list of nodes of the Branch and Bound tree yet to be solved (i.e. not pruned
+ nor branched on).
 
 \begin{algorithm}[H]
   \SetAlgoLined
@@ -129,10 +140,9 @@ This constitutes the core of the Branch and Bound approach, which we formally
 
 While finding optimal solutions with Branch and Bound is in worst case
  exponential-time, for some problems there exist Approximation Algorithms (AAs)
- which can provide feasible solutions in as fast as polynomial-time, by
- sacrificing guaranteed optimality.
-In such cases, AAs provide a guarantee on the *quality* of the solution, 
- within some factor. 
+ which can provide feasible solutions in as fast as polynomial-time.
+To achieve this, AAs exchange a guarantee on optimality for a guarantee the
+ *quality* of the solution, within some factor of the optimal value.
 
 An $\alpha$-approximation is an AA that guarantees that the solution value will
  always be within a constant factor $\alpha < 1$ of the optimal solution; i.e. for
@@ -140,11 +150,9 @@ An $\alpha$-approximation is an AA that guarantees that the solution value will
  $\alpha z \leq z_{A} \leq z$.
 As a result, for a maximisation problem, we can analytically derive an upper
  bound on the optimal value from the lower bound guarantee on the optimal
- solution. 
+ solution by simple algebraic manipulation. 
 In this way, we can use AAs in lieu of an LP relaxation to obtain valid dual
- bounds on our optimal solution.
-Further, if we use information from a found approximate solution, we can derive
- improved dual bounds *a posteriori* on our optimal solution.
+ bounds on our optimal solution. 
 Because we are leveraging guarantees on the optimal value, the dual bounds we
  obtain are also guaranteed to be within a level of accuracy. 
 This is distinct from LP relaxations, which can provide arbitrarily poor dual
@@ -161,13 +169,13 @@ To do this, we investigate known approximation schemes and methods to construct
  high quality dual bounds from them, as well as devising branching strategies
  within its Branch and Bound. 
 
-In the following sections, we give a brief literature review of the research
- and improvements to the Branch and Bound approach, as well as an overview of
- details and approaches with AAs that are central to this report.
+# Literature Review
 
-(**Put warm starting in future work**)
+We now give a brief literature review of the research and improvements to the
+ Branch and Bound approach, as well as an overview of details and approaches
+ with AAs that are central to the premise of this project.
 
-# Branch and Bound improvements and strategies
+## Branch and Bound improvements and strategies
 
 While our previous description of the Branch and Bound approach captured the
  core components, there still remain many aspects which are uncertain: which
@@ -178,13 +186,14 @@ These problems are in fact non-trivial and represent active research areas
 In light of this, we provide an overview of known strategies and the body of
  research that comprises the current understanding in the field.
 
-## Branching Strategies
+### Branching Strategies
 
 Deriving useful subproblems is central to the Branch and Bound approach, as it
  provides us with the partial enumeration required to establish bounds on an
  optimal solution value. 
 A basic strategy is to branch on the variable with the largest fractional
- component, however \cite{achterberg2005branching} has shown this to be as bad as random selection. 
+ component, however \cite{achterberg2005branching} has shown this to be as bad
+ as random selection. 
 It is possible to make inferences based on the properties of each variable's
  fractional component, as shown by \cite{tomlin1970branch} by the proposal of "use penalties".
 This was used to inform the branching process
@@ -195,48 +204,229 @@ However, \cite {mitra1973investigation} showed with computational experiments th
  have limited use, while approaches involving issuing "pseudocosts" as proposed
  by \cite{benichou1971experiments} may have advantages. 
 
-In an attempt to provide a categorisation for branching methods, \cite{morrison2016branch} proposed two groupings: *binary*/*non-binary* strategies, and *wide* strategies. 
+In an attempt to provide a categorisation for branching methods, 
+\cite{morrison2016branch} proposed two groupings: *binary*/*non-binary* strategies,
+ and *wide* strategies. 
 Both problem types and tree depth provided the ideas central to these
  classifications.
 
 A detailed survey of the literature and the current open questions in research
- are provided by \cite{morrison2016branch}, where the reader is directed for further reading.
+ is also provided by \cite{morrison2016branch}, where the reader is directed for
+ further reading.
+
+### Node selection schemes
+Talk about best bound?
+
+### Bounding optimal solutions
+
+As we have seen, a natural method of finding dual bound on optimal solutions can
+ be done with LP relaxations. 
+Solving LPs has been efficiently possible since the introduction of Dantzig's
+ Simplex method \cite{dantzig1951maximization}. 
+Despite its efficiency, though, LP relaxations can provide arbtirarily poor
+ bounds in this context: such an approach for finding the Vertex Cover of a
+ graph will be generally far from optimal (CITE?). 
+However, this is only one of many known ways to obtain valid dual bounds within
+ Mixed Integer Programming: other examples include Semidefinite Programming
+ relaxations (see \cite{lovasz1991cones,vandenberghe1996semidefinite}), and
+ Langrangian relaxations \cite{geoffrion1974lagrangean}.
 
 
-## Bounding optimal solutions
+### Extensions, improvements, and related techniques
+MIP solvers in the state-of-the-art often combine Branch and Bound strategies
+ with various extensions to improve performance. 
+One common extension to the method includes using cutting planes
+ \cite{gomory1958outline} to produce the Branch-and-Cut algorithm. 
+The cutting plane approach, introduced by \cite{dantzig1954solution}, and
+ extended to general Integer Programs (IPs) in \cite{gomory1958outline},
+ involves solving a LP relaxation of a program and formulates a constraint, a
+ cutting plane, that separates this solution from the rest of the search space. 
+A Branch and Cut approach \cite{padberg1987optimization, padberg1991branch},
+ then, is a Branch and Bound with the ability to choose to add a cutting plane
+ instead of branching on variable. 
+For a more detailed treatment on this topic, the reader is referred to
+ \cite{conforti2014integer}. 
+Other key methods for extending the Branch and Bound are with presolving
+ techniques \cite{mahajan2010presolving} and using primal heuristics
+ \cite{berthold2006primal}.
 
-## Extensions, improvements, and related techniques
+Another related concept is the idea of warm starting a solution in linear
+ programming linked to integer programming by \cite{ralphs2006duality}. 
+In short, warm starting is a method to exploit information gained about the
+ problem from previous computations to inform future ones. 
+Ones simple method for this is to use previous computation in finding a starting
+ primal bound in a Branch and Bound.
 
-# Stuff about approximations
+## Approximation algorithms for the Knapsack Problem
 
-All the big Knapsack approximations.
+As mentioned, the case study chosen for experimentation within this project is
+ the 0,1 Knapsack Problem (KP). 
+Known to be NP-Hard (CITE), KP has been studied extensively both in to solving
+ optimally and approximately (see, for example \cite{kellerer2005knapsack, horowitz1974computing,ingargiola1973reduction,kolesar1967branch,garfinkel1972integer,nemhauser1969discrete}), and as such, it serves well as a topic for
+ analysis. 
+We describe the formulation for KP as follows: given $n$ items associated
+ weights $w_i$ and values $v_i$, and Knapsack capacity $W$, our program is
 
-Probably introduce both KP and approximations notation here. We'll probably always need:
+\begin{equation*}
+\begin{array}{ll@{}ll}
+\text{minimize}  & \displaystyle\sum\limits_{i=1}^{n} v_{i}&x_{i} &\\
+\text{subject to}& \displaystyle\sum\limits_{i=1}^{n}     &w_{i} x_{i} \leq W, 
+                                                \text{ and } x_{i} \in \{0,1\}\\
+                 &  
+\end{array}
+\end{equation*}
+
+It is well known that KP lends itself well to a Dynamic Programming (DP)
+ approach, although there are many ways to conduct this. 
+One of the most well known examples, performing a DP by values as presented by
+ \cite{vazirani2013approximation}, can find a solution in $O(n^2 P)$ time for
+ the most profitable item's value $P$, which we now describe: let $A(i, p)$ be
+ the minimal weight of the solution to KP with only the first $i$ items
+ available, where the total value is exactly $p$. 
+If no such set exists\footnote{that is, the first $i$ items cannot yield a
+ value of $p$ and so cannot have an associated minimal weight}, then
+ $A(i,p) = \infty$. 
+
+The DP recurrence can then be defined as follows:
+
+\begin{equation}
+  A(i+1,p) = \begin{cases}
+    \text{min} \{A(i,p), w_{i+1} + A(i,p-v_{i+1})\} \text{, if }v_{i+1}<p \\
+    A(i+1, p) = A(i,p) \text{ otherwise}
+  \end{cases}
+\end{equation}
+
+The optimal solution value can then be found be finding the value
+ max$\{p$ $|$ $A(n. p)$ $\leq$ $W\}$. 
+
+Being NP-Hard, KP does not admit a polynomial time algorithm, however we can
+ construct a *polynomial time approximation scheme* (PTAS). 
+A PTAS is guaranteed to give a solution value within a factor of $(1-\epsilon)$
+ of optimality, and have running time bounded by a polynomial in $n$, for fixed
+ values of $\epsilon$.
+A classic example of a PTAS was presented by (cite Sahni), with time complexity
+ $O(n^{1 / \epsilon})$. 
+
+If we restrict the definition of a PTAS further, so that the running time is
+ bounded by a polynomial in both $n$ and $\epsilon$, we obtain a *fully
+ polynomial time approximation scheme* (FPTAS). 
+This means we can choose an $\epsilon$ that gives us a high quality solution
+ while still being polynomially bounded. 
+
+It is common for FPTAS's for KP to to achieve polynomially bounded run time by
+ adjusting the input problem to reduce its complexity, and using a DP to
+ then solve this adjusted problem. 
+As such, the construction of an FPTAS normally involves two distinct steps:
+ a preprocessing step to form the simpler problem, and a step where this is
+ solved to find an approximate value for the original problem.
+We now give an overview of the range of FPTAS's described that led to the state
+ of the art.
+
+### Ibarra and Kim's FPTAS (1975) 
+**TODO**: describe the reasoning behind letting $K= \frac{\epsilon P}{n}$ 
+
+What is now a standard method of constructing an FPTAS for KP was first
+ described by Ibarra and Kim \cite{ibarra1975fast}. 
+While there are several components at play in their proposal algorithm,
+ the core of what creates the approximation involves a scaling the values
+ of all items down to by a factor dependant on $\epsilon$. 
+This distillation of their algorithm, as described by
+ \cite{vazirani2013approximation}, is presented below:
+
+\begin{algorithm}[H]
+  \SetAlgoLined
+  \KwData{A KP problem instance, and error parameter $\epsilon$.}
+  \KwResult{The Weight and value pair of the optimal solution}
+  Given $\epsilon$, let $K = \frac{\epsilon P}{n}$\;
+  For each object $i$, define adjusted values $v'=\left \lfloor \frac{v_i}{K}\right \rfloor$\;
+  Run a DP with these adjusted item values\;
+  Return the approximation solution set, $S'$, provided by the DP\;
+\caption{FPTAS for Knapsack}
+\end{algorithm}
+
+By using the DP recurrence (1) described in the previous section, we can obtain an
+ FPTAS for the Knapsack.
+We now present the argument for this as described by \cite{vazirani2013approximation}.
+
+\begin{lemma}
+The set, $S'$, output by the algorithm satisfies:
+$$\text{value}(S') \geq (1-\epsilon) \cdot OPT$$
+\end{lemma}
+
+\begin{proof}
+Here is my proof
+\end{proof}
+
+\begin{theorem}
+Algorithm 2 is an FPTAS for KP
+\end{theorem}
+
+\begin{proof}
+Assume that it is the case. Therefore by Proof By Assumption we have proven it to be true.
+\end{proof}
+
+**Use Rhee's thesis to help me do this**
+
+By refining our approach, we can improve our runtime further.
+
+ - Preprocessing: Talk about dynamic programming on expensive items
+ - Computing: Talk about greedy approach on cheap items
+ - Results in $O(mP')$ time algorithm
+
+The approach described by \cite{ibarra1975fast} builds on this core approach by
+ improving the nuance of the preprocessing step, which we know describe.
+The first improvement results from acknowledging that while a given input
+ problem will potentially have many items with very small value, the bulk of the
+ value of an optimal solution will likely be from high value items \textsc{this
+ doesn't seem like the actual reason}. 
+We establish a threshold $t$ such that the DP will only compute on items with
+ value greater than this. 
+This means we can amend our scaling factor in light of the reduced the range of
+ item values that our DP considers. 
 
 
 
- - Error parameter $\epsilon$
- - Profits 
 
-## Sahni (1975) 
+### Lawler (1978)
+What he changed about the DP.
 
-## Ibarra and Kim (1975) (Williamson Shmoys + Vazirani)
+ - Solution pairs as presented by WS
+ - Amended rounding procedure
+ - Complexity
 
-## Lawler (1979)
+### Magazine and Oguz (1981)
+More changes to the last two
 
-## Magazine and Oguz (1981)
+ - Based on the DP recurrence (1)
+ - Builds on both Lawler and Ibarra & Kim
+ - Space and time complexities
 
-## Kellerer and Pferschy (1999)
+### Kellerer and Pferschy (1999)
 
-## Kellerer and Pferschy (2001)
+Use both Rhee and their informal description to fuel the discussion of this part
 
-## Anything else?
+
+### Kellerer and Pferschy (2001)
+
+Vector merging procedure
 
 # Design and Analysis
+of the project that is
+
+Stuff to include:
+
+ - A priori
+ - A posteriori 1
+ - A posteriori 2
 
 # Implementation and results
 
+Benchmarks lol
+
 ## What is a logical way to lay all this out?
+
+# Todos
+(**Put warm starting in future work**)
 
 \bibliography{project_overview_draft}
 \bibliographystyle{plain}
