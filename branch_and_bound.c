@@ -1,8 +1,6 @@
 /******************************************************************************
  * Branch_and_bound version                                                   *
  * Implements the B&B with the normal a posteriori bound                      *
- * TODO:                                                                      *
- *  - There is a memory leak somewhere in this with 5_50_1000 instances       *
  * Notes                                                                      *
  *  - On instances where the WS FPTAS needs to dig deep in recursion to get   *
  *     an answer, stack space needs to be set to unlimited with the bash      *
@@ -16,6 +14,7 @@
 #include <time.h>
 #include <limits.h>
 #include <math.h>
+#include <string.h>
 #include "branch_and_bound.h"
 #include "branch_and_bound_benchmark.h"
 #include "fptas.h"
@@ -88,12 +87,13 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
   /* Initialise variables */
   int count = 0;
   int branching_variable;
-  // PQ_create_queue(...) TODO
-  LL_Problem_Queue *node_queue = LL_create_queue(); 
+  Min_Heap node_queue = PQ_initialise_min_heap(0);
+  //LL_Problem_Queue *node_queue = LL_create_queue(); 
   Problem_Instance *root_node = define_root_node(n);
-  //PQ_enqueue(...) TODO
-  LL_enqueue(node_queue, root_node, logging_stream,
-             logging_rule, 0);
+  PQ_enqueue(&node_queue, *root_node, logging_stream, logging_rule, 0);
+  free(root_node);
+  //LL_enqueue(node_queue, root_node, logging_stream,
+  //           logging_rule, 0);
   srand(seed);
   Problem_Instance *current_node;
   int first_iteration = TRUE;
@@ -101,18 +101,21 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
   int iterations = 0;
 
   /* MAIN LOOP: While our node queue is not empty: */
-  while(node_queue->size >= 1)
+  //while(node_queue->size >= 1)
+  while(node_queue.size >= 1)
   {
     iterations++;
 
     /* Log information */
     if(logging_rule != NO_LOGGING)
+      //fprintf(logging_stream, "\nStarting loop iteration %d (Node queue size: %d"
+      //        ")\n", iterations, node_queue->size);
       fprintf(logging_stream, "\nStarting loop iteration %d (Node queue size: %d"
-              ")\n", iterations, node_queue->size);
+              ")\n", iterations, node_queue.size);
 
     /* Take node N off queue by some node selection scheme */
-    //current_node = PQ_dequeue(...) TODO
-    current_node = select_and_dequeue_node(node_queue);
+    current_node = PQ_pop_node(&node_queue);
+    //current_node = select_and_dequeue_node(node_queue);
     
     /* Derive the LB and UB for node N with the FPTAS */
     find_bounds(current_node, profits, weights, x, capacity, n, z,
@@ -130,10 +133,11 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
              current_node->ID);
       free(current_node->variable_statuses);
       free(current_node);
-      //PQ_queue(...) != NULL TODO 
-      while (LL_dequeue(node_queue) != NULL)
-        ; 
-      free(node_queue);
+      while(PQ_pop_node(&node_queue) != NULL)
+        ;  // This also frees the node_queue array
+      //while (LL_dequeue(node_queue) != NULL)
+      //  ; 
+      //free(node_queue);
       return;
     }
 
@@ -206,7 +210,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
 
       /* Else, generate children */
       generate_and_enqueue_nodes(current_node, n, branching_variable, 
-                                 node_queue, &count, logging_stream, logging_rule,
+                                 &node_queue, &count, logging_stream, logging_rule,
                                  &node_limit_flag);
 
       /* Log information */
@@ -221,9 +225,11 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
         *z_out = global_lower_bound;
 
         /* Total clean up */
-        while (LL_dequeue(node_queue))
-          ; 
-        free(node_queue);
+        //while (LL_dequeue(node_queue))
+        //  ; 
+        //free(node_queue);
+        while(PQ_pop_node(&node_queue) != NULL)
+         ;
         return;
       } 
 
@@ -237,28 +243,32 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
           bytes_allocated = -1;
           *z_out = global_lower_bound;
           /* Total clean up */
-          while (LL_dequeue(node_queue))
-            ; 
-          free(node_queue);
+          //while (LL_dequeue(node_queue))
+          //  ; 
+          //free(node_queue);
+          while(PQ_pop_node(&node_queue) != NULL)
+            ;
           return;
         }
         else if (overallocation == TIMEOUT)
         {
           *start_time = -1;
           /* Total clean up */
-          while (LL_dequeue(node_queue))
-            ; 
-          free(node_queue);
+          //while (LL_dequeue(node_queue))
+          //  ; 
+          while(PQ_pop_node(&node_queue) != NULL)
+            ;
+          //free(node_queue);
           return;
         }
       }
-
-    /* Else, loop again */
     }
+
     /* Free current node */
     free(current_node->variable_statuses);
     free(current_node);
     current_node = NULL;
+    /* Loop again */
   }
   /* Prepare output parameters */
   *z_out = global_lower_bound;
@@ -279,7 +289,9 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
     free(current_node);
     current_node = NULL;
   }
-  free(node_queue);
+  //free(node_queue);
+  while((current_node = PQ_pop_node(&node_queue)) != NULL)
+   free(current_node);
 }
 
 /* Initial global lower bound heuristic */
@@ -395,7 +407,9 @@ Problem_Instance *define_root_node(int n)
 
 /* Generation and node enqueuing algorithm */
 void generate_and_enqueue_nodes(Problem_Instance *parent, int n, 
-                          int branching_variable, LL_Problem_Queue *problem_queue,
+                          int branching_variable,
+                          //LL_Problem_Queue *problem_queue,
+                          Min_Heap *problem_queue,
                           int *count, FILE *logging_stream, int logging_rule, 
                           int *node_limit_flag)
 {
@@ -445,12 +459,13 @@ void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
   generated_node_variable_off->off_child = NULL;
 
 
-  /* Place into priority queue (for now just append) */
-  //PQ_enqueue(...) TODO
-  LL_enqueue(problem_queue, generated_node_variable_on, logging_stream, 
-             logging_rule, node_limit_flag);
-  LL_enqueue(problem_queue, generated_node_variable_off, logging_stream, 
-             logging_rule, node_limit_flag);
+  /* Place into priority queue ))) */
+  PQ_enqueue(problem_queue, *generated_node_variable_on, logging_stream, logging_rule, node_limit_flag);
+  PQ_enqueue(problem_queue, *generated_node_variable_off, logging_stream, logging_rule, node_limit_flag); 
+  //LL_enqueue(problem_queue, generated_node_variable_on, logging_stream, 
+  //           logging_rule, node_limit_flag);
+  //LL_enqueue(problem_queue, generated_node_variable_off, logging_stream, 
+  //           logging_rule, node_limit_flag);
 
   /* Parent is freed outside */
 }
@@ -769,6 +784,7 @@ void LL_enqueue(LL_Problem_Queue *queue, Problem_Instance *problem,
   }
 }
 
+
 /* LL Problem Queue method: dequeue */
 Problem_Instance *LL_dequeue(LL_Problem_Queue *queue)
 {
@@ -920,4 +936,95 @@ int partition (double arr1[], double arr2[], int l, int h)
     swap (&arr2[i + 1], &arr2[h]);
     return (i + 1);
 }
+
+
+// Make min heap
+Min_Heap PQ_initialise_min_heap(int size)
+{
+  Min_Heap heap;
+  heap.size = 0;
+  return heap;
+}
+
+void PQ_enqueue(Min_Heap *hp, Problem_Instance nd, 
+              FILE *logging_stream, int logging_rule, int *node_limit_flag)
+{
+ /**PQ_enqueue*****************************************************************
+  * Description                                                               *
+  *   Enqueues a given problem instance onto our min heap arranged by parent  *
+  *    upper bound values.                                                    *
+  *                                                                           *
+  *****************************************************************************/
+  /* Make space for the new item */
+  if(hp->size)
+      hp->elem = realloc(hp->elem, (hp->size + 1) * sizeof(Problem_Instance)) ;
+  else
+      hp->elem = malloc(sizeof(Problem_Instance)) ;
+  bytes_allocated += sizeof(Problem_Instance);
+
+  /* Find spot in the heap for this new item */
+  int i = (hp->size)++ ;
+  while(i && nd.parent_upper_bound < hp->elem[PARENT(i)].parent_upper_bound) {
+      hp->elem[i] = hp->elem[PARENT(i)] ;
+      i = PARENT(i) ;
+  }   
+  hp->elem[i] = nd ;
+
+  /* Problem Instance is now in the heap, just check that we haven't gone
+      too far */
+  if(hp->size >= NODE_OVERFLOW)
+  {
+    printf("%d nodes in queue! Abandon ship!\n", NODE_OVERFLOW);
+    if(logging_rule != NO_LOGGING)
+      fprintf(logging_stream, "NODE OVERFLOW AAAAAAAAAAAAAAAAAAAHH-- \n");
+    *node_limit_flag = 1;
+  }
+}
+
+// min heap pop
+Problem_Instance *PQ_pop_node(Min_Heap *heap)
+{
+  Problem_Instance *popped_node = malloc(sizeof(Problem_Instance));
+
+  /* Heap is nonempty */
+  if(heap->size)
+  {
+    memcpy(popped_node, &(heap->elem[0]), sizeof(Problem_Instance));
+    heap->elem[0] = heap->elem[--(heap->size)];
+    heap->elem = realloc(heap->elem, heap->size *sizeof(Problem_Instance));
+    heapify(heap, 0);
+    return popped_node;
+  }
+  /* Heap is empty */
+  else
+  {
+    free(popped_node);
+    free(heap->elem);
+    return NULL;
+  }
+}
+
+// Heapify
+void heapify(Min_Heap *hp, int i) {
+    int smallest =
+       (LCHILD(i) < hp->size &&
+        hp->elem[LCHILD(i)].parent_upper_bound
+          < hp->elem[i].parent_upper_bound ? LCHILD(i) : i );
+    if(RCHILD(i) < hp->size && hp->elem[RCHILD(i)].parent_upper_bound 
+          < hp->elem[smallest].parent_upper_bound) {
+        smallest = RCHILD(i) ;
+    }   
+    if(smallest != i) {
+        heap_swap(&(hp->elem[i]), &(hp->elem[smallest])) ;
+        heapify(hp, smallest) ;
+    }   
+}
+
+// Heap swap, which is the same as the other one but for problem instances
+void heap_swap(Problem_Instance *n1, Problem_Instance *n2) {
+    Problem_Instance temp = *n1 ;
+    *n1 = *n2 ;
+    *n2 = temp ;
+}
+
 

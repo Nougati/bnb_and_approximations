@@ -19,6 +19,10 @@
 #define MEMORY_EXCEEDED 1
 #define TIMEOUT 2
 #define NODE_OVERFLOW 1500000
+#define LCHILD(x) 2 * x + 1
+#define RCHILD(x) 2 * x + 2
+#define PARENT(x) (x - 1) / 2
+
 //#define GLOBAL_MEMORY_LIMIT 5368709120
 
 /* Structure Declarations */
@@ -40,8 +44,14 @@ typedef struct queue
   struct p_instance** array;
 } Problem_Queue;
 
+typedef struct min_heap {
+    int size ;
+    Problem_Instance *elem ;
+} Min_Heap ;
 
-/*WIP*/
+
+
+/*LL shit*/
 typedef struct linked_list_item
 {
   struct linked_list_item *in_front;
@@ -55,6 +65,17 @@ typedef struct linked_list_p_queue
   struct linked_list_item *tail;
   int size;
 } LL_Problem_Queue;
+
+/* PQ shit */
+void heapify(Min_Heap *hp, int i);
+void heap_swap(Problem_Instance *n1, Problem_Instance *n2);
+Min_Heap PQ_initialise_min_heap(int size);
+void PQ_enqueue(Min_Heap *hp, Problem_Instance nd,  
+              FILE *logging_stream, int logging_rule, int *node_limit_flag);
+Problem_Instance *PQ_pop_node(Min_Heap *heap);
+void heapify(Min_Heap *hp, int i);
+void heap_swap(Problem_Instance *n1, Problem_Instance *n2);
+
 
 
 /* Branch and Bound Declarations */
@@ -79,9 +100,16 @@ int find_heuristic_initial_GLB(int profits[], int weights[], int x[], const long
 int find_branching_variable(int n, const long z, int *read_only_variables, 
                             int branching_strategy, int *profits);
 
+/*
 void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
                           int branching_variable, 
                           LL_Problem_Queue *problems_list, int *count, 
+                          FILE *logging_stream, int logging_rule,
+                          int *node_limit_flag);
+*/
+void generate_and_enqueue_nodes(Problem_Instance *parent, int n,
+                          int branching_variable, 
+                          Min_Heap *problems_list, int *count, 
                           FILE *logging_stream, int logging_rule,
                           int *node_limit_flag);
 
