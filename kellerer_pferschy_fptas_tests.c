@@ -47,8 +47,8 @@ int main(int argc, char *argv[])
 
   /* Everything for interval dynamic programming */
   //test_vector_merge_naive();
-  test_vector_merge_interval();
-  //test_interval_dynamic_programming();
+  //test_vector_merge_interval();
+  test_interval_dynamic_programming();
   //test_get_ith_interval();
   //test_get_number_of_weights();
   //test_get_no_subintervals_used();
@@ -1981,7 +1981,7 @@ void test_vector_merge_interval(void)
   /*                                         */
   /*******************************************/
   printf("Test 1...\n");
-  status == SUCCESS;
+  status = SUCCESS;
   int n1 = 4;
   int A1[] = {0, 1, 2,  3, 4};
   int B1[] = {2, 4, 8, 16, 0};
@@ -1990,7 +1990,8 @@ void test_vector_merge_interval(void)
   int q1 = 0;
   //TODO get q
 
-  vector_merge_naive(A1, B1, quadratic_vmerge_C1, n1);
+  //vector_merge_naive(A1, B1, quadratic_vmerge_C1, n1);
+  vector_merge_quadratic(A1, B1, quadratic_vmerge_C1, n1);
 
   vector_merge_interval(A1, B1, C1, n1);
 
@@ -2017,14 +2018,14 @@ void test_vector_merge_interval(void)
             i == n1 ? "]\n" : ", ",
             i % 5 == 0 && i != n1 && i != 0 ? "\n\t" : "");
   }
-  
+
   /*******************************************/
   /*  Test 2: Just the next example from     */
   /*       testing the naive method.         */
   /*                                         */
-  /*******************************************/
+  /*******************************************
   printf("Test 2...\n");
-  status == SUCCESS;
+  status = SUCCESS;
   int n2 = 6;
   int A2[] = {0, 7, 5, 9, 2, 4, 6};
   int B2[] = {15, 18, 12, 16, 17, 14, 0};
@@ -2059,12 +2060,15 @@ void test_vector_merge_interval(void)
             i == n2 ? "]\n" : ", ",
             i % 5 == 0 && i != n2 && i != 0 ? "\n\t" : "");
   }
-
   /*******************************************/
   /*  Test 3: Huge!                          */
   /*                                         */
   /*                                         */
-  /*******************************************/
+  /*******************************************
+
+
+  printf("Test 3...\n");
+  status = SUCCESS;
   int n3 = 750;
   int A3[] =
     {0, 118, 427, 229, 352, 99, 112, 398, 437, 490, 432, 262, 396, 267, 
@@ -2352,9 +2356,121 @@ void test_vector_merge_interval(void)
             i % 5 == 0 && i != n3 && i != 0 ? "\n\t" : "");
   }
 
+  printf("Test 4...\n");
+  status = SUCCESS;
+  int n4 = 2;
+  int A4[] =
+    {0, 118, 427};
+  int B4[] = 
+    {405, 270, 0};
+  int quadratic_vmerge_C4[] = 
+    {0, 0, 0};
+  int C4[] = 
+    {0, 0, 0};
+
+  vector_merge_naive(A4, B4, quadratic_vmerge_C4, n4);
+
+  vector_merge_interval(A4, B4, C4, n4);
+  
+  for(int i = 0; i <= n4; i++)
+  {
+    if(C4[i] != quadratic_vmerge_C4[i])
+    {
+      suite_status = FAILURE;
+      status = FAILURE;
+      break;
+    }
+  }
+  
+  if(status == FAILURE)
+  {
+    printf("\tTest 4 failed! Expected\n\t");
+    for(int i = 0; i <= n4; i++)
+     printf("%s%d%s%s", i == 0 ? "[" : "", quadratic_vmerge_C4[i], 
+            i == n4 ? "]\n" : ", ",
+            i % 5 == 0 && i != n4 && i != 0 ? "\n\t" : "");
+    printf("\n\tBut we got\n\t");
+    for(int i = 0; i <= n4; i++)
+     printf("%s%d%s%s", i == 0 ? "[" : "", C4[i], 
+            i == n4 ? "]\n" : ", ",
+            i % 5 == 0 && i != n4 && i != 0 ? "\n\t" : "");
+  }
+  */
+
+
+  /*
+  int n5 = 60;
+  int A5[] =
+    {0, 118, 427, 229, 352, 99, 112, 398, 437, 490, 432, 262, 396, 267, 
+   461, 460, 400, 459, 238, 87, 440, 82, 427, 333, 374, 383, 
+   190, 153, 194, 226, 335, 68, 344, 114, 148, 47, 212, 112, 
+   445, 500, 101, 376, 113, 348, 495, 73, 159, 246, 384, 249, 
+   332, 323, 330, 110, 156, 203, 493, 345, 207, 38, 423};
+
+  int B5[] =
+    {405, 270, 178, 212, 430, 278, 70, 28, 68, 127, 79, 435, 423, 
+    315, 13, 273, 160, 443, 15, 231, 373, 337, 205, 363, 383, 
+    157, 240, 264, 136, 95, 359, 40, 216, 36, 104, 497, 166, 
+    173, 377, 233, 152, 455, 167, 426, 270, 31, 50, 429, 474, 
+    65, 11, 346, 401, 215, 60, 283, 223, 300, 399, 359, 0};
+
+  int C5[] =
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+  int quadratic_vmerge_C5[] = 
+    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+  */
+  int n5 = 4;
+  int A5[] =
+    {0, 118, 427, 229, 99};
+
+  int B5[] =
+    {405, 270, 178, 430, 0};
+
+  int C5[] =
+    {0, 0, 0, 0, 0, 0};
+
+  int quadratic_vmerge_C5[] = 
+    {0, 0, 0, 0, 0, 0};
+
+  //vector_merge_naive(A5, B5, quadratic_vmerge_C5, n5);
+  vector_merge_quadratic(A5, B5, quadratic_vmerge_C5, n5);
+
+  //vector_merge_interval(A5, B5, C5, n5);
+  vector_merge_naive(A5, B5, C5, n5);
+
   if(suite_status == SUCCESS)
     printf("\tAll passed!\n");
 
+  for(int i = 0; i <= n5; i++)
+  {
+    if(C5[i] != quadratic_vmerge_C5[i])
+    {
+      printf("%d, ", i);
+      suite_status = FAILURE;
+      status = FAILURE;
+      //break;
+    }
+  }
+  printf("\n");
+  
+  if(status == FAILURE)
+  {
+    printf("\tTest 5 failed! Expected\n\t");
+    for(int i = 0; i <= n5; i++)
+     printf("%s%d%s%s", i == 0 ? "[" : "", quadratic_vmerge_C5[i], 
+            i == n5 ? "]\n" : ", ",
+            i % 5 == 0 && i != n5 && i != 0 ? "\n\t" : "");
+    printf("\n\tBut we got\n\t");
+    for(int i = 0; i <= n5; i++)
+     printf("%s%d%s%s", i == 0 ? "[" : "", C5[i], 
+            i == n5 ? "]\n" : ", ",
+            i % 5 == 0 && i != n5 && i != 0 ? "\n\t" : "");
+  }
 }
 
 void test_interval_dynamic_programming(void)
@@ -2379,7 +2495,7 @@ void test_interval_dynamic_programming(void)
       small_weights: [485, 326, 248, 322, 795, 43  , 845, 955, 252, -1]
         new epsilon: 0.250000
   */
-  /*
+  printf("Test 2...\n");
   int profits1[] = {94, 506, 416, 992, 649, 237, 457, 815, 446, 422};
   int weights1[] = {485, 326, 248, 421, 322, 795, 43, 845, 955, 252};
   int capacity1 = 1850;
@@ -2387,18 +2503,51 @@ void test_interval_dynamic_programming(void)
   double epsilon1 = 0.3;
 
   double new_epsilon1 = epsilon1;
-  int large_profits1[n], large_weights1[n], small_profits1[n], 
-      small_weights1[n], intervals1[n], subintervals1[n];
+  int large_profits1[n1], large_weights1[n1], small_profits1[n1], 
+      small_weights1[n1], intervals1[n1], subintervals1[n1];
   int new_n1, lower_bound1;
-  scaling_reduction(profits1, weights1, n1, capacity1, &new_epsilon1, large_profits1,
-                    large_weights1, small_profits1, small_weights1, intervals1,
-                    subintervals1, &new_n1, &lower_bound1);
+  double upper_bound1;
+  scaling_reduction(profits1, weights1, n1, capacity1, &new_epsilon1, 
+                    large_profits1, large_weights1, small_profits1, 
+                    small_weights1, intervals1, subintervals1, &new_n1, 
+                    &lower_bound1, &upper_bound1);
 
+  print_list(large_profits1, new_n1, "profits1");
+  print_list(large_weights1, new_n1, "weights1");
+  print_list(intervals1, new_n1, "intervals1");
+  print_list(subintervals1, new_n1, "subintervals1");
+
+  int *y_1a, *r_1a;
+  y_1a = calloc(upper_bound1, sizeof(int));
+  r_1a = calloc(upper_bound1, sizeof(int));
   interval_dynamic_programming(large_profits1, large_weights1, intervals1, 
                                subintervals1, new_n1, capacity1, lower_bound1, 
-                               epsilon1, 2*lower_bound1);
-  printf("%lf\n", new_epsilon1);
-  */
+                               epsilon1, upper_bound1, y_1a, r_1a);
+
+  printf("DP 1 done!\n");
+  
+  int *y_1b, *r_1b;
+  y_1b = calloc(upper_bound1, sizeof(int));
+  r_1b= calloc(upper_bound1, sizeof(int));
+
+  interval_dynamic_programming_for_testing(large_profits1, large_weights1, 
+                                           intervals1, subintervals1, new_n1, 
+                                           capacity1, lower_bound1, epsilon1, 
+                                           upper_bound1, y_1b, r_1b);
+  printf("DP 2 done!\n");
+
+  int discrepancy = 0;
+  for(int i = 0; i < upper_bound1; i++)
+  {
+    if(y_1a[i] != y_1b[i])
+    {
+      discrepancy = 1;
+      printf("Discrepancy:y[%d] = %d, y2[%d] = %d\n", i, y_1a[i], i, y_1b[i]);
+    }
+  }
+  if (!discrepancy)
+    printf("Hey it worked!\n");
+
 
   /* Instance 3
     double epsilon = 0.1; int capacity = 99785; int n=50;
@@ -2452,11 +2601,6 @@ void test_interval_dynamic_programming(void)
                       0, 0, 0, 0, 0, 0, 0, 0]
   */
 
-    int profits2[] = {94, 506, 416, 992, 649, 237, 457, 815, 446, 422};
-    int weights2[] = {485, 326, 248, 421, 322, 795, 43, 845, 955, 252};
-    int capacity2 = 1850;
-    int n2 = 10;
-    double epsilon2 = 0.05;
 
     /*
     double epsilon2 = 0.1;
@@ -2482,6 +2626,13 @@ void test_interval_dynamic_programming(void)
                       41972, 9895, 83213, 99748, 89487, 71923,
                       17029, 2567};
   */
+  printf("Test 2...\n");
+
+  int profits2[] = {94, 506, 416, 992, 649, 237, 457, 815, 446, 422};
+  int weights2[] = {485, 326, 248, 421, 322, 795, 43, 845, 955, 252};
+  int capacity2 = 1850;
+  int n2 = 10;
+  double epsilon2 = 0.05;
 
   double new_epsilon2 = epsilon2;
   int large_profits2[n2], large_weights2[n2], small_profits2[n2], 
@@ -2517,13 +2668,17 @@ void test_interval_dynamic_programming(void)
                                            upper_bound2, y2, r2);
   printf("DP 2 done!\n");
 
+  discrepancy = 0;
   for(int i = 0; i < upper_bound2; i++)
   {
     if(y[i] != y2[i])
     {
+      discrepancy = 1;
       printf("Discrepancy:y[%d] = %d, y2[%d] = %d\n", i, y[i], i, y2[i]);
     }
   }
+  if (!discrepancy)
+    printf("Hey it worked!\n");
 }
 
 

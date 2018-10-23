@@ -71,4 +71,6 @@ void print_list(int *list, int length, const char *name);
 int get_no_subintervals_used(int *intervals, int *subintervals, int n);
 int sum_of(int *array, int start, int end);
 int binary_search_max_value(int left, int right, int threshold, int *arr);
+void vector_merge_quadratic(int *A, int *B, int *C, int n);
+
 

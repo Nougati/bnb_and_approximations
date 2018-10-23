@@ -854,7 +854,6 @@ void interval_dynamic_programming(int *large_profits_prime,
          get_number_of_weights(index, large_profits_prime, n);
 
     /* For each residual value */
-    //TODO 1000 iterations of this takes about 11 seconds
     for(int r = 0; r < p_t; r++)
     {
     clock_t start_iter = clock();
@@ -873,7 +872,6 @@ void interval_dynamic_programming(int *large_profits_prime,
       vector_merge_interval(A, B, C, profits_upper_bound);
       clock_t end = clock();
       double elapsed =  ((double) (end - start)) / CLOCKS_PER_SEC;
-      //printf("Vector merge completed after %lf seconds.\n", elapsed);
 
       /* Put the result of vector merge into this array */
       for(int k = 1; k < k_cap; k++)
@@ -881,7 +879,6 @@ void interval_dynamic_programming(int *large_profits_prime,
 
     clock_t end_iter = clock();
     double elapsed_iter =  ((double) (end_iter - start_iter)) / CLOCKS_PER_SEC;
-    //printf("Iteration completed after %lf seconds.\n", elapsed_iter);
     }
   }
 
@@ -889,7 +886,7 @@ void interval_dynamic_programming(int *large_profits_prime,
   free(A);
   free(B);
   free(C);
-  free(y);
+  //free(y);
 }
 
 int get_ith_subinterval(int i, int *intervals, int *subintervals, 
@@ -979,6 +976,7 @@ void vector_merge_interval(int *A, int *B, int *C, int n)
   int *a = calloc(n+1, sizeof(int));
   int *b = calloc(n+1, sizeof(int));
   int *pred = calloc(n+1, sizeof(int));
+  int *origin = calloc(n+1, sizeof(int));
 
   /* Symbolic infinity is n+2 for a, b, and pred because they index the ranges
      of A, B and C, who are all of range n+1... Well actually n+1 would do because
@@ -987,7 +985,7 @@ void vector_merge_interval(int *A, int *B, int *C, int n)
 
   /* Sanity check these base cases (in particular their indices) */
   a[1] = 1;
-  b[1] = n;
+  b[1] = n+1;
   pred[1] = 0;
 
   /* Last is the index of the most recent non-empty interval. At the start,
@@ -1052,17 +1050,76 @@ void vector_merge_interval(int *A, int *B, int *C, int n)
       b[i] = symbolic_infinity;
     }
   }
+
+  /* Reconstruction of origin */
+  while(last > 0)
+  {
+    //for j := b(last) down to a(last) do
+    for(int j = b[last]; j >= a[last]; j--)
+      origin[j] = last;
+    
+    last = pred[last];
+    //last := pred(last)
+  }
+
+  for(int i = 1; i < n+1; i++)
+    C[i] = A[origin[i]] + sum_of(B, 0, i - origin[i]);
   free(a);
   free(b);
   free(pred);
+}
+
+void vector_merge_quadratic(int *A, int *B, int *C, int n)
+{
+  int *a = calloc(n+1, sizeof(int));
+  int *b = calloc(n+1, sizeof(int));
+  int *pred = calloc(n+1, sizeof(int));
+  int *origin = calloc(n+1, sizeof(int));
+  int symb_inf = n+2;
+  int last, j;
+
+  for(int j = 1; j <= n; j++)
+    C[j] = A[1] + sum_of(B, 0, j-1);
+
+  a[1] = 1; b[1] = n; pred[1] = 0;
+  last = 1;
+  for(int i = 2; i <= n; i++)
+  {
+    if(C[n] > A[i] + sum_of(B, 0, n-i))
+    {
+      b[i] = n;
+      j = n-1;
+      while(C[j] > A[i] + sum_of(B, 0, j-i) && j >= i)
+      {
+        C[j] = A[i] + sum_of(B, 0, j-1);
+        if (j == a[last])
+        {
+          a[last] = symb_inf; b[last] = symb_inf;
+          last = pred[last];
+        }
+        j = j-1;
+      }
+      b[last] = j;
+      a[i] = j +1; pred[i] = last;
+      last = i;
+    }
+    else
+    {
+      a[i] = symb_inf; b[i] = symb_inf;
+    }
+  }
 
   /* Reconstruction of origin */
-  //while last > 0
-    //for j := b(last) down to a(last) do
-      //origin(j) := last
-    //last := pred(last)
-
-  //TODO Copying origin back to C?
+  while(last > 0)
+  {
+    for(int j = b[last]; j >= a[last]; j--)
+    {
+      origin[j] = last;
+    }
+    last = pred[last];
+  }
+  for(int i = 1; i < n+1; i++)
+    C[i] = A[origin[i]] + sum_of(B, 0, i - origin[i]);
 }
 
 void vector_merge_naive(int *A, int *B, int *C, int n)
@@ -1387,7 +1444,8 @@ void interval_dynamic_programming_for_testing(int *large_profits_prime,
 
       clock_t start = clock();
       //vector_merge_interval(A, B, C, profits_upper_bound);
-      vector_merge_naive(A, B, C, profits_upper_bound);
+      //vector_merge_naive(A, B, C, profits_upper_bound);
+      vector_merge_quadratic(A, B, C, profits_upper_bound);
       clock_t end = clock();
       double elapsed =  ((double) (end - start)) / CLOCKS_PER_SEC;
       //printf("Vector merge completed after %lf seconds.\n", elapsed);
@@ -1406,5 +1464,5 @@ void interval_dynamic_programming_for_testing(int *large_profits_prime,
   free(A);
   free(B);
   free(C);
-  free(y);
+  //free(y);
 }

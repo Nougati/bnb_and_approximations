@@ -330,7 +330,7 @@ What is now a standard method of constructing an FPTAS for KP was first
 While there are several components at play in their proposal algorithm,
  the core of what creates the approximation involves a scaling the values
  of all items down to by a factor dependant on $\epsilon$. 
-This distillation of their algorithm, as described by
+The distillation of their algorithm, as described by
  \cite{vazirani2013approximation}, is presented below:
 
 \begin{algorithm}[H]
@@ -354,7 +354,30 @@ $$\text{value}(S') \geq (1-\epsilon) \cdot OPT$$
 \end{lemma}
 
 \begin{proof}
-Here is my proof
+
+ Let $z_{S'}$ be the value of the solution set $S'$ obtained from the FPTAS, and
+ $z_O$ be the value of the optimal solution set $O$. 
+ Also, let $z'_{S'}$ be the value of the solution set with adjusted/truncated
+ values value the FPTAS's solution set $S'$, and $z'_O$ be the optimal solution
+ set with similarly adjusted value for all items.  
+
+Because of the flooring operation truncating off at most $K$ we know that the
+ difference between $z_{O}$ and $K \cdot z'_{O}$ would be at most $nK$.
+ Furthermore, since $z'_{S'}$ is the optimal value for the adjusted profits,
+ $z'_{O}$ cannot exceed it.
+
+ So, 
+
+$$z_{O} - nK \leq K \cdot z'_O \leq K \cdot z'_{S'} \leq z_{S'} \leq z_O$$ 
+
+Since $K = \frac{\epsilon P}{K}$, 
+
+$$z_O - nK = z_O - \epsilon P$$ 
+
+Finally, since $P \leq z_O$,
+
+$$(1-\epsilon)\cdot z_O \leq z_{S'} \leq z_O$$
+
 \end{proof}
 
 \begin{theorem}
@@ -373,19 +396,33 @@ By refining our approach, we can improve our runtime further.
  - Computing: Talk about greedy approach on cheap items
  - Results in $O(mP')$ time algorithm
 
-The approach described by \cite{ibarra1975fast} builds on this core approach by
- improving the nuance of the preprocessing step, which we know describe.
+The remainder of the description given by \cite{ibarra1975fast}
+ extends this core approach by improving the nuance of the preprocessing
+ step, which we now describe.
+
 The first improvement results from acknowledging that while a given input
  problem will potentially have many items with very small value, the bulk of the
- value of an optimal solution will likely be from high value items \textsc{this
- doesn't seem like the actual reason}. 
+ value of an optimal solution will likely be from high value items (**is this
+ really the actual reason?**). 
 We establish a threshold $t$ such that the DP will only compute on items with
  value greater than this. 
 This means we can amend our scaling factor in light of the reduced the range of
  item values that our DP considers. 
 
+Within the set of smaller valued items, we conduct a greedy search with the
+ remaining space, having completed the algorithm, which is guaranteed to be a
+ 1/2-approximation (**I think this is right.. but verify this**). 
 
+The chosen value for $t$, in their case, is $\frac{1}{3} \epsilon
+ \widetilde{P}$ (**why? maybe it's not necessary to introduce this**).
 
+\begin{lemma}
+This is a 1/2-app lol
+\end{lemma}
+
+\begin{proof}
+Assume that it is the case. Therefore by Proof By Assumption we have proven it to be true.
+\end{proof}
 
 ### Lawler (1978)
 What he changed about the DP.
@@ -411,15 +448,96 @@ Use both Rhee and their informal description to fuel the discussion of this part
 Vector merging procedure
 
 # Design and Analysis
-of the project that is
 
-Stuff to include:
+In light of the approaches described in the literature to both Branch and Bound
+ and AAs, our objective is to now find a method of constructing high-quality
+ dual bounds. 
+Intuitively, the guarantees which help define given FPTAS's for KP are not
+ proven with such applications in mind, so there are potential extensions to
+ the analysis which we can use to find stronger dual bounds. 
+In this section, we demonstrate analysis methods which have been undertaken
+ to this end. 
 
- - A priori
- - A posteriori 1
- - A posteriori 2
+## Analytic derivation of dual bounds a priori
+
+To form a basis to our discussion, we reintroduce the bounds obtained by the
+ FPTAS originally presented by Ibarra and Kim in \cite{ibarra1975fast}. 
+In particular, recall that we found
+
+$$(1-\epsilon) \cdot z_O \leq z_{S'} \leq z_O$$
+
+
+Which means that before running the approximation we know *a priori* the range for the optimal value:
+
+$$z_O \in [z_{S'}, \frac{z'_{S'}}{1-\epsilon}]$$
+
+This provides us with the following first attempt at an amendeded Branch and
+ Bound algorithm:
+\begin{algorithm}[H]
+  \SetAlgoLined
+  \KwData{A MIP instance, and an AA for the given problem.}
+  \KwResult{The Weight and value pair of the optimal solution}
+  Let $\bar z :=$ approximate solution\;
+  \While{$\mathcal{L}$ is not empty}
+  {
+  Choose a node $N_i$ from $\mathcal{L}$, and delete it from $\mathcal{L}$\;
+  Run the AA, deriving upper bound (UB) and lower bound (LB) in the process\;
+  \If{UB $\leq \bar z$}
+  {
+  Go to step 3\;
+  }
+  \Else
+  {
+  \If{LB$>\bar z$}
+  {
+  $\bar z := $ LB\;
+  }
+  }
+  \If{for $N_i$'s parent's UB, $UB_p$, $UB > UB_p$}
+  {
+  Set $UB := UB_p$
+  }
+  \Else
+  {
+  Choose a variable to branch on, then generate and enqueue new child nodes;\
+  }
+  Return $\ubar z$\;
+  }
+\caption{Branch and Bound with Approximation Algorithms}
+\end{algorithm}
+
+## Derivation of dual bounds a posteriori
+
+We can obtain improvements to our dual bounds by observing information obtained
+ following completion of the FPTAS, however, i.e. *a posteriori*.
+To do this, we first observe that the approximate solution set $S'$
+ will have a profit of $p(S')$. 
+This value will be the value of the adjusted profits $p'(S')$ scaled up by $K$,
+ plus any profit $\omega$ lost from the flooring operation, i.e.
+
+\begin{align*}
+  p(S') &= Kp'(S')+\omega
+\end{align*}
+
+**Todo the same analysis but with omega involves**.
+
+This analysis leads to the insight that 
+$$OPT \leq \frac{(p(S') \omega)}{1-\epsilon}$$
+
+Which gives us 
+
+$$OPT \leq p(S') + Kn - \omega $$
+
+
+## Improved a posteriori dual bounds
+Another approach is if we round up
+
+
+## Truncation branching strategy
 
 # Implementation and results
+
+## Methods for implemnetation
 
 Benchmarks lol
 
