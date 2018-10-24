@@ -22,6 +22,8 @@ bibliography: project_overview_draft.bib
 
 \section{Introduction}
 
+\subsection{Background}
+
 The field of discrete optimisation (CITE) studies problems that model discrete
  decision making. 
 Mixed-Integer Programming refers to a set of modelling and solving techniques for
@@ -319,11 +321,11 @@ It is common for FPTAS's for KP to to achieve polynomially bounded run time by
 As such, the construction of an FPTAS normally involves two distinct steps:
  a preprocessing step to form the simpler problem, and a step where this is
  solved to find an approximate value for the original problem.
-We now give an overview of the range of FPTAS's described that led to the state
- of the art.
+For our ends, we consider the examples within the literature which have led to
+ what are now textbook examples of FPTAS's to show the performance of well
+ established approximations when used in a Branch and Bound scheme.
 
 ### Ibarra and Kim's FPTAS (1975) 
-**TODO**: describe the reasoning behind letting $K= \frac{\epsilon P}{n}$ 
 
 What is now a standard method of constructing an FPTAS for KP was first
  described by Ibarra and Kim \cite{ibarra1975fast}. 
@@ -385,67 +387,53 @@ Algorithm 2 is an FPTAS for KP
 \end{theorem}
 
 \begin{proof}
-Assume that it is the case. Therefore by Proof By Assumption we have proven it to be true.
+Assume that it is the case. Therefore by Proof By Assumption we have proven it
+ to be true.
 \end{proof}
 
-**Use Rhee's thesis to help me do this**
-
-By refining our approach, we can improve our runtime further.
-
- - Preprocessing: Talk about dynamic programming on expensive items
- - Computing: Talk about greedy approach on cheap items
- - Results in $O(mP')$ time algorithm
-
-The remainder of the description given by \cite{ibarra1975fast}
- extends this core approach by improving the nuance of the preprocessing
- step, which we now describe.
-
-The first improvement results from acknowledging that while a given input
- problem will potentially have many items with very small value, the bulk of the
- value of an optimal solution will likely be from high value items (**is this
- really the actual reason?**). 
-We establish a threshold $t$ such that the DP will only compute on items with
- value greater than this. 
-This means we can amend our scaling factor in light of the reduced the range of
- item values that our DP considers. 
-
-Within the set of smaller valued items, we conduct a greedy search with the
- remaining space, having completed the algorithm, which is guaranteed to be a
- 1/2-approximation (**I think this is right.. but verify this**). 
-
-The chosen value for $t$, in their case, is $\frac{1}{3} \epsilon
- \widetilde{P}$ (**why? maybe it's not necessary to introduce this**).
-
-\begin{lemma}
-This is a 1/2-app lol
-\end{lemma}
-
-\begin{proof}
-Assume that it is the case. Therefore by Proof By Assumption we have proven it to be true.
-\end{proof}
+This constitutes the core of what is one of two textbook approaches to
+ constructing an FPTAS for KP. 
+There are nuanced optimisations which supplement this original algorithm's
+ approach given by \cite{ibarra1975fast}, however for simplicity we omit
+ such details here.
 
 ### Lawler (1978)
-What he changed about the DP.
 
- - Solution pairs as presented by WS
- - Amended rounding procedure
- - Complexity
+The second standard construction for obtaining an FPTAS for KP was presented
+ originally by \cite{lawler1979fast}, which we describe here as it was
+ illustrated in \cite{williamson2011design}.
+Building on the contributions by \cite{ibarra1975fast}, this approach describes
+ an alternative FPTAS which still maintains the basic approach shown in
+ Algorithm 2. 
+Specifically, we construct this algorithm by providing a different DP algorithm.
 
-### Magazine and Oguz (1981)
-More changes to the last two
+For $j \leq n$, let $A_j$ be an array which contains representations of
+ solutions to KP for the first $j$ items.
+A solution is represented by an ordered pair $(v, w)$ in $A_j$ if there is a
+ set of the first $j$ items with value $v$ and weight $w \leq W$. 
+Instead of explicitly storing all partial solutions, we resolve to only store
+ partial solutions which are not *dominated* by other partial solutions. 
+We say a solution $(v,w)$ dominates solution $(v', w')$ if $v \geq v'$ and
+ $w \leq w'$. 
 
- - Based on the DP recurrence (1)
- - Builds on both Lawler and Ibarra & Kim
- - Space and time complexities
+The dynamic programming algorithm, as presented by \cite{williamson2011design},
+ then follows:
 
-### Kellerer and Pferschy (1999)
+\begin{algorithm}[H]
+  \SetAlgoLined
+  \KwData{A KP problem instance}
+  \KwResult{The weight and value pair of the optimal solution}
+  
+  \For{$j\gets2$ to $n$}{
+    \For{POO}{
+      Shit!\; 
+      }
+    }
 
-Use both Rhee and their informal description to fuel the discussion of this part
+\caption{Alternative dynamic programming for Knapsack}
+\end{algorithm}
 
 
-### Kellerer and Pferschy (2001)
-
-Vector merging procedure
 
 # Design and Analysis
 
@@ -467,7 +455,8 @@ In particular, recall that we found
 $$(1-\epsilon) \cdot z_O \leq z_{S'} \leq z_O$$
 
 
-Which means that before running the approximation we know *a priori* the range for the optimal value:
+Which means that before running the approximation we know *a priori* the range
+ for the optimal value:
 
 $$z_O \in [z_{S'}, \frac{z'_{S'}}{1-\epsilon}]$$
 
