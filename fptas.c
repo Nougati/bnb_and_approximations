@@ -17,6 +17,13 @@
 #include "pisinger_reader.h"
 #include "branch_and_bound.h"
 
+/* lowerbound shiz */
+void get_a_lower_bound(const int *profits, const int *weights, int n, int capacity,
+                             int *lower_bound, double *upper_bound);
+int partition_hey(double arr1[], double arr2[], int l, int h);
+void swap_hey( double* a, double* b );
+void quick_sort_parallel_lists_hey(double *list1, double *list2, int lo, int hi);
+
 /* Iterative merge sort start */
 void remove_linked_list(struct solution_pair** head_reference);
 void copy_linked_list(struct solution_pair* old_head, 
@@ -384,9 +391,17 @@ void DP(const int problem_profits[], // profit primes?
   */
 
   /* Find the max profit item and derive the profit upper bound based on it */
-  int max_profit = DP_max_profit(problem_profits, n);
-  int p_upper_bound = DP_p_upper_bound(problem_profits, n, max_profit,
-                                       bounding_method);
+  //int max_profit = DP_max_profit(problem_profits, n);
+  //int p_upper_bound = DP_p_upper_bound(problem_profits, n, max_profit,
+  //                                     bounding_method);
+
+  /* Hacked together lower bound getting machine */
+  int lower_bound;
+  double upper_bound; 
+  get_a_lower_bound(problem_profits, problem_weights, n, capacity,
+                    &lower_bound, &upper_bound);
+  int p_upper_bound = (int) upper_bound;
+  
 
   /* Add the amount allocated */
   bytes_allocated += (n+1)*sizeof(int *);
@@ -1940,5 +1955,141 @@ void copy_solution_pair(struct solution_pair* old_pair,
     for(int i = 0; i < n; i++)
       new_pair->solution_array[i] = old_pair->solution_array[i];
   }
+}
+
+void get_a_lower_bound(const int *profits, const int *weights, int n, int capacity,
+                             int *lower_bound, double *upper_bound)
+{
+  /**get_a_lower_bound*********************************************************
+   * Description                                                              *
+   *   Lol this is just a copy of the other one.                              *
+   * Notes                                                                    *
+   *   lower_bound and upper_bound are output parameters.                     *
+   ****************************************************************************/
+    
+  if(capacity <= 0)
+    return;
+
+  /* Order by non-increasing profit/weight ratio */
+  double ratios[n];
+  double indices[n];
+  for(int i = 0; i < n; i++) indices[i] = 0;
+  for(int i = 0; i < n; i++)
+  { 
+    if (weights[i] != 0)
+      ratios[i] = (double) profits[i]/weights[i];
+    else
+      ratios[i] = 0;
+    indices[i] = (double) i;
+  }
+
+  quick_sort_parallel_lists_hey(ratios, indices, 0, n-1);
+  
+  /* Pick items in that order, one by one until picking an item would 
+      overfill the knapsack */
+  int current_weight = 0;
+  int current_profit = 0;
+  int i = 0;
+  for(i = 0; i < n && weights[(int)indices[i]]+current_weight <= capacity; i++)
+  { 
+    current_weight += weights[(int)indices[i]];
+    current_profit += profits[(int)indices[i]];
+  }
+  
+  /* Then pick the fractional component of that item that you can fit to get
+      the dual bound */
+  double scale = 0;
+  if(i < n)
+  { 
+    scale = (double)(capacity - current_weight) / weights[(int)indices[i]];
+    *upper_bound = current_profit + scale * profits[(int)indices[i]];
+  }
+  else *upper_bound = current_profit;
+
+  /* Continue traversing the list until you find the next item that you can
+      fit to get the primal bound */
+  
+  while (i < n && weights[(int)indices[i]]+current_weight > capacity)
+    i++;
+  if(i < n)
+    *lower_bound = profits[(int)indices[i]]+current_profit;
+  else
+    *lower_bound = current_profit;
+}
+
+void quick_sort_parallel_lists_hey(double *list1, double *list2, int lo, int hi)
+{
+  /**quick_sort_parallel_lists*************************************************
+   * Description                                                              *
+   *  Sort according to the first list, but also reflect changes in second    *
+   *  list in parallel.                                                       *
+   *                                                                          *
+   ****************************************************************************/
+
+    // Create an auxiliary stack
+    double stack[ hi - lo + 1 ];
+
+    // initialize top of stack
+    int top = -1;
+
+    // push initial values of l and h to stack
+    stack[ ++top ] = lo;
+    stack[ ++top ] = hi;
+
+    // Keep popping from stack while is not empty
+    while ( top >= 0 )
+    {
+        // Pop h and l
+        hi = stack[ top-- ];
+        lo = stack[ top-- ];
+
+        // Set pivot element at its correct position
+        // in sorted array
+        int p = partition_hey( list1, list2, lo, hi );
+
+        // If there are elements on left side of pivot,
+        // then push left side to stack
+        if ( p-1 > lo )
+        {
+            stack[ ++top ] = lo;
+            stack[ ++top ] = p - 1;
+        }
+
+        // If there are elements on right side of pivot,
+        // then push right side to stack
+        if ( p+1 < hi )
+        {
+            stack[ ++top ] = p + 1;
+            stack[ ++top ] = hi;
+        }
+    }
+}
+
+/* swap function from geeksforgeeks.org/iterative-quick-sort/ */
+void swap_hey( double* a, double* b )
+{
+    double t = *a;
+    *a = *b;
+    *b = t;
+}
+
+/*  partition function from geeksforgeeks.org/iterative-quick-sort/ */
+int partition_hey(double arr1[], double arr2[], int l, int h)
+{
+    double x = arr1[h];
+    int i = (l - 1);
+
+    for (int j = l; j <= h- 1; j++)
+    {
+        if (arr1[j] >= x)
+        {
+            i++;
+            swap_hey(&arr1[i], &arr1[j]);
+            swap_hey(&arr2[i], &arr2[j]);
+        }
+    }
+    swap_hey(&arr1[i + 1], &arr1[h]);
+    swap_hey(&arr2[i + 1], &arr2[h]);
+    return (i + 1);
 }
 

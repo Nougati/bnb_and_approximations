@@ -858,7 +858,6 @@ void linear_programming_dual(int *profits, int *weights, int n, int capacity,
     *lower_bound = profits[(int)indices[i]]+current_profit;
   else
     *lower_bound = current_profit;
-
 }
 
 void quick_sort_parallel_lists(double *list1, double *list2, int lo, int hi)
@@ -936,7 +935,6 @@ int partition (double arr1[], double arr2[], int l, int h)
     swap (&arr2[i + 1], &arr2[h]);
     return (i + 1);
 }
-
 
 // Make min heap
 Min_Heap PQ_initialise_min_heap(int size)
