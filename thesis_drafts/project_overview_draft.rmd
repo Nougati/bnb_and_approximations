@@ -20,6 +20,21 @@ bibliography: project_overview_draft.bib
 \def\BState{\State\hskip-\ALG@thistlm}
 \makeatother
 
+**Abstract**
+
+Implicit enumeration refers to a divide-and-conquer problem solving strategy
+ where we can enumerate through a problem's solutions without specifically
+ finding each solution. 
+This has broad uses within many fields of Computer Science, one such example
+ being in Mixed-Integer Programming's Branch and Bound. 
+To omit evaluation of solutions from our search, we analyse them with regards
+ to bounds established on where the optimal value can reside, known as dual bounds.
+ Traditionally, bounds are found by relaxing the problem formulation so that it
+ can be solved efficiently, however such approaches may perform arbitrarily
+ poorly according to problem type.
+In this report, we describe our investigation into a new approach for deriving
+ dual bounds: approximation algorithms.
+
 \section{Introduction}
 
 \subsection{Background}
@@ -171,6 +186,44 @@ To do this, we investigate known approximation schemes and methods to construct
  high quality dual bounds from them, as well as devising branching strategies
  within its Branch and Bound. 
 
+## Research Context
+
+Following the inception of Dantzig's \cite{Dantzig} Simplex method in 1947,
+ theoretical interest in finding optimal solutions shifted to harder problems. 
+Solving discrete optimisation problems, known as Integer Programs (IPs), began
+ to thrive as a focal point of research. 
+Discrete optimisation gave rise to two new active research areas: exactly
+ solving IPs, and active pursuit of polynomial time algorithms for such hard
+ problems and their variants. 
+
+Research into optimally solving IPs led to Land and Doig's initial Branch and
+ Bound method \cite{LandDoig} in 1960, but had little direct applicability due
+ to limitations in computing hardware at the time. 
+On the other hand, as a response to the many discrete optimisation problems for
+ which polynomial-time algorithms were not known, Computational Complexity
+ Theory research began\cite{Cook}. 
+Concerns with finding polynomially bounded algorithm run-times led to
+ sacrificing optimality for efficiency, in what became AA research through the
+ 1970s. 
+Approximations for the Knapsack Problem\cite{IbarraKim}, Travelling Salesman
+ Problem \cite{CristofidesTSP}, Facility Location problem
+ \cite{CornuejolsFisherNemhauser}, and many others were devised through the
+ decade. 
+Until 1980, discrete problem algorithm design and AA design remained
+ disconnected. 
+
+It wasn't until Wolsey \cite{WOLSEY} attempting to unify AAs of the 1970s with
+ the Branch-and-Bound algorithm of 1960 that the fields met again. 
+Wolsey provided a general analysis technique relating approximation worst-cases
+ with optimal LP relaxation solutions, and devised a Branch-and-Bound procedure
+ from these components. 
+However, since this point, to the best of our knowledge, no further work has
+ been done in investigating the relationship between approximations and Branch
+ and Bound. 
+This project investigates whether a stronger link exists and can be leveraged to
+ improve performances. 
+
+
 # Literature Review
 
 We now give a brief literature review of the research and improvements to the
@@ -191,24 +244,28 @@ In light of this, we provide an overview of known strategies and the body of
 ### Branching Strategies
 
 Deriving useful subproblems is central to the Branch and Bound approach, as it
- provides us with the partial enumeration required to establish bounds on an
- optimal solution value. 
-A basic strategy is to branch on the variable with the largest fractional
- component, however \cite{achterberg2005branching} has shown this to be as bad
- as random selection. 
+ provides us with the partial enumeration required to establish high quality
+ bounds on an optimal solution's value. 
+When using LP relaxations, a generally effective strategy is to branch on the
+ variable with the largest fractional component in the LP's solution, and while
+ \cite{achterberg2005branching} has shown that this can be as bad as random
+ selection, it is still regarded as the most reliable branching strategy (CITE?).
+
 It is possible to make inferences based on the properties of each variable's
- fractional component, as shown by \cite{tomlin1970branch} by the proposal of "use penalties".
-This was used to inform the branching process
- where "up penalties" and "down penalties" were calculated for each variable
- based on their respective fractional components, after which the variable with
- the highest penalty in any direction was chosen.
-However, \cite {mitra1973investigation} showed with computational experiments that such approaches may
- have limited use, while approaches involving issuing "pseudocosts" as proposed
- by \cite{benichou1971experiments} may have advantages. 
+ fractional component, as shown by \cite{tomlin1970branch} by the proposal of
+ "use penalties".
+This was used to inform the branching process where "up penalties" and "down
+ penalties" were calculated for each variable based on their respective
+ fractional components, after which the variable with the highest penalty in any
+ direction was chosen.
+However, \cite {mitra1973investigation} showed with computational experiments
+ that such approaches may have limited use, while approaches involving issuing
+ "pseudocosts" as proposed by \cite{benichou1971experiments} may have
+ advantages. 
 
 In an attempt to provide a categorisation for branching methods, 
-\cite{morrison2016branch} proposed two groupings: *binary*/*non-binary* strategies,
- and *wide* strategies. 
+\cite{morrison2016branch} described two groupings: *binary*/*non-binary*
+ strategies, and *wide* strategies. 
 Both problem types and tree depth provided the ideas central to these
  classifications.
 
@@ -217,7 +274,54 @@ A detailed survey of the literature and the current open questions in research
  further reading.
 
 ### Node selection schemes
-Talk about best bound?
+
+Having chosen a variable to branch on, we will have generated a number of
+ subproblems which are represented as *nodes* at the frontier of our search
+ tree. 
+Because of this representation, the method of node selection is also known
+ as the *search strategy* for the tree. 
+
+**Consider diagram here**
+
+As in our description of the Branch and Bound, we will refer to the set of nodes
+ which are to be explored as $\mathcal{L}$.
+To continue our search, it is clear that we must choose a node to explore,
+ however the choice of method for doing this is not necessarily straightforward. 
+There are many methods for conducting such a tree search, the most common of
+ which we now describe. 
+
+The *depth-first search* (DFS) strategy is a standard and well studied approach
+ to both Branch and Bound and general tree traversal
+ \cite{golomb1965backtrack, tarjan1972depth}. 
+In this strategy, one arranges the unexplored nodes in a first-in first-out
+ (FIFO) manner, by storing $\mathcal{L}$ as a stack. 
+While this approach may seem naive, it can be modified to have very low memory
+ costs. 
+There are many potential drawbacks to DFS, as well as many derivations to
+ counteract these, and the reader is directed to \cite{morrison2016branch} for
+ a more comprehensive overview of these concepts and techniques. 
+ 
+The *breadth-first search* (BrFS) strategy is likewise a notorious and well
+ studied search strategy trees. 
+The strategy employed by BrFS is often considered to be opposite to DFS, as
+ it employs a last-in first-out (LIFO) search, often by storing $\mathcal{L}$
+ in a queue. 
+Despite being a well known strategy, BrFS is not often used within Branch and
+ Bound searches. 
+
+The final main category of search we will consider is known as the Best-First
+ Search (BFS). 
+As its name indicates, instead of having the order which nodes are created
+ govern the order which they are chosen, we define a way to appraise the
+ "quality" of nodes to inform our choice. 
+One can conduct such a search by storing $\mathcal{L}$ as a priority queue based
+ on the "quality" of a node.
+The definition of "quality" is clearly important, but within a Branch and Bound
+ a basic but useful indicator would any information about a node's dual bound. **HELP**
+BFS is known to be highly effective; \cite{dechter1985generalized} showed that
+ BFS could provably explore the lowest number of subproblems in certain
+ families of scenarios, although it is also relevant to note that
+ \cite{sewell2012branch} demonstrated potential flaws in the scheme. 
 
 ### Bounding optimal solutions
 
@@ -309,8 +413,10 @@ A PTAS is guaranteed to give a solution value within a factor of $(1-\epsilon)$
 A classic example of a PTAS was presented by (cite Sahni), with time complexity
  $O(n^{1 / \epsilon})$. 
 
-If we restrict the definition of a PTAS further, so that the running time is
- bounded by a polynomial in both $n$ and $\epsilon$, we obtain a *fully
+While PTAS's are indeed bounded by a polynomial in $n$, they can be exponential
+ in terms of $\epsilon$, so long as $\epsilon$ is fixed. 
+If we restrict the definition of a PTAS further, then, so that the running time
+ is bounded by a polynomial in both $n$ and $\epsilon$, we obtain a *fully
  polynomial time approximation scheme* (FPTAS). 
 This means we can choose an $\epsilon$ that gives us a high quality solution
  while still being polynomially bounded. 
@@ -400,12 +506,12 @@ There are nuanced optimisations which supplement this original algorithm's
 ### Lawler (1978)
 
 The second standard construction for obtaining an FPTAS for KP was presented
- originally by \cite{lawler1979fast}, which we describe here as it was
- illustrated in \cite{williamson2011design}.
-Building on the contributions by \cite{ibarra1975fast}, this approach describes
+ originally by \cite{lawler1979fast}, which we present as described by
+ \cite{williamson2011design}.
+Building on the contributions of \cite{ibarra1975fast}, this approach describes
  an alternative FPTAS which still maintains the basic approach shown in
  Algorithm 2. 
-Specifically, we construct this algorithm by providing a different DP algorithm.
+Specifically, we construct this algorithm by changing our DP approach.
 
 For $j \leq n$, let $A_j$ be an array which contains representations of
  solutions to KP for the first $j$ items.
@@ -416,24 +522,66 @@ Instead of explicitly storing all partial solutions, we resolve to only store
 We say a solution $(v,w)$ dominates solution $(v', w')$ if $v \geq v'$ and
  $w \leq w'$. 
 
-The dynamic programming algorithm, as presented by \cite{williamson2011design},
+The DP algorithm, as presented by \cite{williamson2011design},
  then follows:
 
+\SetArgSty{textnormal}
 \begin{algorithm}[H]
   \SetAlgoLined
   \KwData{A KP problem instance}
-  \KwResult{The weight and value pair of the optimal solution}
+  \KwResult{The value of the optimal solution}
   
   \For{$j\gets2$ to $n$}{
-    \For{POO}{
-      Shit!\; 
+    \For{ each $(v,w) \in A_{j}$ }{
+      \If{ $w + w_j \leq W$ }{
+        Add $(v+v_j, w+w_j)$ to $A_j$\
+        } 
       }
+    Remove dominated pairs from $A_j$\
     }
-
+  \Return max$_{(v,w) \in A_j} v$
 \caption{Alternative dynamic programming for Knapsack}
 \end{algorithm}
 
+It can be shown that this algorithm correctly finds the optimal value to KP,
+ and the reader is directed to either \cite{lawler1979fast} or
+ \cite{williamson2011design} for the proof of this result.
+By using this DP algorithm in Algorithm 2, we obtain another valid FPTAS for
+ KP.
 
+The original version of this algorithm, presented in \cite{lawler1979fast},
+ contains further subtle refinements to this algorithm by improving details of
+ the FPTAS provided by \cite{ibarra1975fast}. 
+
+## Approximations, Linear Programming and Branch and Bound (find better section title)
+
+All that now remains to review is the existing literature which addresses AAs in
+ an implicit enumeration setting. 
+As far as we are aware, the only focused treatment of this was presented by
+ Wolsey \cite{wolsey1980heuristic}. 
+
+Acknowledging that LPs are tightly knitted to the state of the art in Branch and
+ Bound, Wolsey demonstrated the use of a framework which allows one to emulate
+ characteristics of linear duality with AAs. 
+In this way, the first and only provided method for finding dual bounds was
+ presented.
+
+For an approximate solution value $z_A$, an LP relaxation solution value
+ $z_{LP}$, Wolsey showed we can construct inequalities of the form:
+$$z_A \leq r \cdot z_{LP} + s$$
+
+for $r \geq 1$. 
+Further, he showed that we can extend this analysis to formulations on the Bin
+ Packing Problem, Longest Undirected Hamiltonian Tours, Minimum Length Eularian
+ Tours and the Chinese Postman Problem.
+
+Following this analysis, Wolsey demonstrated that we can construct a Branch and
+ Bound where the value of $z_A$ would monotonically increase as enumeration
+ progressed, inevitably convering to optimality.
+The product is the only implicit enumeration scheme leveraging AA guarantees
+ that we are aware of.
+
+**Note to self: I hadn't spoken of linear duality up to this point.. Should I have?**
 
 # Design and Analysis
 
@@ -454,11 +602,11 @@ In particular, recall that we found
 
 $$(1-\epsilon) \cdot z_O \leq z_{S'} \leq z_O$$
 
-
-Which means that before running the approximation we know *a priori* the range
  for the optimal value:
 
 $$z_O \in [z_{S'}, \frac{z'_{S'}}{1-\epsilon}]$$
+
+**TODO:** Something something something truncation branching (does this need its own section?)
 
 This provides us with the following first attempt at an amendeded Branch and
  Bound algorithm:
@@ -495,6 +643,83 @@ This provides us with the following first attempt at an amendeded Branch and
 \caption{Branch and Bound with Approximation Algorithms}
 \end{algorithm}
 
+
+Here are some LP benchmarks lol
+
+```{r echo = FALSE, results = 'asis'}
+library(knitr)
+library(kableExtra)
+library(magrittr)
+smoke <- matrix(c("Fractional", "10", "10", "10", "10",  
+                  "Random", "10", "10", "10", "10", 
+                  "Fractional", "10", "10", "10", "10",
+                  "Random", "10", "10", "10", "10" ),ncol=5, byrow=TRUE)
+
+
+
+colnames(smoke) <- c("Branching Strategy", "Running time", "Memory used", "Node count", "Avg. time per node") 
+
+rownames(smoke) <- c("instance 1", "instance 1", "instance 2", "instance 2")
+smoke <- as.table(smoke)
+kable(smoke) %>%
+  kable_styling(latex_options = "striped", position = "center") %>%
+  column_spec(3, width = "5em") %>%
+  column_spec(4, width = "5em") %>%
+  column_spec(5, width = "5em") %>%
+  column_spec(6, width = "5em")
+```
+
+Implementing this approach, we can see how this performs on given instances
+ of KP 
+
+```{r echo = FALSE, results = 'asis'}
+library(knitr)
+library(kableExtra)
+library(magrittr)
+smoke <- matrix(c("I&K", "Truncation", "10", "10", "10", "10",  
+                  "I&K", "Random", "10", "10", "10", "10", 
+                  "Lawler", "Truncation", "10", "10", "10", "10",
+                  "Lawler", "Random", "10", "10", "10", "10" ),ncol=6, byrow=TRUE)
+
+colnames(smoke) <- c("DP", "Branching Strategy", "Running time", "Memory used", "Node count", "Avg. time per node") 
+
+rownames(smoke) <- c("instance 1", "instance 1", "instance 2", "instance 2")
+smoke <- as.table(smoke)
+kable(smoke) %>%
+  kable_styling(latex_options = "striped", position = "center") %>%
+  column_spec(3, width = "5em") %>%
+  column_spec(4, width = "5em") %>%
+  column_spec(5, width = "5em") %>%
+  column_spec(6, width = "5em") %>%
+  column_spec(7, width = "5em") %>%
+  column_spec(8, width = "5em")
+```
+
+Likewise we obtain the aggregate stats for these problems of similar form:
+
+```{r echo = FALSE, results = 'asis'}
+library(knitr)
+library(kableExtra)
+library(magrittr)
+smoke <- matrix(c("I&K", "Truncation", "10", "10", "10", "10",  
+                  "I&K", "Random", "10", "10", "10", "10", 
+                  "Lawler", "Truncation", "10", "10", "10", "10",
+                  "Lawler", "Random", "10", "10", "10", "10" ),ncol=6, byrow=TRUE)
+
+colnames(smoke) <- c("DP", "Branching Strategy", "Avg. running time", "Avg. memory used", "Avg, node count", "Mean avga time per node") 
+
+rownames(smoke) <- c("instance 1", "instance 2", "instance 3", "instance 4")
+smoke <- as.table(smoke)
+kable(smoke) %>%
+  kable_styling(latex_options = "striped", position = "center") %>%
+  column_spec(3, width = "5em") %>%
+  column_spec(4, width = "5em") %>%
+  column_spec(5, width = "5em") %>%
+  column_spec(6, width = "5em") %>%
+  column_spec(7, width = "5em") %>%
+  column_spec(8, width = "5em")
+```
+
 ## Derivation of dual bounds a posteriori
 
 We can obtain improvements to our dual bounds by observing information obtained
@@ -517,23 +742,121 @@ Which gives us
 
 $$OPT \leq p(S') + Kn - \omega $$
 
+Implementing this approach, we can see how this performs on given instances
+ of KP 
+
+```{r echo = FALSE, results = 'asis'}
+library(knitr)
+library(kableExtra)
+library(magrittr)
+smoke <- matrix(c("I&K", "Truncation", "10", "10", "10", "10",  
+                  "I&K", "Random", "10", "10", "10", "10", 
+                  "Lawler", "Truncation", "10", "10", "10", "10",
+                  "Lawler", "Random", "10", "10", "10", "10" ),ncol=6, byrow=TRUE)
+
+colnames(smoke) <- c("DP", "Branching Strategy", "Running time", "Memory used", "Node count", "Avg. time per node") 
+
+rownames(smoke) <- c("instance 1", "instance 1", "instance 2", "instance 2")
+smoke <- as.table(smoke)
+kable(smoke) %>%
+  kable_styling(latex_options = "striped", position = "center") %>%
+  column_spec(3, width = "5em") %>%
+  column_spec(4, width = "5em") %>%
+  column_spec(5, width = "5em") %>%
+  column_spec(6, width = "5em") %>%
+  column_spec(7, width = "5em") %>%
+  column_spec(8, width = "5em")
+```
+
+Likewise we obtain the aggregate stats for these problems of similar form:
+
+```{r echo = FALSE, results = 'asis'}
+library(knitr)
+library(kableExtra)
+library(magrittr)
+smoke <- matrix(c("I&K", "Truncation", "10", "10", "10", "10",  
+                  "I&K", "Random", "10", "10", "10", "10", 
+                  "Lawler", "Truncation", "10", "10", "10", "10",
+                  "Lawler", "Random", "10", "10", "10", "10" ),ncol=6, byrow=TRUE)
+
+colnames(smoke) <- c("DP", "Branching Strategy", "Avg. running time", "Avg. memory used", "Avg, node count", "Mean avga time per node") 
+
+rownames(smoke) <- c("instance 1", "instance 2", "instance 3", "instance 4")
+smoke <- as.table(smoke)
+kable(smoke) %>%
+  kable_styling(latex_options = "striped", position = "center") %>%
+  column_spec(3, width = "5em") %>%
+  column_spec(4, width = "5em") %>%
+  column_spec(5, width = "5em") %>%
+  column_spec(6, width = "5em") %>%
+  column_spec(7, width = "5em") %>%
+  column_spec(8, width = "5em")
+```
 
 ## Improved a posteriori dual bounds
-Another approach is if we round up
+Another approach is if we round up. We get these bounds, see?
 
+$$OPT \leq p(S'') + \omega$$
 
-## Truncation branching strategy
+Implementing this approach, we can see how this performs on given instances
+ of KP 
 
-# Implementation and results
+```{r echo = FALSE, results = 'asis'}
+library(knitr)
+library(kableExtra)
+library(magrittr)
+smoke <- matrix(c("I&K", "Truncation", "10", "10", "10", "10",  
+                  "I&K", "Random", "10", "10", "10", "10", 
+                  "Lawler", "Truncation", "10", "10", "10", "10",
+                  "Lawler", "Random", "10", "10", "10", "10" ),ncol=6, byrow=TRUE)
 
-## Methods for implemnetation
+colnames(smoke) <- c("DP", "Branching Strategy", "Running time", "Memory used", "Node count", "Avg. time per node") 
 
-Benchmarks lol
+rownames(smoke) <- c("instance 1", "instance 1", "instance 2", "instance 2")
+smoke <- as.table(smoke)
+kable(smoke) %>%
+  kable_styling(latex_options = "striped", position = "center") %>%
+  column_spec(3, width = "5em") %>%
+  column_spec(4, width = "5em") %>%
+  column_spec(5, width = "5em") %>%
+  column_spec(6, width = "5em") %>%
+  column_spec(7, width = "5em") %>%
+  column_spec(8, width = "5em")
+```
 
-## What is a logical way to lay all this out?
+Likewise we obtain the aggregate stats for these problems of similar form:
 
-# Todos
-(**Put warm starting in future work**)
+```{r echo = FALSE, results = 'asis'}
+library(knitr)
+library(kableExtra)
+library(magrittr)
+smoke <- matrix(c("I&K", "Truncation", "10", "10", "10", "10",  
+                  "I&K", "Random", "10", "10", "10", "10", 
+                  "Lawler", "Truncation", "10", "10", "10", "10",
+                  "Lawler", "Random", "10", "10", "10", "10" ),ncol=6, byrow=TRUE)
+
+colnames(smoke) <- c("DP", "Branching Strategy", "Avg. running time", "Avg. memory used", "Avg, node count", "Mean avga time per node") 
+
+rownames(smoke) <- c("instance 1", "instance 2", "instance 3", "instance 4")
+smoke <- as.table(smoke)
+kable(smoke) %>%
+  kable_styling(latex_options = "striped", position = "center") %>%
+  column_spec(3, width = "5em") %>%
+  column_spec(4, width = "5em") %>%
+  column_spec(5, width = "5em") %>%
+  column_spec(6, width = "5em") %>%
+  column_spec(7, width = "5em") %>%
+  column_spec(8, width = "5em")
+```
+
+# Future work
+
+Things like:
+
+ - Warm starting
+ - State of the art KP FPTAS 
+ - Christofides algorithm for metric TSP
+
 
 \bibliography{project_overview_draft}
 \bibliographystyle{plain}
