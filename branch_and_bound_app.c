@@ -166,13 +166,20 @@ int main(int argc, char *argv[]) {
   else if(dualbound_type==APOSTERIORI_DUAL_ROUNDUP)
     strcpy(str_dualbound_type, "Rounded up profits dual bound");
   else if(dualbound_type==LINEAR_PROG_DUAL)
+  {
     strcpy(str_dualbound_type, "Linear programming dual bound");
-  if(branching_strategy == LINEAR_ENUM_BRANCHING)
-    strcpy(str_branching_strategy, "Linear search enumeration branching");
-  else if(branching_strategy == RANDOM_BRANCHING)
-    strcpy(str_branching_strategy, "Random variable branching");
-  else if(branching_strategy == TRUNCATION_BRANCHING)
-    strcpy(str_branching_strategy, "Truncation branching");
+    strcpy(str_branching_strategy, "Fractional branching (this is forced for LP)");
+
+  }
+  if(dualbound_type != LINEAR_PROG_DUAL)
+  {
+    if(branching_strategy == LINEAR_ENUM_BRANCHING)
+      strcpy(str_branching_strategy, "Linear search enumeration branching");
+    else if(branching_strategy == RANDOM_BRANCHING)
+      strcpy(str_branching_strategy, "Random variable branching");
+    else if(branching_strategy == TRUNCATION_BRANCHING)
+      strcpy(str_branching_strategy, "Truncation branching");
+  }
   printf("Problem specification: \n\tProblem #%d of %s"
          "\n\tDP method: %s"
          "\n\tEpsilon: %f"

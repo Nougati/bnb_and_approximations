@@ -22,7 +22,8 @@
 #include "pisinger_reader.h"
 
 void linear_programming_dual(int *profits, int *weights, int n, int capacity,
-                             int *lower_bound, double *upper_bound);
+                             int *lower_bound, double *upper_bound,
+                             int *LP_brancher);
 void swap ( double* a, double* b );
 int partition (double arr1[], double arr2[], int l, int h);
 void quick_sort_parallel_lists(double *list1, double *list2, int lo, int hi);
@@ -99,6 +100,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
   int first_iteration = TRUE;
   int global_lower_bound = 0;
   int iterations = 0;
+  int LP_brancher = -1;
 
   /* MAIN LOOP: While our node queue is not empty: */
   //while(node_queue->size >= 1)
@@ -122,7 +124,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                 &current_node->lower_bound, &current_node->upper_bound,
                 problem_file, DP_method, logging_rule, logging_stream, eps,
                 dualbound_type, memory_allocation_limit, timeout, 
-                start_time);
+                start_time, &LP_brancher);
 
     /* Overflow check */
     if (bytes_allocated == -1 || *start_time == -1)
@@ -191,9 +193,14 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
         fprintf(logging_stream, "\tUB > GLB; branching on variable.\n");
 
       /* Find branching variable accoring to some strategy */
-      branching_variable = find_branching_variable(n, z, 
-                                              current_node->variable_statuses,
-                                              branching_strategy, profits);
+      if(branching_strategy != LINEAR_PROG_DUAL)
+        branching_variable = find_branching_variable(n, z, 
+                                                current_node->variable_statuses,
+                                                branching_strategy, profits);
+      else
+      {
+        branching_variable = LP_brancher;
+      }
 
       /* If we can't constrain anymore variables, move on */
       if (branching_variable == -1) 
@@ -486,7 +493,7 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
                  int *upper_bound_ptr, char *problem_file, int DP_method, 
                  int logging_rule, FILE *logging_stream, double eps, 
                  const int dualbound_type, const long long int memory_allocation_limit,
-                 const int timeout, clock_t *start_time)
+                 const int timeout, clock_t *start_time, int *LP_brancher)
 { 
   /* lower_bound_ptr and upper_bound_ptr are both output parameters */
   /* Solve the FPTAS with current node */
@@ -502,6 +509,8 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
     printf("SMART DYNAMIC PROGRAAAAAAAAAAAMMING\n");
     exit(-1);
   }
+
+  /* If we were going to use LP dual bounds, we get them in the switch statement below */
   else if (dualbound_type < LINEAR_PROG_DUAL)
   {
     if(logging_rule == FULL_LOGGING)
@@ -607,7 +616,7 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
 
       linear_programming_dual(symbolic_profits, symbolic_weights, n, 
                               adjusted_capacity, &fptas_lower_bound,
-                              &fptas_upper_bound);
+                              &fptas_upper_bound, LP_brancher);
 
       /* Add profits of items constrained on to upper/lower bounds */ 
       if(adjusted_capacity >= 0)
@@ -800,7 +809,8 @@ Problem_Instance *LL_dequeue(LL_Problem_Queue *queue)
 }
 
 void linear_programming_dual(int *profits, int *weights, int n, int capacity,
-                             int *lower_bound, double *upper_bound)
+                             int *lower_bound, double *upper_bound,
+                             int *LP_brancher)
 {
   /**linear_programming_dual***************************************************
    * Description                                                              *
@@ -848,6 +858,7 @@ void linear_programming_dual(int *profits, int *weights, int n, int capacity,
     *upper_bound = current_profit + scale * profits[(int)indices[i]];
   }
   else *upper_bound = current_profit;
+  *LP_brancher = i;
   
   /* Continue traversing the list until you find the next item that you can
       fit to get the primal bound */

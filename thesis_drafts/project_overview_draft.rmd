@@ -375,7 +375,7 @@ We describe the formulation for KP as follows: given $n$ items associated
 
 \begin{equation*}
 \begin{array}{ll@{}ll}
-\text{minimize}  & \displaystyle\sum\limits_{i=1}^{n} v_{i}&x_{i} &\\
+\text{maximise}  & \displaystyle\sum\limits_{i=1}^{n} v_{i}&x_{i} &\\
 \text{subject to}& \displaystyle\sum\limits_{i=1}^{n}     &w_{i} x_{i} \leq W, 
                                                 \text{ and } x_{i} \in \{0,1\}\\
                  &  
