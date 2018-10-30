@@ -120,7 +120,7 @@ void find_bounds(Problem_Instance *current_node, int profits[], int weights[],
                  int *upper_bound_ptr, char *problem_file, int DP_method,
                  int logging_rule, FILE *logging_stream, double eps,
                  const int dualbound_type, const long long int memory_allocation_limit, 
-                 const int timeout, clock_t *start_time);
+                 const int timeout, clock_t *start_time, int *LP_brancher);
 
 void post_order_tree_clean(Problem_Instance *root_node);
 
