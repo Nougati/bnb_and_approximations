@@ -16,6 +16,8 @@ output:
 bibliography: project_overview_draft.bib
 ---
 
+\tableofcontents
+
 \makeatletter
 \def\BState{\State\hskip-\ALG@thistlm}
 \makeatother
@@ -552,6 +554,10 @@ By using this DP algorithm in Algorithm 2, we obtain another valid FPTAS for
 The original version of this algorithm, presented in \cite{lawler1979fast},
  contains further subtle refinements to this algorithm by improving details of
  the FPTAS provided by \cite{ibarra1975fast}. 
+
+### Kellerer Pferschy lol
+
+They did it!
 
 ## Approximations, Linear Programming and Branch and Bound (find better section title)
 
