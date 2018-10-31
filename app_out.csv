@@ -1,0 +1,271 @@
+knapPI_1_50_1000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.012205, 100, 2681442
+knapPI_1_50_1000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.008464, 100, 2679626
+knapPI_1_50_1000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.003053, 278, 2782222
+knapPI_1_50_1000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 2.324839, 100, 2681442
+knapPI_1_50_1000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 2.336523, 100, 2679626
+knapPI_1_50_1000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.003386, 278, 2782222
+knapPI_1_100_100000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.119960, 200, 726906
+knapPI_1_100_100000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.117888, 200, 726732
+knapPI_1_100_100000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.026151, 1004, 733306
+knapPI_1_100_100000.csv, Vasirani's DP algorithm, Plus nK dual bound, 40.999670, 196, 726906
+knapPI_1_100_100000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 39.632618, 196, 726732
+knapPI_1_100_100000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.030809, 1004, 733306
+knapPI_1_100_1000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.148717, 200, 4512922
+knapPI_1_100_1000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.153951, 200, 4511064
+knapPI_1_100_1000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.055269, 1862, 4574958
+knapPI_1_100_1000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 33.051436, 198, 4512922
+knapPI_1_100_1000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 32.885936, 198, 4511064
+knapPI_1_100_1000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.057005, 1862, 4574958
+knapPI_1_200_100000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 1.400216, 400, 1010545
+knapPI_1_200_100000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.015749, 0, 1010347
+knapPI_1_200_100000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.270054, 2950, 1016526
+knapPI_1_200_100000.csv, Vasirani's DP algorithm, Plus nK dual bound, 369.978503, 398, 1010545
+knapPI_1_200_100000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 3.254381, 0, 1010347
+knapPI_1_200_100000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.254415, 2950, 1016526
+knapPI_1_200_1000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 2.344476, 604, 8541149
+knapPI_1_200_1000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 2.096650, 400, 8539301
+knapPI_1_200_1000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.293062, 2806, 8701318
+knapPI_1_200_1000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 514.003067, 600, 8541149
+knapPI_1_200_1000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 437.094295, 398, 8539301
+knapPI_1_200_1000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.285649, 2806, 8701318
+knapPI_1_50_1000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.013259, 100, 2681442
+knapPI_1_50_1000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.011438, 100, 2679626
+knapPI_1_50_1000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.003377, 278, 2782222
+knapPI_1_50_1000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 1.930038, 100, 2681442
+knapPI_1_50_1000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 1.945933, 100, 2679626
+knapPI_1_50_1000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.003005, 278, 2782222
+knapPI_1_100_100000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.110520, 200, 726906
+knapPI_1_100_100000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.113508, 200, 726732
+knapPI_1_100_100000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.031517, 1004, 733306
+knapPI_1_100_100000.csv, Vasirani's DP algorithm, Plus nK dual bound, 36.171380, 196, 726906
+knapPI_1_100_100000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 36.414233, 196, 726732
+knapPI_1_100_100000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.029674, 1004, 733306
+knapPI_1_100_1000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.138540, 200, 4512922
+knapPI_1_100_1000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.146176, 200, 4511064
+knapPI_1_100_1000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.054146, 1862, 4574958
+knapPI_1_100_1000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 31.486536, 198, 4512922
+knapPI_1_100_1000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 31.054105, 198, 4511064
+knapPI_1_100_1000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.054090, 1862, 4574958
+knapPI_1_200_100000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 1.318012, 400, 1010545
+knapPI_1_200_100000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.018976, 0, 1010347
+knapPI_1_200_100000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.258962, 2950, 1016526
+knapPI_1_200_100000.csv, Vasirani's DP algorithm, Plus nK dual bound, 354.382464, 398, 1010545
+knapPI_1_200_100000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 3.199795, 0, 1010347
+knapPI_1_200_100000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.253128, 2950, 1016526
+knapPI_1_200_1000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 2.338246, 604, 8541149
+knapPI_1_200_1000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 2.068337, 400, 8539301
+knapPI_1_200_1000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.283893, 2806, 8701318
+knapPI_1_200_1000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 509.052268, 600, 8541149
+knapPI_1_200_1000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 433.283232, 398, 8539301
+knapPI_1_200_1000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.295197, 2806, 8701318
+knapPI_2_50_10000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.007058, 102, 12730
+knapPI_2_50_10000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.001335, 0, 13887
+knapPI_2_50_10000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.024254, 2316, 13587
+knapPI_2_50_10000.csv, Vasirani's DP algorithm, Plus nK dual bound, 0.086257, 102, 12730
+knapPI_2_50_10000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 0.006090, 0, 13887
+knapPI_2_50_10000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.018672, 2316, 13587
+knapPI_2_50_1000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.008624, 100, 929985
+knapPI_2_50_1000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.010956, 100, 928047
+knapPI_2_50_1000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.021253, 2350, 981670
+knapPI_2_50_1000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 0.372679, 100, 929985
+knapPI_2_50_1000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 0.373998, 100, 928047
+knapPI_2_50_1000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.026353, 2350, 981670
+knapPI_2_50_10000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.021705, 100, 12953030
+knapPI_2_50_10000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.023788, 100, 12934671
+knapPI_2_50_10000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.009789, 1140, 13690738
+knapPI_2_50_10000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 0.417193, 100, 12953030
+knapPI_2_50_10000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 0.420296, 100, 12934671
+knapPI_2_50_10000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.015086, 1140, 13690738
+knapPI_2_100_1000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.090863, 200, 1486084
+knapPI_2_100_1000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.157230, 200, 1484197
+knapPI_2_100_1000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.041412, 1900, 1505448
+knapPI_2_100_1000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 3.593656, 200, 1486084
+knapPI_2_100_1000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 3.557496, 200, 1484197
+knapPI_2_100_1000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.048649, 1900, 1505448
+knapPI_2_100_10000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.342471, 200, 15047404
+knapPI_2_100_10000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.377658, 200, 15028210
+knapPI_2_100_10000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.148173, 5140, 15214495
+knapPI_2_100_10000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 5.891499, 200, 15047404
+knapPI_2_100_10000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 6.011190, 200, 15028210
+knapPI_2_100_10000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.144865, 5140, 15214495
+knapPI_2_200_100000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.891041, 406, 117916
+knapPI_2_200_100000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 1.616036, 406, 117703
+knapPI_2_200_100000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.042975, 602, 119825
+knapPI_2_200_100000.csv, Vasirani's DP algorithm, Plus nK dual bound, 48.273559, 406, 117916
+knapPI_2_200_100000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 50.947043, 406, 117703
+knapPI_2_200_100000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.044097, 602, 119825
+knapPI_2_200_1000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 1.880932, 674, 1715349
+knapPI_2_200_1000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 3.243884, 414, 1713370
+knapPI_2_200_1000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.352871, 4114, 1730481
+knapPI_2_200_1000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 61.914529, 674, 1715349
+knapPI_2_200_1000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 51.306069, 414, 1713370
+knapPI_2_200_1000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.357627, 4114, 1730481
+knapPI_2_200_10000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 1.302031, 400, 17163474
+knapPI_2_200_10000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 1.470250, 400, 17143759
+knapPI_2_200_10000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.120287, 1532, 17610410
+knapPI_2_200_10000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 46.852165, 400, 17163474
+knapPI_2_200_10000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 47.089936, 400, 17143759
+knapPI_2_200_10000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.119332, 1532, 17610410
+knapPI_3_50_100000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.019086, 100, 167731
+knapPI_3_50_100000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.016540, 100, 167545
+knapPI_3_50_100000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.005271, 414, 168573
+knapPI_3_50_100000.csv, Vasirani's DP algorithm, Plus nK dual bound, 0.313487, 96, 167731
+knapPI_3_50_100000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 0.318844, 96, 167545
+knapPI_3_50_100000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.004706, 414, 168573
+knapPI_3_50_1000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.007259, 100, 1682922
+knapPI_3_50_1000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.012236, 100, 1681052
+knapPI_3_50_1000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.003765, 258, 1701115
+knapPI_3_50_1000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 0.330623, 100, 1682922
+knapPI_3_50_1000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 0.324988, 100, 1681052
+knapPI_3_50_1000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.002762, 258, 1701115
+knapPI_3_50_10000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.117508, 100, 14685145
+knapPI_3_50_10000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.124015, 100, 14665763
+knapPI_3_50_10000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.010076, 822, 14956365
+knapPI_3_50_10000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 0.651474, 100, 14685145
+knapPI_3_50_10000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 0.664782, 100, 14665763
+knapPI_3_50_10000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.012872, 822, 14956365
+knapPI_3_100_100000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 1.667028, 1054, 138174
+knapPI_3_100_100000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.940565, 200, 137964
+knapPI_3_100_100000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 1.007027, 40360, 145294
+knapPI_3_100_100000.csv, Vasirani's DP algorithm, Plus nK dual bound, 17.959580, 964, 138174
+knapPI_3_100_100000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 5.336108, 110, 137964
+knapPI_3_100_100000.csv, Vasirani's DP algorithm, Linear programming dual bound, 1.021443, 40360, 145294
+knapPI_3_100_1000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.722349, 200, 1089283
+knapPI_3_100_1000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.723699, 200, 1087131
+knapPI_3_100_1000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.016027, 516, 1087131
+knapPI_3_100_1000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 4.794586, 200, 1089283
+knapPI_3_100_1000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 4.752063, 200, 1087131
+knapPI_3_100_1000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.017738, 516, 1087131
+knapPI_3_100_10000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 6.820796, 1332, 21902487
+knapPI_3_100_10000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 6.515379, 534, 21883286
+knapPI_3_100_10000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.417432, 13866, 21965826
+knapPI_3_100_10000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 30.721292, 1332, 21902487
+knapPI_3_100_10000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 16.448469, 534, 21883286
+knapPI_3_100_10000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.418507, 13866, 21965826
+knapPI_3_200_1000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 78.132186, 11080, 2399
+knapPI_3_200_1000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.162963, 0, 2697
+knapPI_3_200_1000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 6.404786, 55706, 2487
+knapPI_3_200_1000.csv, Vasirani's DP algorithm, Plus nK dual bound, 8.730120, 7146, 2399
+knapPI_3_200_1000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 0.007769, 0, 2697
+knapPI_3_200_1000.csv, Vasirani's DP algorithm, Linear programming dual bound, 6.415452, 55706, 2487
+knapPI_3_200_100000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 38.092657, 1104, 142553
+knapPI_3_200_100000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 16.426750, 400, 142338
+knapPI_3_200_100000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.432799, 5018, 149845
+knapPI_3_200_100000.csv, Vasirani's DP algorithm, Plus nK dual bound, 187.841430, 1104, 142553
+knapPI_3_200_100000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 70.848252, 400, 142338
+knapPI_3_200_100000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.428104, 5018, 149845
+knapPI_3_200_1000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 149.665546, 13692, 1101406
+knapPI_3_200_1000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 41.254299, 946, 1099218
+knapPI_3_200_1000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 6.663121, 71282, 1099208
+knapPI_3_200_1000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 1573.565512, 13628, 1101406
+knapPI_3_200_1000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 172.699919, 942, 1099218
+knapPI_3_200_1000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 6.719850, 71282, 1099208
+knapPI_3_200_10000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 638.073491, 100556, 25992003
+knapPI_3_200_10000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 229.340449, 7156, 25971815
+knapPI_3_200_10000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 56.026463, 533682, 26711883
+knapPI_3_200_10000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 9704.766855, 100298, 25992003
+knapPI_3_200_10000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 980.409343, 6898, 25971815
+knapPI_3_200_10000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 53.455815, 533682, 26711883
+knapPI_4_100_10000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.195241, 200, 8548870
+knapPI_4_100_10000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.004354, 0, 9909895
+knapPI_4_100_10000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.000052, 0, 9909895
+knapPI_4_100_10000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 5.110531, 200, 8548870
+knapPI_4_100_10000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 4.987610, 200, 8529446
+knapPI_4_100_10000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.000064, 0, 9909895
+knapPI_4_200_100000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 15.617581, 11768, 102537
+knapPI_4_200_100000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.043446, 0, 102605
+knapPI_4_200_100000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 4.472588, 45226, 110418
+knapPI_4_200_100000.csv, Vasirani's DP algorithm, Plus nK dual bound, 486.201519, 11766, 102537
+knapPI_4_200_100000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 0.240663, 0, 102605
+knapPI_4_200_100000.csv, Vasirani's DP algorithm, Linear programming dual bound, 4.475479, 45226, 110418
+knapPI_4_200_1000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.035373, 400, 1001206
+knapPI_4_200_1000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.040812, 400, 999217
+knapPI_4_200_1000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 2.764976, 29436, 1070800
+knapPI_4_200_1000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 2.383650, 400, 1001206
+knapPI_4_200_1000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 2.403722, 400, 999217
+knapPI_4_200_1000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 2.771428, 29436, 1070800
+knapPI_4_200_10000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 2.320727, 400, 9513673
+knapPI_4_200_10000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.020914, 0, 9972090
+knapPI_4_200_10000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 1.895465, 21052, 9950904
+knapPI_4_200_10000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 69.090201, 398, 9513673
+knapPI_4_200_10000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 0.271754, 0, 9972090
+knapPI_4_200_10000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 1.896001, 21052, 9950904
+knapPI_5_50_10000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.032524, 100, 11975
+knapPI_5_50_10000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.003683, 0, 21980
+knapPI_5_50_10000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.004138, 356, 12145
+knapPI_5_50_10000.csv, Vasirani's DP algorithm, Plus nK dual bound, 0.284873, 100, 11975
+knapPI_5_50_10000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 0.012743, 0, 21980
+knapPI_5_50_10000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.005348, 356, 12145
+knapPI_5_50_100000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.017535, 100, 149706
+knapPI_5_50_100000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.024272, 100, 149508
+knapPI_5_50_100000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.026631, 2260, 153441
+knapPI_5_50_100000.csv, Vasirani's DP algorithm, Plus nK dual bound, 0.515570, 100, 149706
+knapPI_5_50_100000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 0.512935, 100, 149508
+knapPI_5_50_100000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.024210, 2260, 153441
+knapPI_5_50_1000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.025642, 100, 1647764
+knapPI_5_50_1000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.030198, 100, 1645960
+knapPI_5_50_1000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.000824, 100, 1721573
+knapPI_5_50_1000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 0.744205, 100, 1647764
+knapPI_5_50_1000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 0.741499, 100, 1645960
+knapPI_5_50_1000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.000838, 100, 1721573
+knapPI_5_50_10000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.026394, 100, 18924955
+knapPI_5_50_10000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.031205, 100, 18907078
+knapPI_5_50_10000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.045222, 5458, 19850100
+knapPI_5_50_10000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 0.379620, 100, 18924955
+knapPI_5_50_10000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 0.388297, 100, 18907078
+knapPI_5_50_10000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.050502, 5458, 19850100
+knapPI_5_100_100000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 1.595554, 2620, 229875
+knapPI_5_100_100000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.132714, 200, 229684
+knapPI_5_100_100000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.507350, 18650, 232725
+knapPI_5_100_100000.csv, Vasirani's DP algorithm, Plus nK dual bound, 55.997412, 2620, 229875
+knapPI_5_100_100000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 3.655359, 200, 229684
+knapPI_5_100_100000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.504815, 18650, 232725
+knapPI_5_100_1000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.625749, 200, 2271455
+knapPI_5_100_1000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.621868, 200, 2269591
+knapPI_5_100_1000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.006810, 200, 2322974
+knapPI_5_100_1000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 9.654612, 200, 2271455
+knapPI_5_100_1000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 9.671103, 200, 2269591
+knapPI_5_100_1000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.007722, 200, 2322974
+knapPI_5_100_10000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 0.472139, 200, 10987109
+knapPI_5_100_10000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.474071, 200, 10965397
+knapPI_5_100_10000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.153008, 5112, 10965179
+knapPI_5_100_10000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 8.868318, 200, 10987109
+knapPI_5_100_10000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 8.884528, 200, 10965397
+knapPI_5_100_10000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.154866, 5112, 10965179
+knapPI_5_200_1000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 12.888064, 766, 1208
+knapPI_5_200_1000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.116209, 0, 2706
+knapPI_5_200_1000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.159726, 1916, 1248
+knapPI_5_200_1000.csv, Vasirani's DP algorithm, Plus nK dual bound, 1.280380, 766, 1208
+knapPI_5_200_1000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 0.007081, 0, 2706
+knapPI_5_200_1000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.156126, 1916, 1248
+knapPI_5_200_10000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 65.889059, 7332, 22310
+knapPI_5_200_10000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.191528, 0, 28310
+knapPI_5_200_10000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 15.264870, 137328, 22604
+knapPI_5_200_10000.csv, Vasirani's DP algorithm, Plus nK dual bound, 90.879345, 7004, 22310
+knapPI_5_200_10000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 0.076502, 0, 28310
+knapPI_5_200_10000.csv, Vasirani's DP algorithm, Linear programming dual bound, 15.256099, 137328, 22604
+knapPI_5_200_100000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 37.165039, 1224, 240441
+knapPI_5_200_100000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 20.054752, 400, 240236
+knapPI_5_200_100000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.388403, 4008, 247815
+knapPI_5_200_100000.csv, Vasirani's DP algorithm, Plus nK dual bound, 217.557129, 1224, 240441
+knapPI_5_200_100000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 90.344181, 400, 240236
+knapPI_5_200_100000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.381176, 4008, 247815
+knapPI_5_200_1000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 22.378516, 4354, 2628434
+knapPI_5_200_1000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 7.860509, 400, 2626418
+knapPI_5_200_1000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 2.316750, 25966, 2652876
+knapPI_5_200_1000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 560.171021, 4354, 2628434
+knapPI_5_200_1000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 108.837155, 400, 2626418
+knapPI_5_200_1000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 2.316598, 25966, 2652876
+knapPI_5_200_10000000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 35.922111, 3124, 11986914
+knapPI_5_200_10000000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 10.561498, 400, 11965202
+knapPI_5_200_10000000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 2.202080, 20562, 12240821
+knapPI_5_200_10000000.csv, Vasirani's DP algorithm, Plus nK dual bound, 484.169692, 3124, 11986914
+knapPI_5_200_10000000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 90.673445, 400, 11965202
+knapPI_5_200_10000000.csv, Vasirani's DP algorithm, Linear programming dual bound, 2.181387, 20562, 12240821
+knapPI_6_50_1000.csv, Williamson Shmoy's DP algorithm, Plus nK dual bound, 1.060423, 7626, 993
+knapPI_6_50_1000.csv, Williamson Shmoy's DP algorithm, Rounded up profits dual bound, 0.022418, 0, 994
+knapPI_6_50_1000.csv, Williamson Shmoy's DP algorithm, Linear programming dual bound, 0.033307, 3206, 994
+knapPI_6_50_1000.csv, Vasirani's DP algorithm, Plus nK dual bound, 0.032713, 176, 993
+knapPI_6_50_1000.csv, Vasirani's DP algorithm, Rounded up profits dual bound, 0.000803, 0, 993
+knapPI_6_50_1000.csv, Vasirani's DP algorithm, Linear programming dual bound, 0.031548, 3206, 994
+END
