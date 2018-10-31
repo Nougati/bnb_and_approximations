@@ -40,7 +40,8 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                                    int *number_of_nodes,
                                    long long int memory_allocation_limit, 
                                    clock_t *start_time, int timeout, 
-                                   const int dualbound_type) 
+                                   const int dualbound_type,
+                                   int *root_dual_bound) 
 { 
   /**branch_and_bound_bin_knapsack*********************************************
    * Description                                                              *
@@ -112,8 +113,7 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
     if(logging_rule != NO_LOGGING)
       //fprintf(logging_stream, "\nStarting loop iteration %d (Node queue size: %d"
       //        ")\n", iterations, node_queue->size);
-      fprintf(logging_stream, "\nStarting loop iteration %d (Node queue size: %d"
-              ")\n", iterations, node_queue.size);
+      fprintf(logging_stream, "\nStarting loop iteration %d (Node queue size: %"                              "d)\n", iterations, node_queue.size);
 
     /* Take node N off queue by some node selection scheme */
     current_node = PQ_pop_node(&node_queue);
@@ -125,6 +125,8 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                 problem_file, DP_method, logging_rule, logging_stream, eps,
                 dualbound_type, memory_allocation_limit, timeout, 
                 start_time, &LP_brancher);
+    if(current_node->ID == 1)
+      *root_dual_bound = current_node->upper_bound;
 
     /* Overflow check */
     if (bytes_allocated == -1 || *start_time == -1)

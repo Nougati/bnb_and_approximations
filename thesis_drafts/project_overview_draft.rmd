@@ -1,6 +1,4 @@
 ---
-title: '(DRAFT) Implicit enumeration with dual bounds obtained from approximation algorithms'
-author: Nelson Frew
 header-includes:
  - \usepackage{amsmath}
  - \usepackage{amssymb}
@@ -16,36 +14,54 @@ output:
 bibliography: project_overview_draft.bib
 ---
 
-\tableofcontents
-
 \makeatletter
 \def\BState{\State\hskip-\ALG@thistlm}
 \makeatother
 
+\begin{titlepage}
+  \centering
+  {\scshape\LARGE Monash University \par}
+  \vspace{1cm}
+  {\scshape\Large Literature Review \par}
+  \vspace{1.5cm}
+  {\huge Implicit enumeration with dual bounds from approximation algorithms \par}
+  \vspace{2cm}
+  {\Large Nelson Frew \par}
+  \vfill
+  supervised by \par
+  Dr. Pierre Le Bodic \& Arthur Mahéo
+  \vfill
+  {\large \today\par}
+\end{titlepage}
+
 **Abstract**
 
-Implicit enumeration refers to a divide-and-conquer problem solving strategy
- where we can enumerate through a problem's solutions without specifically
+Implicit enumeration refers to a divide and conquer problem solving strategy
+ where one enumerates through a problem's search space without specifically
  finding each solution. 
 This has broad uses within many fields of Computer Science, one such example
- being in Mixed-Integer Programming's Branch and Bound. 
-To omit evaluation of solutions from our search, we analyse them with regards
- to bounds established on where the optimal value can reside, known as dual bounds.
- Traditionally, bounds are found by relaxing the problem formulation so that it
- can be solved efficiently, however such approaches may perform arbitrarily
- poorly according to problem type.
+ being in Mixed-Integer Programming's Branch and Bound, where one partially
+ enumerates through a search space by deriving subproblems and finding what are
+ known as their dual bounds on these to guide our search.
+Traditionally, dual bounds are found by solving a relaxed version of the problem
+ formulation which can be solved efficiently, however such approaches may perform
+ arbitrarily poorly according to problem type.
 In this report, we describe our investigation into a new approach for deriving
  dual bounds: approximation algorithms.
+
+\newpage
+\tableofcontents
+\newpage
 
 \section{Introduction}
 
 \subsection{Background}
 
-The field of discrete optimisation (CITE) studies problems that model discrete
- decision making. 
+The field of discrete optimisation \cite{hammer1979discrete} studies problems
+ that model discrete decision making. 
 Mixed-Integer Programming refers to a set of modelling and solving techniques for
- such discrete problems (CITE) by formulating them as Mixed-Integer Programs
- (MIPs). 
+ such discrete problems \cite{wolsey2007mixed} by formulating them as
+ Mixed-Integer Programs (MIPs). 
 For many problems, this approach is the most efficient known method to find a
  solution. 
 The standard MIP formulation, for maximisation, is as follows:
@@ -66,10 +82,9 @@ Generally, objective functions are constrained by linear inequalities, and
 
 Optimisation problems with linear constraints and continuous variables are
  known as Linear Programs (LPs), which are both solvable in polynomial time
- and very efficiently in practice (CITE).
+ and very efficiently in practice \cite{alizadeh1995interior}.
 In this report, we consider maximisation problems whose constraints are all
- linear.
-MIPs, on the other hand, are characterised by having one or more variables
+ linear\cite{alizadeh1995interior}, on the other hand, are characterised by having one or more variables
  constrained to be integer, generally resulting in an NP-Hard problem (CITE). 
 By removing the integer constraints on variables in a MIP, we obtain its
  associated *LP relaxation*.
@@ -84,9 +99,9 @@ Because the feasible region of continuous solutions naturally subsumes the set
 
 Since $z_{LP}$ is at least as large as our optimal value, $z$ is provided with
  an upper bound, which we refer to as the *dual bound*.
-The state-of-the-art method for solving MIPs uses this relationship to search
- for what are known as *primal solutions* that are feasible to the MIP,
- and employs dual bounds to implicitly enumerate through these. 
+The state-of-the-art method for solving MIPs uses this relationship to find 
+ what are known as *primal solutions* that are feasible to the MIP, as well as
+ dual bounds to implicitly enumerate through these. 
 We find primal solutions by forming *subproblems*, constrained versions of the
  original problem, and solving the LP relaxation of these. 
 If the solved LP relaxation is feasible to the original MIP, then we have found
@@ -107,8 +122,8 @@ Otherwise, if this subproblem has a dual bound above our primal bound, we
 This constitutes the core of the Branch and Bound approach, which we formally
  describe below: let $(x^i, y^i)$ be $x$ and $y$ values associated with the
  optimal solution to linear program $LP_i$, $(x^*, y^*)$ denote an optimal
- solution to the MIP; $\ubar z$ denote the lower bound on the optimal value
- and $z^*$ the optimal solution of the MIP, and let $\mathcal{L}$ denote the
+ solution to the MIP, $\ubar z$ the lower bound on the optimal value
+ , $z^*$ the optimal solution of the MIP, and let $\mathcal{L}$ denote the
  list of nodes of the Branch and Bound tree yet to be solved (i.e. not pruned
  nor branched on).
 
@@ -179,7 +194,7 @@ This is distinct from LP relaxations, which can provide arbitrarily poor dual
 
 When conducting a Branch and Bound with AAs, an important observation is that
  the general strategies which have contributed to the success of the
- standard Branch and Bound with LPs must be addressed. 
+ standard Branch and Bound with LPs may not apply in our context.
 In particular, methods of branching and node selection do not have a clear
  translation with respect to AAs. 
 In this project, we investigate methods of effectively using dual bounds
@@ -190,8 +205,9 @@ To do this, we investigate known approximation schemes and methods to construct
 
 ## Research Context
 
-Following the inception of Dantzig's \cite{Dantzig} Simplex method in 1947,
- theoretical interest in finding optimal solutions shifted to harder problems. 
+Following the inception of Dantzig's \cite{dantzig1951maximization} Simplex
+ method in 1947, theoretical interest in finding optimal solutions shifted to
+ harder problems. 
 Solving discrete optimisation problems, known as Integer Programs (IPs), began
  to thrive as a focal point of research. 
 Discrete optimisation gave rise to two new active research areas: exactly
@@ -199,25 +215,26 @@ Discrete optimisation gave rise to two new active research areas: exactly
  problems and their variants. 
 
 Research into optimally solving IPs led to Land and Doig's initial Branch and
- Bound method \cite{LandDoig} in 1960, but had little direct applicability due
- to limitations in computing hardware at the time. 
-On the other hand, as a response to the many discrete optimisation problems for
- which polynomial-time algorithms were not known, Computational Complexity
- Theory research began\cite{Cook}. 
-Concerns with finding polynomially bounded algorithm run-times led to
+ Bound method \cite{land1960automatic} in 1960, but had little direct
+ applicability due to limitations in computing hardware at the time. 
+As a response to the many discrete optimisation problems for which
+ polynomial-time algorithms were not known, Computational Complexity Theory
+ research began \cite{cook1971complexity}. 
+Concerns with finding polynomially bounded algorithm run times led to
  sacrificing optimality for efficiency, in what became AA research through the
  1970s. 
-Approximations for the Knapsack Problem\cite{IbarraKim}, Travelling Salesman
- Problem \cite{CristofidesTSP}, Facility Location problem
- \cite{CornuejolsFisherNemhauser}, and many others were devised through the
+Approximations for the Knapsack Problem \cite{ibarra1975fast}, Travelling
+ Salesman Problem \cite{christofides1976worst}, Facility Location problem
+ \cite{cornuejols1977exceptional}, and many others were devised through the
  decade. 
 Until 1980, discrete problem algorithm design and AA design remained
  disconnected. 
 
-It wasn't until Wolsey \cite{WOLSEY} attempting to unify AAs of the 1970s with
- the Branch-and-Bound algorithm of 1960 that the fields met again. 
+It wasn't until Wolsey's \cite{wolsey1980heuristic} attempt to unify the AAs of
+ the 1970s with the Branch and Bound algorithm from 1960 that the fields met
+ again. 
 Wolsey provided a general analysis technique relating approximation worst-cases
- with optimal LP relaxation solutions, and devised a Branch-and-Bound procedure
+ with optimal LP relaxation solutions, and devised a Branch and Bound procedure
  from these components. 
 However, since this point, to the best of our knowledge, no further work has
  been done in investigating the relationship between approximations and Branch
@@ -318,8 +335,8 @@ As its name indicates, instead of having the order which nodes are created
  "quality" of nodes to inform our choice. 
 One can conduct such a search by storing $\mathcal{L}$ as a priority queue based
  on the "quality" of a node.
-The definition of "quality" is clearly important, but within a Branch and Bound
- a basic but useful indicator would any information about a node's dual bound. **HELP**
+The definition of "quality" is clearly important:  within a Branch and Bound
+ a basic but useful indicator could be any information about a node's dual bound. **HELP**
 BFS is known to be highly effective; \cite{dechter1985generalized} showed that
  BFS could provably explore the lowest number of subproblems in certain
  families of scenarios, although it is also relevant to note that
@@ -340,7 +357,7 @@ However, this is only one of many known ways to obtain valid dual bounds within
  Langrangian relaxations \cite{geoffrion1974lagrangean}.
 
 
-### Extensions, improvements, and related techniques
+### Other extensions, improvements, and related techniques
 MIP solvers in the state-of-the-art often combine Branch and Bound strategies
  with various extensions to improve performance. 
 One common extension to the method includes using cutting planes
@@ -369,7 +386,7 @@ Ones simple method for this is to use previous computation in finding a starting
 
 As mentioned, the case study chosen for experimentation within this project is
  the 0,1 Knapsack Problem (KP). 
-Known to be NP-Hard (CITE), KP has been studied extensively both in to solving
+Known to be NP-Complete \cite{kellerer2004introduction}, KP has been studied extensively both in to solving
  optimally and approximately (see, for example \cite{kellerer2005knapsack, horowitz1974computing,ingargiola1973reduction,kolesar1967branch,garfinkel1972integer,nemhauser1969discrete}), and as such, it serves well as a topic for
  analysis. 
 We describe the formulation for KP as follows: given $n$ items associated
@@ -515,9 +532,9 @@ Building on the contributions of \cite{ibarra1975fast}, this approach describes
  Algorithm 2. 
 Specifically, we construct this algorithm by changing our DP approach.
 
-For $j \leq n$, let $A_j$ be an array which contains representations of
- solutions to KP for the first $j$ items.
-A solution is represented by an ordered pair $(v, w)$ in $A_j$ if there is a
+For some integer $j \leq n$, let $A_j$ be an array which contains
+ representations of solutions to KP for the first $j$ items.
+A solution is represented by an ordered pair $(v, w) \in A_j$ if there is a
  set of the first $j$ items with value $v$ and weight $w \leq W$. 
 Instead of explicitly storing all partial solutions, we resolve to only store
  partial solutions which are not *dominated* by other partial solutions. 
@@ -569,8 +586,8 @@ As far as we are aware, the only focused treatment of this was presented by
 Acknowledging that LPs are tightly knitted to the state of the art in Branch and
  Bound, Wolsey demonstrated the use of a framework which allows one to emulate
  characteristics of linear duality with AAs. 
-In this way, the first and only provided method for finding dual bounds was
- presented.
+In this way, the first and only provided method for finding dual bounds with AAs
+ was presented.
 
 For an approximate solution value $z_A$, an LP relaxation solution value
  $z_{LP}$, Wolsey showed we can construct inequalities of the form:
@@ -584,12 +601,12 @@ Further, he showed that we can extend this analysis to formulations on the Bin
 Following this analysis, Wolsey demonstrated that we can construct a Branch and
  Bound where the value of $z_A$ would monotonically increase as enumeration
  progressed, inevitably convering to optimality.
-The product is the only implicit enumeration scheme leveraging AA guarantees
+The this produced  the only implicit enumeration scheme leveraging AA guarantees
  that we are aware of.
 
 **Note to self: I hadn't spoken of linear duality up to this point.. Should I have?**
 
-# Design and Analysis
+# Design, Analyses, and Implementation
 
 In light of the approaches described in the literature to both Branch and Bound
  and AAs, our objective is to now find a method of constructing high-quality

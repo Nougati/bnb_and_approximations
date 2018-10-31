@@ -88,8 +88,10 @@ void branch_and_bound_bin_knapsack(int profits[], int weights[], int x[],
                                    int DP_method, int logging_rule, 
                                    FILE *logging_stream, double epsilon, 
                                    int *number_of_nodes, 
-                                   long long int memory_allocation_limit, clock_t *start_time, 
-                                   int timeout, const int dualbound_type);
+                                   long long int memory_allocation_limit,
+                                   clock_t *start_time, int timeout,
+                                   const int dualbound_type,
+                                   int *root_dual_bound);
 
 int find_heuristic_initial_GLB(int profits[], int weights[], int x[], const long z, 
                                int n, int capacity, char *problem_file,

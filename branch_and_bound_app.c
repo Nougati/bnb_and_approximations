@@ -185,18 +185,20 @@ int main(int argc, char *argv[]) {
          "\n\tEpsilon: %f"
          "\n\tDualbound type: %s"
          "\n\tBranching strategy: %s\n", problem_no, problem_file, 
-          str_DP_method, epsilon==0 ? 0.002 : epsilon, str_dualbound_type, str_branching_strategy);
+          str_DP_method, epsilon==0 ? 0.002 : epsilon, str_dualbound_type,
+          str_branching_strategy);
 
   /* Start timer */
   clock_t t = clock();
 
   /* Solve the problem */
+  int dual_bound;
   branch_and_bound_bin_knapsack(profits, weights, x, capacity, z, &z_out, 
                                 sol_out, n, problem_file, branching_strategy,
                                 seed, DP_method, logging_rule, logging_stream, 
                                 epsilon, &number_of_nodes, 
                                 memory_allocation_limit, &t, timeout, 
-                                dualbound_type);
+                                dualbound_type, &dual_bound);
 
 
   /* Stop timer */
@@ -205,9 +207,13 @@ int main(int argc, char *argv[]) {
 
   /* Print results */
   if(branching_strategy == RANDOM_BRANCHING) printf("Seed: %ld\n", seed);
-  printf("Results:\n\t%ld/%ld (%s)\n\ttime taken: %lf\n\tBytes allocated: %lld\n" , z_out,
-         z, z_out == z ? "Pass!" : "Failure!", time_taken, bytes_allocated);
-  printf("\tNo of nodes: %d\n", number_of_nodes);
+  printf("Results:\n\t%ld/%ld (%s)\n\ttime taken: %lf\n\tBytes allocated: %lld"
+         "\n" , z_out, z, z_out == z ? "Pass!" : "Failure!", time_taken,
+         bytes_allocated);
+  printf("\tNo of nodes: %d\n\tDual bound@root: %d\n", number_of_nodes, dual_bound);
+  FILE *fp = fopen("./app_out.csv","a");
+  fprintf(fp, "%s, %s, %s, %lf, %d, %d\n", problem_file, str_DP_method,
+          str_dualbound_type, time_taken, number_of_nodes, dual_bound);
 
   /* Clean up */  
   free(profits);
