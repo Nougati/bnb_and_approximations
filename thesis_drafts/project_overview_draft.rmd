@@ -8,6 +8,7 @@ header-includes:
  - \newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
  - \newtheorem{theorem}{Theorem}
  - \newtheorem{lemma}{Lemma}
+ - \newtheorem{definition}{Definition}
 output:
   pdf_document:
     number_sections: true
@@ -22,7 +23,7 @@ bibliography: project_overview_draft.bib
   \centering
   {\scshape\LARGE Monash University \par}
   \vspace{1cm}
-  {\scshape\Large Literature Review \par}
+  {\scshape\Large Final Report \par}
   \vspace{1.5cm}
   {\huge Implicit enumeration with dual bounds from approximation algorithms \par}
   \vspace{2cm}
@@ -30,6 +31,9 @@ bibliography: project_overview_draft.bib
   \vfill
   supervised by \par
   Dr. Pierre Le Bodic \& Arthur Mahéo
+
+  \vspace{2cm}
+  {\Large Submitted for the degree of Bachelor's of Computer Science (Honours)\par}
   \vfill
   {\large \today\par}
 \end{titlepage}
@@ -48,6 +52,16 @@ Traditionally, dual bounds are found by solving a relaxed version of the problem
  arbitrarily poorly according to problem type.
 In this report, we describe our investigation into a new approach for deriving
  dual bounds: approximation algorithms.
+
+**Acknowledgements**
+Thanks everybody!
+
+**Declaration of work originality**
+I made this!
+
+**Disclaimer**
+I did this also in the summer of 2017 as a summer Scholar. Also in the latter
+ half of 2018 I had heaps of students n junk
 
 \newpage
 \tableofcontents
@@ -84,8 +98,9 @@ Optimisation problems with linear constraints and continuous variables are
  known as Linear Programs (LPs), which are both solvable in polynomial time
  and very efficiently in practice \cite{alizadeh1995interior}.
 In this report, we consider maximisation problems whose constraints are all
- linear\cite{alizadeh1995interior}, on the other hand, are characterised by having one or more variables
- constrained to be integer, generally resulting in an NP-Hard problem (CITE). 
+ linear\cite{alizadeh1995interior}, on the other hand, are characterised by
+ having one or more variables constrained to be integer, generally resulting in
+ an NP-Hard problem \cite{karp1972reducibility}. 
 By removing the integer constraints on variables in a MIP, we obtain its
  associated *LP relaxation*.
 
@@ -386,9 +401,11 @@ Ones simple method for this is to use previous computation in finding a starting
 
 As mentioned, the case study chosen for experimentation within this project is
  the 0,1 Knapsack Problem (KP). 
-Known to be NP-Complete \cite{kellerer2004introduction}, KP has been studied extensively both in to solving
- optimally and approximately (see, for example \cite{kellerer2005knapsack, horowitz1974computing,ingargiola1973reduction,kolesar1967branch,garfinkel1972integer,nemhauser1969discrete}), and as such, it serves well as a topic for
- analysis. 
+Known to be NP-Complete \cite{kellerer2004introduction}, KP has been studied
+ extensively both in to solving optimally and approximately (see, for example
+ \cite{kellerer2005knapsack, horowitz1974computing, ingargiola1973reduction,
+ kolesar1967branch, garfinkel1972integer, nemhauser1969discrete}), and as such,
+ it serves well as a topic for analysis. 
 We describe the formulation for KP as follows: given $n$ items associated
  weights $w_i$ and values $v_i$, and Knapsack capacity $W$, our program is
 
@@ -426,11 +443,16 @@ The optimal solution value can then be found be finding the value
 
 Being NP-Hard, KP does not admit a polynomial time algorithm, however we can
  construct a *polynomial time approximation scheme* (PTAS). 
-A PTAS is guaranteed to give a solution value within a factor of $(1-\epsilon)$
- of optimality, and have running time bounded by a polynomial in $n$, for fixed
- values of $\epsilon$.
-A classic example of a PTAS was presented by (cite Sahni), with time complexity
- $O(n^{1 / \epsilon})$. 
+
+\begin{definition}
+A polynomial-time approximation scheme (PTAS) is an algorithm guaranteed to give
+ a solution value within a factor of $(1-\epsilon)$ (for maximisation problems)
+ of the optimal value, and have a running time bounded by a polynomial in the
+ input size $n$, for fixed values of $\epsilon$.
+\end{definition}
+
+A classic example of a PTAS was presented by Sahni cite{sahni1975approximate},
+ with time complexity $O(n^{1 / \epsilon})$. 
 
 While PTAS's are indeed bounded by a polynomial in $n$, they can be exponential
  in terms of $\epsilon$, so long as $\epsilon$ is fixed. 
@@ -439,6 +461,13 @@ If we restrict the definition of a PTAS further, then, so that the running time
  polynomial time approximation scheme* (FPTAS). 
 This means we can choose an $\epsilon$ that gives us a high quality solution
  while still being polynomially bounded. 
+
+\begin{definition}
+A fully polynomial time approximation scheme (FPTAS) is an algorithm guaranteed
+ to give a solutoin value within a factor of $(1-\epsilon)$ (for maximisation
+ problems) of the optimal value, and have a running time bounded by a polynomial
+ in the input size $n$ and $\frac{1}{\epsilon}$.
+\end{definition}
 
 It is common for FPTAS's for KP to to achieve polynomially bounded run time by
  adjusting the input problem to reduce its complexity, and using a DP to
@@ -476,8 +505,10 @@ By using the DP recurrence (1) described in the previous section, we can obtain 
 We now present the argument for this as described by \cite{vazirani2013approximation}.
 
 \begin{lemma}
-The set, $S'$, output by the algorithm satisfies:
-$$\text{value}(S') \geq (1-\epsilon) \cdot OPT$$
+For the item set returned by the approximation, $S'$, its associated approximated value $z_{S'}$, and value of the optimal solution set $z_O$, the following inequality holds:
+
+$$(1-\epsilon) \cdot z_O \leq z_{S'}$$
+
 \end{lemma}
 
 \begin{proof}
@@ -497,23 +528,28 @@ Because of the flooring operation truncating off at most $K$ we know that the
 
 $$z_{O} - nK \leq K \cdot z'_O \leq K \cdot z'_{S'} \leq z_{S'} \leq z_O$$ 
 
-Since $K = \frac{\epsilon P}{K}$, 
+Since $K = \frac{\epsilon P}{K}$, and $P \leq z_O$:
 
-$$z_O - nK = z_O - \epsilon P$$ 
-
-Finally, since $P \leq z_O$,
+$$z_O - nK = z_O - \epsilon P \geq z_O - \epsilon z_O = (1-\epsilon)\cdot z_O$$
 
 $$(1-\epsilon)\cdot z_O \leq z_{S'} \leq z_O$$
 
 \end{proof}
+
+We show that this must be an FPTAS as it was described by
+ \cite{vazirani2013approximation}:
 
 \begin{theorem}
 Algorithm 2 is an FPTAS for KP
 \end{theorem}
 
 \begin{proof}
-Assume that it is the case. Therefore by Proof By Assumption we have proven it
- to be true.
+By Lemma 1, we know that the solution found will be within a factor
+ $(1-\epsilon)$ of the optimal value $z_O$. 
+We know that the running time of the original DP algorithm was $O(n^2P)$, so
+ with our scaled profits our run time reduces to
+$$O(n^2 \lfloor \frac{P}{K} \rfloor ) = O(n^2 \lfloor \frac{n}{\epsilon} \rfloor)$$
+which is bounded by a polynomial in $n$ and $\frac{1}{\epsilon}$.
 \end{proof}
 
 This constitutes the core of what is one of two textbook approaches to
@@ -572,11 +608,30 @@ The original version of this algorithm, presented in \cite{lawler1979fast},
  contains further subtle refinements to this algorithm by improving details of
  the FPTAS provided by \cite{ibarra1975fast}. 
 
-### Kellerer Pferschy lol
+### Kellerer and Pferschy (2004) *UNFINISHED*
+The final example of and FPTAS for KP which we will review was presented by
+ Kellerer and Pferschy in 1999 in \cite{kellerer1999new} and improved upon in
+ a follow up paper in 2004 in \cite{kellerer2004improved}. 
+At the time of writing, the FPTAS presented in the latter paper is the
+ state-of-the-art. 
 
-They did it!
+The preprocessing step proposed involves, just as in previous FPTAS's, making
+ a distinction between items with large profit, and items with small profit. 
+Then, all profits which are deemed to be large are sorted into 
+
+The FPTAS presented operates on a DP scheme designed to exploit characteristics
+ rendered by the proprocessing step.
+The authors introduce what they refer to as a *vector merging problem*, which
+ they then efficiently devise an algorithm for, before using this problem as a
+ generalised formulation of the KP. 
+
+ - Give a broad overview of scaling reduction
+ - Give a broad overview of interval DP
+ - Give a broad overview of vector merge
 
 ## Approximations, Linear Programming and Branch and Bound (find better section title)
+
+**Note: I haven't amended this to remove linear duality up to this point**
 
 All that now remains to review is the existing literature which addresses AAs in
  an implicit enumeration setting. 
@@ -585,12 +640,13 @@ As far as we are aware, the only focused treatment of this was presented by
 
 Acknowledging that LPs are tightly knitted to the state of the art in Branch and
  Bound, Wolsey demonstrated the use of a framework which allows one to emulate
- characteristics of linear duality with AAs. 
+ characteristics of linear duality, the basis for dual bounds with LPs, with AAs. 
 In this way, the first and only provided method for finding dual bounds with AAs
  was presented.
 
 For an approximate solution value $z_A$, an LP relaxation solution value
  $z_{LP}$, Wolsey showed we can construct inequalities of the form:
+
 $$z_A \leq r \cdot z_{LP} + s$$
 
 for $r \geq 1$. 
@@ -601,10 +657,9 @@ Further, he showed that we can extend this analysis to formulations on the Bin
 Following this analysis, Wolsey demonstrated that we can construct a Branch and
  Bound where the value of $z_A$ would monotonically increase as enumeration
  progressed, inevitably convering to optimality.
-The this produced  the only implicit enumeration scheme leveraging AA guarantees
- that we are aware of.
+The result of this produced the only implicit enumeration scheme leveraging AA
+ guarantees that we are aware of.
 
-**Note to self: I hadn't spoken of linear duality up to this point.. Should I have?**
 
 # Design, Analyses, and Implementation
 
@@ -619,6 +674,8 @@ In this section, we demonstrate analysis methods which have been undertaken
 
 ## Analytic derivation of dual bounds a priori
 
+**TODO: Something something something truncation branching (does this need its own section?) Where should it go?**
+
 To form a basis to our discussion, we reintroduce the bounds obtained by the
  FPTAS originally presented by Ibarra and Kim in \cite{ibarra1975fast}. 
 In particular, recall that we found
@@ -629,7 +686,6 @@ $$(1-\epsilon) \cdot z_O \leq z_{S'} \leq z_O$$
 
 $$z_O \in [z_{S'}, \frac{z'_{S'}}{1-\epsilon}]$$
 
-**TODO:** Something something something truncation branching (does this need its own section?)
 
 This provides us with the following first attempt at an amendeded Branch and
  Bound algorithm:
@@ -743,7 +799,7 @@ kable(smoke) %>%
   column_spec(8, width = "5em")
 ```
 
-## Derivation of dual bounds a posteriori
+## Derivation of dual bounds a posteriori *UNFINISHED*
 
 We can obtain improvements to our dual bounds by observing information obtained
  following completion of the FPTAS, however, i.e. *a posteriori*.
@@ -816,7 +872,7 @@ kable(smoke) %>%
   column_spec(8, width = "5em")
 ```
 
-## Improved a posteriori dual bounds
+## Improved a posteriori dual bounds **UNFINISHED**
 Another approach is if we round up. We get these bounds, see?
 
 $$OPT \leq p(S'') + \omega$$
@@ -872,9 +928,25 @@ kable(smoke) %>%
   column_spec(8, width = "5em")
 ```
 
-# Future work
+# Future work *UNFINISHED*
 
-Things like:
+While we have given a preliminary treatment of the use of using a posteriori
+ knowledge to find dual bounds with AAs, much remains to be done. 
+Further work investigating the integration of AAs into a Branch and Bound, such
+ as the potential of warm-starting DP solutions, as is done with LP, may be
+ worthwhile. 
+
+In addition, the algorithms we conducted tests on in this report did not
+ include the current state of the art algorithm, and as such had a limited
+ capacity to handle instances with large amounts of items. 
+As such, further work into experimentation with more sophisticated FPTAS's may
+ have merit. 
+
+It will, of course, be worth investing time in investigating the viability of
+ our proposed method with known approximations to more complex problems, such
+ Christofides' \cite{christofides1976worst} approximation for the Metric
+ Travelling Salesman problem. 
+
 
  - Warm starting
  - State of the art KP FPTAS 
