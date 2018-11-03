@@ -5,6 +5,7 @@ header-includes:
  - \usepackage{amsthm}
  - \usepackage[linesnumbered,ruled]{algorithm2e}
  - \usepackage{accents}
+ - \usepackage{mathtools}
  - \newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
  - \newtheorem{theorem}{Theorem}
  - \newtheorem{lemma}{Lemma}
@@ -25,7 +26,7 @@ bibliography: project_overview_draft.bib
   \vspace{1cm}
   {\scshape\Large Final Report \par}
   \vspace{1.5cm}
-  {\huge Implicit enumeration with dual bounds from approximation algorithms \par}
+  {\huge Implicit enumeration using dual bounds from approximation algorithms \par}
   \vspace{2cm}
   {\Large Nelson Frew \par}
   \vfill
@@ -38,12 +39,23 @@ bibliography: project_overview_draft.bib
   {\large \today\par}
 \end{titlepage}
 
+\newpage
+\vspace*{\fill}
+\begin{center}
+
+\emph{I, Nelson Frew, did not plagiaraise this intro segment from Kelvin}
+
+\vspace*{\fill}
+\end{center}
+\newpage
+
 **Abstract**
 
+
 Implicit enumeration refers to a divide and conquer problem solving strategy
- where one enumerates through a problem's search space without specifically
- finding each solution. 
-This has broad uses within many fields of Computer Science, one such example
+ where one enumerates through a problem's search space without finding each
+ solution. 
+ihas broad uses within many fields of Computer Science, one such example
  being in Mixed-Integer Programming's Branch and Bound, where one partially
  enumerates through a search space by deriving subproblems and finding what are
  known as their dual bounds on these to guide our search.
@@ -56,8 +68,6 @@ In this report, we describe our investigation into a new approach for deriving
 **Acknowledgements**
 Thanks everybody!
 
-**Declaration of work originality**
-I made this!
 
 **Disclaimer**
 I did this also in the summer of 2017 as a summer Scholar. Also in the latter
@@ -71,11 +81,12 @@ I did this also in the summer of 2017 as a summer Scholar. Also in the latter
 
 \subsection{Background}
 
+<!--What is "discrete"-->
 The field of discrete optimisation \cite{hammer1979discrete} studies problems
  that model discrete decision making. 
 Mixed-Integer Programming refers to a set of modelling and solving techniques for
  such discrete problems \cite{wolsey2007mixed} by formulating them as
- Mixed-Integer Programs (MIPs). 
+ Mixed-Integer Programs (MIPs).  <!-- Swapping between formulating and modelling-->
 For many problems, this approach is the most efficient known method to find a
  solution. 
 The standard MIP formulation, for maximisation, is as follows:
@@ -89,6 +100,7 @@ The standard MIP formulation, for maximisation, is as follows:
 \end{array}
 \end{equation*}
 
+<!--Define objective function-->
 Where $x$ and $y$ are the sets of decision variables that we assign values to
  with the purpose of maximising the objective function $cx+hy$.
 Generally, objective functions are constrained by linear inequalities, and
@@ -102,8 +114,10 @@ In this report, we consider maximisation problems whose constraints are all
  having one or more variables constrained to be integer, generally resulting in
  an NP-Hard problem \cite{karp1972reducibility}. 
 By removing the integer constraints on variables in a MIP, we obtain its
- associated *LP relaxation*.
+ associated *LP relaxation*.<!--Make it clear when it is to be read at linear
+ program vs linear programming -->
 
+<!--Define feasible region-->
 Because the feasible region of continuous solutions naturally subsumes the set
  of feasible solutions for integers, we know, for optimal value for the LP
  relaxation $z_{LP}$ and optimal value to the MIP $z$, that
@@ -402,7 +416,7 @@ Ones simple method for this is to use previous computation in finding a starting
 As mentioned, the case study chosen for experimentation within this project is
  the 0,1 Knapsack Problem (KP). 
 Known to be NP-Complete \cite{kellerer2004introduction}, KP has been studied
- extensively both in to solving optimally and approximately (see, for example
+ extensively both in solving optimally and approximately (see, for example
  \cite{kellerer2005knapsack, horowitz1974computing, ingargiola1973reduction,
  kolesar1967branch, garfinkel1972integer, nemhauser1969discrete}), and as such,
  it serves well as a topic for analysis. 
@@ -482,7 +496,7 @@ For our ends, we consider the examples within the literature which have led to
 ### Ibarra and Kim's FPTAS (1975) 
 
 What is now a standard method of constructing an FPTAS for KP was first
- described by Ibarra and Kim \cite{ibarra1975fast}. 
+ described by Ibarra & Kim \cite{ibarra1975fast}. 
 While there are several components at play in their proposal algorithm,
  the core of what creates the approximation involves a scaling the values
  of all items down to by a factor dependant on $\epsilon$. 
@@ -513,7 +527,7 @@ $$(1-\epsilon) \cdot z_O \leq z_{S'}$$
 
 \begin{proof}
 
- Let $z_{S'}$ be the value of the solution set $S'$ obtained from the FPTAS, and
+Let $z_{S'}$ be the value of the solution set $S'$ obtained from the FPTAS, and
  $z_O$ be the value of the optimal solution set $O$. 
  Also, let $z'_{S'}$ be the value of the solution set with adjusted/truncated
  values value the FPTAS's solution set $S'$, and $z'_O$ be the optimal solution
@@ -555,8 +569,9 @@ which is bounded by a polynomial in $n$ and $\frac{1}{\epsilon}$.
 This constitutes the core of what is one of two textbook approaches to
  constructing an FPTAS for KP. 
 There are nuanced optimisations which supplement this original algorithm's
- approach given by \cite{ibarra1975fast}, however for simplicity we omit
- such details here.
+ approach given by \cite{ibarra1975fast} (for example, the authors define a
+ distinction between small profits and large profits), however for simplicity
+ we omit such details here.
 
 ### Lawler (1978)
 
@@ -614,20 +629,69 @@ The final example of and FPTAS for KP which we will review was presented by
  a follow up paper in 2004 in \cite{kellerer2004improved}. 
 At the time of writing, the FPTAS presented in the latter paper is the
  state-of-the-art. 
-
-The preprocessing step proposed involves, just as in previous FPTAS's, making
- a distinction between items with large profit, and items with small profit. 
-Then, all profits which are deemed to be large are sorted into 
-
 The FPTAS presented operates on a DP scheme designed to exploit characteristics
  rendered by the proprocessing step.
 The authors introduce what they refer to as a *vector merging problem*, which
  they then efficiently devise an algorithm for, before using this problem as a
  generalised formulation of the KP. 
 
- - Give a broad overview of scaling reduction
- - Give a broad overview of interval DP
- - Give a broad overview of vector merge
+The preprocessing step proposed involves, just as in previous FPTAS's, making
+ a distinction between items with "large" and "small" profits.
+All items with large profits are then organised into equal length intervals of
+ value, each of which containing a set of subintervals whose lengths increase
+ with their respective value ranges.
+Then, a subset of each given subinterval's smallest weight items are kept,
+ according to the given subinterval and the error parameter $\epsilon$.
+These chosen items then have all their profits reduced to the lower bound of
+ their respective subinterval, completing the preprocessing step.
+
+In order to complete this procedure, we compute a lower bound $\ubar z$ on
+ the optimal value such that
+
+$$\ubar z \leq z \leq 2 \ubar z$$
+
+and modify our $\epsilon$ value as follows:
+
+$$\hat{\epsilon} := \frac{1}{\lceil \frac{2}{\epsilon} \rceil}$$
+
+to make both $\frac{1}{\epsilon}$ and $\frac{1}{\epsilon ^2}$ integer values,
+ a fact exploited in the following DP scheme. 
+The optimal solution value of this adjusted set of large profit items $L$ is at
+ worst $(1-\epsilon)$ of the optimal value for the unadjusted profit set
+ $\mathcal{L}$:
+
+\begin{theorem} $z_L \geq (1-\epsilon) z_{\mathcal{L}}$
+\end{theorem}
+
+\begin{proof}
+**TODO PROVE ME** (also make sure that I have introduced everything to make sure
+ this proof succinctly makes sense).
+\end{proof}
+
+Having established this, the next object of interest is the proposal DP scheme
+ that will exploit this scaled and reduced item set. 
+Central to the approach achieving fast run time is providing a fast solution to
+ what is named the *Vector Merging Problem*: for vectors $A = (A_1, ... , A_n)$,
+ and $B = (B_0, ... , B_{n-1})$, we want to compute a vector $C$ defined by:
+
+\DeclarePairedDelimiter\set\{\}
+
+$$C(k) := \text{min}\set[\Bigg]{A(l) = \sum_{j=0}^{k-l} B(j) \text{ }\Bigg|\text{ } l = 1, \dots , k}, k = 1, \dots, n$$
+
+While this problem can be trivially solved in $O(n^2)$ time, we can solve this
+ problem fully in $O(n\text{log}n)$ time. 
+The basis for this algorithm is as follows: **TODO**
+
+The DP scheme that we employ maintains an array $y_j[q]$, which has the minimum
+ weight solution for the first $j$ items with profit $q$. 
+Because we can evaluate various profit values $q$ of $y_j[q]$ in any order,
+ we simultaneously solve ... **TODO residual value explanation**
+
+**TODO: Simultaneous profit evaluation explanation and how it looks like Vmerge**
+
+**TODO: Tie it up into an interval DP**
+
+**TODO: Talk about some semantics about finding item sets and ties it all up**
 
 ## Approximations, Linear Programming and Branch and Bound (find better section title)
 
@@ -928,7 +992,7 @@ kable(smoke) %>%
   column_spec(8, width = "5em")
 ```
 
-# Future work *UNFINISHED*
+# Future work
 
 While we have given a preliminary treatment of the use of using a posteriori
  knowledge to find dual bounds with AAs, much remains to be done. 
@@ -946,11 +1010,6 @@ It will, of course, be worth investing time in investigating the viability of
  our proposed method with known approximations to more complex problems, such
  Christofides' \cite{christofides1976worst} approximation for the Metric
  Travelling Salesman problem. 
-
-
- - Warm starting
- - State of the art KP FPTAS 
- - Christofides algorithm for metric TSP
 
 
 \bibliography{project_overview_draft}
