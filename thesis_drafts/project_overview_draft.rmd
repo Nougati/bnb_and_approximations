@@ -6,6 +6,8 @@ header-includes:
  - \usepackage[linesnumbered,ruled]{algorithm2e}
  - \usepackage{accents}
  - \usepackage{mathtools}
+ - \usepackage{booktabs}
+ - \newcommand{\ra}[1]{\renewcommand{\arraystretch}{#1}}
  - \newcommand{\ubar}[1]{\underaccent{\bar}{#1}}
  - \newtheorem{theorem}{Theorem}
  - \newtheorem{lemma}{Lemma}
@@ -55,10 +57,10 @@ bibliography: project_overview_draft.bib
 Implicit enumeration refers to a divide and conquer problem solving strategy
  where one enumerates through a problem's search space without finding each
  solution. 
-ihas broad uses within many fields of Computer Science, one such example
- being in Mixed-Integer Programming's Branch and Bound, where one partially
- enumerates through a search space by deriving subproblems and finding what are
- known as their dual bounds on these to guide our search.
+Implicit enumeration has broad uses within many fields of Computer Science, one
+ such example being in Mixed-Integer Programming's Branch and Bound, where one
+ partially enumerates through a search space by deriving subproblems and finding
+ what are known as their dual bounds on these to guide our search.
 Traditionally, dual bounds are found by solving a relaxed version of the problem
  formulation which can be solved efficiently, however such approaches may perform
  arbitrarily poorly according to problem type.
@@ -99,30 +101,37 @@ The standard MIP formulation, for maximisation, is as follows:
 \end{array}
 \end{equation*}
 
-<!-- TODO: Define objective function-->
-Where $x$ and $y$ are the sets of decision variables that we assign values to
- with the purpose of maximising the objective function $cx+hy$.
+Where $x$ and $y$ are the sets of *decision variables* that we assign values to
+ with the purpose of maximising the *objective function* $cx+hy$.
 Generally, objective functions are constrained by linear inequalities, and
  variables can be specified to be integer or continuous. 
 
 <!--Arthur said something about doing stuff in a different order in this section [CLARIFY]-->
 
-<!--TODO: Put a paragraph here about linear programming relaxations-->
 <!--TODO: Put in a paragraph talking about feasible regions-->
+The set of decision variable values permitted by an optimisation problem's
+ constraints is termed the *search space*.
+While a problem with allowing continuous variables will have a continuous
+ *feasible region* representing its search space, a problem constrained to have
+ integer variables will have a *feasible set* of solutions.
+
+**Put a diagram showing continuous versus integer regions**
+
+<!--TODO: Put a paragraph here about linear programming relaxations-->
+
 
 Optimisation problems with linear constraints and continuous variables are
  known as Linear Programs (LPs), which are both solvable in polynomial time
- and very efficiently in practice \cite{alizadeh1995interior}. <!--Say they have p-time algos then refer to LP solvers research here-->
+ and very efficiently in practice \cite{alizadeh1995interior}. <!--[CLARIFY]Say they have p-time algos then refer to LP solvers research here-->
 In this report, we consider maximisation problems whose constraints are all
- linear\cite{alizadeh1995interior}. 
+ linear. 
 MIPs, on the other hand, are characterised by having one or more variables
  constrained to be integer, generally resulting in an NP-Hard problem
  \cite{karp1972reducibility}. 
 By removing the integer constraints on variables in a MIP, we obtain its
  associated *LP relaxation*.<!--Make it clear when it is to be read at linear
- program vs linear programming -->
+ program vs linear programming [CLARIFY]-->
 
-<!--Define feasible region-->
 Because the feasible region of continuous solutions naturally subsumes the set
  of feasible solutions for integers, we know that, for optimal value for the LP
  relaxation $z_{LP}$ and optimal value to the MIP $z$: 
@@ -134,9 +143,9 @@ Because the feasible region of continuous solutions naturally subsumes the set
 <!-- Redo this so that paragraphs compartmentalise branching then bounding -->
 Since $z_{LP}$ is at least as large as our optimal value, $z$ is provided with
  an upper bound, which we refer to as the *dual bound*.
-The state-of-the-art method for solving MIPs uses this relationship to find 
- what are known as *primal solutions* that are feasible to the MIP, as well as
- dual bounds to implicitly enumerate through these. 
+Branch and Bound commonly solves LP-relaxations to find what are known as
+ *primal solutions* that are feasible to the MIP, and find dual bounds to
+ implicitly enumerate through these. 
 We find primal solutions by forming *subproblems*, constrained versions of the
  original problem, and solving the LP relaxation of these. 
 If the solution to the LP relaxation is feasible to the original MIP, then we
@@ -153,14 +162,14 @@ Otherwise, if this subproblem has a dual bound above our primal bound, we
  continue constraining and solving subproblem relaxations until a new feasible
  solution is found, or a further constrained subproblem of this is pruned.
 
-<!-- Not formal enough -->
+<!-- Not formal enough [CLARIFY] -->
 This constitutes the core of the Branch and Bound approach, which we formally
  describe below: let $(x^i, y^i)$ be $x$ and $y$ values associated with the
  optimal solution to linear program $LP_i$, $(x^*, y^*)$ denote an optimal
  solution to the MIP, $\ubar z$ the lower bound on the optimal value
  , $z^*$ the optimal solution of the MIP, and let $\mathcal{L}$ denote the
- list of nodes of the Branch and Bound tree yet to be solved (i.e. not pruned
- nor branched on).
+ list of nodes of the Branch and Bound tree yet to be solved (i.e. neither
+ pruned nor branched on).
 
 \begin{algorithm}[H]
   \SetAlgoLined
@@ -182,7 +191,7 @@ This constitutes the core of the Branch and Bound approach, which we formally
   }
   \uIf{$z_i \leq \ubar z $}
   {
-  Go to step 2\;
+  Go to line 2\;
   }
   {
   \uElseIf{$(x^i, y^i)$ is feasible to the MIP}
@@ -207,15 +216,16 @@ This constitutes the core of the Branch and Bound approach, which we formally
 \caption{Branch and Bound algorithm for Mixed-Integer Programming}
 \end{algorithm}
 
-<!-- TODO: break in narrative, via heuristics. This would mean motivating use of
-     dual bounds earlier (Pierre was like "oh yeah there are these heuristics, 
-     but they don't serve our purposes  -->
-
-While finding optimal solutions with Branch and Bound is in worst case
- exponential-time, for some problems there exist Approximation Algorithms (AAs)
- which can provide feasible solutions in as fast as polynomial-time. <!--Reword-->
-To achieve this, AAs exchange a guarantee on optimality for a guarantee the
- *quality* of the solution, within some factor of the optimal value.
+While having an exponential worst-case time complexity, the majority of
+ computation done in a Branch and Bound is in solving polynomial-time
+ LP relaxations which may or may not yield a feasible solution, but always
+ provide dual bounds. 
+A candidate alternative, then, could be *heuristics*, which are guaranteed to
+ yield a feasible solution in polynomial time, but these provide no way to
+ find dual bounds. 
+However, if a heuristic's solutions has a quality guarantee, in terms of the
+ optimal value, it becomes an *Approximation Algorithm* (AA), and we can derive
+ duals bounds through its guarantee. 
 
 An $\alpha$-approximation is an AA that guarantees that the solution value will
  always be within a constant factor $\alpha < 1$ of the optimal solution; i.e. for
@@ -228,14 +238,14 @@ In this way, we can use AAs in lieu of an LP relaxation to obtain valid dual
  bounds on our optimal solution. 
 Because we are leveraging guarantees on the optimal value, the dual bounds we
  obtain are also guaranteed to be within a level of accuracy. 
-This is a feature not found in LP relaxations, as they can provide arbitrarily
+This is a feature not found in LP relaxations, which can provide arbitrarily
  poor dual bounds. 
 
-When conducting a Branch and Bound with AAs, an important observation is that
- the general strategies which have contributed to the success of the
- standard Branch and Bound with LPs may not apply in our context. <!--Sentence too long-->
+There are many strategies to improve a Branch and Bound with LPs, yet it is not
+ necessarily possible to apply the same methods with regards to a Branch and
+ Bound with AAs.
 In particular, methods of branching and node selection do not have a clear
- translation with respect to AAs. 
+ translation in this amended scheme. 
 In this project, we investigate methods of effectively using dual bounds
  provided by AAs for the 0,1 Knapsack. 
 To do this, we investigate known approximation schemes and methods to construct
@@ -244,9 +254,9 @@ To do this, we investigate known approximation schemes and methods to construct
 
 ## Research Context
 
-Following the inception of Dantzig's \cite{dantzig1951maximization} Simplex
- method in 1947, theoretical interest in finding optimal solutions shifted to
- harder problems. 
+Following the inception of Dantzig's  Simplex method
+ \cite{dantzig1951maximizatiol} in 1947, theoretical interest in finding optimal
+ solutions shifted to harder problems. 
 Solving discrete optimisation problems, known as Integer Programs (IPs), began
  to thrive as a focal point of research. 
 Discrete optimisation gave rise to two new active research areas: exactly
@@ -260,8 +270,8 @@ As a response to the many discrete optimisation problems for which
  polynomial-time algorithms were not known, Computational Complexity Theory
  research began \cite{cook1971complexity}. 
 Concerns with finding polynomially bounded algorithm run times led to
- sacrificing optimality for efficiency, in what became AA research through the
- 1970s. <!-- +guarantees lol -->
+ sacrificing optimality for efficiency, in what became heuristic and AA research
+ through the 1970s.
 Approximations for the Knapsack Problem \cite{ibarra1975fast}, Travelling
  Salesman Problem \cite{christofides1976worst}, Facility Location problem
  \cite{cornuejols1977exceptional}, and many others were devised through the
@@ -278,9 +288,8 @@ Wolsey provided a general analysis technique relating approximation worst-cases
 However, since this point, to the best of our knowledge, no further work has
  been done in investigating the relationship between approximations and Branch
  and Bound. 
-This project investigates whether a stronger link exists and can be leveraged to
- improve performances. 
-
+This project investigates whether a stronger link may exist and can be leveraged
+ to improve performance. 
 
 # Literature Review
 
@@ -352,7 +361,7 @@ The *depth-first search* (DFS) strategy is a standard and well studied approach
  to both Branch and Bound and general tree traversal
  \cite{golomb1965backtrack, tarjan1972depth}. 
 In this strategy, one arranges the unexplored nodes in a first-in first-out
- (FIFO) manner, by storing $\mathcal{L}$ as a stack. 
+ (FIFO) manner, by storing $\mathcal{L}$ as a stack data structure. 
 While this approach may seem naive, it can be modified to have very low memory
  costs.  There are many potential drawbacks to DFS, as well as many derivations to
  counteract these, and the reader is directed to \cite{morrison2016branch} for
@@ -362,7 +371,7 @@ The *breadth-first search* (BrFS) strategy is likewise a notorious and well
  studied search strategy trees. 
 The strategy employed by BrFS is often considered to be opposite to DFS, as
  it uses a last-in first-out (LIFO) search, often by storing $\mathcal{L}$
- in a queue. 
+ in a queue data structure. 
 Despite being a well known strategy, BrFS is not often used within Branch and
  Bound schemes. 
 
@@ -374,7 +383,7 @@ As its name indicates, instead of having the order which nodes are created
 One can conduct such a search by storing $\mathcal{L}$ as a priority queue based
  on the "quality" of a node.
 The definition of "quality" is clearly important:  within a Branch and Bound
- a basic but useful indicator could be any information about a node's dual bound. **HELP**
+ a basic but useful indicator could be any information about a node's dual bound.
 BFS is known to be highly effective; \cite{dechter1985generalized} showed that
  BFS could provably explore the lowest number of subproblems in certain
  families of scenarios, although it is also relevant to note that
@@ -387,8 +396,8 @@ Using LP relaxations to find dual bounds is a standard method used within
 Solving LPs has been efficiently possible since the introduction of Dantzig's
  Simplex method \cite{dantzig1951maximization}. 
 Despite its efficiency, LP relaxations can provide arbtirarily poor
- bounds in this context: such an approach for finding the Vertex Cover of a
- graph will be generally far from optimal (CITE?). <!--TODO: put other case study here-->
+ bounds in this context: for Graph Colouring, \cite{coll2002facets} presented a
+ formulation where the linear relaxation is significantly weak.
 However, this is only one of many known ways to obtain valid dual bounds within
  Mixed Integer Programming: other examples include Semidefinite Programming
  relaxations (see \cite{lovasz1991cones,vandenberghe1996semidefinite}), and
@@ -443,12 +452,13 @@ We describe the formulation for KP as follows: given $n$ items with associated
 \end{equation*}
 
 It is well known that the KP lends itself well to a Dynamic Programming (DP)
- approach, although there are many ways to conduct this. <!--Citation?-->
-One of the most well known examples, performing a DP by values as presented by
+ approach, although there are many ways to conduct this
+ \cite{kellerer2004basic}.
+One of the most common examples, performing a DP by values as presented by
  \cite{vazirani2013approximation}, can find a solution in $O(n^2 P)$ time, where
- $P$ is the value of the most profitable item which we now describe: let
- $A(i, p)$ be the minimal weight of the solution to KP with only the first $i$
- items available, where the total value is exactly $p$. 
+ $P$ is the value of the most profitable item.
+Let $A(i, p)$ be the minimal weight of the solution to the KP with only the
+ first $i$ items available, where the total value is exactly $p$. 
 If no such set exists\footnote{that is, the first $i$ items cannot yield a
  value of $p$ and so cannot have an associated minimal weight}, then
  $A(i,p) = \infty$. 
@@ -482,32 +492,31 @@ While the run time of a PTAS is indeed bounded by a polynomial in $n$, the
  complexity can be exponential in terms of $\epsilon$, so long as $\epsilon$ is
  fixed. 
 If we restrict the definition of a PTAS further, then, so that the running time
- is bounded by a polynomial in both $n$ and $\epsilon$, we obtain a *fully
- polynomial time approximation scheme* (FPTAS). 
+ is bounded by a polynomial in both $n$ and $\epsilon$, we obtain a *Fully
+ Polynomial Time Approximation Scheme* (FPTAS). 
 This means we can choose an $\epsilon$ that gives us a high quality solution
  while still being polynomially bounded. 
 
 \begin{definition}[FPTAS]
 A Fully Polynomial Time Approximation Scheme is an algorithm guaranteed
- to give a solutoin value within a factor of $(1-\epsilon)$ (for maximisation
+ to give a solution value within a factor of $(1-\epsilon)$ (for maximisation
  problems) of the optimal value, and to have a running time bounded by a
  polynomial in the input size $n$ and $\frac{1}{\epsilon}$.
 \end{definition}
 
-Commonly, FPTAS's for the KP achieve polynomially bounded run time by adjusting
- the input problem to reduce its complexity, then using a DP algorithm to solve
- this simplified problem. 
+It is common for FPTAS's for the KP to achieve polynomially bounded run time by
+ adjusting the input problem to reduce its complexity, and then use a DP
+ algorithm to solve this simplified problem. 
 As such, the construction of an FPTAS often involves two distinct steps:
  a preprocessing step to form the simpler problem, and a solving step to find an
  approximate value for the original problem.
 We consider the examples from the literature which have led to what are now
- textbook examples of FPTAS's to show the performance of well established
- approximations when used in a Branch and Bound scheme, followed by a
- description of the state-of-the-art method.
+ textbook examples of FPTAS's, followed by a description of the state-of-the-art
+ method.
 
 ### Ibarra and Kim's FPTAS (1975) 
 
-What is now a standard method of constructing an FPTAS for KP was first
+What is now a standard method of constructing an FPTAS for the KP was first
  described by Ibarra & Kim \cite{ibarra1975fast}. 
 While there are several components at play in their proposed algorithm,
  the core of what creates the approximation involves scaling the values
@@ -518,7 +527,7 @@ The distillation of their algorithm, as described by <!--Wordy-->
 \begin{algorithm}[H]
   \SetAlgoLined
   \KwData{A KP instance, and error parameter $\epsilon$.}
-  \KwResult{The Weight and value pair of the optimal solution}
+  \KwResult{The weight and value pair of the optimal solution}
   Given $\epsilon$, let $K = \frac{\epsilon P}{n}$\;
   For each object $i$, define adjusted values $v'=\left \lfloor \frac{v_i}{K}\right \rfloor$\;
   Run a DP with these adjusted item values\;
@@ -591,8 +600,7 @@ The second standard procedure for obtaining an FPTAS for the KP was originally
  presented by \cite{lawler1979fast}; we present it as described by
  \cite{williamson2011design}.
 Building on the contributions of \cite{ibarra1975fast}, this approach describes
- an alternative FPTAS which still maintains the basic approach shown in
- Algorithm 2. 
+ an alternative FPTAS which still maintains the strategy shown in Algorithm 2. 
 Specifically, we construct this algorithm by changing the DP approach.
 
 For some integer $j \leq n$, let $A_j$ be an array which contains
@@ -643,18 +651,19 @@ At the time of writing, the FPTAS presented in the latter paper is the
  state-of-the-art. 
 The FPTAS presented operates on a DP scheme designed to exploit characteristics
  rendered by the proprocessing step.
-The authors introduce what they refer to as a *vector merging problem*, which
- they then efficiently devise an algorithm for, before using this problem as a
- generalised formulation of the KP. 
+The authors introduce an auxiliary problem, which they then efficiently devise
+ an algorithm for, before using this problem as a generalised formulation of the
+ KP. 
 
-The preprocessing step proposed involves, just as in previous FPTAS's, making
- a distinction between items with "large" and "small" profits.
+The preprocessing step proposed involves making a distinction between items with
+ "large" and "small" profits.
 All items with large profits are then organised into equal length intervals of
  value, each of which containing a set of subintervals whose lengths increase
- with their respective value ranges.
-Then, a subset of each given subinterval's smallest weight items are kept,
- according to the given subinterval and the error parameter $\epsilon$.
-These chosen items then have all their profits reduced to the lower bound of
+ with the values defining them; i.e. a higher profit subinterval will have a
+ larger range. 
+Then, only the first $m$ smallest weight items of a given subinterval are
+ kept, according to the given subinterval and the error parameter $\epsilon$.
+These remaining items then have all their profits reduced to the lower bound of
  their respective subinterval, completing the preprocessing step.
 
 In order to complete this procedure, we compute a lower bound $\ubar z$ on
@@ -676,38 +685,66 @@ The optimal solution value of this adjusted set of large profit items $L$ is at
 \end{theorem}
 
 \begin{proof}
-**TODO PROVE ME** (also make sure that I have introduced everything to make sure
+ (also make sure that I have introduced everything to make sure
  this proof succinctly makes sense).
 \end{proof}
+**TODO PROVE ME**
 
 Having established this, the next object of interest is the proposal DP scheme
  that will exploit this scaled and reduced item set. 
 Central to the approach achieving fast run time is providing a fast solution to
- what is named the *Vector Merging Problem*: for vectors $A = (A_1, ... , A_n)$,
- and $B = (B_0, ... , B_{n-1})$, we want to compute a vector $C$ defined by:
+ what is named the *Vector Merging* (VM) problem: for vectors
+ $A = (A_1, ... , A_n)$, and $B = (B_0, ... , B_{n-1})$, we want to compute a
+ vector $C$ defined by:
 
 \DeclarePairedDelimiter\set\{\}
 
-$$C(k) := \text{min}\set[\Bigg]{A(l) = \sum_{j=0}^{k-l} B(j) \text{ }\Bigg|\text{ } l = 1, \dots , k}, k = 1, \dots, n$$
+$$C_k := \text{min}\set[\Bigg]{A_l + \sum_{j=0}^{k-l} B_j \text{ }\Bigg|\text{ }
+ l = 1, \dots , k}, k = 1, \dots, n$$
 
-While this problem can be trivially solved in $O(n^2)$ time, we can solve this
+While this problem is trivially solvable in $O(n^2)$ time, we can solve this
  problem fully in $O(n\text{log}n)$ time. 
-The basis for this algorithm is as follows: **TODO**
+The basis for this algorithm comes from a series of observations, which we now 
+ describe.
 
+The value for each $C_k$ is determined by the value $l$ which minimises the sum
+ of $A_l$ and its associated $B$ entries. 
+We say that $C_k$ *originates* from $l$, and describe this with the "origin"
+ vector entry $origin[k] = l$. 
+It will likely be the case that $origin$ will have a large number of consecutive
+ values $l$ that are identical; therefore we can store just the indices where a
+ value of origin starts and ends a consecutive streak.
+We can then conduct a binary search in the range specified by these start and
+ end points to find the point where a given $l$ no longer minimises a given $C_k$. 
+We then repeat this process for all $k$ for all remaining entries of $C$,
+ producing $n$ iterations, each with a binary search, resulting in a time
+ complexity of $O(n\text{log}n)$.
+
+To relate this to the KP, we first define a DP approach.
 The DP scheme that we employ maintains an array $y_j[q]$, which has the minimum
  weight solution for the first $j$ items with profit $q$. 
 Because we can evaluate various profit values $q$ of $y_j[q]$ in any order,
- we simultaneously solve ... **TODO residual value explanation**
+ and because we preprocessed our profits such that each profit in subinterval
+ $t$ has profit $p_t$, we simultaneously solve the entries with the same
+ residual value $r$ from the division $\frac{q}{p_t}$, for each
+ $r = 0, \dots , p_t -1$.  We can then solve $y_j[r+p_t]$, for every multiple of
+ $p_t$ up to $q$ simultaneously. 
 
-**TODO: Simultaneous profit evaluation explanation and how it looks like Vmerge**
+In addition, we can also consider all $m$ items which have this same value $p_t$
+ simultaneously, denoted as $j+1, j+2, \dots, j+m$, allowing us to use the recurrence:
 
-**TODO: Tie it up into an interval DP**
+$$y_{j+1}[2 \cdot p_t] := \text{min}\{ y_{j-1}[2\cdot p_t], y_{j-1}[p_t] + w_1^t
+, y_{j-1}[0] + w_1^t + w_2^t\}$$
 
-**TODO: Talk about some semantics about finding item sets and ties it all up**
+Which has the exact same structure as our problem VM, where we let $A$ take the
+ values of the profits, B take the values of the weights, and C be the DP array.
+The authors have shown that this is indeed a valid FPTAS which runs in
+ $O(n\text{log}(1/3) + 1/\epsilon ^3 \text{log}^2(1/\epsilon))$ time.
+Other details, such as deriving the optimal item set as well as the optimal value
+ are also provided, which we omit here for brevity.
+As well as the original paper in \cite{kellerer2004improved}, the authors also provide an overview of the algorithm in detail in \cite{kellerer2005knapsack}, wher the reader is referred for further information.
 
 ## Approximations, Linear Programming and Branch and Bound 
-
-**Note: I haven't amended this to remove linear duality up to this point**
 
 All that now remains to review is the existing literature which addresses AAs in
  an implicit enumeration setting. 
@@ -739,54 +776,65 @@ The result of this produced the only implicit enumeration scheme leveraging AA
 
 # Design, Analyses, and Implementation
 
-<!--Reword-->
-In light of the approaches described in the literature to both Branch and Bound
- and AAs, our objective is to now find a method of constructing high-quality
- dual bounds. 
-Intuitively, the guarantees which help define given FPTAS's for KP are not
- proven with such applications in mind, so there are potential extensions to
- the analysis which we can use to find stronger dual bounds. 
-In this section, we demonstrate analysis methods which have been undertaken
- to this end. 
+Given the examples from the literature to Branch and Bound and AAs, our aim is
+ now to establish methods for deriving effective dual bounds. 
+We will show how we can derive dual bounds from the analysis of the guarantees
+ which define a given FPTAS, and present a branching strategy in light of this.
+Then, we will improve the bounds obtained with further analytical insights, and
+ then how we can preprocess an instance in the interest of finding dual bounds.
 
 ## Analytic derivation of dual bounds *a priori*
-
-**TODO: Something something something truncation branching (does this need its own section?) Where should it go?**
 
 To form a basis to our discussion, we reintroduce the bounds obtained by the
  FPTAS originally presented by Ibarra and Kim in \cite{ibarra1975fast}. 
 In particular, recall that we found
 
-$$(1-\epsilon) \cdot z_O \leq z_{S'} \leq z_O$$
+$$(1-\epsilon) \cdot z_O \leq z_O - nK \leq z_{S'} \leq z_O$$
 
- for the optimal value:
+By basic algebraic manipulation, we can then obtain the following bounds for the
+ optimal value *a priori*:
 
-$$z_O \in [z_{S'}, \frac{z'_{S'}}{1-\epsilon}]$$
+$$z_O \in \left [z_{S'}, z_{S'} + nK \right ] $$
 
+which provides us with a method to bound our subproblems, leaving the issue of
+ branching to be addressed. 
+In devising a branching strategy, we must consider what variables we can
+ constrain which will help us minimise our dual bounds. 
+Given that our upper bound on $z_O$ is determined by the scaled values of the
+ approximation, we can see that the value truncated by the preprocessing step
+ presented in section 2.2.1 determines the quality of our dual bound. <!--reword-->
+
+**Insert visualisation of it**
+
+We can attempt to minimise our dual bounds, then, by attempting to maximise the
+ difference between $z_{S'}$ and $K\cdot z'_{S'}$, which we can do by first
+ branching on variables which truncate the most value in the scaling step. 
+For the remainder of this report, this strategy will be termed *Truncation
+ branching*.
 
 This provides us with the following first attempt at an amendeded Branch and
  Bound algorithm:
 \begin{algorithm}[H]
   \SetAlgoLined
   \KwData{A MIP instance, and an AA for the given problem.}
-  \KwResult{The Weight and value pair of the optimal solution}
+  \KwResult{The weight and value pair of the optimal solution}
   Let $\bar z :=$ approximate solution\;
   \While{$\mathcal{L}$ is not empty}
   {
   Choose a node $N_i$ from $\mathcal{L}$, and delete it from $\mathcal{L}$\;
   Run the AA, deriving upper bound (UB) and lower bound (LB) in the process\;
-  \If{UB $\leq \bar z$}
+  \uIf{UB $\leq \bar z$}
   {
-  Go to step 3\;
+  Go to line 2\;
   }
   \Else
   {
-  \If{LB$>\bar z$}
+  \uIf{LB$>\bar z$}
   {
   $\bar z := $ LB\;
   }
   }
-  \If{for $N_i$'s parent's UB, $UB_p$, $UB > UB_p$}
+  \uElseIf{for $N_i$'s parent's UB, $UB_p$, $UB > UB_p$}
   {
   Set $UB := UB_p$
   }
@@ -799,212 +847,138 @@ This provides us with the following first attempt at an amendeded Branch and
 \caption{Branch and Bound with Approximation Algorithms}
 \end{algorithm}
 
-
 Here are some LP benchmarks lol
 
-<!-- TODO: Latex booktabs-->
-```{r echo = FALSE, results = 'asis'}
-library(knitr)
-library(kableExtra)
-library(magrittr)
-smoke <- matrix(c("Fractional", "10", "10", "10", "10",  
-                  "Random", "10", "10", "10", "10", 
-                  "Fractional", "10", "10", "10", "10",
-                  "Random", "10", "10", "10", "10" ),ncol=5, byrow=TRUE)
+\begin{table*}\centering
+\ra{1.0}
+\begin{tabular}{@{}rrrrcrrrcrrr@{}}\toprule
+& \multicolumn{3}{c}{$n = 50$} & \phantom{abc}& \multicolumn{3}{c}{$n = 100$} &
+  \phantom{abc} & \multicolumn{3}{c}{$n = 200$}\\
+\cmidrule{2-4} \cmidrule{6-8} \cmidrule{10-12}
+  & DP & Nodes & DB && DP & Nodes & DB && DP & Nodes & DB \\ \midrule
+Random branching\\
+Inst \#1 (WS) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Inst \#2 (WS) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Inst \#3 (WS) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Inst \#1 (VV) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Inst \#2 (VV) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Inst \#3 (VV) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Truncation branching\\
+Inst \#1 (WS) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Inst \#2 (WS) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Inst \#3 (WS) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Inst \#1 (VV) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Inst \#2 (VV) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Inst \#3 (VV) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+\bottomrule
+\end{tabular}
+\caption{Comparison between the a priori bound and use of standard LP bounding. Values are relative decrease (percentage)}
+\end{table*}
 
+Implementing this approach, the average relative decreases for node counts and
+ dual bound values are shown in table 1.
 
-
-colnames(smoke) <- c("Branching Strategy", "Running time", "Memory used", "Node count", "Avg. time per node") 
-
-rownames(smoke) <- c("instance 1", "instance 1", "instance 2", "instance 2")
-smoke <- as.table(smoke)
-kable(smoke) %>%
-  kable_styling(latex_options = "striped", position = "center") %>%
-  column_spec(3, width = "5em") %>%
-  column_spec(4, width = "5em") %>%
-  column_spec(5, width = "5em") %>%
-  column_spec(6, width = "5em")
-```
-
-Implementing this approach, we can see how this performs on given instances
- of KP 
-
-```{r echo = FALSE, results = 'asis'}
-library(knitr)
-library(kableExtra)
-library(magrittr)
-smoke <- matrix(c("I&K", "Truncation", "10", "10", "10", "10",  
-                  "I&K", "Random", "10", "10", "10", "10", 
-                  "Lawler", "Truncation", "10", "10", "10", "10",
-                  "Lawler", "Random", "10", "10", "10", "10" ),ncol=6, byrow=TRUE)
-
-colnames(smoke) <- c("DP", "Branching Strategy", "Running time", "Memory used", "Node count", "Avg. time per node") 
-
-rownames(smoke) <- c("instance 1", "instance 1", "instance 2", "instance 2")
-smoke <- as.table(smoke)
-kable(smoke) %>%
-  kable_styling(latex_options = "striped", position = "center") %>%
-  column_spec(3, width = "5em") %>%
-  column_spec(4, width = "5em") %>%
-  column_spec(5, width = "5em") %>%
-  column_spec(6, width = "5em") %>%
-  column_spec(7, width = "5em") %>%
-  column_spec(8, width = "5em")
-```
-
-Likewise we obtain the aggregate stats for these problems of similar form:
-
-```{r echo = FALSE, results = 'asis'}
-library(knitr)
-library(kableExtra)
-library(magrittr)
-smoke <- matrix(c("I&K", "Truncation", "10", "10", "10", "10",  
-                  "I&K", "Random", "10", "10", "10", "10", 
-                  "Lawler", "Truncation", "10", "10", "10", "10",
-                  "Lawler", "Random", "10", "10", "10", "10" ),ncol=6, byrow=TRUE)
-
-colnames(smoke) <- c("DP", "Branching Strategy", "Avg. running time", "Avg. memory used", "Avg, node count", "Mean avga time per node") 
-
-rownames(smoke) <- c("instance 1", "instance 2", "instance 3", "instance 4")
-smoke <- as.table(smoke)
-kable(smoke) %>%
-  kable_styling(latex_options = "striped", position = "center") %>%
-  column_spec(3, width = "5em") %>%
-  column_spec(4, width = "5em") %>%
-  column_spec(5, width = "5em") %>%
-  column_spec(6, width = "5em") %>%
-  column_spec(7, width = "5em") %>%
-  column_spec(8, width = "5em")
-```
-
-## Derivation of dual bounds *a posteriori* UNFINISHED
+## Derivation of dual bounds *a posteriori* 
 
 We can obtain improvements to our dual bounds by observing information obtained
  following completion of the FPTAS, however, i.e. *a posteriori*.
 To do this, we first observe that the approximate solution set $S'$
- will have a profit of $p(S')$. 
-This value will be the value of the adjusted profits $p'(S')$ scaled up by $K$,
+ will have a profit of $z_{S'}$. 
+This value will be the value of the adjusted profits $z'_{S'}$ scaled up by $K$,
  plus any profit $\omega$ lost from the flooring operation, i.e.
 
 \begin{align*}
-  p(S') &= Kp'(S')+\omega
+  p(S') &= Kz'_{S'}+\omega \\
+        &\geq (1-\epsilon) \cdot z + \omega
 \end{align*}
 
-**Todo the same analysis but with omega involves**.
+Note that in our *a priori* bound $\omega$ was unknown and the analysis treated
+ the worst case where $\omega = 0$. 
+However, after completing our FPTAS, $\omega$ becomes known and so we obtain
+ the stronger result
 
-This analysis leads to the insight that 
-$$OPT \leq \frac{(p(S') \omega)}{1-\epsilon}$$
+\begin{align*}
+  (1-\epsilon)\cdot z + \omega &= z - \epsilon z + \omega \\
+                               &\leq z - \epsilon P + \omega \\
+                               &= z - Kn + \omega
+\end{align*}
 
-Which gives us 
+Further, having run the FPTAS, we know the value of $z'_{S'}$. Since $K z'_{S'}$
+ could only have lost at most $nK$ of precision, 
 
-$$OPT \leq p(S') + Kn - \omega $$
-
-Implementing this approach, we can see how this performs on given instances
- of KP 
-
-```{r echo = FALSE, results = 'asis'}
-library(knitr)
-library(kableExtra)
-library(magrittr)
-smoke <- matrix(c("I&K", "Truncation", "10", "10", "10", "10",  
-                  "I&K", "Random", "10", "10", "10", "10", 
-                  "Lawler", "Truncation", "10", "10", "10", "10",
-                  "Lawler", "Random", "10", "10", "10", "10" ),ncol=6, byrow=TRUE)
-
-colnames(smoke) <- c("DP", "Branching Strategy", "Running time", "Memory used", "Node count", "Avg. time per node") 
-
-rownames(smoke) <- c("instance 1", "instance 1", "instance 2", "instance 2")
-smoke <- as.table(smoke)
-kable(smoke) %>%
-  kable_styling(latex_options = "striped", position = "center") %>%
-  column_spec(3, width = "5em") %>%
-  column_spec(4, width = "5em") %>%
-  column_spec(5, width = "5em") %>%
-  column_spec(6, width = "5em") %>%
-  column_spec(7, width = "5em") %>%
-  column_spec(8, width = "5em")
-```
-
-Likewise we obtain the aggregate stats for these problems of similar form:
-
-```{r echo = FALSE, results = 'asis'}
-library(knitr)
-library(kableExtra)
-library(magrittr)
-smoke <- matrix(c("I&K", "Truncation", "10", "10", "10", "10",  
-                  "I&K", "Random", "10", "10", "10", "10", 
-                  "Lawler", "Truncation", "10", "10", "10", "10",
-                  "Lawler", "Random", "10", "10", "10", "10" ),ncol=6, byrow=TRUE)
-
-colnames(smoke) <- c("DP", "Branching Strategy", "Avg. running time", "Avg. memory used", "Avg, node count", "Mean avga time per node") 
-
-rownames(smoke) <- c("instance 1", "instance 2", "instance 3", "instance 4")
-smoke <- as.table(smoke)
-kable(smoke) %>%
-  kable_styling(latex_options = "striped", position = "center") %>%
-  column_spec(3, width = "5em") %>%
-  column_spec(4, width = "5em") %>%
-  column_spec(5, width = "5em") %>%
-  column_spec(6, width = "5em") %>%
-  column_spec(7, width = "5em") %>%
-  column_spec(8, width = "5em")
-```
-
-## Improved a posteriori dual bounds **UNFINISHED**
-Another approach is if we round up. We get these bounds, see?
-
-$$OPT \leq p(S'') + \omega$$
+$$z_{S'} \geq z_O - Kn + \omega \implies z_O \leq z_{S'} + Kn - \omega  $$
+$$z_O \in \left [ z_{S'},  K \cdot z'_{S'} + Kn - \omega \right ] $$
 
 Implementing this approach, we can see how this performs on given instances
- of KP 
+ of KP in table 2.
 
-```{r echo = FALSE, results = 'asis'}
-library(knitr)
-library(kableExtra)
-library(magrittr)
-smoke <- matrix(c("I&K", "Truncation", "10", "10", "10", "10",  
-                  "I&K", "Random", "10", "10", "10", "10", 
-                  "Lawler", "Truncation", "10", "10", "10", "10",
-                  "Lawler", "Random", "10", "10", "10", "10" ),ncol=6, byrow=TRUE)
+\begin{table*}\centering
+\ra{1.0}
+\begin{tabular}{@{}rrrrcrrrcrrr@{}}\toprule
+& \multicolumn{3}{c}{$n = 50$} & \phantom{abc}& \multicolumn{3}{c}{$n = 100$} &
+  \phantom{abc} & \multicolumn{3}{c}{$n = 200$}\\
+\cmidrule{2-4} \cmidrule{6-8} \cmidrule{10-12}
+  & DP & Nodes & DB && DP & Nodes & DB && DP & Nodes & DB \\ \midrule
+Truncation branching\\
+Inst \#1 (WS) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Inst \#2 (WS) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Inst \#3 (WS) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Inst \#1 (VV) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Inst \#2 (VV) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Inst \#3 (VV) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+\bottomrule
+\end{tabular}
+\caption{Comparison between a posteriori bound and use of standard LP bounding.
+ Values are relative decrease (percentage)}
+\end{table*}
 
-colnames(smoke) <- c("DP", "Branching Strategy", "Running time", "Memory used", "Node count", "Avg. time per node") 
+## Improved *a posteriori* dual bounds 
+To improve our approach further, we can specifically design a preprocessing
+ scheme intended for finding dual bounds.
+An approach to do this is by modifying our value-scaling procedure to round
+ all the profits up, instead of rounding down.
+That is for every value $v_i$, we define its adjusted value as
 
-rownames(smoke) <- c("instance 1", "instance 1", "instance 2", "instance 2")
-smoke <- as.table(smoke)
-kable(smoke) %>%
-  kable_styling(latex_options = "striped", position = "center") %>%
-  column_spec(3, width = "5em") %>%
-  column_spec(4, width = "5em") %>%
-  column_spec(5, width = "5em") %>%
-  column_spec(6, width = "5em") %>%
-  column_spec(7, width = "5em") %>%
-  column_spec(8, width = "5em")
-```
+$$v''_i = \left \lceil \frac{v_i}{K} \right \rceil $$
 
-Likewise we obtain the aggregate stats for these problems of similar form:
+This results in some amount of added values when we scale back up by $K$, which
+ we use $\omega$ to denote. 
+We can show that this still adheres to our required $(1-\epsilon) \cdot z_O$
+ lower bound: let $S''$ be the approximate set where profits are rounded up,
+ and $z''_{S''}$ be the value of $S''$ with scaled down, rounded up profits.
 
-```{r echo = FALSE, results = 'asis'}
-library(knitr)
-library(kableExtra)
-library(magrittr)
-smoke <- matrix(c("I&K", "Truncation", "10", "10", "10", "10",  
-                  "I&K", "Random", "10", "10", "10", "10", 
-                  "Lawler", "Truncation", "10", "10", "10", "10",
-                  "Lawler", "Random", "10", "10", "10", "10" ),ncol=6, byrow=TRUE)
+\begin{align*}
+  z_{S''} &= K z''_{S''} - \omega \\
+          &\geq z_O - \omega      \\
+          &\geq z_O - K|S''|      \\
+          &\geq z_O - nK          \\
+          &=z_O - \epsilon P      \\
+          &\geq (1 - \epsilon) z_O
+\end{align*}
 
-colnames(smoke) <- c("DP", "Branching Strategy", "Avg. running time", "Avg. memory used", "Avg, node count", "Mean avga time per node") 
+Implementing this approach, we can see how this performs on given instances
+ of KP in table 3.
 
-rownames(smoke) <- c("instance 1", "instance 2", "instance 3", "instance 4")
-smoke <- as.table(smoke)
-kable(smoke) %>%
-  kable_styling(latex_options = "striped", position = "center") %>%
-  column_spec(3, width = "5em") %>%
-  column_spec(4, width = "5em") %>%
-  column_spec(5, width = "5em") %>%
-  column_spec(6, width = "5em") %>%
-  column_spec(7, width = "5em") %>%
-  column_spec(8, width = "5em")
-```
+\begin{table*}\centering
+\ra{1.0}
+\begin{tabular}{@{}rrrrcrrrcrrr@{}}\toprule
+& \multicolumn{3}{c}{$n = 50$} & \phantom{abc}& \multicolumn{3}{c}{$n = 100$} &
+  \phantom{abc} & \multicolumn{3}{c}{$n = 200$}\\
+\cmidrule{2-4} \cmidrule{6-8} \cmidrule{10-12}
+  & DP & Nodes & DB && DP & Nodes & DB && DP & Nodes & DB \\ \midrule
+Truncation branching\\
+Inst \#1 (WS) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Inst \#2 (WS) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Inst \#3 (WS) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Inst \#1 (VV) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Inst \#2 (VV) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+Inst \#3 (VV) & 0.123 & 0.456 & 0.789 && 0.111 & 0.222 & 0.333 && 0.444 & 0.555 & 0.666\\
+\bottomrule
+\end{tabular}
+\caption{Comparison between a posteriori bound and use of standard LP bounding.
+ Values are relative decrease (percentage)}
+\end{table*}
+
 
 # Future work
 
@@ -1022,7 +996,7 @@ As such, further work into experimentation with more sophisticated FPTAS's may
 
 It will, of course, be worth investing time in investigating the viability of
  our proposed method with known approximations to more complex problems, such
- Christofides' \cite{christofides1976worst} approximation for the Metric
+ as Christofides' \cite{christofides1976worst} approximation for the Metric
  Travelling Salesman problem. 
 
 
