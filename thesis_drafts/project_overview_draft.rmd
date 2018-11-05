@@ -106,9 +106,6 @@ Where $x$ and $y$ are the sets of *decision variables* that we assign values to
 Generally, objective functions are constrained by linear inequalities, and
  variables can be specified to be integer or continuous. 
 
-<!--Arthur said something about doing stuff in a different order in this section [CLARIFY]-->
-
-<!--TODO: Put in a paragraph talking about feasible regions-->
 The set of decision variable values permitted by an optimisation problem's
  constraints is termed the *search space*.
 While a problem with allowing continuous variables will have a continuous
@@ -116,8 +113,6 @@ While a problem with allowing continuous variables will have a continuous
  integer variables will have a *feasible set* of solutions.
 
 **Put a diagram showing continuous versus integer regions**
-
-<!--TODO: Put a paragraph here about linear programming relaxations-->
 
 
 Optimisation problems with linear constraints and continuous variables are
@@ -140,7 +135,6 @@ Because the feasible region of continuous solutions naturally subsumes the set
   z \leq z_{LP}
 \end{align*}
 
-<!-- Redo this so that paragraphs compartmentalise branching then bounding -->
 Since $z_{LP}$ is at least as large as our optimal value, $z$ is provided with
  an upper bound, which we refer to as the *dual bound*.
 Branch and Bound commonly solves LP-relaxations to find what are known as
